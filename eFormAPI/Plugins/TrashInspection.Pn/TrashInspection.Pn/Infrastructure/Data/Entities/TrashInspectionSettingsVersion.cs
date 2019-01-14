@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Base;
 namespace TrashInspection.Pn.Infrastructure.Data.Entities
 {
-    class TrashInspectionSettingsVersion : BaseEntity
+    public class TrashInspectionSettingsVersion : BaseEntity
     {
         public int? SelectedeFormId { get; set; }
         public string SelectedeFormName { get; set; }

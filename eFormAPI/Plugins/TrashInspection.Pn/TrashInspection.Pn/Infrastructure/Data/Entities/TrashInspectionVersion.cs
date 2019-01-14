@@ -34,7 +34,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Entities
 
         public string Producer { get; set; }
 
-        public string Transport { get; set; }
+        public string Transporter { get; set; }
 
         public int Installation_Id { get; set; }
 

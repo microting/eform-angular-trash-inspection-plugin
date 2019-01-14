@@ -18,7 +18,55 @@ using Newtonsoft.Json.Linq;
 
 namespace TrashInspection.Pn.Services
 {
-    class TrashInspectionService : ITrashInspectionService
+    public class TrashInspectionService : ITrashInspectionService
     {
+        private readonly IEFormCoreService _coreHelper;
+        private readonly ILogger<TrashInspectionService> _logger;
+        private readonly TrashInspectionPnDbContext _dbContext;
+        private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
+
+        public TrashInspectionService(ILogger<TrashInspectionService> logger,
+            TrashInspectionPnDbContext dbContext,
+            IEFormCoreService coreHelper,
+            ITrashInspectionLocalizationService trashInspectionLocalizationService)
+        {
+            _logger = logger;
+            _dbContext = dbContext;
+            _coreHelper = coreHelper;
+            _trashInspectionLocalizationService = trashInspectionLocalizationService;
+        }
+
+        public OperationDataResult<TrashInspectionModel> GetAllTrashInspections(TrashInspectionRequestModel pnRequestModel)
+        {
+            return new OperationDataResult<TrashInspectionModel>(true, "we did it bois");
+        }
+
+        public OperationDataResult<TrashInspectionModel> GetSingleTrashInspection(int trashInspectionId)
+        {
+            return new OperationDataResult<TrashInspectionModel>(true);
+        }
+
+        public OperationResult CreateTrashInspection(TrashInspectionModel createModel)
+        {
+            createModel.Save(_dbContext);
+            return new OperationResult(true);
+                
+        }
+
+        public OperationResult UpdateTrashInspection(TrashInspectionModel updateModel)
+        {
+            updateModel.Update(_dbContext);
+            return new OperationResult(true);
+        }
+
+        public OperationResult DeleteTrashInspection(int trashInspectionId)
+        {
+            TrashInspectionModel trashInspection = new TrashInspectionModel();
+            trashInspection.Id = trashInspectionId;
+            trashInspection.Delete(_dbContext);
+            return new OperationResult(true);
+
+        }
+
     }
 }

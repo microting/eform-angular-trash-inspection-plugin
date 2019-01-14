@@ -7,7 +7,7 @@ namespace TrashInspection.Pn.Abstractions
     {
         Task<OperationResult> CreateTrashInspection(TrashInspectionModel model);
         Task<OperationResult> DeleteTrashInspection(int trashInspectionId);
-        Task<OperationResult> UpdatetrashInspection(TrashInspectionModel updateModel);
+        Task<OperationResult> UpdateTrashInspection(TrashInspectionModel updateModel);
         Task<OperationDataResult<TrashInspectionModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel);
         Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId);
 
