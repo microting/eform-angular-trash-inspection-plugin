@@ -1,0 +1,16 @@
+{
+	"forstevejning": {
+		"Vejehovedudl": {
+			"vejenummer": "SomeNumber",
+			"dato": "14-01-19",
+			"Tid": "11:19:43",
+			"RegNr": "XX22222",
+			"Affaldsfraktion": "22",
+			"EAKkode": "10.00.00",
+			"Producent": "Some company Inc.",
+			"Transport": "Some other company Inc",
+			"anl": "XXX",
+			"SkalInspiceres": "false"
+		}
+	}
+}
