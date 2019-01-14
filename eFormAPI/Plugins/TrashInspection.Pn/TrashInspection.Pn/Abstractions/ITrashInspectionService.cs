@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using System.Threading.Tasks;
+using TrashInspection.Pn.Infrastructure.Models;
+using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 namespace TrashInspection.Pn.Abstractions
 {
-    interface ITrashInspectionService
+    public interface ITrashInspectionService
     {
+        Task<OperationResult> CreateTrashInspection(TrashInspectionModel model);
+        Task<OperationResult> DeleteTrashInspection(int trashInspectionId);
+        Task<OperationResult> UpdatetrashInspection(TrashInspectionModel updateModel);
+        Task<OperationDataResult<TrashInspectionModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel);
+        Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId);
+
     }
 }

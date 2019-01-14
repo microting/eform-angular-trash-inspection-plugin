@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TrashInspection.Pn.Abstractions
+﻿namespace TrashInspection.Pn.Abstractions
 {
-    interface ITrashInspectionLocalizationService
+    public interface ITrashInspectionLocalizationService
     {
+        string GetString(string key);
+        string GetString(string format, params object[] args);
     }
 }
