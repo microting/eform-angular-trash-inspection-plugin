@@ -1,0 +1,40 @@
+dist: xenial
+language: csharp
+solution: Trashinspection.Pn.sln
+mono: none
+dotnet: 2.2
+services:
+  - mysql
+script:
+  - dotnet restore eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.sln
+  - dotnet build eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.sln
+  - dotnet test -v n eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.Test/Trashinpection.Pn.Test.csproj
+  - cd ../..
+  - git clone --depth=50 --branch=master https://github.com/microting/eform-angular-frontend.git microting/eform-angular-frontend
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trashinspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trashinspection-pn
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trashinspection-settings microting/eform-angular-frontend/eform-client/e2e/Tests/trashinspection-settings
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
+  - cd microting/eform-angular-frontend
+  - dotnet restore -v q eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
+  - dotnet build eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
+  - cd ../..
+  - mkdir -p microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
+  - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/Trashinspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/Trashinspection
+  - cd microting/eform-angular-frontend
+  - cd eform-client && npm install
+  - cd src/app/plugins
+  - sed '/\/\/ INSERT ROUTES HERE/i {' plugins.routing.ts -i
+  - sed '/\/\/ INSERT ROUTES HERE/i path: "trashinspection-pn",' plugins.routing.ts -i
+  - sed '/\/\/ INSERT ROUTES HERE/i canActivate: [AuthGuard],' plugins.routing.ts -i
+  - sed '/\/\/ INSERT ROUTES HERE/i loadChildren: "./modules/trashinspection-pn/trashinspection-pn.module#TrashinspectionPnModule"' plugins.routing.ts -i
+  - sed '/\/\/ INSERT ROUTES HERE/i }' plugins.routing.ts -i
+  - cd ../../..
+  - npm start &
+  - sleep 40
+  - dotnet run --project ../eFormAPI/eFormAPI.Web/eFormAPI.Web.csproj > dotnet_log 2>&1 &
+  - sleep 40
+  - npm run testheadless
+  - sleep 40
+  - dotnet run --project ../eFormAPI/eFormAPI.Web/eFormAPI.Web.csproj > dotnet_log 2>&1 &
+  - sleep 40
+  - npm run testheadlessplugin
