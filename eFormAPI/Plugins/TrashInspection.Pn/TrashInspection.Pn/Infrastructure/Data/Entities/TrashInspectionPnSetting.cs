@@ -3,7 +3,7 @@
 
 namespace TrashInspection.Pn.Infrastructure.Data.Entities
 {
-    class TrashInspectionPnSetting: BaseEntity
+    public class TrashInspectionPnSetting: BaseEntity
     {
         public int? SelectedeFormId { get; set; }
         public string SelectedeFormName { get; set; }

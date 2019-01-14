@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Base;
 
@@ -35,7 +36,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Entities
         public string Producer { get; set; }
 
         public string Transport { get; set; }
-
+        [ForeignKey("Installation")]
         public int Installation_Id { get; set; }
 
         public bool Must_Be_Inspected { get; set; }
