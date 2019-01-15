@@ -22,13 +22,7 @@ script:
   - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/Trashinspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/Trashinspection
   - cd microting/eform-angular-frontend
   - cd eform-client && npm install
-  - cd src/app/plugins
-  - sed '/\/\/ INSERT ROUTES HERE/i {' plugins.routing.ts -i
-  - sed '/\/\/ INSERT ROUTES HERE/i path: "trashinspection-pn",' plugins.routing.ts -i
-  - sed '/\/\/ INSERT ROUTES HERE/i canActivate: [AuthGuard],' plugins.routing.ts -i
-  - sed '/\/\/ INSERT ROUTES HERE/i loadChildren: "./modules/trashinspection-pn/trashinspection-pn.module#TrashinspectionPnModule"' plugins.routing.ts -i
-  - sed '/\/\/ INSERT ROUTES HERE/i }' plugins.routing.ts -i
-  - cd ../../..
+  - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
   - npm start &
   - sleep 40
   - dotnet run --project ../eFormAPI/eFormAPI.Web/eFormAPI.Web.csproj > dotnet_log 2>&1 &
