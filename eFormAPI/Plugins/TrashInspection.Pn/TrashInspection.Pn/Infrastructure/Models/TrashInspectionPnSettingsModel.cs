@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TrashInspection.Pn.Infrastructure.Models
+﻿namespace TrashInspection.Pn.Infrastructure.Models
 {
     public class TrashInspectionPnSettingsModel
     {
+        public int? SelectedeFormId { get; set; }
+        public string SelectedeFormName { get; set; }
     }
 }

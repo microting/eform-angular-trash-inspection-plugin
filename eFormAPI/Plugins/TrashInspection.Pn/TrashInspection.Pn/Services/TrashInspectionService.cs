@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace TrashInspection.Pn.Services
 {
@@ -36,30 +37,30 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public OperationDataResult<TrashInspectionModel> GetAllTrashInspections(TrashInspectionRequestModel pnRequestModel)
-        {
-            return new OperationDataResult<TrashInspectionModel>(true, "we did it bois");
-        }
-
-        public OperationDataResult<TrashInspectionModel> GetSingleTrashInspection(int trashInspectionId)
+        public async Task<OperationDataResult<TrashInspectionModel>> GetAllTrashInspections(TrashInspectionRequestModel pnRequestModel)
         {
             return new OperationDataResult<TrashInspectionModel>(true);
         }
 
-        public OperationResult CreateTrashInspection(TrashInspectionModel createModel)
+        public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId)
+        {
+            return new OperationDataResult<TrashInspectionModel>(true);
+        }
+
+        public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
             createModel.Save(_dbContext);
             return new OperationResult(true);
                 
         }
 
-        public OperationResult UpdateTrashInspection(TrashInspectionModel updateModel)
+        public async Task<OperationResult> UpdateTrashInspection(TrashInspectionModel updateModel)
         {
             updateModel.Update(_dbContext);
             return new OperationResult(true);
         }
 
-        public OperationResult DeleteTrashInspection(int trashInspectionId)
+        public async Task<OperationResult> DeleteTrashInspection(int trashInspectionId)
         {
             TrashInspectionModel trashInspection = new TrashInspectionModel();
             trashInspection.Id = trashInspectionId;

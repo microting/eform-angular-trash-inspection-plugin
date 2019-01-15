@@ -43,7 +43,7 @@ namespace TrashInspection.Pn.Conrtrollers
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> UpdateTrashInspection([FromBody] TrashInspectionModel updateModel)
         {
-            return await _trashInspectionService.UpdatetrashInspection(updateModel);
+            return await _trashInspectionService.UpdateTrashInspection(updateModel);
         }
 
         [HttpDelete]
