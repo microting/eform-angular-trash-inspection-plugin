@@ -20,7 +20,7 @@ namespace TrashInspection.Pn.Conrtrollers
 
         [HttpGet]
         [Route("api/trash-inspection-pn/inspections")]
-        public async Task<OperationDataResult<TrashInspectionModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel)
+        public async Task<OperationDataResult<TrashInspectionsModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel)
         {
             return await _trashInspectionService.GetAllTrashInspections(requestModel);
         }
