@@ -37,11 +37,43 @@ namespace TrashInspection.Pn.Infrastructure.Models
         }
         public void Update(TrashInspectionPnDbContext _dbContext)
         {
+            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
+            if( installation == null)
+            {
+                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
+            }
+            installation.Name = Name;
+
+            if (_dbContext.ChangeTracker.HasChanges())
+            {
+                installation.Updated_at = DateTime.Now;
+                installation.Updated_By_User_Id = Updated_By_User_Id;
+                installation.Version += 1;
+
+                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
+                _dbContext.SaveChanges();
+            }
         }
         public void Delete(TrashInspectionPnDbContext _dbContext)
         {
+            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
+            if (installation == null)
+            {
+                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
+            }
+            installation.Workflow_state = eFormShared.Constants.WorkflowStates.Removed;
+
+            if (_dbContext.ChangeTracker.HasChanges())
+            {
+                installation.Updated_at = DateTime.Now;
+                installation.Updated_By_User_Id = Updated_By_User_Id;
+                installation.Version += 1;
+                _dbContext.Installations.Remove(installation);
+                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
+                _dbContext.SaveChanges();
+            }
         }
 
         private InstallationVersion MapInstallationVersion(TrashInspectionPnDbContext _dbContext, Installation installation)

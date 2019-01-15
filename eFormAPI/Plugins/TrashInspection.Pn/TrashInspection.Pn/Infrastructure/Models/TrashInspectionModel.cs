@@ -60,7 +60,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             if (trashInspection == null)
             {
-                throw new NullReferenceException($"Could not fint Trash Inspection with ID: {Id}");
+                throw new NullReferenceException($"Could not find Trash Inspection with ID: {Id}");
             }
             trashInspection.Date = Date;
             trashInspection.Eak_Code = Eak_Code;
