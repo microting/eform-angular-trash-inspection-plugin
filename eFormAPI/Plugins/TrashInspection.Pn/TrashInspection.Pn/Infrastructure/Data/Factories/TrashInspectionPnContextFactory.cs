@@ -7,7 +7,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Factories
 {
     public class TrashInspectionPnContextFactory : IDesignTimeDbContextFactory<TrashInspectionPnDbContext>
     {
-        public TrashInspectionPnDbContext CreateDbcontext(string[] args)
+        public TrashInspectionPnDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TrashInspectionPnDbContext>();
             if (args.Any())

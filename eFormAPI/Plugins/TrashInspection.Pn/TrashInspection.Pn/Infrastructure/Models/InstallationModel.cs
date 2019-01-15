@@ -1,12 +1,12 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microting.eFormApi.BasePn.Infrastructure.Database.Base;
-
+using System.Linq;
+using TrashInspection.Pn.Infrastructure.Data;
+using TrashInspection.Pn.Infrastructure.Data.Entities;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class InstallationModel
+    public class InstallationModel : IModel
     {
         public int Id { get; set; }
         public DateTime? Created_at { get; set; }
@@ -17,5 +17,48 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int Created_By_User_Id { get; set; }
         public int Updated_By_User_Id { get; set; }
         public string Name { get; set; }
+
+        public void Save(TrashInspectionPnDbContext _dbContext)
+        {
+            Installation installation = new Installation();
+            installation.Created_at = DateTime.Now;
+            installation.Created_By_User_Id = Created_By_User_Id;
+            installation.Name = Name;
+            installation.Updated_at = DateTime.Now;
+            installation.Updated_By_User_Id = Updated_By_User_Id;
+            installation.Version = Version;
+            installation.Workflow_state = eFormShared.Constants.WorkflowStates.Created;
+
+            _dbContext.Installations.Add(installation);
+            _dbContext.SaveChanges();
+
+            _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
+            _dbContext.SaveChanges();
+        }
+        public void Update(TrashInspectionPnDbContext _dbContext)
+        {
+
+        }
+        public void Delete(TrashInspectionPnDbContext _dbContext)
+        {
+
+        }
+
+        private InstallationVersion MapInstallationVersion(TrashInspectionPnDbContext _dbContext, Installation installation)
+        {
+            InstallationVersion installationVer = new InstallationVersion();
+
+            installationVer.Created_at = installation.Created_at;
+            installationVer.Created_By_User_Id = installation.Created_By_User_Id;
+            installationVer.Name = installation.Name;
+            installationVer.Updated_at = installation.Updated_at;
+            installationVer.Updated_By_User_Id = installation.Updated_By_User_Id;
+            installationVer.Version = installation.Version;
+            installationVer.Workflow_state = installation.Workflow_state;
+
+            installationVer.InstallationId = installation.Id;
+
+            return installationVer;
+        }
     }
 }

@@ -26,28 +26,6 @@ namespace TrashInspection.Pn.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex(x => x.Created_By_User_Id);
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex(x => x.Eak_Code);
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
-            modelBuilder.Entity<Entities.TrashInspection>()
-                .HasIndex();
         }
     }
 }
