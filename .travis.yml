@@ -6,9 +6,9 @@ dotnet: 2.2
 services:
   - mysql
 script:
-  - dotnet restore eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.sln
-  - dotnet build eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.sln
-  - dotnet test -v n eFormAPI/Plugins/Trashinpection.Pn/Trashinpection.Pn.Test/Trashinpection.Pn.Test.csproj
+  - dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
+  - dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
+  - dotnet test -v n eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
   - cd ../..
   - git clone --depth=50 --branch=master https://github.com/microting/eform-angular-frontend.git microting/eform-angular-frontend
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trashinspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trashinspection-pn
