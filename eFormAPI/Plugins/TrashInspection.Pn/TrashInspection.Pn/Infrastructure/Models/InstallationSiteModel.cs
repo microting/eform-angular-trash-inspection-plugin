@@ -74,7 +74,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installationSite.Updated_at = DateTime.Now;
                 installationSite.Updated_By_User_Id = Updated_By_User_Id;
                 installationSite.Version += 1;
-                _dbContext.InstallationSites.Remove(installationSite);
+                //_dbContext.InstallationSites.Remove(installationSite);
                 _dbContext.InstallationSiteVersions.Add(MapInstallationSiteVersion(_dbContext, installationSite));
                 _dbContext.SaveChanges();
             }

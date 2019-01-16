@@ -70,7 +70,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installation.Updated_at = DateTime.Now;
                 installation.Updated_By_User_Id = Updated_By_User_Id;
                 installation.Version += 1;
-                _dbContext.Installations.Remove(installation);
+                //_dbContext.Installations.Remove(installation);
                 _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
                 _dbContext.SaveChanges();
             }
