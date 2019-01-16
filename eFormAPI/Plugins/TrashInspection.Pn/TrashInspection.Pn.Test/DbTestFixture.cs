@@ -1,12 +1,12 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Runtime.InteropServices;
 using TrashInspection.Pn.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Data.Factories;
+
 namespace TrashInspection.Pn.Test
 {
     [TestFixture]
