@@ -1,5 +1,4 @@
-﻿
-namespace TrashInspection.Pn
+﻿namespace TrashInspection.Pn
 {
     public static class DbConfig
     {
