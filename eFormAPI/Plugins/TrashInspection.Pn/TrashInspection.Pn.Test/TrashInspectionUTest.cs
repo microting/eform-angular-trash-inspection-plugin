@@ -17,6 +17,7 @@ namespace TrashInspection.Pn.Test
             // Arrange
             Random rnd = new Random();
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = DateTime.Now;
             trashInspectionModel.Date = DateTime.Now;
             trashInspectionModel.Eak_Code = rnd.Next(1, 255);
             trashInspectionModel.Installation_Id = rnd.Next(1, 255);
@@ -37,7 +38,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
-            Assert.AreEqual(trashInspectionModel.Created_at, trashInspection.Created_at);
+            Assert.AreEqual(trashInspectionModel.Created_at.ToString(), trashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspectionModel.Created_By_User_Id, trashInspection.Created_By_User_Id);
             Assert.AreEqual(trashInspectionModel.Date, trashInspection.Date);
             Assert.AreEqual(trashInspectionModel.Eak_Code, trashInspection.Eak_Code);
@@ -57,6 +58,7 @@ namespace TrashInspection.Pn.Test
             // Arrange
             Random rnd = new Random();
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = DateTime.Now;
             trashInspectionModel.Date = DateTime.Now;
             trashInspectionModel.Eak_Code = rnd.Next(1, 255);
             trashInspectionModel.Installation_Id = rnd.Next(1, 255);
@@ -77,7 +79,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
-            Assert.AreEqual(trashInspectionModel.Created_at, trashInspection.Created_at);
+            Assert.AreEqual(trashInspectionModel.Created_at.ToString(), trashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspectionModel.Created_By_User_Id, trashInspection.Created_By_User_Id);
             Assert.AreEqual(trashInspectionModel.Date, trashInspection.Date);
             Assert.AreEqual(trashInspectionModel.Eak_Code, trashInspection.Eak_Code);
@@ -99,6 +101,7 @@ namespace TrashInspection.Pn.Test
             Random rnd = new Random();
 
             Infrastructure.Data.Entities.TrashInspection trashInspection = new Infrastructure.Data.Entities.TrashInspection();
+            trashInspection.Created_at = DateTime.Now;
             trashInspection.Date = DateTime.Now;
             trashInspection.Eak_Code = rnd.Next(1, 255);
             trashInspection.Installation_Id = rnd.Next(1, 255);
@@ -115,8 +118,10 @@ namespace TrashInspection.Pn.Test
 
             // Act
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = trashInspection.Created_at;
             trashInspectionModel.Date = trashInspection.Date;
             trashInspectionModel.Eak_Code = trashInspection.Eak_Code;
+            trashInspectionModel.Id = trashInspection.Id;
             trashInspectionModel.Installation_Id = trashInspection.Installation_Id;
             trashInspectionModel.Must_Be_Inspected = trashInspection.Must_Be_Inspected;
             trashInspectionModel.Producer = trashInspection.Producer;
@@ -136,6 +141,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
+            Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
@@ -154,6 +160,7 @@ namespace TrashInspection.Pn.Test
             Random rnd = new Random();
 
             Infrastructure.Data.Entities.TrashInspection trashInspection = new Infrastructure.Data.Entities.TrashInspection();
+            trashInspection.Created_at = DateTime.Now;
             trashInspection.Date = DateTime.Now;
             trashInspection.Eak_Code = rnd.Next(1, 255);
             trashInspection.Installation_Id = rnd.Next(1, 255);
@@ -170,8 +177,10 @@ namespace TrashInspection.Pn.Test
 
             // Act
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = trashInspection.Created_at;
             trashInspectionModel.Date = trashInspection.Date;
             trashInspectionModel.Eak_Code = trashInspection.Eak_Code;
+            trashInspectionModel.Id = trashInspection.Id;
             trashInspectionModel.Installation_Id = trashInspection.Installation_Id;
             trashInspectionModel.Must_Be_Inspected = trashInspection.Must_Be_Inspected;
             trashInspectionModel.Producer = trashInspection.Producer;
@@ -191,6 +200,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
+            Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
@@ -203,12 +213,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(trashInspection.Weighing_Number, dbTrashInspection.Weighing_Number);
         }
         [Test]
-        public void TrashInspectionModel_DeleteWTrue_DoesUpdate()
+        public void TrashInspectionModel_DeleteWTrue_DoesDelete()
         {
             // Arrange
             Random rnd = new Random();
 
             Infrastructure.Data.Entities.TrashInspection trashInspection = new Infrastructure.Data.Entities.TrashInspection();
+            trashInspection.Created_at = DateTime.Now;
             trashInspection.Date = DateTime.Now;
             trashInspection.Eak_Code = rnd.Next(1, 255);
             trashInspection.Installation_Id = rnd.Next(1, 255);
@@ -225,8 +236,10 @@ namespace TrashInspection.Pn.Test
 
             // Act
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = trashInspection.Created_at;
             trashInspectionModel.Date = trashInspection.Date;
             trashInspectionModel.Eak_Code = trashInspection.Eak_Code;
+            trashInspectionModel.Id = trashInspection.Id;
             trashInspectionModel.Installation_Id = trashInspection.Installation_Id;
             trashInspectionModel.Must_Be_Inspected = trashInspection.Must_Be_Inspected;
             trashInspectionModel.Producer = trashInspection.Producer;
@@ -246,6 +259,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
+            Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
@@ -259,12 +273,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(trashInspection.Workflow_state, eFormShared.Constants.WorkflowStates.Removed);
         }
         [Test]
-        public void TrashInspectionModel_DeleteWFalse_DoesUpdate()
+        public void TrashInspectionModel_DeleteWFalse_DoesDelete()
         {
             // Arrange
             Random rnd = new Random();
 
             Infrastructure.Data.Entities.TrashInspection trashInspection = new Infrastructure.Data.Entities.TrashInspection();
+            trashInspection.Created_at = DateTime.Now;
             trashInspection.Date = DateTime.Now;
             trashInspection.Eak_Code = rnd.Next(1, 255);
             trashInspection.Installation_Id = rnd.Next(1, 255);
@@ -281,8 +296,10 @@ namespace TrashInspection.Pn.Test
 
             // Act
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
+            trashInspectionModel.Created_at = trashInspection.Created_at;
             trashInspectionModel.Date = trashInspection.Date;
             trashInspectionModel.Eak_Code = trashInspection.Eak_Code;
+            trashInspectionModel.Id = trashInspection.Id;
             trashInspectionModel.Installation_Id = trashInspection.Installation_Id;
             trashInspectionModel.Must_Be_Inspected = trashInspection.Must_Be_Inspected;
             trashInspectionModel.Producer = trashInspection.Producer;
@@ -302,6 +319,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, trashInspectionList.Count());
 
+            Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);

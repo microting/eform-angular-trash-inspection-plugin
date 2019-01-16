@@ -25,7 +25,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Factories
             {
                 throw new ArgumentNullException("Connection string not present");
             }
-//            optionsBuilder.UseSqlServer(@"data source=(LocalDb)\SharedInstance;Initial catalog=machine-area-pn-tests;Integrated Security=True");
+            //optionsBuilder.UseSqlServer(@"data source=(LocalDb)\SharedInstance;Initial catalog=trash-inspection-pn-tests;Integrated Security=True");
             optionsBuilder.UseLazyLoadingProxies(true);
             return new TrashInspectionPnDbContext(optionsBuilder.Options);
         }

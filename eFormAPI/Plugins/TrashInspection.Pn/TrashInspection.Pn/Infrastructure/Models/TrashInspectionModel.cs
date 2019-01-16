@@ -98,7 +98,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             {
                 trashInspection.Updated_at = DateTime.Now;
                 trashInspection.Version += 1;
-                _dbContext.TrashInspections.Remove(trashInspection);
+                //_dbContext.TrashInspections.Remove(trashInspection);
                 _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
                 _dbContext.SaveChanges();
 
