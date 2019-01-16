@@ -11,4 +11,8 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.12.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TrashInspection.Pn\TrashInspection.Pn.csproj" />
+  </ItemGroup>
+
 </Project>

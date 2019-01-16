@@ -44,7 +44,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             if (installationSite == null)
             {
-                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
+                throw new NullReferenceException($"Could not find InstallationSite with ID: {Id}");
             }
             installationSite.Installation_Id = Installation_Id;
             installationSite.Sdk_Site_Id = SDK_Site_Id;
@@ -65,7 +65,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             if (installationSite == null)
             {
-                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
+                throw new NullReferenceException($"Could not find InstallationSite with ID: {Id}");
             }
             installationSite.Workflow_state = eFormShared.Constants.WorkflowStates.Removed;
 
