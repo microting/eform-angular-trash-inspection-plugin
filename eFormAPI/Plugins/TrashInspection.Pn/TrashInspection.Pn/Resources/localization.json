@@ -6,13 +6,13 @@
 			"en-US": "Trash Inspection"
 		}
 	},
-  {
-    "Key": "TrashInspections",
-    "LocalizedValue": {
-      "da": "Affaldsinspektioner",
-      "en-US": "Trash Inspections"
-    }
-  },
+	{
+		"Key": "TrashInspections",
+		"LocalizedValue": {
+			"da": "Affaldsinspektioner",
+			"en-US": "Trash Inspections"
+		}
+	},
 	{
 		"Key": "Installations",
 		"LocalizedValue": {
@@ -26,14 +26,14 @@
 			"da": "Indstillinger",
 			"en-US": "Settings"
 		}
-	}
-  {
-    "Key": "InstallationCreatedSuccesfully",
+	},
+	{
+		"Key": "InstallationCreatedSuccesfully",
 		"LocalizedValue": {
 			"da": "Intstallation {0} blev oprettet med succes",
 			"en-US": "Intstallation {0} created successfully"
 		}
-  },
+	},
 	{
 		"Key": "IntstallationDeletedSuccessfully",
 		"LocalizedValue": {
@@ -62,48 +62,48 @@
 			"en-US": "Error while creating Intstallation"
 		}
 	},
-  {
-    "Key": "ErrorCreatingTrashInspection",
+	{
+		"Key": "ErrorCreatingTrashInspection",
 		"LocalizedValue": {
 			"da": "Fejl under oprettelse af Affaldsinspektion",
 			"en-US": "Error while creating Trash Inspection"
 		}
-  },
-  {
-    "Key": "ErrorObtainInstallation",
-    "LocalizedValue": {
-      "da": "Fejl under opnåelse af installation",
-      "en-US": "Error while obtaining installation"
-    }
-  },
-  {
-    "Key": "ErrorObtainInstallations",
-    "LocalizedValue": {
-      "da": "Fejl under opnåelse af installationer",
-      "en-US": "Error while obtaining installations"
-    }
-  },
+	},
+	{
+		"Key": "ErrorObtainInstallation",
+		"LocalizedValue": {
+			"da": "Fejl under opnÃ¥else af installation",
+			"en-US": "Error while obtaining installation"
+		}
+	},
+	{
+		"Key": "ErrorObtainInstallations",
+		"LocalizedValue": {
+			"da": "Fejl under opnÃ¥else af installationer",
+			"en-US": "Error while obtaining installations"
+		}
+	},
 	{
 		"Key": "ErrorObtainTrashInspection",
 		"LocalizedValue": {
-			"da": "Fejl under opnåelse af Affaldsinspektion",
+			"da": "Fejl under opnÃ¥else af Affaldsinspektion",
 			"en-US": "Error while obtaining Trash Inspection"
 		}
 	},
 	{
 		"Key": "ErrorObtainTrashInspections",
 		"LocalizedValue": {
-			"da": "Fejl under opnåelse af Affaldsinspektion",
+			"da": "Fejl under opnÃ¥else af Affaldsinspektion",
 			"en-US": "Error while obtaining Trash Inspections"
 		}
 	},
-  {
-    "Key": "ErrorUpdatingInstallation",
-    "LocalizedValue": {
-      "da": "Fejl under opdatering af installation",
-      "en-US": "Error while updating installation"
-    }
-  },
+	{
+		"Key": "ErrorUpdatingInstallation",
+		"LocalizedValue": {
+			"da": "Fejl under opdatering af installation",
+			"en-US": "Error while updating installation"
+		}
+	},
 	{
 		"Key": "ErrorUpdatingTrashInspection",
 		"LocalizedValue": {
@@ -111,13 +111,13 @@
 			"en-US": "Error while updating Trash Inspection"
 		}
 	},
-  {
-    "Key": "ErrorWhileDeletingInstallation",
-    "LocalizedValue": {
-      "da": "Fejl under sletning af installation",
-      "en-US": "Error while deleting installation"
-    }
-  },
+	{
+		"Key": "ErrorWhileDeletingInstallation",
+		"LocalizedValue": {
+			"da": "Fejl under sletning af installation",
+			"en-US": "Error while deleting installation"
+		}
+	},
 	{
 		"Key": "ErrorWhileDeletingTrashInspection",
 		"LocalizedValue": {
