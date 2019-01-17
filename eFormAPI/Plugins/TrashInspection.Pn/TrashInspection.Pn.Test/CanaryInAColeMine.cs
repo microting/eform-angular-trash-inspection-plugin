@@ -6,7 +6,7 @@ namespace TrashInspection.Pn.Test
     public class CanaryInAColeMine
     {
         [Test]
-        public void CanPeed()
+        public void CanPeep()
         {
             Assert.True(true);
         }

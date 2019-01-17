@@ -40,13 +40,13 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(trashInspectionModel.Created_at.ToString(), trashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspectionModel.Created_By_User_Id, trashInspection.Created_By_User_Id);
-            Assert.AreEqual(trashInspectionModel.Date, trashInspection.Date);
+            Assert.AreEqual(trashInspectionModel.Date.ToString(), trashInspection.Date.ToString());
             Assert.AreEqual(trashInspectionModel.Eak_Code, trashInspection.Eak_Code);
             Assert.AreEqual(trashInspectionModel.Installation_Id, trashInspection.Installation_Id);
             Assert.AreEqual(trashInspectionModel.Must_Be_Inspected, trashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspectionModel.Producer, trashInspection.Producer);
             Assert.AreEqual(trashInspectionModel.Registration_Number, trashInspection.Registration_Number);
-            Assert.AreEqual(trashInspectionModel.Time, trashInspection.Time);
+            Assert.AreEqual(trashInspectionModel.Time.ToString(), trashInspection.Time.ToString());
             Assert.AreEqual(trashInspectionModel.Transporter, trashInspection.Transporter);
             Assert.AreEqual(trashInspectionModel.Trash_Fraction, trashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspectionModel.Weighing_Number, trashInspection.Weighing_Number);
@@ -81,13 +81,13 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(trashInspectionModel.Created_at.ToString(), trashInspection.Created_at.ToString());
             Assert.AreEqual(trashInspectionModel.Created_By_User_Id, trashInspection.Created_By_User_Id);
-            Assert.AreEqual(trashInspectionModel.Date, trashInspection.Date);
+            Assert.AreEqual(trashInspectionModel.Date.ToString(), trashInspection.Date.ToString());
             Assert.AreEqual(trashInspectionModel.Eak_Code, trashInspection.Eak_Code);
             Assert.AreEqual(trashInspectionModel.Installation_Id, trashInspection.Installation_Id);
             Assert.AreEqual(trashInspectionModel.Must_Be_Inspected, trashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspectionModel.Producer, trashInspection.Producer);
             Assert.AreEqual(trashInspectionModel.Registration_Number, trashInspection.Registration_Number);
-            Assert.AreEqual(trashInspectionModel.Time, trashInspection.Time);
+            Assert.AreEqual(trashInspectionModel.Time.ToString(), trashInspection.Time.ToString());
             Assert.AreEqual(trashInspectionModel.Transporter, trashInspection.Transporter);
             Assert.AreEqual(trashInspectionModel.Trash_Fraction, trashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspectionModel.Weighing_Number, trashInspection.Weighing_Number);
@@ -142,13 +142,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(1, trashInspectionList.Count());
 
             Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
-            Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
+            Assert.AreEqual(trashInspection.Date.ToString(), dbTrashInspection.Date.ToString());
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
             Assert.AreEqual(trashInspection.Must_Be_Inspected, dbTrashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspection.Producer, dbTrashInspection.Producer);
             Assert.AreEqual(trashInspection.Registration_Number, dbTrashInspection.Registration_Number);
-            Assert.AreEqual(trashInspection.Time, dbTrashInspection.Time);
+            Assert.AreEqual(trashInspection.Time.ToString(), dbTrashInspection.Time.ToString());
             Assert.AreEqual(trashInspection.Transporter, dbTrashInspection.Transporter);
             Assert.AreEqual(trashInspection.Trash_Fraction, dbTrashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspection.Weighing_Number, dbTrashInspection.Weighing_Number);
@@ -201,13 +201,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(1, trashInspectionList.Count());
 
             Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
-            Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
+            Assert.AreEqual(trashInspection.Date.ToString(), dbTrashInspection.Date.ToString());
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
             Assert.AreEqual(trashInspection.Must_Be_Inspected, dbTrashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspection.Producer, dbTrashInspection.Producer);
             Assert.AreEqual(trashInspection.Registration_Number, dbTrashInspection.Registration_Number);
-            Assert.AreEqual(trashInspection.Time, dbTrashInspection.Time);
+            Assert.AreEqual(trashInspection.Time.ToString(), dbTrashInspection.Time.ToString());
             Assert.AreEqual(trashInspection.Transporter, dbTrashInspection.Transporter);
             Assert.AreEqual(trashInspection.Trash_Fraction, dbTrashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspection.Weighing_Number, dbTrashInspection.Weighing_Number);
@@ -260,13 +260,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(1, trashInspectionList.Count());
 
             Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
-            Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
+            Assert.AreEqual(trashInspection.Date.ToString(), dbTrashInspection.Date.ToString());
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
             Assert.AreEqual(trashInspection.Must_Be_Inspected, dbTrashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspection.Producer, dbTrashInspection.Producer);
             Assert.AreEqual(trashInspection.Registration_Number, dbTrashInspection.Registration_Number);
-            Assert.AreEqual(trashInspection.Time, dbTrashInspection.Time);
+            Assert.AreEqual(trashInspection.Time.ToString(), dbTrashInspection.Time.ToString());
             Assert.AreEqual(trashInspection.Transporter, dbTrashInspection.Transporter);
             Assert.AreEqual(trashInspection.Trash_Fraction, dbTrashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspection.Weighing_Number, dbTrashInspection.Weighing_Number);
@@ -320,13 +320,13 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(1, trashInspectionList.Count());
 
             Assert.AreEqual(trashInspection.Created_at.ToString(), dbTrashInspection.Created_at.ToString());
-            Assert.AreEqual(trashInspection.Date, dbTrashInspection.Date);
+            Assert.AreEqual(trashInspection.Date.ToString(), dbTrashInspection.Date.ToString());
             Assert.AreEqual(trashInspection.Eak_Code, dbTrashInspection.Eak_Code);
             Assert.AreEqual(trashInspection.Installation_Id, dbTrashInspection.Installation_Id);
             Assert.AreEqual(trashInspection.Must_Be_Inspected, dbTrashInspection.Must_Be_Inspected);
             Assert.AreEqual(trashInspection.Producer, dbTrashInspection.Producer);
             Assert.AreEqual(trashInspection.Registration_Number, dbTrashInspection.Registration_Number);
-            Assert.AreEqual(trashInspection.Time, dbTrashInspection.Time);
+            Assert.AreEqual(trashInspection.Time.ToString(), dbTrashInspection.Time.ToString());
             Assert.AreEqual(trashInspection.Transporter, dbTrashInspection.Transporter);
             Assert.AreEqual(trashInspection.Trash_Fraction, dbTrashInspection.Trash_Fraction);
             Assert.AreEqual(trashInspection.Weighing_Number, dbTrashInspection.Weighing_Number);

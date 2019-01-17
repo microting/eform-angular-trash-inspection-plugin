@@ -8,12 +8,23 @@ namespace TrashInspection.Pn.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            string autoIDGenStrategy = "SqlServer:ValueGenerationStrategy";
+            object autoIDGenStrategyValue = SqlServerValueGenerationStrategy.IdentityColumn;
+
+            // Setup for MySQL Provider
+            if (migrationBuilder.ActiveProvider == "Pomelo.EntityFrameworkCore.MySql")
+            {
+                DbConfig.IsMySQL = true;
+                autoIDGenStrategy = "MySql:ValueGenerationStrategy";
+                autoIDGenStrategyValue = MySqlValueGenerationStrategy.IdentityColumn;
+            }
+
             migrationBuilder.CreateTable(
                 name: "Installations",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
@@ -32,7 +43,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
@@ -52,7 +63,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
@@ -73,7 +84,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
@@ -93,7 +104,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     SelectedeFormId = table.Column<int>(nullable: true),
                     SelectedeFormName = table.Column<string>(nullable: true)
                 },
@@ -107,7 +118,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
@@ -135,7 +146,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     SelectedeFormId = table.Column<int>(nullable: true),
                     SelectedeFormName = table.Column<string>(nullable: true),
                     Trash_Inspection_Id = table.Column<int>(nullable: false)
@@ -150,7 +161,7 @@ namespace TrashInspection.Pn.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation(autoIDGenStrategy, autoIDGenStrategyValue),
                     Created_at = table.Column<DateTime>(nullable: true),
                     Updated_at = table.Column<DateTime>(nullable: true),
                     Workflow_state = table.Column<string>(maxLength: 255, nullable: true),
