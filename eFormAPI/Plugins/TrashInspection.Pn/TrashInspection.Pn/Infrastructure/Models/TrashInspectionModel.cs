@@ -30,7 +30,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Data.Entities.TrashInspection trashInspection = new Data.Entities.TrashInspection();
-            trashInspection.Created_at = DateTime.Now;
+            trashInspection.Created_at = Created_at;
             trashInspection.Created_By_User_Id = Created_By_User_Id;
             trashInspection.Date = Date;
             trashInspection.Eak_Code = Eak_Code;

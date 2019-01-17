@@ -21,7 +21,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.Created_at = Created_at;
             installation.Created_By_User_Id = Created_By_User_Id;
             installation.Name = Name;
             installation.Updated_at = DateTime.Now;

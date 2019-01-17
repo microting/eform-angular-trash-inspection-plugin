@@ -23,7 +23,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             InstallationSite installationSite = new InstallationSite();
-            installationSite.Created_at = DateTime.Now;
+            installationSite.Created_at = Created_at;
             installationSite.Created_By_User_Id = Created_By_User_Id;
             installationSite.Installation_Id = Installation_Id;
             installationSite.Sdk_Site_Id = SDK_Site_Id;
