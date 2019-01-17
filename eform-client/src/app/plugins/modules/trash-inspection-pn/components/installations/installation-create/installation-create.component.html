@@ -11,7 +11,7 @@
               <div class="md-form">
                 <input mdbInputDirective
                        [mdbValidate]="false"
-                       [(ngModel)]="newAreaModel.name"
+                       [(ngModel)]="newInstallationModel.name"
                        type="text" id="createAreaName"
                        name="createAreaName" class="form-control">
                 <label for="createAreaName">{{'Name' | translate}}</label>
@@ -28,19 +28,19 @@
               </tr>
               </thead>
               <tbody id="tableBody">
-              <tr *ngFor="let machine of mappingMachines.machineList">
+              <tr *ngFor="let trashInspection of mappingTrashInspections.machineList">
                 <td>
-                  {{machine.id}}
+                  {{trashInspection.id}}
                 </td>
                 <td>
-                  {{machine.name}}
+                  {{trashInspection.name}}
                 </td>
                 <td>
                   <div class="mat-checkbox">
-                    <input id="checkbox{{machine.id}}" (change)="addToArray($event, machine.id)"
-                           [checked]="isChecked(machine.id)"
+                    <input id="checkbox{{trashInspection.id}}" (change)="addToArray($event, trashInspection.id)"
+                           [checked]="isChecked(trashInspection.id)"
                            color="primary" type="checkbox">
-                    <label for="checkbox{{machine.id}}"></label>
+                    <label for="checkbox{{trashInspection.id}}"></label>
                   </div>
                 </td>
               </tr>
@@ -50,7 +50,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!newAreaModel.name" (click)="createArea()">
+        <button class="btn btn-success" [disabled]="!newInstallationModel.name" (click)="createInstallation()">
           {{ 'Create' | translate }}
         </button>
         <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>

@@ -12,7 +12,7 @@
                 <h6>ID</h6>
               </div>
               <div class="col-md-6">
-                <strong>{{selectedAreaModel.id}}</strong>
+                <strong>{{selectedInstallationModel.id}}</strong>
               </div>
             </div>
 
@@ -21,7 +21,7 @@
                 <h6>{{'Creation Date' | translate}}</h6>
               </div>
               <div class="col-md-6">
-                <strong>{{selectedAreaModel.name}}</strong>
+                <strong>{{selectedInstallationModel.name}}</strong>
               </div>
             </div>
 
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-danger" (click)="deleteArea()">
+        <button class="btn btn-danger" (click)="deleteInstallation()">
           {{ 'Delete' | translate }}
         </button>
         <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>

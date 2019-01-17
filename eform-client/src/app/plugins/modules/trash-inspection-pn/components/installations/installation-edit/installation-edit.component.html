@@ -12,7 +12,7 @@
                 <div class="md-form">
                   <input mdbInputDirective
                          [mdbValidate]="false"
-                         [(ngModel)]="selectedAreaModel.name"
+                         [(ngModel)]="selectedInstallationModel.name"
                          type="text" id="updateAreaName"
                          name="createAreaName" class="form-control">
                   <label for="updateAreaName">{{'Name' | translate}}</label>
@@ -31,20 +31,20 @@
                 </tr>
                 </thead>
                 <tbody id="tableBody">
-                <tr *ngFor="let machine of mappingMachines.machineList">
+                <tr *ngFor="let trashInspection of mappingTrashInspections.machineList">
                   <td>
-                    {{machine.id}}
+                    {{trashInspection.id}}
                   </td>
                   <td>
-                    {{machine.name}}
+                    {{trashInspection.name}}
                   </td>
                   <td>
                     <div class="mat-checkbox">
-                      <input id="update-checkbox{{machine.id}}" [checked]="isChecked(machine.id)"
-                             [value]="isChecked(machine.id)"
-                             (change)="addToEditMapping($event, machine.id)"
+                      <input id="update-checkbox{{trashInspection.id}}" [checked]="isChecked(trashInspection.id)"
+                             [value]="isChecked(trashInspection.id)"
+                             (change)="addToEditMapping($event, trashInspection.id)"
                              color="primary" type="checkbox">
-                      <label for="update-checkbox{{machine.id}}"></label>
+                      <label for="update-checkbox{{trashInspection.id}}"></label>
                     </div>
                   </td>
                 </tr>
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!selectedAreaModel.name" (click)="updateArea()">
+        <button class="btn btn-success" [disabled]="!selectedInstallationModel.name" (click)="updateArea()">
           {{ 'Save' | translate }}
         </button>
         <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>

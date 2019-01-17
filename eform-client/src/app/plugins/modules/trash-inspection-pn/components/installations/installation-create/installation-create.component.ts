@@ -1,21 +1,20 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {} from 'src/app/plugins/modules/machine-area-pn/models/area';
-import {AreaPnCreateModel, MachinesPnModel} from '../../../models';
+import {InstallationPnCreateModel, TrashInspectionsPnModel} from '../../../models';
 import {TrashInspectionPnInstallationsService} from '../../../services';
 
 @Component({
-  selector: 'app-machine-area-pn-area-create',
-  templateUrl: './area-create.component.html',
-  styleUrls: ['./area-create.component.scss']
+  selector: 'app-trash-inspection-pn-installation-create',
+  templateUrl: './installation-create.component.html',
+  styleUrls: ['./installation-create.component.scss']
 })
 export class InstallationCreateComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingMachines: MachinesPnModel = new MachinesPnModel();
-  @Output() onAreaCreated: EventEmitter<void> = new EventEmitter<void>();
+  @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
+  @Output() onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  newAreaModel: AreaPnCreateModel = new AreaPnCreateModel();
+  newInstallationModel: InstallationPnCreateModel = new InstallationPnCreateModel();
 
-  constructor(private machineAreaPnAreasService: TrashInspectionPnInstallationsService) { }
+  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
 
   ngOnInit() {
   }
@@ -24,12 +23,12 @@ export class InstallationCreateComponent implements OnInit {
     this.frame.show();
   }
 
-  createArea() {
+  createInstallation() {
     this.spinnerStatus = true;
-    this.machineAreaPnAreasService.createArea(this.newAreaModel).subscribe((data) => {
+    this.trashInspectionPnInstallationsService.createInstallation(this.newInstallationModel).subscribe((data) => {
       if (data && data.success) {
-        this.onAreaCreated.emit();
-        this.newAreaModel = new AreaPnCreateModel();
+        this.onInstallationCreated.emit();
+        this.newInstallationModel = new InstallationPnCreateModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });
@@ -37,13 +36,13 @@ export class InstallationCreateComponent implements OnInit {
 
   addToArray(e: any, machineId: number) {
     if (e.target.checked) {
-      this.newAreaModel.relatedMachinesIds.push(machineId);
+      this.newInstallationModel.relatedMachinesIds.push(machineId);
     } else {
-      this.newAreaModel.relatedMachinesIds = this.newAreaModel.relatedMachinesIds.filter(x => x !== machineId);
+      this.newInstallationModel.relatedMachinesIds = this.newInstallationModel.relatedMachinesIds.filter(x => x !== machineId);
     }
   }
 
   isChecked(relatedMachineId: number) {
-    return this.newAreaModel.relatedMachinesIds.indexOf(relatedMachineId) !== -1;
+    return this.newInstallationModel.relatedMachinesIds.indexOf(relatedMachineId) !== -1;
   }
 }

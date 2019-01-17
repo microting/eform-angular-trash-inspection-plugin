@@ -7,14 +7,15 @@ import {Router} from '@angular/router';
 import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
 import {BaseService} from 'src/app/common/services/base.service';
 import {
-  MachinePnCreateModel,
-  MachinePnModel,
-  MachinesPnRequestModel, MachinePnUpdateModel,
-  MachinesPnModel
+  TrashInspectionPnCreateModel,
+  TrashInspectionPnModel,
+  TrashInspectionsPnRequestModel,
+  TrashInspectionPnUpdateModel,
+  TrashInspectionsPnModel
 } from '../models';
 
-export let MachineAreaPnMachineMethods = {
-  Machines: 'api/machine-area-pn/machines',
+export let TrashInspectionPnTrashInspectionMethods = {
+  TrashInspections: 'api/trash-inspection-pn/trash-inspections',
 };
 
 @Injectable()
@@ -23,24 +24,24 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
     super(_http, router, toastrService);
   }
 
-  getAllMachines(model: MachinesPnRequestModel): Observable<OperationDataResult<MachinesPnModel>> {
-    return this.get(MachineAreaPnMachineMethods.Machines, model);
+  getAllTrashInspections(model: TrashInspectionsPnRequestModel): Observable<OperationDataResult<TrashInspectionsPnModel>> {
+    return this.get(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }
 
-  getSingleMachine(machineId: number): Observable<OperationDataResult<MachinePnModel>> {
-    return this.get(MachineAreaPnMachineMethods.Machines + '/' + machineId);
+  getSingleTrashInspection(trashInspectionId: number): Observable<OperationDataResult<TrashInspectionPnModel>> {
+    return this.get(TrashInspectionPnTrashInspectionMethods.TrashInspections + '/' + trashInspectionId);
   }
 
-  updateMachine(model: MachinePnUpdateModel): Observable<OperationResult> {
-    return this.put(MachineAreaPnMachineMethods.Machines, model);
+  updateTrashInspection(model: TrashInspectionPnUpdateModel): Observable<OperationResult> {
+    return this.put(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }
 
-  createMachine(model: MachinePnCreateModel): Observable<OperationResult> {
-    return this.post(MachineAreaPnMachineMethods.Machines, model);
+  createTrashInspection(model: TrashInspectionPnCreateModel): Observable<OperationResult> {
+    return this.post(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }
 
-  deleteMachine(machineId: number): Observable<OperationResult> {
-    return this.delete(MachineAreaPnMachineMethods.Machines + '/' + machineId);
+  deleteTrashInspection(trashInspectionId: number): Observable<OperationResult> {
+    return this.delete(TrashInspectionPnTrashInspectionMethods.TrashInspections + '/' + trashInspectionId);
   }
 
 }

@@ -8,9 +8,9 @@ import {TemplateListModel, TemplateRequestModel} from '../../../../../common/mod
 import {EFormService} from '../../../../../common/services/eform';
 
 @Component({
-  selector: 'app-machine-area-settings',
-  templateUrl: './machine-area-settings.component.html',
-  styleUrls: ['./machine-area-settings.component.scss']
+  selector: 'app-trash-inspection-settings',
+  templateUrl: './trash-inspection-settings.component.html',
+  styleUrls: ['./trash-inspection-settings.component.scss']
 })
 export class TrashInspectionSettingsComponent implements OnInit {
   spinnerStatus = false;
@@ -20,7 +20,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
 
   constructor(
-    private machineAreaSettingsService: TrashInspectionPnSettingsService,
+    private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
     private router: Router,
     private eFormService: EFormService,
     private entitySearchService: EntitySearchService,
@@ -45,7 +45,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
 
   getSettings() {
     this.spinnerStatus = true;
-    this.machineAreaSettingsService.getAllSettings().subscribe((data) => {
+    this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
       if (data && data.success) {
         // debugger;
         this.settingsModel = data.model;
@@ -55,7 +55,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
   updateSettings() {
     // debugger;
     this.spinnerStatus = true;
-    this.machineAreaSettingsService.updateSettings(this.settingsModel)
+    this.trashInspectionPnSettingsService.updateSettings(this.settingsModel)
       .subscribe((data) => {
         if (data && data.success) {
 

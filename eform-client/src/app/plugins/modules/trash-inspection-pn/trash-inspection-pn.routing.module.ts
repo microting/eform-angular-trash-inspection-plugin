@@ -2,8 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminGuard, AuthGuard} from 'src/app/common/guards';
 import {TrashInspectionPnLayoutComponent} from './layouts';
-import {MachinesPageComponent, AreasPageComponent} from './components';
-import {MachineAreaSettingsComponent} from './components/machine-area-settings';
+import {TrashInspectionsPageComponent, InstallationsPageComponent, TrashInspectionSettingsComponent} from './components';
 
 export const routes: Routes = [
   {
@@ -11,19 +10,19 @@ export const routes: Routes = [
     component: TrashInspectionPnLayoutComponent,
     children: [
       {
-        path: 'machines',
+        path: 'trash-inspections',
         canActivate: [AuthGuard],
-        component: MachinesPageComponent
+        component: TrashInspectionsPageComponent
       },
       {
-        path: 'areas',
+        path: 'installations',
         canActivate: [AdminGuard],
-        component: AreasPageComponent
+        component: InstallationsPageComponent
       },
       {
         path: 'settings',
         canActivate: [AdminGuard],
-        component: MachineAreaSettingsComponent
+        component: TrashInspectionSettingsComponent
       }
     ]
   }

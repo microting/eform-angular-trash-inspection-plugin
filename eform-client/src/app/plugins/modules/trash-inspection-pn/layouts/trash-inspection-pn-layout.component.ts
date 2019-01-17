@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {LocaleService} from 'src/app/common/services/auth';
-import {MachineAreaPnLocalSettings} from '../enums';
+import {TrashInspectionPnLocalSettings} from '../enums';
 import {SharedPnService} from '../../shared/services';
 declare var require: any;
 
@@ -18,7 +18,7 @@ export class TrashInspectionPnLayoutComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.sharedPnService.initLocalPageSettings('machinesPnSettings', MachineAreaPnLocalSettings);
+    this.sharedPnService.initLocalPageSettings('machinesPnSettings', TrashInspectionPnLocalSettings);
   }
 
 

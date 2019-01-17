@@ -1,31 +1,33 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {PageSettingsModel} from 'src/app/common/models/settings';
-import {AreasPnRequestModel, AreasPnModel, AreaPnModel} from 'src/app/plugins/modules/machine-area-pn/models/area';
-import {MachinesPnRequestModel, MachinesPnModel} from 'src/app/plugins/modules/machine-area-pn/models/machine';
+import {InstallationPnRequestModel,
+        InstallationsPnModel,
+        InstallationPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
+import {TrashInspectionsPnRequestModel, TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
 import {
-  MachineAreaPnAreasService,
-  MachineAreaPnMachinesService
-} from 'src/app/plugins/modules/machine-area-pn/services';
+  TrashInspectionPnInstallationsService,
+  TrashInspectionPnTrashInspectionsService
+} from 'src/app/plugins/modules/trash-inspection-pn/services';
 import {SharedPnService} from 'src/app/plugins/modules/shared/services';
 
 @Component({
-  selector: 'app-areas-page',
-  templateUrl: './areas-page.component.html',
-  styleUrls: ['./areas-page.component.scss']
+  selector: 'app-installations-page',
+  templateUrl: './installations-page.component.html',
+  styleUrls: ['./installations-page.component.scss']
 })
 export class InstallationsPageComponent implements OnInit {
-  @ViewChild('createAreaModal') createAreaModal;
-  @ViewChild('editAreaModal') editAreaModal;
-  @ViewChild('deleteAreaModal') deleteAreaModal;
+  @ViewChild('createInspectionModal') createInspectionModal;
+  @ViewChild('editInstallationModal') editInstallationModal;
+  @ViewChild('deleteInstallationModal') deleteInstallationModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  areasModel: AreasPnModel = new AreasPnModel();
-  mappingMachines: MachinesPnModel = new MachinesPnModel();
-  areasRequestModel: AreasPnRequestModel = new AreasPnRequestModel();
+  installationsModel: InstallationsPnModel = new InstallationsPnModel();
+  mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
+  installationRequestModel: InstallationPnRequestModel = new InstallationPnRequestModel();
   spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
-              private machineAreaPnAreasService: MachineAreaPnAreasService,
-              private machineAreaPnMachinesService: MachineAreaPnMachinesService) { }
+              private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
+              private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService) { }
 
   ngOnInit() {
     this.getLocalPageSettings();
@@ -33,52 +35,52 @@ export class InstallationsPageComponent implements OnInit {
 
   getLocalPageSettings() {
     this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('machinesPnSettings', 'Areas').settings;
+    ('trashInspectionsPnSettings', 'Installations').settings;
     this.getAllInitialData();
   }
 
   updateLocalPageSettings() {
     this.sharedPnService.updateLocalPageSettings
-    ('machinesPnSettings', this.localPageSettings, 'Areas');
-    this.getAllAreas();
+    ('trashInspectionsPnSettings', this.localPageSettings, 'Installations');
+    this.getAllInstallations();
   }
 
   getAllInitialData() {
-    this.getAllAreas();
-    this.getMachinesForMapping();
+    this.getAllInstallations();
+    this.getTrashInspectionsForMapping();
   }
 
-  getAllAreas() {
+  getAllInstallations() {
     this.spinnerStatus = true;
-    this.areasRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.areasRequestModel.sort = this.localPageSettings.sort;
-    this.areasRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.machineAreaPnAreasService.getAllAreas(this.areasRequestModel).subscribe((data) => {
+    this.installationRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
+    this.installationRequestModel.sort = this.localPageSettings.sort;
+    this.installationRequestModel.pageSize = this.localPageSettings.pageSize;
+    this.trashInspectionPnInstallationsService.getAllInstallations(this.installationRequestModel).subscribe((data) => {
       if (data && data.success) {
-        this.areasModel = data.model;
+        this.installationsModel = data.model;
       } this.spinnerStatus = false;
     });
   }
 
-  getMachinesForMapping() {
+  getTrashInspectionsForMapping() {
     this.spinnerStatus = true;
-    this.machineAreaPnMachinesService.getAllMachines(new MachinesPnRequestModel()).subscribe((data) => {
+    this.trashInspectionPnTrashInspectionsService.getAllTrashInspections(new TrashInspectionsPnRequestModel()).subscribe((data) => {
       if (data && data.success) {
-        this.mappingMachines = data.model;
+        this.mappingTrashInspections = data.model;
       } this.spinnerStatus = false;
     });
   }
 
-  showEditAreaModal(area: AreaPnModel) {
-    this.editAreaModal.show(area);
+  showEditInstallationModal(installation: InstallationPnModel) {
+    this.editInstallationModal.show(installation);
   }
 
-  showDeleteAreaModal(area: AreaPnModel) {
-    this.deleteAreaModal.show(area);
+  showDeleteInstallationModal(installation: InstallationPnModel) {
+    this.deleteInstallationModal.show(installation);
   }
 
-  showCreateAreaModal() {
-    this.createAreaModal.show();
+  showCreateInstallationModal() {
+    this.createInspectionModal.show();
   }
 
   sortTable(sort: string) {
@@ -93,14 +95,14 @@ export class InstallationsPageComponent implements OnInit {
 
   changePage(e: any) {
     if (e || e === 0) {
-      this.areasRequestModel.offset = e;
+      this.installationRequestModel.offset = e;
       if (e === 0) {
-        this.areasRequestModel.pageIndex = 0;
+        this.installationRequestModel.pageIndex = 0;
       } else {
-        this.areasRequestModel.pageIndex
-          = Math.floor(e / this.areasRequestModel.pageSize);
+        this.installationRequestModel.pageIndex
+          = Math.floor(e / this.installationRequestModel.pageSize);
       }
-      this.getAllAreas();
+      this.getAllInstallations();
     }
   }
 

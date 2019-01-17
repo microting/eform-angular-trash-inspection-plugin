@@ -17,7 +17,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 
 namespace TrashInspection.Pn
 {
-    public class EformTrashInspectionPlugin
+    public class EformTrashInspectionPlugin : IEformPlugin
     {
         public string Name => "Microting Trash Inspection Plugin";
         public string PluginId => "EFormTrashInspectionPn";

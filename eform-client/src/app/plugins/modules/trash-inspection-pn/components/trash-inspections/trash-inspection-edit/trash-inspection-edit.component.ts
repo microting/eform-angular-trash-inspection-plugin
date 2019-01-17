@@ -1,66 +1,67 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
-  AreaPnModel, AreasPnModel,
-  MachinePnModel,
-  MachinePnUpdateModel
+  InstallationPnModel, InstallationsPnModel,
+  TrashInspectionPnModel,
+  TrashInspectionPnUpdateModel
 } from '../../../models';
 import {
   TrashInspectionPnTrashInspectionsService
 } from '../../../services';
 
 @Component({
-  selector: 'app-machine-area-pn-machine-edit',
-  templateUrl: './machine-edit.component.html',
-  styleUrls: ['./machine-edit.component.scss']
+  selector: 'app-trash-inspection-pn-trash-inspection-edit',
+  templateUrl: './trash-inspection-edit.component.html',
+  styleUrls: ['./trash-inspection-edit.component.scss']
 })
 export class TrashInspectionEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingAreas: AreasPnModel = new AreasPnModel();
-  @Output() onMachineUpdated: EventEmitter<void> = new EventEmitter<void>();
+  @Input() mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
+  @Output() onTrashInspectionUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  selectedMachineModel: MachinePnModel = new MachinePnModel();
-  constructor(private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService) { }
+  selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
+  constructor(private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService) { }
 
   ngOnInit() {
   }
 
-  show(machineModel: MachinePnModel) {
-    this.getSelectedMachine(machineModel.id);
+  show(trashInspectionModel: TrashInspectionPnModel) {
+    this.getSelectedTrashInspection(trashInspectionModel.id);
     this.frame.show();
   }
 
-  getSelectedMachine(id: number) {
+  getSelectedTrashInspection(id: number) {
     this.spinnerStatus = true;
-    this.machineAreaPnMachinesService.getSingleMachine(id).subscribe((data) => {
+    this.trashInspectionPnTrashInspectionsService.getSingleTrashInspection(id).subscribe((data) => {
       if (data && data.success) {
-        this.selectedMachineModel = data.model;
+        this.selectedTrashInspectionModel = data.model;
       } this.spinnerStatus = false;
     });
   }
 
-  updateMachine() {
+  updateTrashInspection() {
     this.spinnerStatus = true;
-    this.machineAreaPnMachinesService.updateMachine(new MachinePnUpdateModel(this.selectedMachineModel))
+    this.trashInspectionPnTrashInspectionsService.updateTrashInspection(new TrashInspectionPnUpdateModel(this.selectedTrashInspectionModel))
       .subscribe((data) => {
       if (data && data.success) {
-        this.onMachineUpdated.emit();
-        this.selectedMachineModel = new MachinePnModel();
+        this.onTrashInspectionUpdated.emit();
+        this.selectedTrashInspectionModel = new TrashInspectionPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });
   }
 
-  addToEditMapping(e: any, areaId: number) {
+  addToEditMapping(e: any, installationId: number) {
     if (e.target.checked) {
-      this.selectedMachineModel.relatedAreasIds.push(areaId);
+      this.selectedTrashInspectionModel.relatedAreasIds.push(installationId);
     } else {
-      this.selectedMachineModel.relatedAreasIds = this.selectedMachineModel.relatedAreasIds.filter(x => x !== areaId);
+      this.selectedTrashInspectionModel.relatedAreasIds = this.selectedTrashInspectionModel.relatedAreasIds
+        .filter(x => x !== installationId);
     }
   }
 
-  isChecked(areaId: number) {
-    if (this.selectedMachineModel.relatedAreasIds && this.selectedMachineModel.relatedAreasIds.length > 0) {
-      return this.selectedMachineModel.relatedAreasIds.findIndex(x => x === areaId) !== -1;
+  isChecked(installationId: number) {
+    if (this.selectedTrashInspectionModel.relatedAreasIds && this.selectedTrashInspectionModel.relatedAreasIds.length > 0) {
+      return this.selectedTrashInspectionModel.relatedAreasIds.findIndex(x => x === installationId) !== -1;
     } return false;
   }
 

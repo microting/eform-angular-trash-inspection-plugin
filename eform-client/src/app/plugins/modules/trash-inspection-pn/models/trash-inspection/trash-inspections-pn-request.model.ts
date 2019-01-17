@@ -1,4 +1,4 @@
-export class TrashInspectionPnRequestModel {
+export class TrashInspectionsPnRequestModel {
   pageIndex: number;
   pageSize: number;
   sort: string;

@@ -7,15 +7,15 @@ import {Router} from '@angular/router';
 import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
 import {BaseService} from 'src/app/common/services/base.service';
 import {
-  AreasPnRequestModel,
-  AreasPnModel,
-  AreaPnCreateModel,
-  AreaPnUpdateModel,
-  AreaPnModel
+  InstallationPnRequestModel,
+  InstallationsPnModel,
+  InstallationPnCreateModel,
+  InstallationPnUpdateModel,
+  InstallationPnModel
 } from '../models';
 
-export let MachineAreaPnAreaMethods = {
-  Areas: 'api/machine-area-pn/areas',
+export let TrashInspectionPnInstallationMethods = {
+  Installations: 'api/trash-inspection-pn/installations',
 };
 
 @Injectable()
@@ -24,23 +24,23 @@ export class TrashInspectionPnInstallationsService extends BaseService {
     super(_http, router, toastrService);
   }
 
-  getAllAreas(model: AreasPnRequestModel): Observable<OperationDataResult<AreasPnModel>> {
-    return this.get(MachineAreaPnAreaMethods.Areas, model);
+  getAllInstallations(model: InstallationPnRequestModel): Observable<OperationDataResult<InstallationsPnModel>> {
+    return this.get(TrashInspectionPnInstallationMethods.Installations, model);
   }
 
-  getSingleArea(areaId: number): Observable<OperationDataResult<AreaPnModel>> {
-    return this.get(MachineAreaPnAreaMethods.Areas + '/' + areaId);
+  getSingleInstallation(installationId: number): Observable<OperationDataResult<InstallationPnModel>> {
+    return this.get(TrashInspectionPnInstallationMethods.Installations + '/' + installationId);
   }
 
-  updateArea(model: AreaPnUpdateModel): Observable<OperationResult> {
-    return this.put(MachineAreaPnAreaMethods.Areas, model);
+  updateInstallation(model: InstallationPnUpdateModel): Observable<OperationResult> {
+    return this.put(TrashInspectionPnInstallationMethods.Installations, model);
   }
 
-  createArea(model: AreaPnCreateModel): Observable<OperationResult> {
-    return this.post(MachineAreaPnAreaMethods.Areas, model);
+  createInstallation(model: InstallationPnCreateModel): Observable<OperationResult> {
+    return this.post(TrashInspectionPnInstallationMethods.Installations, model);
   }
 
-  deleteArea(machineId: number): Observable<OperationResult> {
-    return this.delete(MachineAreaPnAreaMethods.Areas + '/' + machineId);
+  deleteInstallation(installationId: number): Observable<OperationResult> {
+    return this.delete(TrashInspectionPnInstallationMethods.Installations + '/' + installationId);
   }
 }

@@ -1,61 +1,63 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {AreaPnModel, AreaPnUpdateModel} from 'src/app/plugins/modules/machine-area-pn/models/area';
-import {MachinesPnModel} from 'src/app/plugins/modules/machine-area-pn/models/machine';
-import {MachineAreaPnAreasService} from 'src/app/plugins/modules/machine-area-pn/services';
+import {InstallationPnModel, InstallationPnUpdateModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
+import {TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
+import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
 
 @Component({
-  selector: 'app-machine-area-pn-area-edit',
-  templateUrl: './area-edit.component.html',
-  styleUrls: ['./area-edit.component.scss']
+  selector: 'app-trash-inspection-pn-installation-edit',
+  templateUrl: './installation-edit.component.html',
+  styleUrls: ['./installation-edit.component.scss']
 })
 export class InstallationEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingMachines: MachinesPnModel = new MachinesPnModel();
-  @Output() onAreaUpdated: EventEmitter<void> = new EventEmitter<void>();
+  @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
+  @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  selectedAreaModel: AreaPnModel = new AreaPnModel();
-  constructor(private machineAreaPnAreasService: MachineAreaPnAreasService) { }
+  selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
+  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
 
   ngOnInit() {
   }
 
-  show(areaModel: AreaPnModel) {
-    this.getSelectedArea(areaModel.id);
+  show(installationModel: InstallationPnModel) {
+    this.getSelectedArea(installationModel.id);
     this.frame.show();
   }
 
   getSelectedArea(id: number) {
     this.spinnerStatus = true;
-    this.machineAreaPnAreasService.getSingleArea(id).subscribe((data) => {
+    this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
       if (data && data.success) {
-        this.selectedAreaModel = data.model;
+        this.selectedInstallationModel = data.model;
       } this.spinnerStatus = false;
     });
   }
 
   updateArea() {
     this.spinnerStatus = true;
-    this.machineAreaPnAreasService.updateArea(new AreaPnUpdateModel(this.selectedAreaModel)).subscribe((data) => {
+    this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
+      .subscribe((data) => {
       if (data && data.success) {
-        this.onAreaUpdated.emit();
-        this.selectedAreaModel = new AreaPnModel();
+        this.onInstallationUpdated.emit();
+        this.selectedInstallationModel = new InstallationPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });
   }
 
-  addToEditMapping(e: any, machineId: number) {
+  addToEditMapping(e: any, trashInspectionId: number) {
     debugger;
     if (e.target.checked) {
-      this.selectedAreaModel.relatedMachinesIds.push(machineId);
+      this.selectedInstallationModel.relatedMachinesIds.push(trashInspectionId);
     } else {
-      this.selectedAreaModel.relatedMachinesIds = this.selectedAreaModel.relatedMachinesIds.filter(x => x !== machineId);
+      this.selectedInstallationModel.relatedMachinesIds = this.selectedInstallationModel.relatedMachinesIds
+        .filter(x => x !== trashInspectionId);
     }
   }
 
-  isChecked(machineId: number) {
-    if (this.selectedAreaModel.relatedMachinesIds && this.selectedAreaModel.relatedMachinesIds.length > 0) {
-      return this.selectedAreaModel.relatedMachinesIds.findIndex(x => x === machineId) !== -1;
+  isChecked(trashInspectionId: number) {
+    if (this.selectedInstallationModel.relatedMachinesIds && this.selectedInstallationModel.relatedMachinesIds.length > 0) {
+      return this.selectedInstallationModel.relatedMachinesIds.findIndex(x => x === trashInspectionId) !== -1;
     } return false;
   }
 }

@@ -11,7 +11,7 @@
               <div class="md-form">
                 <input mdbInputDirective
                        [mdbValidate]="false"
-                       [(ngModel)]="newMachineModel.name"
+                       [(ngModel)]="newTrashInspectionModel.name"
                        type="text" id="createMachineName"
                        name="createMachineName" class="form-control">
                 <label for="createMachineName">{{'Name' | translate}}</label>
@@ -28,7 +28,7 @@
               </tr>
               </thead>
               <tbody id="tableBody">
-              <tr *ngFor="let area of mappingAreas.areaList">
+              <tr *ngFor="let area of mappingInstallation.areaList">
                 <td>
                   {{area.id}}
                 </td>
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!newMachineModel.name" (click)="createMachine()">
+        <button class="btn btn-success" [disabled]="!newTrashInspectionModel.name" (click)="createTrashInspection()">
           {{ 'Create' | translate }}
         </button>
         <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>

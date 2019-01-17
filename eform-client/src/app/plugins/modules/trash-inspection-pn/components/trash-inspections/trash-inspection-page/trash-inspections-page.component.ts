@@ -1,35 +1,35 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {PageSettingsModel} from 'src/app/common/models/settings';
 import {
-  MachinesPnRequestModel,
-  MachinesPnModel,
-  AreasPnModel,
-  AreasPnRequestModel,
-  MachinePnModel
+  TrashInspectionsPnRequestModel,
+  TrashInspectionsPnModel,
+  InstallationsPnModel,
+  InstallationPnRequestModel,
+  TrashInspectionPnModel
 } from '../../../models';
 import {TrashInspectionPnInstallationsService, TrashInspectionPnTrashInspectionsService} from '../../../services';
 import {SharedPnService} from '../../../../shared/services';
 import {AuthService} from '../../../../../../common/services/auth';
 
 @Component({
-  selector: 'app-machine-area-pn-machines-page',
-  templateUrl: './machines-page.component.html',
-  styleUrls: ['./machines-page.component.scss']
+  selector: 'app-trash-inspection-pn-trash-inspection-page',
+  templateUrl: './trash-inspections-page.component.html',
+  styleUrls: ['./trash-inspections-page.component.scss']
 })
 export class TrashInspectionsPageComponent implements OnInit {
-  @ViewChild('createMachineModal') createMachineModal;
-  @ViewChild('editMachineModal') editMachineModal;
-  @ViewChild('deleteMachineModal') deleteMachineModal;
+  @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
+  @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
+  @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  machinesModel: MachinesPnModel = new MachinesPnModel();
-  machinesRequestModel: MachinesPnRequestModel = new MachinesPnRequestModel();
-  mappingAreas: AreasPnModel = new AreasPnModel();
+  trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
+  trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
+  mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
   spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
-              private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService,
+              private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
               private authService: AuthService,
-              private machineAreaPnAreasService: TrashInspectionPnInstallationsService) { }
+              private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
   get currentRole(): string {
     return this.authService.currentRole;
   }
@@ -39,53 +39,53 @@ export class TrashInspectionsPageComponent implements OnInit {
 
   getLocalPageSettings() {
     this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('machinesPnSettings', 'Machines').settings;
+    ('trashInspectionsPnSettings', 'TrashInspections').settings;
     this.getAllInitialData();
   }
 
   updateLocalPageSettings() {
     debugger;
     this.sharedPnService.updateLocalPageSettings
-    ('machinesPnSettings', this.localPageSettings, 'Machines');
+    ('trashInspectionsPnSettings', this.localPageSettings, 'TrashInspections');
     this.getLocalPageSettings();
   }
 
   getAllInitialData() {
-    this.getAllMachines();
-    this.getMappedAreas();
+    this.getAllTrashInspections();
+    this.getMappedInstallations();
   }
 
-  getAllMachines() {
+  getAllTrashInspections() {
     this.spinnerStatus = true;
-    this.machinesRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.machinesRequestModel.sort = this.localPageSettings.sort;
-    this.machinesRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.machineAreaPnMachinesService.getAllMachines(this.machinesRequestModel).subscribe((data) => {
+    this.trashInspectionsRequestModel.pageSize = this.localPageSettings.pageSize;
+    this.trashInspectionsRequestModel.sort = this.localPageSettings.sort;
+    this.trashInspectionsRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
+    this.trashInspectionPnTrashInspectionsService.getAllTrashInspections(this.trashInspectionsRequestModel).subscribe((data) => {
       if (data && data.success) {
-        this.machinesModel = data.model;
+        this.trashInspectionsModel = data.model;
       } this.spinnerStatus = false;
     });
   }
 
-  getMappedAreas() {
+  getMappedInstallations() {
     this.spinnerStatus = true;
-    this.machineAreaPnAreasService.getAllAreas(new AreasPnRequestModel()).subscribe((data) => {
+    this.trashInspectionPnInstallationsService.getAllInstallations(new InstallationPnRequestModel()).subscribe((data) => {
       if (data && data.success) {
-        this.mappingAreas = data.model;
+        this.mappingInstallations = data.model;
       } this.spinnerStatus = false;
     });
   }
 
-  showEditMachineModal(machine: MachinePnModel) {
-    this.editMachineModal.show(machine);
+  showEditTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
+    this.editTrashInspectionModal.show(trashInspection);
   }
 
-  showDeleteMachineModal(machine: MachinePnModel) {
-    this.deleteMachineModal.show(machine);
+  showDeleteTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
+    this.deleteTrashInspectionModal.show(trashInspection);
   }
 
-  showCreateMachineModal() {
-    this.createMachineModal.show();
+  showCreateTrashInspectionModal() {
+    this.createTrashInspectionModal.show();
   }
 
   sortTable(sort: string) {
@@ -100,14 +100,14 @@ export class TrashInspectionsPageComponent implements OnInit {
 
   changePage(e: any) {
     if (e || e === 0) {
-      this.machinesRequestModel.offset = e;
+      this.trashInspectionsRequestModel.offset = e;
       if (e === 0) {
-        this.machinesRequestModel.pageIndex = 0;
+        this.trashInspectionsRequestModel.pageIndex = 0;
       } else {
-        this.machinesRequestModel.pageIndex
-          = Math.floor(e / this.machinesRequestModel.pageSize);
+        this.trashInspectionsRequestModel.pageIndex
+          = Math.floor(e / this.trashInspectionsRequestModel.pageSize);
       }
-      this.getAllMachines();
+      this.getAllTrashInspections();
     }
   }
 }

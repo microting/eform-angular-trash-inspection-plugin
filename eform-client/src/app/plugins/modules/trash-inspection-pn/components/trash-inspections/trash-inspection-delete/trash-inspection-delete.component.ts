@@ -1,33 +1,33 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {MachinePnModel} from '../../../models';
+import {TrashInspectionPnModel} from '../../../models';
 import {TrashInspectionPnTrashInspectionsService} from '../../../services';
 
 @Component({
-  selector: 'app-machine-area-pn-machine-delete',
-  templateUrl: './machine-delete.component.html',
-  styleUrls: ['./machine-delete.component.scss']
+  selector: 'app-trash-inspection-pn-trash-inspection-delete',
+  templateUrl: './trash-inspection-delete.component.html',
+  styleUrls: ['./trash-inspection-delete.component.scss']
 })
 export class TrashInspectionDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onMachineDeleted: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onTrashInspectionDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  selectedMachineModel: MachinePnModel = new MachinePnModel();
+  selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
   constructor(private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService) { }
 
   ngOnInit() {
   }
 
-  show(machineModel: MachinePnModel) {
-    this.selectedMachineModel = machineModel;
+  show(trashInspectionModel: TrashInspectionPnModel) {
+    this.selectedTrashInspectionModel = trashInspectionModel;
     this.frame.show();
   }
 
-  deleteMachine() {
+  deleteTrashInspection() {
     this.spinnerStatus = true;
-    this.machineAreaPnMachinesService.deleteMachine(this.selectedMachineModel.id).subscribe((data) => {
+    this.machineAreaPnMachinesService.deleteTrashInspection(this.selectedTrashInspectionModel.id).subscribe((data) => {
       if (data && data.success) {
-        this.onMachineDeleted.emit();
-        this.selectedMachineModel = new MachinePnModel();
+        this.onTrashInspectionDeleted.emit();
+        this.selectedTrashInspectionModel = new TrashInspectionPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });

@@ -7,8 +7,8 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
-export let MachineAreaSettingsMethods = {
-  MachineAreaSettings: 'api/machine-area-pn/settings'
+export let TrashInspectionSettingsMethods = {
+  TrashInspectionSettings: 'api/machine-area-pn/settings'
 
 };
 @Injectable()
@@ -19,9 +19,9 @@ export class TrashInspectionPnSettingsService extends BaseService {
   }
 
   getAllSettings(): Observable<OperationDataResult<TrashInspectionSettingsModel>> {
-    return this.get(MachineAreaSettingsMethods.MachineAreaSettings);
+    return this.get(TrashInspectionSettingsMethods.TrashInspectionSettings);
   }
   updateSettings(model: TrashInspectionSettingsModel): Observable<OperationResult> {
-    return this.post(MachineAreaSettingsMethods.MachineAreaSettings, model);
+    return this.post(TrashInspectionSettingsMethods.TrashInspectionSettings, model);
   }
 }

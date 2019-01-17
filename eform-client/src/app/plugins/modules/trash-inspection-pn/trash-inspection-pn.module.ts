@@ -14,16 +14,17 @@ import {TrashInspectionPnLayoutComponent} from './layouts';
 import {MachineAreaPnRouting} from './trash-inspection-pn.routing.module';
 import {SharedPnModule} from '../shared/shared-pn.module';
 import {
-  AreaCreateComponent,
-  AreaDeleteComponent,
-  AreasPageComponent,
-  AreaEditComponent,
-  MachineCreateComponent,
-  MachineDeleteComponent,
-  MachinesPageComponent,
-  MachineEditComponent
+  InstallationCreateComponent,
+  InstallationDeleteComponent,
+  InstallationsPageComponent,
+  InstallationEditComponent,
+  TrashInspectionCreateComponent,
+  TrashInspectionDeleteComponent,
+  TrashInspectionsPageComponent,
+  TrashInspectionEditComponent,
+  TrashInspectionSettingsComponent
 } from './components';
-import { MachineAreaSettingsComponent } from './components/machine-area-settings';
+
 
 @NgModule({
   imports: [
@@ -36,16 +37,16 @@ import { MachineAreaSettingsComponent } from './components/machine-area-settings
     NgSelectModule
   ],
   declarations: [
-    AreasPageComponent,
-    AreaDeleteComponent,
-    AreaCreateComponent,
-    AreaEditComponent,
-    MachinesPageComponent,
-    MachineCreateComponent,
-    MachineEditComponent,
-    MachineDeleteComponent,
+    InstallationsPageComponent,
+    InstallationDeleteComponent,
+    InstallationCreateComponent,
+    InstallationEditComponent,
+    TrashInspectionsPageComponent,
+    TrashInspectionCreateComponent,
+    TrashInspectionEditComponent,
+    TrashInspectionDeleteComponent,
     TrashInspectionPnLayoutComponent,
-    MachineAreaSettingsComponent
+    TrashInspectionSettingsComponent,
   ],
   providers: [TrashInspectionPnInstallationsService, TrashInspectionPnTrashInspectionsService,   TrashInspectionPnSettingsService
   ]

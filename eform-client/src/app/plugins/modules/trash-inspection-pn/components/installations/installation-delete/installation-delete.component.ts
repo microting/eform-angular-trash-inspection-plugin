@@ -1,33 +1,33 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {AreaPnModel, AreaPnUpdateModel} from 'src/app/plugins/modules/machine-area-pn/models/area';
-import {MachineAreaPnAreasService} from 'src/app/plugins/modules/machine-area-pn/services';
+import {InstallationPnModel, InstallationPnUpdateModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
+import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
 
 @Component({
-  selector: 'app-machine-area-pn-area-delete',
-  templateUrl: './area-delete.component.html',
-  styleUrls: ['./area-delete.component.scss']
+  selector: 'app-trash-inspection-pn-installation-delete',
+  templateUrl: './installation-delete.component.html',
+  styleUrls: ['./installation-delete.component.scss']
 })
 export class InstallationDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onAreaDeleted: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onInstallationDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  selectedAreaModel: AreaPnModel = new AreaPnModel();
-  constructor(private machineAreaPnAreasService: MachineAreaPnAreasService) { }
+  selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
+  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
 
   ngOnInit() {
   }
 
-  show(areaModel: AreaPnModel) {
-    this.selectedAreaModel = areaModel;
+  show(installationModel: InstallationPnModel) {
+    this.selectedInstallationModel = installationModel;
     this.frame.show();
   }
 
-  deleteArea() {
+  deleteInstallation() {
     this.spinnerStatus = true;
-    this.machineAreaPnAreasService.deleteArea(this.selectedAreaModel.id).subscribe((data) => {
+    this.trashInspectionPnInstallationsService.deleteInstallation(this.selectedInstallationModel.id).subscribe((data) => {
       if (data && data.success) {
-        this.onAreaDeleted.emit();
-        this.selectedAreaModel = new AreaPnModel();
+        this.onInstallationDeleted.emit();
+        this.selectedInstallationModel = new InstallationPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });

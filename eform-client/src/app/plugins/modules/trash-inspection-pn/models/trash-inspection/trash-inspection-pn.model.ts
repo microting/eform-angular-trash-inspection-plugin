@@ -1,4 +1,4 @@
-export class MachinesPnModel {
+export class TrashInspectionsPnModel {
   total: number;
   machineList: Array<TrashInspectionPnModel> = [];
 }

@@ -3,9 +3,9 @@ import {
   PageSettingsModel
 } from 'src/app/common/models/settings';
 
-export const MachineAreaPnLocalSettings = [
+export const TrashInspectionPnLocalSettings = [
   new ApplicationPageModel({
-      name: 'Areas',
+      name: 'Installations',
       settings: new PageSettingsModel({
         pageSize: 10,
         sort: 'Id',
@@ -14,7 +14,7 @@ export const MachineAreaPnLocalSettings = [
     }
   ),
   new ApplicationPageModel({
-      name: 'Machines',
+      name: 'TrashInspections',
       settings: new PageSettingsModel({
         pageSize: 10,
         sort: 'Id',

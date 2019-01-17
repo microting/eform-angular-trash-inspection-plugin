@@ -1,4 +1,4 @@
-export class AreasPnModel {
+export class InstallationsPnModel {
   total: number;
   areaList: Array<InstallationPnModel> = [];
 }
