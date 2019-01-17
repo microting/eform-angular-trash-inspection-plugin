@@ -1,0 +1,4 @@
+export * from './trash-inspection-create/trash-inspection-create.component';
+export * from './trash-inspection-delete/trash-inspection-delete.component';
+export * from './trash-inspection-edit/trash-inspection-edit.component';
+export * from './trash-inspection-page/trash-inspections-page.component';

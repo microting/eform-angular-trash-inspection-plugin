@@ -1,0 +1,62 @@
+<div mdbModal class="modal fade" #frame="mdbModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ 'New Area' | translate }}</h3>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
+                       [(ngModel)]="newAreaModel.name"
+                       type="text" id="createAreaName"
+                       name="createAreaName" class="form-control">
+                <label for="createAreaName">{{'Name' | translate}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row p-1 table-responsive table-fixed-scrollable no-gutters">
+            <table class="table table-sm table-striped text-center z-depth-1">
+              <thead>
+              <tr>
+                <th scope="col" id="idTableHeader">ID</th>
+                <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
+                <th scope="col">{{ 'Related Machine' | translate }}</th>
+              </tr>
+              </thead>
+              <tbody id="tableBody">
+              <tr *ngFor="let machine of mappingMachines.machineList">
+                <td>
+                  {{machine.id}}
+                </td>
+                <td>
+                  {{machine.name}}
+                </td>
+                <td>
+                  <div class="mat-checkbox">
+                    <input id="checkbox{{machine.id}}" (change)="addToArray($event, machine.id)"
+                           [checked]="isChecked(machine.id)"
+                           color="primary" type="checkbox">
+                    <label for="checkbox{{machine.id}}"></label>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" [disabled]="!newAreaModel.name" (click)="createArea()">
+          {{ 'Create' | translate }}
+        </button>
+        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>

@@ -1,0 +1,67 @@
+<div mdbModal class="modal fade" #frame="mdbModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ 'Update Area' | translate }}</h3>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form #createForm="ngForm">
+            <div class="row mb-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <input mdbInputDirective
+                         [mdbValidate]="false"
+                         [(ngModel)]="selectedAreaModel.name"
+                         type="text" id="updateAreaName"
+                         name="createAreaName" class="form-control">
+                  <label for="updateAreaName">{{'Name' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row p-1 table-responsive table-fixed-scrollable no-gutters">
+              <table class="table table-sm table-striped text-center z-depth-1">
+                <thead>
+                <tr>
+                  <th scope="col" id="idTableHeader">ID</th>
+                  <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
+                  <th scope="col">
+                    {{ 'Related Machine' | translate }}
+                  </th>
+                </tr>
+                </thead>
+                <tbody id="tableBody">
+                <tr *ngFor="let machine of mappingMachines.machineList">
+                  <td>
+                    {{machine.id}}
+                  </td>
+                  <td>
+                    {{machine.name}}
+                  </td>
+                  <td>
+                    <div class="mat-checkbox">
+                      <input id="update-checkbox{{machine.id}}" [checked]="isChecked(machine.id)"
+                             [value]="isChecked(machine.id)"
+                             (change)="addToEditMapping($event, machine.id)"
+                             color="primary" type="checkbox">
+                      <label for="update-checkbox{{machine.id}}"></label>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" [disabled]="!selectedAreaModel.name" (click)="updateArea()">
+          {{ 'Save' | translate }}
+        </button>
+        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>

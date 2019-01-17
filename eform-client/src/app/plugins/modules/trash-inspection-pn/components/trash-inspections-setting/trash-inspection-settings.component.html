@@ -1,0 +1,33 @@
+<subheader-pn [title]="'Machine Area plugin settings' | translate">
+  <div class="p-3">
+    <button
+      class="btn btn-success" (click)="updateSettings()">{{ 'Save' | translate }}
+    </button>
+  </div>
+</subheader-pn>
+
+<div class="container-fluid">
+  <div class="row mt-4">
+    <div class="col-md-12 col-xs-12 control-block">
+      <subheader-pn [title]="'Settings' | translate" [heandingSizeRem]="1">
+      </subheader-pn>
+      <div class="container-fluid">
+        <div class="row mt-2">
+          <div class="col-md-6">
+            <ng-select [items]="templatesModel.templates"
+                       bindLabel="label"
+                       [placeholder]=" settingsModel.selectedTemplateName || ('Selected template' | translate)"
+                       bindValue="id"
+                       [typeahead]="typeahead"
+                       (change)="onSelectedChanged($event)">
+            </ng-select>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>
