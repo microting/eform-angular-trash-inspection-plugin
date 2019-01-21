@@ -32,5 +32,5 @@ export const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MachineAreaPnRouting {
+export class TrashInspectionPnRouting {
 }

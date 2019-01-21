@@ -30,6 +30,7 @@ namespace TrashInspection.Pn
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IInstallationService, InstallationService>();
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
@@ -85,7 +86,7 @@ namespace TrashInspection.Pn
                     {
                         Name =  localizationService.GetString("Installations"),
                         E2EId = "trash-inspection-pn-installations",
-                        Link = "/plugins/trash-inspecions-pn/installations",
+                        Link = "/plugins/trash-inspection-pn/installations",
                         Position = 1,
                     },
                     new MenuItemModel()

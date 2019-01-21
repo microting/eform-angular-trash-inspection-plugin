@@ -1,10 +1,22 @@
+import {Time} from '@angular/common';
+
 export class TrashInspectionsPnModel {
   total: number;
-  machineList: Array<TrashInspectionPnModel> = [];
+  trashInspectionList: Array<TrashInspectionPnModel> = [];
 }
 
 export class TrashInspectionPnModel {
   id: number;
   name: string;
+  weighingNumber: number;
+  date: Date;
+  time: Time;
+  registrationNumber: string;
+  trashFraction: number;
+  eakCode: number;
+  producer: string;
+  transporter: string;
+  installationId: number;
+  mustBeInspected: boolean;
   relatedAreasIds: Array<number> = [];
 }

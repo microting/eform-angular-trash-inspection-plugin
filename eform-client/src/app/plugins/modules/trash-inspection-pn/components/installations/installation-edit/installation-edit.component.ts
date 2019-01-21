@@ -20,11 +20,11 @@ export class InstallationEditComponent implements OnInit {
   }
 
   show(installationModel: InstallationPnModel) {
-    this.getSelectedArea(installationModel.id);
+    this.getSelectedInstallation(installationModel.id);
     this.frame.show();
   }
 
-  getSelectedArea(id: number) {
+  getSelectedInstallation(id: number) {
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
       if (data && data.success) {
@@ -33,7 +33,7 @@ export class InstallationEditComponent implements OnInit {
     });
   }
 
-  updateArea() {
+  updateInstallation() {
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
       .subscribe((data) => {

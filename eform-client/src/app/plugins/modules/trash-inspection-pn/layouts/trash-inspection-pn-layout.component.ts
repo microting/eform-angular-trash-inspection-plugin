@@ -6,7 +6,7 @@ import {SharedPnService} from '../../shared/services';
 declare var require: any;
 
 @Component({
-  selector: 'app-machine-area-pn-layout',
+  selector: 'app-trash-inspection-pn-layout',
   template: `<router-outlet></router-outlet>`
 })
 export class TrashInspectionPnLayoutComponent implements AfterViewInit, OnInit {
@@ -18,7 +18,7 @@ export class TrashInspectionPnLayoutComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.sharedPnService.initLocalPageSettings('machinesPnSettings', TrashInspectionPnLocalSettings);
+    this.sharedPnService.initLocalPageSettings('trashInspectionsPnSettings', TrashInspectionPnLocalSettings);
   }
 
 

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using eFormShared;
 using TrashInspection.Pn.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Data.Entities;
 
@@ -17,6 +19,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int Created_By_User_Id { get; set; }
         public int Updated_By_User_Id { get; set; }
         public string Name { get; set; }
+        public List<SiteName_Dto> DeployedSites { get; set; }
+
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
@@ -27,7 +31,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             installation.Updated_at = DateTime.Now;
             installation.Updated_By_User_Id = Updated_By_User_Id;
             installation.Version = Version;
-            installation.Workflow_state = eFormShared.Constants.WorkflowStates.Created;
+            installation.Workflow_state = Constants.WorkflowStates.Created;
 
             _dbContext.Installations.Add(installation);
             _dbContext.SaveChanges();

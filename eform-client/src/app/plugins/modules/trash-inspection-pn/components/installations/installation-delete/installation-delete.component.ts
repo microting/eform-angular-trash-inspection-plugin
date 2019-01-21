@@ -27,7 +27,6 @@ export class InstallationDeleteComponent implements OnInit {
     this.trashInspectionPnInstallationsService.deleteInstallation(this.selectedInstallationModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onInstallationDeleted.emit();
-        this.selectedInstallationModel = new InstallationPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });

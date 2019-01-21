@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>{{ 'New Area' | translate }}</h3>
+        <h3>{{ 'New Installation' | translate }}</h3>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
@@ -12,36 +12,33 @@
                 <input mdbInputDirective
                        [mdbValidate]="false"
                        [(ngModel)]="newInstallationModel.name"
-                       type="text" id="createAreaName"
-                       name="createAreaName" class="form-control">
-                <label for="createAreaName">{{'Name' | translate}}</label>
+                       type="text" id="createInstallationName"
+                       name="createInstallationName" class="form-control">
+                <label for="createInstallationName">{{'Name' | translate}}</label>
               </div>
             </div>
           </div>
           <div class="row p-1 table-responsive table-fixed-scrollable no-gutters">
-            <table class="table table-sm table-striped text-center z-depth-1">
+            <table class="table table-xs table-bordered text-center z-depth-1">
               <thead>
               <tr>
-                <th scope="col" id="idTableHeader">ID</th>
-                <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
-                <th scope="col">{{ 'Related Machine' | translate }}</th>
+                <th>Microting ID</th>
+                <th>{{ 'Device user' | translate }}</th>
+                <th>{{ 'Check to pair' | translate }}</th>
               </tr>
               </thead>
-              <tbody id="tableBody">
-              <tr *ngFor="let trashInspection of mappingTrashInspections.machineList">
-                <td>
-                  {{trashInspection.id}}
-                </td>
-                <td>
-                  {{trashInspection.name}}
-                </td>
-                <td>
-                  <div class="mat-checkbox">
-                    <input id="checkbox{{trashInspection.id}}" (change)="addToArray($event, trashInspection.id)"
-                           [checked]="isChecked(trashInspection.id)"
-                           color="primary" type="checkbox">
-                    <label for="checkbox{{trashInspection.id}}"></label>
-                  </div>
+              <tbody id="pairingModalTableBody">
+              <tr *ngFor="let siteDto of sitesDto">
+                <td class="align-middle">{{siteDto.siteUId}}</td>
+                <td class="align-middle">{{siteDto.siteName}}</td>
+                <td class="align-middle">
+                  <ng-container *ngFor="let checkboxModel of deployViewModel.deployCheckboxes">
+                    <div class="mat-checkbox" *ngIf="checkboxModel.id == siteDto.siteUId">
+                      <input id="checkbox{{checkboxModel.id}}" (change)="addToArray($event, checkboxModel.id)"
+                             [checked]="checkboxModel.isChecked" [value]="checkboxModel.isChecked" color="primary" type="checkbox">
+                      <label for="checkbox{{checkboxModel.id}}"></label>
+                    </div>
+                  </ng-container>
                 </td>
               </tr>
               </tbody>
