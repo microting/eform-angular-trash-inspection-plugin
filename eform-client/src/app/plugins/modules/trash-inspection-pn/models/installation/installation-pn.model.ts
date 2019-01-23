@@ -1,6 +1,6 @@
 export class InstallationsPnModel {
   total: number;
-  areaList: Array<InstallationPnModel> = [];
+  installationList: Array<InstallationPnModel> = [];
 }
 
 export class InstallationPnModel {

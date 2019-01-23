@@ -15,7 +15,7 @@ import {
 } from '../models';
 
 export let TrashInspectionPnTrashInspectionMethods = {
-  TrashInspections: 'api/trash-inspection-pn/trash-inspections',
+  TrashInspections: 'api/trash-inspection-pn/inspections',
 };
 
 @Injectable()

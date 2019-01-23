@@ -11,7 +11,7 @@ import {
 import {SharedPnService} from 'src/app/plugins/modules/shared/services';
 
 @Component({
-  selector: 'app-installations-page',
+  selector: 'app-trash-inspection-pn-installations-page',
   templateUrl: './installations-page.component.html',
   styleUrls: ['./installations-page.component.scss']
 })

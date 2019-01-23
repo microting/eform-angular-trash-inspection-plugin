@@ -11,7 +11,7 @@ import {
   TrashInspectionPnSettingsService
 } from './services';
 import {TrashInspectionPnLayoutComponent} from './layouts';
-import {MachineAreaPnRouting} from './trash-inspection-pn.routing.module';
+import {TrashInspectionPnRouting} from './trash-inspection-pn.routing.module';
 import {SharedPnModule} from '../shared/shared-pn.module';
 import {
   InstallationCreateComponent,
@@ -31,7 +31,7 @@ import {
     CommonModule,
     SharedPnModule,
     MDBBootstrapModule,
-    MachineAreaPnRouting,
+    TrashInspectionPnRouting,
     TranslateModule,
     FormsModule,
     NgSelectModule

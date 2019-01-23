@@ -1,9 +1,9 @@
-<subheader-pn [title]="'Areas' | translate">
+<subheader-pn [title]="'Installations' | translate">
   <div class="p-3">
     <button
       class="btn btn-success"
-      mdbTooltip="{{ 'Create Area' | translate }}"
-      (click)="showCreateInstallationModal()">{{ 'New Area' | translate }}
+      mdbTooltip="{{ 'Create Installation' | translate }}"
+      (click)="showCreateInstallationModal()">{{ 'New Installation' | translate }}
     </button>
   </div>
 </subheader-pn>
@@ -42,25 +42,25 @@
       </tr>
       </thead>
       <tbody id="tableBody">
-      <tr *ngFor="let area of installationsModel.areaList">
+      <tr *ngFor="let installation of installationsModel.installationList">
         <td>
-          {{area.id}}
+          {{installation.id}}
         </td>
         <td>
-          {{area.name}}
+          {{installation.name}}
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
             <button class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Area' | translate }}"
-                    (click)="showEditInstallationModal(area)">
+                    mdbTooltip="{{ 'Edit Installation' | translate }}"
+                    (click)="showEditInstallationModal(installation)">
               <i class="material-icons">
                 edit
               </i>
             </button>
             <button class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Area' | translate }}"
-                    (click)="showDeleteInstallationModal(area)">
+                    mdbTooltip="{{ 'Delete Installation' | translate }}"
+                    (click)="showDeleteInstallationModal(installation)">
               <i class="material-icons">
                 delete_forever
               </i>

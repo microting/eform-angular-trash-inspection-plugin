@@ -8,7 +8,7 @@ import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 
 export let TrashInspectionSettingsMethods = {
-  TrashInspectionSettings: 'api/machine-area-pn/settings'
+  TrashInspectionSettings: 'api/trash-inspection-pn/settings'
 
 };
 @Injectable()

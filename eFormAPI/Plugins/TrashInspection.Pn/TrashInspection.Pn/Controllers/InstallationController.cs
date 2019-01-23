@@ -27,9 +27,9 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpGet]
         [Route("api/trash-inspection-pn/installations/{id}")]
-        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int installationId)
+        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int id)
         {
-            return await _installationService.GetSingleInstallation(installationId);
+            return await _installationService.GetSingleInstallation(id);
         }
 
         [HttpPost]
@@ -48,9 +48,9 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpDelete]
         [Route("api/trash-inspection-pn/installations/{id}")]
-        public async Task<OperationResult> DeleteInstallation(int installationId)
+        public async Task<OperationResult> DeleteInstallation(int id)
         {
-            return await _installationService.DeleteInstallation(installationId);
+            return await _installationService.DeleteInstallation(id);
         }
     }
 }

@@ -7,5 +7,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int Total { get; set; }
         public List<InstallationModel> InstallationList { get; set; }
 
+        public InstallationsModel()
+        {
+            InstallationList = new List<InstallationModel>();
+        }
     }
 }

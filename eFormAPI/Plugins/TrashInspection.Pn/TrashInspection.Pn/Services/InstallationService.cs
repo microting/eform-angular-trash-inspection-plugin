@@ -38,8 +38,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var installationsModel = new InstallationsModel();
-
+                InstallationsModel installationsModel = new InstallationsModel();
                 IQueryable<Installation> installationsQuery = _dbContext.Installations.AsQueryable();
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
@@ -67,12 +66,15 @@ namespace TrashInspection.Pn.Services
                         .Take((int)pnRequestModel.PageSize);
                 }
 
+                installationsQuery = installationsQuery.Where(x => x.Workflow_state != eFormShared.Constants.WorkflowStates.Removed);
+
                 List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                 }).ToListAsync();
 
-                installationsModel.Total = await _dbContext.TrashInspections.CountAsync();
+                installationsModel.Total = await _dbContext.Installations.CountAsync();
                 installationsModel.InstallationList = installations;
 
                 return new OperationDataResult<InstallationsModel>(true, installationsModel);
@@ -87,20 +89,21 @@ namespace TrashInspection.Pn.Services
             }
         }
 
-        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int installationId)
+        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int id)
         {
             try
             {
                 var installation = await _dbContext.Installations.Select(x => new InstallationModel()
                 {
+                    Id = x.Id,
                     Name = x.Name
                 })
-                .FirstOrDefaultAsync(x => x.Id == installationId);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (installation == null)
                 {
                     return new OperationDataResult<InstallationModel>(false,
-                        _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{installationId}DoesNotExist"));
+                        _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{id}DoesNotExist"));
                 }
 
                 return new OperationDataResult<InstallationModel>(true, installation);
@@ -123,14 +126,16 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> UpdateInstallation(InstallationModel updateModel)
         {
+            InstallationModel installation = new InstallationModel();
+            installation.Id = updateModel.Id;
             updateModel.Update(_dbContext);
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> DeleteInstallation(int installationId)
+        public async Task<OperationResult> DeleteInstallation(int id)
         {
             InstallationModel installation = new InstallationModel();
-            installation.Id = installationId;
+            installation.Id = id;
             installation.Delete(_dbContext);
             return new OperationResult(true);
 

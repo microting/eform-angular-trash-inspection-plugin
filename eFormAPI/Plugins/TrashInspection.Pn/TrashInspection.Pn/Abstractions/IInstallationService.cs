@@ -7,7 +7,7 @@ namespace TrashInspection.Pn.Abstractions
     public interface IInstallationService
     {
         Task<OperationResult> CreateInstallation(InstallationModel model);
-        Task<OperationResult> DeleteInstallation(int installationId);
+        Task<OperationResult> DeleteInstallation(int id);
         Task<OperationResult> UpdateInstallation(InstallationModel updateModel);
         Task<OperationDataResult<InstallationsModel>> GetAllInstallations(InstallationRequestModel requestModel);
         Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int installationId);
