@@ -76,9 +76,9 @@ export class InstallationCreateComponent implements OnInit {
     deployObject.id = deployId;
     if (e.target.checked) {
       deployObject.isChecked = true;
-      this.deployModel.deployCheckboxes.push(deployObject);
+      this.newInstallationModel.deployCheckboxes.push(deployObject);
     } else {
-      this.deployModel.deployCheckboxes = this.deployModel.deployCheckboxes.filter(x => x.id !== deployId);
+      this.newInstallationModel.deployCheckboxes = this.newInstallationModel.deployCheckboxes.filter(x => x.id !== deployId);
     }
   }
 
@@ -102,15 +102,15 @@ export class InstallationCreateComponent implements OnInit {
     }
   }
 
-  submitDeployment() {
-    this.spinnerStatus = true;
-    this.deployModel.id = this.newInstallationModel.id;
-    this.eFormService.deploySingle(this.deployModel).subscribe(operation => {
-      if (operation && operation.success) {
-        this.frame.hide();
-        this.onDeploymentFinished.emit();
-      }
-      this.spinnerStatus = false;
-    });
-  }
+  // submitDeployment() {
+  //   this.spinnerStatus = true;
+  //   // this.deployModel.id = this.newInstallationModel.id;
+  //   this.eFormService.deploySingle(this.deployModel).subscribe(operation => {
+  //     if (operation && operation.success) {
+  //       this.frame.hide();
+  //       this.onDeploymentFinished.emit();
+  //     }
+  //     this.spinnerStatus = false;
+  //   });
+  // }
 }

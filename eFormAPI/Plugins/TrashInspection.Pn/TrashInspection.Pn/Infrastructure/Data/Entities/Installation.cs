@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Base;
+using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Infrastructure.Data.Entities
 {

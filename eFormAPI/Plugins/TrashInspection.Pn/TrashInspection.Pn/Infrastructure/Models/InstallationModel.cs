@@ -20,7 +20,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int Updated_By_User_Id { get; set; }
         public string Name { get; set; }
         public List<SiteName_Dto> DeployedSites { get; set; }
-
+        public List<DeployCheckbox> DeployCheckboxes { get; set; }
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
@@ -33,6 +33,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             installation.Version = Version;
             installation.Workflow_state = Constants.WorkflowStates.Created;
 
+            
             _dbContext.Installations.Add(installation);
             _dbContext.SaveChanges();
 

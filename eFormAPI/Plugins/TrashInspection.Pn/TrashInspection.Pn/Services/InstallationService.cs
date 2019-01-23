@@ -120,6 +120,24 @@ namespace TrashInspection.Pn.Services
         public async Task<OperationResult> CreateInstallation(InstallationModel createModel)
         {
             createModel.Save(_dbContext);
+            foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
+            {
+                InstallationSite installationSite = _dbContext.InstallationSites.FirstOrDefault(x => x.Id == deployedCheckbox.Id);
+                if(installationSite == null)
+                {
+                    if (deployedCheckbox.IsChecked == true)
+                    {
+                        InstallationSiteModel installationSiteModel = new InstallationSiteModel();
+                        installationSiteModel.SDK_Site_Id = deployedCheckbox.Id;
+                        installationSiteModel.Installation_Id = createModel.Id;
+
+                        installationSiteModel.Save(_dbContext);
+
+                    }
+                }
+                
+
+            }
             return new OperationResult(true);
 
         }
@@ -129,6 +147,24 @@ namespace TrashInspection.Pn.Services
             InstallationModel installation = new InstallationModel();
             installation.Id = updateModel.Id;
             updateModel.Update(_dbContext);
+            foreach (DeployCheckbox deployedCheckbox in updateModel.DeployCheckboxes)
+            {
+                InstallationSite installationSite = _dbContext.InstallationSites.FirstOrDefault(x => x.Id == deployedCheckbox.Id);
+                if (installationSite == null)
+                {
+                    if (deployedCheckbox.IsChecked == true)
+                    {
+                        InstallationSiteModel installationSiteModel = new InstallationSiteModel();
+                        installationSiteModel.SDK_Site_Id = deployedCheckbox.Id;
+                        installationSiteModel.Installation_Id = updateModel.Id;
+
+                        installationSiteModel.Save(_dbContext);
+
+                    }
+                }
+
+
+            }
             return new OperationResult(true);
         }
 
