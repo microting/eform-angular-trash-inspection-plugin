@@ -39,6 +39,7 @@ namespace TrashInspection.Pn.Services
             try
             {
                 InstallationsModel installationsModel = new InstallationsModel();
+                
                 IQueryable<Installation> installationsQuery = _dbContext.Installations.AsQueryable();
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
@@ -76,7 +77,8 @@ namespace TrashInspection.Pn.Services
 
                 installationsModel.Total = await _dbContext.Installations.CountAsync();
                 installationsModel.InstallationList = installations;
-
+                
+                
                 return new OperationDataResult<InstallationsModel>(true, installationsModel);
             }
             catch (Exception e)
@@ -84,7 +86,7 @@ namespace TrashInspection.Pn.Services
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
                 return new OperationDataResult<InstallationsModel>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspections"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingInstallations"));
 
             }
         }
@@ -103,7 +105,7 @@ namespace TrashInspection.Pn.Services
                 if (installation == null)
                 {
                     return new OperationDataResult<InstallationModel>(false,
-                        _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{id}DoesNotExist"));
+                        _trashInspectionLocalizationService.GetString($"InstallationWithID:{id}DoesNotExist"));
                 }
 
                 return new OperationDataResult<InstallationModel>(true, installation);
@@ -113,7 +115,7 @@ namespace TrashInspection.Pn.Services
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
                 return new OperationDataResult<InstallationModel>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingInstallation"));
             }
         }
 

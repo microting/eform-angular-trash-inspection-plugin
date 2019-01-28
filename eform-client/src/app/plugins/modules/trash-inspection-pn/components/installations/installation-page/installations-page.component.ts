@@ -105,5 +105,4 @@ export class InstallationsPageComponent implements OnInit {
       this.getAllInstallations();
     }
   }
-
 }

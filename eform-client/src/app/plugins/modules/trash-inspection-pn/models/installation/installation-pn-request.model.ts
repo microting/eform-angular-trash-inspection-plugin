@@ -3,13 +3,6 @@ export class InstallationPnRequestModel {
   pageSize: number;
   sort: string;
   isSortDsc: boolean;
-  offset: number;
+  offset: 0;
 
-  constructor() {
-    this.sort = 'Id';
-    this.isSortDsc = true;
-    this.pageSize = 5;
-    this.pageIndex = 1;
-    this.offset = 0;
-  }
 }
