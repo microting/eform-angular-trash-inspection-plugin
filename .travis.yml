@@ -1,6 +1,6 @@
 dist: xenial
 language: csharp
-solution: Trashinspection.Pn.sln
+solution: TrashInspection.Pn.sln
 mono: none
 dotnet: 2.2
 services:
@@ -11,15 +11,15 @@ script:
   - dotnet test -v n eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
   - cd ../..
   - git clone --depth=50 --branch=master https://github.com/microting/eform-angular-frontend.git microting/eform-angular-frontend
-  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trashinspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trashinspection-pn
-  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trashinspection-settings microting/eform-angular-frontend/eform-client/e2e/Tests/trashinspection-settings
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspection-settings microting/eform-angular-frontend/eform-client/e2e/Tests/trashinspection-settings
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
   - cd microting/eform-angular-frontend
   - dotnet restore -v q eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
   - dotnet build eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
   - cd ../..
   - mkdir -p microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
-  - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/Trashinspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/Trashinspection
+  - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
   - cd microting/eform-angular-frontend
   - cd eform-client && npm install
   - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
