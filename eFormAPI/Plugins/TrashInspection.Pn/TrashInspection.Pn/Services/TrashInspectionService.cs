@@ -69,15 +69,15 @@ namespace TrashInspection.Pn.Services
                 List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel()
                 {
                 Date = x.Date,
-                Eak_Code = x.Eak_Code,
-                Installation_Id = x.Installation_Id,
-                Must_Be_Inspected = x.Must_Be_Inspected,
+                EakCode = x.Eak_Code,
+                InstallationId = x.Installation_Id,
+                MustBeInspected = x.Must_Be_Inspected,
                 Producer = x.Producer,
-                Registration_Number = x.Registration_Number,
+                RegistrationNumber = x.Registration_Number,
                 Time = x.Time,
                 Transporter = x.Transporter,
-                Trash_Fraction = x.Trash_Fraction,
-                Weighing_Number = x.Weighing_Number
+                TrashFraction = x.Trash_Fraction,
+                WeighingNumber = x.Weighing_Number
             }).ToListAsync();
 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
@@ -102,15 +102,15 @@ namespace TrashInspection.Pn.Services
                 var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
                 {
                     Date = x.Date,
-                    Eak_Code = x.Eak_Code,
-                    Installation_Id = x.Installation_Id,
-                    Must_Be_Inspected = x.Must_Be_Inspected,
+                    EakCode = x.Eak_Code,
+                    InstallationId = x.Installation_Id,
+                    MustBeInspected = x.Must_Be_Inspected,
                     Producer = x.Producer,
-                    Registration_Number = x.Registration_Number,
+                    RegistrationNumber = x.Registration_Number,
                     Time = x.Time,
                     Transporter = x.Transporter,
-                    Trash_Fraction = x.Trash_Fraction,
-                    Weighing_Number = x.Weighing_Number
+                    TrashFraction = x.Trash_Fraction,
+                    WeighingNumber = x.Weighing_Number
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
 
