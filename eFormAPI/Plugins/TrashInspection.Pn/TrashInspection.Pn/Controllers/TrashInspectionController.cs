@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using TrashInspection.Pn.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Conrtrollers
 {

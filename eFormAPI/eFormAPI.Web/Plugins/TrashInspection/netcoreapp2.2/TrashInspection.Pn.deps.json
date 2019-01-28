@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "1f9ba2314d554cc3db075945c6843e6cc6cb3935"
+    "signature": "4288359957eea820c23fcce4ab04fd4e733d6adb"
   },
   "compilationOptions": {},
   "targets": {
@@ -11,8 +11,9 @@
           "AutoMapper": "6.1.0",
           "McMaster.NETCore.Plugins": "0.2.1",
           "Microsoft.NETCore.App": "2.2.0",
-          "Microting.eForm": "3.0.125",
-          "Microting.eFormApi.BasePn": "1.1.85",
+          "Microting.eForm": "3.0.151",
+          "Microting.eFormApi.BasePn": "1.1.93",
+          "Microting.eFormTrashInspectionBase": "1.1.1",
           "OtpSharp.Core": "1.0.0"
         },
         "runtime": {
@@ -31,25 +32,25 @@
           }
         }
       },
-      "AWSSDK.Core/3.3.29.16": {
+      "AWSSDK.Core/3.3.31.6": {
         "dependencies": {
           "System.Net.Requests": "4.3.0"
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.29.16"
+            "fileVersion": "3.3.31.6"
           }
         }
       },
-      "AWSSDK.SQS/3.3.3.42": {
+      "AWSSDK.SQS/3.3.3.53": {
         "dependencies": {
-          "AWSSDK.Core": "3.3.29.16"
+          "AWSSDK.Core": "3.3.31.6"
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.SQS.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.3.3.42"
+            "fileVersion": "3.3.3.53"
           }
         }
       },
@@ -100,14 +101,14 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Proxies/2.2.0": {
+      "Microsoft.EntityFrameworkCore.Proxies/2.2.1": {
         "dependencies": {
           "Castle.Core": "4.3.1"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Proxies.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.18346"
           }
         }
       },
@@ -132,18 +133,18 @@
       },
       "Microsoft.NETCore.Platforms/2.2.0": {},
       "Microsoft.NETCore.Targets/2.0.0": {},
-      "Microting.eForm/3.0.125": {
+      "Microting.eForm/3.0.151": {
         "dependencies": {
-          "AWSSDK.Core": "3.3.29.16",
-          "AWSSDK.SQS": "3.3.3.42",
+          "AWSSDK.Core": "3.3.31.6",
+          "AWSSDK.SQS": "3.3.3.53",
           "Castle.Core": "4.3.1",
           "Castle.Windsor": "4.1.1",
-          "Microsoft.EntityFrameworkCore.Proxies": "2.2.0",
+          "Microsoft.EntityFrameworkCore.Proxies": "2.2.1",
           "Newtonsoft.Json": "12.0.1",
           "Pomelo.EntityFrameworkCore.MySql": "2.1.4",
           "Rebus": "5.2.1",
           "Rebus.Castle.Windsor": "4.1.0",
-          "Rebus.MySql": "1.1.0",
+          "Rebus.MySql": "1.1.1",
           "Rebus.SqlServer": "5.0.3",
           "System.ComponentModel.EventBasedAsync": "4.3.0",
           "System.Linq.Queryable": "4.3.0",
@@ -156,14 +157,25 @@
           }
         }
       },
-      "Microting.eFormApi.BasePn/1.1.85": {
+      "Microting.eFormApi.BasePn/1.1.93": {
         "dependencies": {
           "McMaster.NETCore.Plugins": "0.2.1",
-          "Microting.eForm": "3.0.125",
+          "Microting.eForm": "3.0.151",
           "OtpSharp.Core": "1.0.0"
         },
         "runtime": {
           "lib/netcoreapp2.2/Microting.eFormApi.BasePn.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microting.eFormTrashInspectionBase/1.1.1": {
+        "dependencies": {
+          "Microting.eForm": "3.0.151"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microting.eFormTrashInspectionBase.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -261,7 +273,7 @@
           }
         }
       },
-      "Rebus.MySql/1.1.0": {
+      "Rebus.MySql/1.1.1": {
         "dependencies": {
           "MySql.Data": "8.0.12",
           "NETStandard.Library": "2.0.3",
@@ -386,19 +398,19 @@
       "path": "automapper/6.1.0",
       "hashPath": "automapper.6.1.0.nupkg.sha512"
     },
-    "AWSSDK.Core/3.3.29.16": {
+    "AWSSDK.Core/3.3.31.6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qgm05RWKnnKEpFwLV1Aco/WizrpFI+3/qk70/1vWMOHEUY/sc+eOGHXx4V/pvedn4zyljTq3eXfx8BvNVVyHPw==",
-      "path": "awssdk.core/3.3.29.16",
-      "hashPath": "awssdk.core.3.3.29.16.nupkg.sha512"
+      "sha512": "sha512-xHVdfeyzdrv28LsjjXUFM6PwdgCLzOfmQn1lByESz8qvyJEXeJRw9dOg4kifKQTBoSefRh+kOBlAUYcNEpvntQ==",
+      "path": "awssdk.core/3.3.31.6",
+      "hashPath": "awssdk.core.3.3.31.6.nupkg.sha512"
     },
-    "AWSSDK.SQS/3.3.3.42": {
+    "AWSSDK.SQS/3.3.3.53": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2oMzRtg9zXGZ6xouR1akULiGkr5+USPTne2DN4leiYSTBYAxl/Nutu8Tssngjjc/AOkC/7lt9AVV01qzy16zvA==",
-      "path": "awssdk.sqs/3.3.3.42",
-      "hashPath": "awssdk.sqs.3.3.3.42.nupkg.sha512"
+      "sha512": "sha512-pQwdoCKMw8Fc1e9QK/SEhXf3iZLeui3pQapaWzQ3HopFhuVfQoTbEfgZr3PV5cs/6ZrHDqbH3nP3Qk1XOwINNQ==",
+      "path": "awssdk.sqs/3.3.3.53",
+      "hashPath": "awssdk.sqs.3.3.3.53.nupkg.sha512"
     },
     "Castle.Core/4.3.1": {
       "type": "package",
@@ -428,12 +440,12 @@
       "path": "mcmaster.netcore.plugins/0.2.1",
       "hashPath": "mcmaster.netcore.plugins.0.2.1.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Proxies/2.2.0": {
+    "Microsoft.EntityFrameworkCore.Proxies/2.2.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ez/7PLtAYhHw4MZlg69mNG/qcu75aAqQ3Dvq7TIBr1jumjTERpvdGpeRqj1Q9uzgPySIg24AjH+1gUd34fmg+Q==",
-      "path": "microsoft.entityframeworkcore.proxies/2.2.0",
-      "hashPath": "microsoft.entityframeworkcore.proxies.2.2.0.nupkg.sha512"
+      "sha512": "sha512-BcNt1uYPf8awEKLlHHKpIhKmwbSVjLOSreFGWV4YgBfh3xmiZ5iOJR5NNqrfB5CJqdrLksOhJCh9ivsTD14mbg==",
+      "path": "microsoft.entityframeworkcore.proxies/2.2.1",
+      "hashPath": "microsoft.entityframeworkcore.proxies.2.2.1.nupkg.sha512"
     },
     "Microsoft.NETCore.App/2.2.0": {
       "type": "package",
@@ -477,19 +489,26 @@
       "path": "microsoft.netcore.targets/2.0.0",
       "hashPath": "microsoft.netcore.targets.2.0.0.nupkg.sha512"
     },
-    "Microting.eForm/3.0.125": {
+    "Microting.eForm/3.0.151": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-OqMYj8n2qKi+I/4G7mYzH2FoFMwgpSjsZx5RDu3RnczxJAaUH7Z353RYf3ptSC+K5olHovIFN1tgeGStz4V6cQ==",
-      "path": "microting.eform/3.0.125",
-      "hashPath": "microting.eform.3.0.125.nupkg.sha512"
+      "sha512": "sha512-kUjnlUC6orol9CLwXf/xt3vAyDhdZ2VuwXotU6Pa3vGx0+qSI7cC0qfeP8RI+rHmj8n3cS6+fEtDpRYkS685Dw==",
+      "path": "microting.eform/3.0.151",
+      "hashPath": "microting.eform.3.0.151.nupkg.sha512"
     },
-    "Microting.eFormApi.BasePn/1.1.85": {
+    "Microting.eFormApi.BasePn/1.1.93": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GjiIprpWxzXFrkwcBviP8qfurxoyAi4ZfDOUfBXKo8i3HdBlmMs3w1TsrrY5sNpjQ/xd87RvKOvyLZSHezAZGw==",
-      "path": "microting.eformapi.basepn/1.1.85",
-      "hashPath": "microting.eformapi.basepn.1.1.85.nupkg.sha512"
+      "sha512": "sha512-6eb4aXZrRkOfxp/ej8nOlcQhgSH6tfnPeojq0PazuNJ30a/Lmg+01h1FfzeqRpyQnhFaTWh+IpvlGP0Aq42lMQ==",
+      "path": "microting.eformapi.basepn/1.1.93",
+      "hashPath": "microting.eformapi.basepn.1.1.93.nupkg.sha512"
+    },
+    "Microting.eFormTrashInspectionBase/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-l17hwl36FvnPsDkjfDERzj0oqNUj8/rankMB4ZuKo1VzaiW/Zi6EXg8GvjivkBtgzMEA3tvlcWCBNBytEbDrTA==",
+      "path": "microting.eformtrashinspectionbase/1.1.1",
+      "hashPath": "microting.eformtrashinspectionbase.1.1.1.nupkg.sha512"
     },
     "MySql.Data/8.0.12": {
       "type": "package",
@@ -554,12 +573,12 @@
       "path": "rebus.castle.windsor/4.1.0",
       "hashPath": "rebus.castle.windsor.4.1.0.nupkg.sha512"
     },
-    "Rebus.MySql/1.1.0": {
+    "Rebus.MySql/1.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-M/UxrVtCFkqn/0hNqYFupNFga7LmPyC0KrvPEKoKqCjPiC2MMS5TkSgwBM7ZDFfuIcB5/ft86pc11eBzH3Ojhw==",
-      "path": "rebus.mysql/1.1.0",
-      "hashPath": "rebus.mysql.1.1.0.nupkg.sha512"
+      "sha512": "sha512-VzRfoCQNTXYhSIVqBEKFCkpiyP7FAb41bzjm/xvKQ4MHNKiZTD1sK5+MoOtd/FrigsJZbRsZp4z02nzEWqOuGw==",
+      "path": "rebus.mysql/1.1.1",
+      "hashPath": "rebus.mysql.1.1.1.nupkg.sha512"
     },
     "Rebus.SqlServer/5.0.3": {
       "type": "package",

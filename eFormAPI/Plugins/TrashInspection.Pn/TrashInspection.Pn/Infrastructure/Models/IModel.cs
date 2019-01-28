@@ -1,4 +1,4 @@
-﻿using TrashInspection.Pn.Infrastructure.Data;
+﻿using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {

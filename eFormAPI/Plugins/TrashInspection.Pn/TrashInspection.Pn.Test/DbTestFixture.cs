@@ -1,11 +1,10 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
-using System.Runtime.InteropServices;
-using TrashInspection.Pn.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Data.Factories;
+using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 
 namespace TrashInspection.Pn.Test
 {

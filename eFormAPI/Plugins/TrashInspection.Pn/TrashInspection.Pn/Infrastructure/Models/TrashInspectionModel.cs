@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using TrashInspection.Pn.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
@@ -31,23 +31,25 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
-            Data.Entities.TrashInspection trashInspection = new Data.Entities.TrashInspection();
-            trashInspection.Created_at = CreatedAt;
-            trashInspection.Created_By_User_Id = CreatedByUserId;
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();            
+            if (CreatedAt != null) {
+                trashInspection.CreatedAt = (DateTime)CreatedAt;                
+            }
+            trashInspection.CreatedByUserId = CreatedByUserId;
             trashInspection.Date = Date;
             trashInspection.Eak_Code = EakCode;
-            trashInspection.Installation_Id = InstallationId;
-            trashInspection.Must_Be_Inspected = MustBeInspected;
+            trashInspection.InstallationId = InstallationId;
+            trashInspection.MustBeInspected = MustBeInspected;
             trashInspection.Producer = Producer;
-            trashInspection.Registration_Number = RegistrationNumber;
+            trashInspection.RegistrationNumber = RegistrationNumber;
             trashInspection.Time = Time;
             trashInspection.Transporter = Transporter;
-            trashInspection.Trash_Fraction = TrashFraction;
-            trashInspection.Updated_at = DateTime.Now;
-            trashInspection.Updated_By_User_Id = UpdatedByUserId;
+            trashInspection.TrashFraction = TrashFraction;
+            trashInspection.UpdatedAt = DateTime.Now;
+            trashInspection.UpdatedByUserId = UpdatedByUserId;
             trashInspection.Version = Version;
-            trashInspection.Weighing_Number = WeighingNumber;
-            trashInspection.Workflow_state = eFormShared.Constants.WorkflowStates.Created;
+            trashInspection.WeighingNumber = WeighingNumber;
+            trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
 
             _dbContext.TrashInspections.Add(trashInspection);
             _dbContext.SaveChanges();
@@ -58,7 +60,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
         public void Update(TrashInspectionPnDbContext _dbContext)
         {
-            Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
 
             if (trashInspection == null)
             {
@@ -66,18 +68,18 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspection.Date = Date;
             trashInspection.Eak_Code = EakCode;
-            trashInspection.Installation_Id = InstallationId;
-            trashInspection.Must_Be_Inspected = MustBeInspected;
+            trashInspection.InstallationId = InstallationId;
+            trashInspection.MustBeInspected = MustBeInspected;
             trashInspection.Producer = Producer;
-            trashInspection.Registration_Number = RegistrationNumber;
+            trashInspection.RegistrationNumber = RegistrationNumber;
             trashInspection.Time = Time;
             trashInspection.Transporter = Transporter;
-            trashInspection.Trash_Fraction = TrashFraction;
-            trashInspection.Weighing_Number = WeighingNumber;
+            trashInspection.TrashFraction = TrashFraction;
+            trashInspection.WeighingNumber = WeighingNumber;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
-                trashInspection.Updated_at = DateTime.Now;
+                trashInspection.UpdatedAt = DateTime.Now;
                 trashInspection.Version += 1;
 
                 _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
@@ -87,18 +89,18 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
         public void Delete(TrashInspectionPnDbContext _dbContext)
         {
-            Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
 
             if(trashInspection == null)
             {
                 throw new NullReferenceException($"Could not find Trash Inspection with id: {Id}");
             }
 
-            trashInspection.Workflow_state = eFormShared.Constants.WorkflowStates.Removed;
+            trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Removed;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
-                trashInspection.Updated_at = DateTime.Now;
+                trashInspection.UpdatedAt = DateTime.Now;
                 trashInspection.Version += 1;
                 //_dbContext.TrashInspections.Remove(trashInspection);
                 _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
@@ -108,28 +110,28 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
         }
 
-        private TrashInspectionVersion MapTrashInspectionVersion(TrashInspectionPnDbContext _dbContext, Data.Entities.TrashInspection trashInspection)
+        private TrashInspectionVersion MapTrashInspectionVersion(TrashInspectionPnDbContext _dbContext, Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection)
         {
             TrashInspectionVersion trashInspectionVer = new TrashInspectionVersion();
 
-            trashInspectionVer.Created_at = trashInspection.Created_at;
-            trashInspectionVer.Created_By_User_Id = trashInspection.Created_By_User_Id;
+            trashInspectionVer.CreatedAt = trashInspection.CreatedAt;
+            trashInspectionVer.CreatedByUserId = trashInspection.CreatedByUserId;
             trashInspectionVer.Date = trashInspection.Date;
-            trashInspectionVer.Eak_Code = trashInspection.Eak_Code;
-            trashInspectionVer.Installation_Id = trashInspection.Installation_Id;
-            trashInspectionVer.Must_Be_Inspected = trashInspection.Must_Be_Inspected;
+            trashInspectionVer.EakCode = trashInspection.Eak_Code;
+            trashInspectionVer.InstallationId = trashInspection.InstallationId;
+            trashInspectionVer.MustBeInspected = trashInspection.MustBeInspected;
             trashInspectionVer.Producer = trashInspection.Producer;
-            trashInspectionVer.Registration_Number = trashInspection.Registration_Number;
+            trashInspectionVer.RegistrationNumber = trashInspection.RegistrationNumber;
             trashInspectionVer.Time = trashInspection.Time;
             trashInspectionVer.Transporter = trashInspection.Transporter;
-            trashInspectionVer.Trash_Fraction = trashInspection.Trash_Fraction;
-            trashInspectionVer.Updated_at = trashInspection.Updated_at;
-            trashInspectionVer.Updated_By_User_Id = trashInspection.Updated_By_User_Id;
+            trashInspectionVer.TrashFraction = trashInspection.TrashFraction;
+            trashInspectionVer.UpdatedAt = trashInspection.UpdatedAt;
+            trashInspectionVer.UpdatedByUserId = trashInspection.UpdatedByUserId;
             trashInspectionVer.Version = trashInspection.Version;
-            trashInspectionVer.Weighing_Number = trashInspection.Weighing_Number;
-            trashInspectionVer.Workflow_state = trashInspection.Workflow_state;
+            trashInspectionVer.WeighingNumber = trashInspection.WeighingNumber;
+            trashInspectionVer.WorkflowState = trashInspection.WorkflowState;
 
-            trashInspectionVer.Trash_Inspction_Id = trashInspection.Id;
+            trashInspectionVer.TrashInspctionId = trashInspection.Id;
             
             return trashInspectionVer;
         }

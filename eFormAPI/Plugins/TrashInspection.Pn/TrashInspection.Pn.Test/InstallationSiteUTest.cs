@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrashInspection.Pn.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using NUnit.Framework;
 
 namespace TrashInspection.Pn.Test
@@ -16,7 +16,7 @@ namespace TrashInspection.Pn.Test
         {
             // Arrange
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
 
 
@@ -26,9 +26,9 @@ namespace TrashInspection.Pn.Test
             Random rnd = new Random();
 
             InstallationSiteModel installationSite = new InstallationSiteModel();
-            installationSite.Created_at = DateTime.Now;
-            installationSite.Installation_Id = installation.Id;
-            installationSite.SDK_Site_Id = rnd.Next(1, 255);
+            installationSite.CreatedAt = DateTime.Now;
+            installationSite.InstallationId = installation.Id;
+            installationSite.SdkSiteId = rnd.Next(1, 255);
 
             // Act
             installationSite.Save(DbContext);
@@ -40,8 +40,8 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationSiteList.Count());
 
-            Assert.AreEqual(installationSite.Created_at.ToString(), dbInstallationSite.Created_at.ToString());
-            Assert.AreEqual(installationSite.Installation_Id, dbInstallationSite.Installation_Id);
+            Assert.AreEqual(installationSite.CreatedAt.ToString(), dbInstallationSite.CreatedAt.ToString());
+            Assert.AreEqual(installationSite.InstallationId, dbInstallationSite.InstallationId);
 
 
         }
@@ -51,7 +51,7 @@ namespace TrashInspection.Pn.Test
         {
             // Arrange
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
 
 
@@ -60,17 +60,17 @@ namespace TrashInspection.Pn.Test
 
             Random rnd = new Random();
             InstallationSite installationSite = new InstallationSite();
-            installationSite.Created_at = DateTime.Now;
-            installationSite.Installation_Id = installation.Id;
-            installationSite.Sdk_Site_Id = rnd.Next(1, 255);
+            installationSite.CreatedAt = DateTime.Now;
+            installationSite.InstallationId = installation.Id;
+            installationSite.SDKSiteId = rnd.Next(1, 255);
 
             DbContext.InstallationSites.Add(installationSite);
             DbContext.SaveChanges();
             // Act
             InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-            installationSiteModel.Created_at = installation.Created_at;
-            installationSiteModel.SDK_Site_Id = installationSite.Sdk_Site_Id;
-            installationSiteModel.Installation_Id = installation.Id;
+            installationSiteModel.CreatedAt = installation.CreatedAt;
+            installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
+            installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
 
             installationSiteModel.Update(DbContext);
@@ -82,9 +82,9 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationSiteList.Count());
 
-            Assert.AreEqual(installationSite.Created_at.ToString(), dbInstallationSite.Created_at.ToString());
-            Assert.AreEqual(installationSite.Sdk_Site_Id, dbInstallationSite.Sdk_Site_Id);
-            Assert.AreEqual(installationSite.Installation_Id, dbInstallationSite.Installation_Id);
+            Assert.AreEqual(installationSite.CreatedAt.ToString(), dbInstallationSite.CreatedAt.ToString());
+            Assert.AreEqual(installationSite.SDKSiteId, dbInstallationSite.SDKSiteId);
+            Assert.AreEqual(installationSite.InstallationId, dbInstallationSite.InstallationId);
 
         }
 
@@ -93,7 +93,7 @@ namespace TrashInspection.Pn.Test
         {
             // Arrange
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
 
 
@@ -101,17 +101,17 @@ namespace TrashInspection.Pn.Test
             DbContext.SaveChanges();
             Random rnd = new Random();
             InstallationSite installationSite = new InstallationSite();
-            installationSite.Created_at = DateTime.Now;
-            installationSite.Installation_Id = installation.Id;
-            installationSite.Sdk_Site_Id = rnd.Next(1, 255);
+            installationSite.CreatedAt = DateTime.Now;
+            installationSite.InstallationId = installation.Id;
+            installationSite.SDKSiteId = rnd.Next(1, 255);
 
             DbContext.InstallationSites.Add(installationSite);
             DbContext.SaveChanges();
             // Act
             InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-            installationSiteModel.Created_at = installation.Created_at;
-            installationSiteModel.SDK_Site_Id = installationSite.Sdk_Site_Id;
-            installationSiteModel.Installation_Id = installation.Id;
+            installationSiteModel.CreatedAt = installation.CreatedAt;
+            installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
+            installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
             installationSiteModel.Delete(DbContext);
 
@@ -122,10 +122,10 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationSiteList.Count());
 
-            Assert.AreEqual(installationSite.Created_at.ToString(), dbInstallationSite.Created_at.ToString());
-            Assert.AreEqual(installationSite.Sdk_Site_Id, dbInstallationSite.Sdk_Site_Id);
-            Assert.AreEqual(installationSite.Installation_Id, dbInstallationSite.Installation_Id);
-            Assert.AreEqual(installationSite.Workflow_state, eFormShared.Constants.WorkflowStates.Removed);
+            Assert.AreEqual(installationSite.CreatedAt.ToString(), dbInstallationSite.CreatedAt.ToString());
+            Assert.AreEqual(installationSite.SDKSiteId, dbInstallationSite.SDKSiteId);
+            Assert.AreEqual(installationSite.InstallationId, dbInstallationSite.InstallationId);
+            Assert.AreEqual(installationSite.WorkflowState, eFormShared.Constants.WorkflowStates.Removed);
 
         }
 

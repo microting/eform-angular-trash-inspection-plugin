@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrashInspection.Pn.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using NUnit.Framework;
 
 namespace TrashInspection.Pn.Test
@@ -17,7 +17,7 @@ namespace TrashInspection.Pn.Test
             // Arrange
             Random rnd = new Random();
             InstallationModel installation = new InstallationModel();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
             
             // Act
@@ -30,7 +30,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationList.Count());
 
-            Assert.AreEqual(installation.Created_at.ToString(), dbInstallation.Created_at.ToString());
+            Assert.AreEqual(installation.CreatedAt.ToString(), dbInstallation.CreatedAt.ToString());
             Assert.AreEqual(installation.Name, dbInstallation.Name);
            
 
@@ -41,7 +41,7 @@ namespace TrashInspection.Pn.Test
         {
             // Arrange
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
             
 
@@ -50,7 +50,7 @@ namespace TrashInspection.Pn.Test
 
             // Act
             InstallationModel installationModel = new InstallationModel();
-            installationModel.Created_at = installation.Created_at;
+            installationModel.CreatedAt = installation.CreatedAt;
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
@@ -63,7 +63,7 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationList.Count());
 
-            Assert.AreEqual(installation.Created_at.ToString(), dbInstallation.Created_at.ToString());
+            Assert.AreEqual(installation.CreatedAt.ToString(), dbInstallation.CreatedAt.ToString());
             Assert.AreEqual(installation.Name, dbInstallation.Name);
             Assert.AreEqual(installation.Id, dbInstallation.Id);
            
@@ -74,7 +74,7 @@ namespace TrashInspection.Pn.Test
         {
             // Arrange
             Installation installation = new Installation();
-            installation.Created_at = DateTime.Now;
+            installation.CreatedAt = DateTime.Now;
             installation.Name = Guid.NewGuid().ToString();
 
 
@@ -83,7 +83,7 @@ namespace TrashInspection.Pn.Test
 
             // Act
             InstallationModel installationModel = new InstallationModel();
-            installationModel.Created_at = installation.Created_at;
+            installationModel.CreatedAt = installation.CreatedAt;
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
@@ -96,10 +96,10 @@ namespace TrashInspection.Pn.Test
 
             Assert.AreEqual(1, installationList.Count());
 
-            Assert.AreEqual(installation.Created_at.ToString(), dbInstallation.Created_at.ToString());
+            Assert.AreEqual(installation.CreatedAt.ToString(), dbInstallation.CreatedAt.ToString());
             Assert.AreEqual(installation.Name, dbInstallation.Name);
             Assert.AreEqual(installation.Id, dbInstallation.Id);
-            Assert.AreEqual(installation.Workflow_state, eFormShared.Constants.WorkflowStates.Removed);
+            Assert.AreEqual(installation.WorkflowState, eFormShared.Constants.WorkflowStates.Removed);
 
         }
 

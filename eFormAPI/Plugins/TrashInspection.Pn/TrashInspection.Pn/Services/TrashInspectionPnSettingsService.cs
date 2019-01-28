@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using System.Linq;
 using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Infrastructure.Models;
 using eFormCore;
 using eFormData;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Services
 {

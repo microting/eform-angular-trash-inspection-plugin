@@ -4,15 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Data.Entities;
-using TrashInspection.Pn.Infrastructure.Extensions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Services
 {
@@ -67,7 +66,7 @@ namespace TrashInspection.Pn.Services
                         .Take((int)pnRequestModel.PageSize);
                 }
 
-                installationsQuery = installationsQuery.Where(x => x.Workflow_state != eFormShared.Constants.WorkflowStates.Removed);
+                installationsQuery = installationsQuery.Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
 
                 List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel()
                 {
@@ -130,8 +129,8 @@ namespace TrashInspection.Pn.Services
                     if (deployedCheckbox.IsChecked == true)
                     {
                         InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                        installationSiteModel.SDK_Site_Id = deployedCheckbox.Id;
-                        installationSiteModel.Installation_Id = createModel.Id;
+                        installationSiteModel.SdkSiteId = deployedCheckbox.Id;
+                        installationSiteModel.InstallationId = createModel.Id;
 
                         installationSiteModel.Save(_dbContext);
 
@@ -157,8 +156,8 @@ namespace TrashInspection.Pn.Services
                     if (deployedCheckbox.IsChecked == true)
                     {
                         InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                        installationSiteModel.SDK_Site_Id = deployedCheckbox.Id;
-                        installationSiteModel.Installation_Id = updateModel.Id;
+                        installationSiteModel.SdkSiteId = deployedCheckbox.Id;
+                        installationSiteModel.InstallationId = updateModel.Id;
 
                         installationSiteModel.Save(_dbContext);
 

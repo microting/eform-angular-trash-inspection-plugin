@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Extensions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Services
 {
@@ -39,7 +38,7 @@ namespace TrashInspection.Pn.Services
             {
                 var trashInspectionsModel = new TrashInspectionsModel();
 
-                IQueryable<Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
                     if (pnRequestModel.IsSortDsc)
@@ -70,14 +69,14 @@ namespace TrashInspection.Pn.Services
                 {
                 Date = x.Date,
                 EakCode = x.Eak_Code,
-                InstallationId = x.Installation_Id,
-                MustBeInspected = x.Must_Be_Inspected,
+                InstallationId = x.InstallationId,
+                MustBeInspected = x.MustBeInspected,
                 Producer = x.Producer,
-                RegistrationNumber = x.Registration_Number,
+                RegistrationNumber = x.RegistrationNumber,
                 Time = x.Time,
                 Transporter = x.Transporter,
-                TrashFraction = x.Trash_Fraction,
-                WeighingNumber = x.Weighing_Number
+                TrashFraction = x.TrashFraction,
+                WeighingNumber = x.WeighingNumber
             }).ToListAsync();
 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
@@ -103,14 +102,14 @@ namespace TrashInspection.Pn.Services
                 {
                     Date = x.Date,
                     EakCode = x.Eak_Code,
-                    InstallationId = x.Installation_Id,
-                    MustBeInspected = x.Must_Be_Inspected,
+                    InstallationId = x.InstallationId,
+                    MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
-                    RegistrationNumber = x.Registration_Number,
+                    RegistrationNumber = x.RegistrationNumber,
                     Time = x.Time,
                     Transporter = x.Transporter,
-                    TrashFraction = x.Trash_Fraction,
-                    WeighingNumber = x.Weighing_Number
+                    TrashFraction = x.TrashFraction,
+                    WeighingNumber = x.WeighingNumber
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
 
