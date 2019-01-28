@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using TrashInspection.Pn.Infrastructure.Data;
 
 namespace TrashInspection.Pn.Conrtrollers
 {
@@ -12,6 +15,7 @@ namespace TrashInspection.Pn.Conrtrollers
     public class TrashInspectionController : Controller
     {
         private readonly ITrashInspectionService _trashInspectionService;
+        private readonly TrashInspectionPnDbContext _dbContext;
 
         public TrashInspectionController(ITrashInspectionService trashInspectionService)
         {
@@ -33,10 +37,18 @@ namespace TrashInspection.Pn.Conrtrollers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
-            return await _trashInspectionService.CreateTrashInspection(createModel);
+            if (createModel.Token == _dbContext.TrashInspectionPnSettings.FirstOrDefault().Token)
+            {
+                return await _trashInspectionService.CreateTrashInspection(createModel);
+            }
+            else
+            {
+                return new OperationDataResult<AccessDeniedModel>(false);
+            }
         }
 
         [HttpPut]

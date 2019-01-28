@@ -1,0 +1,663 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.2",
+    "signature": "1f9ba2314d554cc3db075945c6843e6cc6cb3935"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.2": {
+      "TrashInspection.Pn/1.0.0": {
+        "dependencies": {
+          "AutoMapper": "6.1.0",
+          "McMaster.NETCore.Plugins": "0.2.1",
+          "Microsoft.NETCore.App": "2.2.0",
+          "Microting.eForm": "3.0.125",
+          "Microting.eFormApi.BasePn": "1.1.85",
+          "OtpSharp.Core": "1.0.0"
+        },
+        "runtime": {
+          "TrashInspection.Pn.dll": {}
+        }
+      },
+      "AutoMapper/6.1.0": {
+        "dependencies": {
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.Linq.Queryable": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/AutoMapper.dll": {
+            "assemblyVersion": "6.1.0.0",
+            "fileVersion": "6.1.0.0"
+          }
+        }
+      },
+      "AWSSDK.Core/3.3.29.16": {
+        "dependencies": {
+          "System.Net.Requests": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.29.16"
+          }
+        }
+      },
+      "AWSSDK.SQS/3.3.3.42": {
+        "dependencies": {
+          "AWSSDK.Core": "3.3.29.16"
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.SQS.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.3.3.42"
+          }
+        }
+      },
+      "Castle.Core/4.3.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "System.ComponentModel": "4.3.0",
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.Diagnostics.TraceSource": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Castle.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.3.1.0"
+          }
+        }
+      },
+      "Castle.Windsor/4.1.1": {
+        "dependencies": {
+          "Castle.Core": "4.3.1",
+          "NETStandard.Library": "2.0.3",
+          "System.Runtime.Loader": "4.3.0",
+          "System.Runtime.Serialization.Formatters": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Castle.Windsor.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.1.1.0"
+          }
+        }
+      },
+      "Google.Protobuf/3.5.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.0/Google.Protobuf.dll": {
+            "assemblyVersion": "3.5.1.0",
+            "fileVersion": "3.5.1.0"
+          }
+        }
+      },
+      "McMaster.NETCore.Plugins/0.2.1": {
+        "runtime": {
+          "lib/netcoreapp2.0/McMaster.NETCore.Plugins.dll": {
+            "assemblyVersion": "0.2.1.0",
+            "fileVersion": "0.2.1.33"
+          }
+        }
+      },
+      "Microsoft.EntityFrameworkCore.Proxies/2.2.0": {
+        "dependencies": {
+          "Castle.Core": "4.3.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.EntityFrameworkCore.Proxies.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.18316"
+          }
+        }
+      },
+      "Microsoft.NETCore.App/2.2.0": {
+        "dependencies": {
+          "Microsoft.NETCore.DotNetHostPolicy": "2.2.0",
+          "Microsoft.NETCore.Platforms": "2.2.0",
+          "Microsoft.NETCore.Targets": "2.0.0",
+          "NETStandard.Library": "2.0.3"
+        }
+      },
+      "Microsoft.NETCore.DotNetAppHost/2.2.0": {},
+      "Microsoft.NETCore.DotNetHostPolicy/2.2.0": {
+        "dependencies": {
+          "Microsoft.NETCore.DotNetHostResolver": "2.2.0"
+        }
+      },
+      "Microsoft.NETCore.DotNetHostResolver/2.2.0": {
+        "dependencies": {
+          "Microsoft.NETCore.DotNetAppHost": "2.2.0"
+        }
+      },
+      "Microsoft.NETCore.Platforms/2.2.0": {},
+      "Microsoft.NETCore.Targets/2.0.0": {},
+      "Microting.eForm/3.0.125": {
+        "dependencies": {
+          "AWSSDK.Core": "3.3.29.16",
+          "AWSSDK.SQS": "3.3.3.42",
+          "Castle.Core": "4.3.1",
+          "Castle.Windsor": "4.1.1",
+          "Microsoft.EntityFrameworkCore.Proxies": "2.2.0",
+          "Newtonsoft.Json": "12.0.1",
+          "Pomelo.EntityFrameworkCore.MySql": "2.1.4",
+          "Rebus": "5.2.1",
+          "Rebus.Castle.Windsor": "4.1.0",
+          "Rebus.MySql": "1.1.0",
+          "Rebus.SqlServer": "5.0.3",
+          "System.ComponentModel.EventBasedAsync": "4.3.0",
+          "System.Linq.Queryable": "4.3.0",
+          "System.Net.Requests": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microting.eForm.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Microting.eFormApi.BasePn/1.1.85": {
+        "dependencies": {
+          "McMaster.NETCore.Plugins": "0.2.1",
+          "Microting.eForm": "3.0.125",
+          "OtpSharp.Core": "1.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp2.2/Microting.eFormApi.BasePn.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MySql.Data/8.0.12": {
+        "dependencies": {
+          "Google.Protobuf": "3.5.1",
+          "System.Configuration.ConfigurationManager": "4.4.1"
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/MySql.Data.dll": {
+            "assemblyVersion": "8.0.12.0",
+            "fileVersion": "8.0.12.0"
+          }
+        }
+      },
+      "MySqlConnector/0.47.1": {
+        "runtime": {
+          "lib/netcoreapp2.1/MySqlConnector.dll": {
+            "assemblyVersion": "0.47.1.0",
+            "fileVersion": "0.47.1.0"
+          }
+        }
+      },
+      "NETStandard.Library/2.0.3": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.2.0"
+        }
+      },
+      "Newtonsoft.Json/12.0.1": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.1.22727"
+          }
+        }
+      },
+      "OtpSharp.Core/1.0.0": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "Wiry.Base32.Patched": "1.0.5.1"
+        },
+        "runtime": {
+          "lib/netstandard1.4/OtpSharp.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Pomelo.EntityFrameworkCore.MySql/2.1.4": {
+        "dependencies": {
+          "MySqlConnector": "0.47.1",
+          "Pomelo.JsonObject": "2.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Pomelo.EntityFrameworkCore.MySql.dll": {
+            "assemblyVersion": "2.1.4.0",
+            "fileVersion": "2.1.4.0"
+          }
+        }
+      },
+      "Pomelo.JsonObject/2.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Pomelo.JsonObject.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "Rebus/5.2.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Rebus.dll": {
+            "assemblyVersion": "5.2.1.0",
+            "fileVersion": "5.2.1.0"
+          }
+        }
+      },
+      "Rebus.Castle.Windsor/4.1.0": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "Rebus": "5.2.1",
+          "Castle.Windsor": "4.1.1"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Rebus.CastleWindsor.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
+          }
+        }
+      },
+      "Rebus.MySql/1.1.0": {
+        "dependencies": {
+          "MySql.Data": "8.0.12",
+          "NETStandard.Library": "2.0.3",
+          "Rebus": "5.2.1"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Rebus.MySql.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Rebus.SqlServer/5.0.3": {
+        "dependencies": {
+          "Rebus": "5.2.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Rebus.SqlServer.dll": {
+            "assemblyVersion": "5.0.3.0",
+            "fileVersion": "5.0.3.0"
+          }
+        }
+      },
+      "System.ComponentModel/4.3.0": {},
+      "System.ComponentModel.EventBasedAsync/4.3.0": {},
+      "System.ComponentModel.Primitives/4.3.0": {
+        "dependencies": {
+          "System.ComponentModel": "4.3.0"
+        }
+      },
+      "System.ComponentModel.TypeConverter/4.3.0": {
+        "dependencies": {
+          "System.ComponentModel": "4.3.0",
+          "System.ComponentModel.Primitives": "4.3.0"
+        }
+      },
+      "System.Configuration.ConfigurationManager/4.4.1": {
+        "dependencies": {
+          "System.Security.Cryptography.ProtectedData": "4.4.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.6.25921.2"
+          }
+        }
+      },
+      "System.Diagnostics.TraceSource/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.2.0"
+        },
+        "runtimeTargets": {
+          "runtime/unix/lib/_._": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "System.Linq.Queryable/4.3.0": {},
+      "System.Net.Requests/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "2.2.0",
+          "System.Net.WebHeaderCollection": "4.3.0"
+        },
+        "runtimeTargets": {
+          "runtime/unix/lib/_._": {
+            "rid": "unix",
+            "assetType": "runtime"
+          },
+          "runtime/win/lib/_._": {
+            "rid": "win",
+            "assetType": "runtime"
+          }
+        }
+      },
+      "System.Net.WebHeaderCollection/4.3.0": {},
+      "System.Runtime.Loader/4.3.0": {},
+      "System.Runtime.Serialization.Formatters/4.3.0": {},
+      "System.Security.Cryptography.ProtectedData/4.4.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.25519.3"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.25519.3"
+          }
+        }
+      },
+      "Wiry.Base32.Patched/1.0.5.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.1/Wiry.Base32.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "TrashInspection.Pn/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AutoMapper/6.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Byz9AM1p6jno92Ptm6pmgnrsFsr5mlnyBcWksciDfQ++JlJvuuS+L5AbEEj22FmYAonFBp+FQIy2Aoj0EdWJ9Q==",
+      "path": "automapper/6.1.0",
+      "hashPath": "automapper.6.1.0.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.3.29.16": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qgm05RWKnnKEpFwLV1Aco/WizrpFI+3/qk70/1vWMOHEUY/sc+eOGHXx4V/pvedn4zyljTq3eXfx8BvNVVyHPw==",
+      "path": "awssdk.core/3.3.29.16",
+      "hashPath": "awssdk.core.3.3.29.16.nupkg.sha512"
+    },
+    "AWSSDK.SQS/3.3.3.42": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2oMzRtg9zXGZ6xouR1akULiGkr5+USPTne2DN4leiYSTBYAxl/Nutu8Tssngjjc/AOkC/7lt9AVV01qzy16zvA==",
+      "path": "awssdk.sqs/3.3.3.42",
+      "hashPath": "awssdk.sqs.3.3.3.42.nupkg.sha512"
+    },
+    "Castle.Core/4.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Dx90A7xzdyYiaq1aMn3QmblpFAaVhDCiZkSblt96pf8QopOjLxCcs5ufKJA1zyg2L+Hxjnzx3JNrmfK8ZMRHvA==",
+      "path": "castle.core/4.3.1",
+      "hashPath": "castle.core.4.3.1.nupkg.sha512"
+    },
+    "Castle.Windsor/4.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gpWzeK0Wf8/2M/DhcpEYU5GZeLKjLa9PnF2Q2RGvSbi46u1anQ7yukJsyfIOZbDIut1S1NjG8quw8IgRYtTy5g==",
+      "path": "castle.windsor/4.1.1",
+      "hashPath": "castle.windsor.4.1.1.nupkg.sha512"
+    },
+    "Google.Protobuf/3.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-j/gbpRZ68sgvdi/vXI39Cj/jWG4d1dtDqfWbkjC9dErNWu/dFcIlq1LIgLscea+llZ6nzm06wz/JGziOegAL7Q==",
+      "path": "google.protobuf/3.5.1",
+      "hashPath": "google.protobuf.3.5.1.nupkg.sha512"
+    },
+    "McMaster.NETCore.Plugins/0.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6biM7XPpjtTPVvcuNB3fdDJ2SM3QThqQE0Yg0D8iQUr36+0JUP08UYUMdlhvvLNejPwwG6l+Teb2NBJqtliZ5w==",
+      "path": "mcmaster.netcore.plugins/0.2.1",
+      "hashPath": "mcmaster.netcore.plugins.0.2.1.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.Proxies/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ez/7PLtAYhHw4MZlg69mNG/qcu75aAqQ3Dvq7TIBr1jumjTERpvdGpeRqj1Q9uzgPySIg24AjH+1gUd34fmg+Q==",
+      "path": "microsoft.entityframeworkcore.proxies/2.2.0",
+      "hashPath": "microsoft.entityframeworkcore.proxies.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.App/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QU8taCyeyePwatrj+h+750lMnsPCq3YPaGmsdtSHXPCjDyjto2KT7QDNVet0oRliX4PjaINpyg0Yzd9DnQ/Wkw==",
+      "path": "microsoft.netcore.app/2.2.0",
+      "hashPath": "microsoft.netcore.app.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.DotNetAppHost/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qIrVLupwT2NYTrf7KM7Nh+mJr36V5MITVRjyGOByVVCwGmQgQmI/6bjZYQv+QdExi4Cm87eCKJX9FdT6nc00Xg==",
+      "path": "microsoft.netcore.dotnetapphost/2.2.0",
+      "hashPath": "microsoft.netcore.dotnetapphost.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.DotNetHostPolicy/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5Xvh/3bDr6YAl6TKfeONvRDZ9QOmvVmzFzA0M6g8uubWdf5/o6qdVOqByFBT/fhjVb6okP0E5+v1oxh1Pk+c+w==",
+      "path": "microsoft.netcore.dotnethostpolicy/2.2.0",
+      "hashPath": "microsoft.netcore.dotnethostpolicy.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.DotNetHostResolver/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Q3j3KC2ugqIVasf7pO4NRDEn7GysZX3ZH6fAHfbjrP8cYXY9cmHeFcbaniw36q8kFhsPt2EnRHzSsLBpbG6l2Q==",
+      "path": "microsoft.netcore.dotnethostresolver/2.2.0",
+      "hashPath": "microsoft.netcore.dotnethostresolver.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Platforms/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-39+GVHdbm+cmoOjdvm+fhiMbddnuVyUlBdYS8Yhn5xsNaBoTXpgBsxQQlI2Sv9EjIP0F+itG6yrDaOM2OEGupQ==",
+      "path": "microsoft.netcore.platforms/2.2.0",
+      "hashPath": "microsoft.netcore.platforms.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Targets/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-odP/tJj1z6GylFpNo7pMtbd/xQgTC3Ex2If63dRTL38bBNMwsBnJ+RceUIyHdRBC0oik/3NehYT+oECwBhIM3Q==",
+      "path": "microsoft.netcore.targets/2.0.0",
+      "hashPath": "microsoft.netcore.targets.2.0.0.nupkg.sha512"
+    },
+    "Microting.eForm/3.0.125": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OqMYj8n2qKi+I/4G7mYzH2FoFMwgpSjsZx5RDu3RnczxJAaUH7Z353RYf3ptSC+K5olHovIFN1tgeGStz4V6cQ==",
+      "path": "microting.eform/3.0.125",
+      "hashPath": "microting.eform.3.0.125.nupkg.sha512"
+    },
+    "Microting.eFormApi.BasePn/1.1.85": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GjiIprpWxzXFrkwcBviP8qfurxoyAi4ZfDOUfBXKo8i3HdBlmMs3w1TsrrY5sNpjQ/xd87RvKOvyLZSHezAZGw==",
+      "path": "microting.eformapi.basepn/1.1.85",
+      "hashPath": "microting.eformapi.basepn.1.1.85.nupkg.sha512"
+    },
+    "MySql.Data/8.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vcVmD7C/socXjlyzY2vjF+bq/NdxrMtQqPym9pZxk6qfUK7dq/KX8XrY/wa5TYp3IHM1JR0UzEfBKNCGmtr1Lg==",
+      "path": "mysql.data/8.0.12",
+      "hashPath": "mysql.data.8.0.12.nupkg.sha512"
+    },
+    "MySqlConnector/0.47.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bwEjq0yLcf6SKCS64/kjql8RC/mFP9n7tGVqqShMW2QgoBJr9tflEWy8S0jupMk4oMPqjqjooMQqqwzZROwPug==",
+      "path": "mysqlconnector/0.47.1",
+      "hashPath": "mysqlconnector.0.47.1.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+      "path": "netstandard.library/2.0.3",
+      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "Newtonsoft.Json/12.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jmVyoEyk0In8r+AObYQyFKVFm7uSRzE0XSHSbEtBJcZDMV6DqJoyB4FLcHwprPVhAh826so0db3DIKXVnpGoPA==",
+      "path": "newtonsoft.json/12.0.1",
+      "hashPath": "newtonsoft.json.12.0.1.nupkg.sha512"
+    },
+    "OtpSharp.Core/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tTLKScem4opPu+F86VJ3aQphdFC5dIzZAITP+GxQzrc0hgLfqf1xgnGvfvk5x4QoVnNU8zZ6cVtzWGkCQylWyg==",
+      "path": "otpsharp.core/1.0.0",
+      "hashPath": "otpsharp.core.1.0.0.nupkg.sha512"
+    },
+    "Pomelo.EntityFrameworkCore.MySql/2.1.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/GngSqZ0GgRh6NOpnQvQQunYbu4drSE9O3omshM4aVj4/CSRrSdkGobqaSs+0erMVK6DpfLXINIWBMZqIz1xUQ==",
+      "path": "pomelo.entityframeworkcore.mysql/2.1.4",
+      "hashPath": "pomelo.entityframeworkcore.mysql.2.1.4.nupkg.sha512"
+    },
+    "Pomelo.JsonObject/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sMN9ETMoYfqCegOCVkOkOkfXK3ceH8nWkSeZPgLwfnx6UnqVXTl/ScIZs+x5Q8qgiPmYYCPmtolxNQ0QrcU97g==",
+      "path": "pomelo.jsonobject/2.0.0",
+      "hashPath": "pomelo.jsonobject.2.0.0.nupkg.sha512"
+    },
+    "Rebus/5.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ikoyVjP358FbHKYmb440L0YMin72i3eknw5uhv6WwsQuot9I1QGG8Oa6fS+sMxBxuIgA7YQk7juSxYAAV76Ihg==",
+      "path": "rebus/5.2.1",
+      "hashPath": "rebus.5.2.1.nupkg.sha512"
+    },
+    "Rebus.Castle.Windsor/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-l8GYbCqSG7E3sb8s1fwSp6pAgScXA61JOGwysSpmtmfeaJHwTYnhqO/pAR6RY5CRodjs7boR0T954gL0fHJ6ug==",
+      "path": "rebus.castle.windsor/4.1.0",
+      "hashPath": "rebus.castle.windsor.4.1.0.nupkg.sha512"
+    },
+    "Rebus.MySql/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-M/UxrVtCFkqn/0hNqYFupNFga7LmPyC0KrvPEKoKqCjPiC2MMS5TkSgwBM7ZDFfuIcB5/ft86pc11eBzH3Ojhw==",
+      "path": "rebus.mysql/1.1.0",
+      "hashPath": "rebus.mysql.1.1.0.nupkg.sha512"
+    },
+    "Rebus.SqlServer/5.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-M75PovJbyBvX4e9IRKnHtNery3Y+pulcaOiGNY+O5yFwIvikYu9cBH6SXdjvlt2ZVYYJXBFWHJP3mc02OUn6tQ==",
+      "path": "rebus.sqlserver/5.0.3",
+      "hashPath": "rebus.sqlserver.5.0.3.nupkg.sha512"
+    },
+    "System.ComponentModel/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VyGn1jGRZVfxnh8EdvDCi71v3bMXrsu8aYJOwoV7SNDLVhiEqwP86pPMyRGsDsxhXAm2b3o9OIqeETfN5qfezw==",
+      "path": "system.componentmodel/4.3.0",
+      "hashPath": "system.componentmodel.4.3.0.nupkg.sha512"
+    },
+    "System.ComponentModel.EventBasedAsync/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SXx4bOoSfWE1TIq7RyY7GhIL8W1ueW+xHQApV7bkWs42eDZUwfPgct5tv3jZkWRkvQ8JjWF1ab1d1lFwqYPE+Q==",
+      "path": "system.componentmodel.eventbasedasync/4.3.0",
+      "hashPath": "system.componentmodel.eventbasedasync.4.3.0.nupkg.sha512"
+    },
+    "System.ComponentModel.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-j8GUkCpM8V4d4vhLIIoBLGey2Z5bCkMVNjEZseyAlm4n5arcsJOeI3zkUP+zvZgzsbLTYh4lYeP/ZD/gdIAPrw==",
+      "path": "system.componentmodel.primitives/4.3.0",
+      "hashPath": "system.componentmodel.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.ComponentModel.TypeConverter/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-16pQ6P+EdhcXzPiEK4kbA953Fu0MNG2ovxTZU81/qsCd1zPRsKc3uif5NgvllCY598k6bI0KUyKW8fanlfaDQg==",
+      "path": "system.componentmodel.typeconverter/4.3.0",
+      "hashPath": "system.componentmodel.typeconverter.4.3.0.nupkg.sha512"
+    },
+    "System.Configuration.ConfigurationManager/4.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LoSjM/kLDpyLyoGsmwS5oVMRzHf/0XHkRpr3QZu/HuAv6Sfk919usTMLqD9N9VK3S4Q2+bd3tKJ0ko4MYFfq4Q==",
+      "path": "system.configuration.configurationmanager/4.4.1",
+      "hashPath": "system.configuration.configurationmanager.4.4.1.nupkg.sha512"
+    },
+    "System.Diagnostics.TraceSource/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BlWWL9q/HKM0KBzuOSOqchFga5MqnvkK5mb+IU7f4ecInSyghlswR3ib3nww1ruBmLrtdI5coCBB2H2AltTFyA==",
+      "path": "system.diagnostics.tracesource/4.3.0",
+      "hashPath": "system.diagnostics.tracesource.4.3.0.nupkg.sha512"
+    },
+    "System.Linq.Queryable/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wdbQgzMijyDkBQySuqYnDcK/V70V6KIUUQdXpkXShHbgQRn0bn9wY3ar0VnsDwCcwu8ig6XBrpC2EU2xK+TuQg==",
+      "path": "system.linq.queryable/4.3.0",
+      "hashPath": "system.linq.queryable.4.3.0.nupkg.sha512"
+    },
+    "System.Net.Requests/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8A5Yu2B68jLbGmomlBmCNGqrXBgNp5Y4lTorNdqzAm6s0UMgZDZ/Yxpnkjy6e0ZB0rP++HaL/R3P/kx5xsdmKQ==",
+      "path": "system.net.requests/4.3.0",
+      "hashPath": "system.net.requests.4.3.0.nupkg.sha512"
+    },
+    "System.Net.WebHeaderCollection/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/aQLXlO/M2SjvKjMyX15IRHK/BJgb4qE1FZGZPjnFxhE7jHwduu65TMuVsyKxUOhYQg/2cr9zpm0olhD1icjTw==",
+      "path": "system.net.webheadercollection/4.3.0",
+      "hashPath": "system.net.webheadercollection.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.Loader/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G6WmvAI9yOEi5GOWtZT3+pJWHXGaat59qZKQ7Z75fGpacllPmLizNFZvZXj3CysSyMkQBsm50b9xTM/x9L3yCQ==",
+      "path": "system.runtime.loader/4.3.0",
+      "hashPath": "system.runtime.loader.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.Serialization.Formatters/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KT591AkTNFOTbhZlaeMVvfax3RqhH1EJlcwF50Wm7sfnBLuHiOeZRRKrr1ns3NESkM20KPZ5Ol/ueMq5vg4QoQ==",
+      "path": "system.runtime.serialization.formatters/4.3.0",
+      "hashPath": "system.runtime.serialization.formatters.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.ProtectedData/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WwEexvBd+17yfY7fcS+fBGl+HADEfCJuKeDJqBT7D6j6vKwYvfLyGuq2y/MmrKORC6mbYwth7kjinO1mPhTL3g==",
+      "path": "system.security.cryptography.protecteddata/4.4.0",
+      "hashPath": "system.security.cryptography.protecteddata.4.4.0.nupkg.sha512"
+    },
+    "Wiry.Base32.Patched/1.0.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9hdgIxDV3LhfXGhlqnVfsAZHowQr1W/EYufQQ6mfHLUEXYdo6UV1CT581aW4Sr6jgLlT4aI/fyrJpq9OIDHZ9w==",
+      "path": "wiry.base32.patched/1.0.5.1",
+      "hashPath": "wiry.base32.patched.1.0.5.1.nupkg.sha512"
+    }
+  }
+}

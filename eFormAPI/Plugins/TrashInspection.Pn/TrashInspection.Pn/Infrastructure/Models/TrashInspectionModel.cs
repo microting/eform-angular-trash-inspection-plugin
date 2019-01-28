@@ -24,6 +24,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int EakCode { get; set; }
         public string Producer { get; set; }
         public string Transporter { get; set; }
+        public string InstallationName { get; set; }
+        public string Token { get; set; }
         public int InstallationId { get; set; }
         public bool MustBeInspected { get; set; }
 

@@ -46,6 +46,7 @@ namespace TrashInspection.Pn.Services
                 {
                     result.SelectedeFormId = null;
                 }
+                result.Token = trashInspectionPnSetting.Token;
                 return new OperationDataResult<TrashInspectionPnSettingsModel>(true, result);
             }
             catch(Exception e)
@@ -85,6 +86,8 @@ namespace TrashInspection.Pn.Services
                     MainElement template = core.TemplateRead((int)trashInspectionSettingsModel.SelectedeFormId);
                     trashInspectionPnSetting.SelectedeFormName = template.Label;
                 }
+
+                trashInspectionPnSetting.Token = trashInspectionSettingsModel.Token;
 
                 _dbContext.SaveChanges();
                 return new OperationResult(true,
