@@ -37,7 +37,7 @@ namespace TrashInspection.Pn.Services
             {
                 TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
                 TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-                if (trashInspectionPnSetting.SelectedeFormId != null)
+                if (trashInspectionPnSetting?.SelectedeFormId != null)
                 {
                     result.SelectedeFormId = (int)trashInspectionPnSetting.SelectedeFormId;
                     result.SelectedeFormName = trashInspectionPnSetting.SelectedeFormName;
@@ -46,7 +46,7 @@ namespace TrashInspection.Pn.Services
                 {
                     result.SelectedeFormId = null;
                 }
-                result.Token = trashInspectionPnSetting.Token;
+                result.Token = trashInspectionPnSetting?.Token;
                 return new OperationDataResult<TrashInspectionPnSettingsModel>(true, result);
             }
             catch(Exception e)

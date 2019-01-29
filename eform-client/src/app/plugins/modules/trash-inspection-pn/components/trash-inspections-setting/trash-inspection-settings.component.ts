@@ -44,7 +44,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
   }
 
   getSettings() {
-    debugger;
+    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
       if (data && data.success) {

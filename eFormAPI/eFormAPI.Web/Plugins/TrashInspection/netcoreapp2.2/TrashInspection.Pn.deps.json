@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "4288359957eea820c23fcce4ab04fd4e733d6adb"
+    "signature": "92a0ff384c46728ecc6f73c51e48557127df4872"
   },
   "compilationOptions": {},
   "targets": {
@@ -13,7 +13,7 @@
           "Microsoft.NETCore.App": "2.2.0",
           "Microting.eForm": "3.0.151",
           "Microting.eFormApi.BasePn": "1.1.93",
-          "Microting.eFormTrashInspectionBase": "1.1.1",
+          "Microting.eFormTrashInspectionBase": "1.1.2",
           "OtpSharp.Core": "1.0.0"
         },
         "runtime": {
@@ -170,7 +170,7 @@
           }
         }
       },
-      "Microting.eFormTrashInspectionBase/1.1.1": {
+      "Microting.eFormTrashInspectionBase/1.1.2": {
         "dependencies": {
           "Microting.eForm": "3.0.151"
         },
@@ -503,12 +503,12 @@
       "path": "microting.eformapi.basepn/1.1.93",
       "hashPath": "microting.eformapi.basepn.1.1.93.nupkg.sha512"
     },
-    "Microting.eFormTrashInspectionBase/1.1.1": {
+    "Microting.eFormTrashInspectionBase/1.1.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-l17hwl36FvnPsDkjfDERzj0oqNUj8/rankMB4ZuKo1VzaiW/Zi6EXg8GvjivkBtgzMEA3tvlcWCBNBytEbDrTA==",
-      "path": "microting.eformtrashinspectionbase/1.1.1",
-      "hashPath": "microting.eformtrashinspectionbase.1.1.1.nupkg.sha512"
+      "sha512": "sha512-CZxVAcYVS1i7DRPbUP/E35Euk5CTcrybdT1/wmaxGwM7MXT+Qs0aCQZwlyCxOu3v33IjZ1/tfvJxaSA27/GVdw==",
+      "path": "microting.eformtrashinspectionbase/1.1.2",
+      "hashPath": "microting.eformtrashinspectionbase.1.1.2.nupkg.sha512"
     },
     "MySql.Data/8.0.12": {
       "type": "package",

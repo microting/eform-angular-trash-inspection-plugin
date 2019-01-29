@@ -150,6 +150,18 @@
           </div>
         </th>
 
+        <th scope="col" class="table-header-sortable" id="nameTableHeader"
+            (click)="sortTable('Name')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Status' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Status'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Status' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Status' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
 
         <th scope="col">
           {{ 'Actions' | translate }}
@@ -160,9 +172,6 @@
       <tr *ngFor="let trashInspection of trashInspectionsModel.trashInspectionList">
         <td>
           {{trashInspection.id}}
-        </td>
-        <td>
-          {{trashInspection.name}}
         </td>
         <td>
           {{trashInspection.date}}
@@ -193,6 +202,12 @@
         </td>
         <td>
           {{trashInspection.weighingNumber}}
+        </td>
+        <td>
+          {{trashInspection.name}}
+        </td>
+        <td>
+          {{trashInspection.status}}
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">

@@ -28,6 +28,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string Token { get; set; }
         public int InstallationId { get; set; }
         public bool MustBeInspected { get; set; }
+        public int Status { get; set; }
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
@@ -49,6 +50,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.UpdatedByUserId = UpdatedByUserId;
             trashInspection.Version = Version;
             trashInspection.WeighingNumber = WeighingNumber;
+            trashInspection.Status = Status;
             trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
 
             _dbContext.TrashInspections.Add(trashInspection);
@@ -56,6 +58,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
             _dbContext.SaveChanges();
+            Id = trashInspection.Id;
         }
 
         public void Update(TrashInspectionPnDbContext _dbContext)
@@ -76,6 +79,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.Transporter = Transporter;
             trashInspection.TrashFraction = TrashFraction;
             trashInspection.WeighingNumber = WeighingNumber;
+            trashInspection.Status = Status;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -130,6 +134,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionVer.Version = trashInspection.Version;
             trashInspectionVer.WeighingNumber = trashInspection.WeighingNumber;
             trashInspectionVer.WorkflowState = trashInspection.WorkflowState;
+//            trashInspectionVer.Status = trashInspection.Status;
 
             trashInspectionVer.TrashInspctionId = trashInspection.Id;
             

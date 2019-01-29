@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using eFormCore;
+using eFormShared;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Services
@@ -67,16 +70,17 @@ namespace TrashInspection.Pn.Services
 
                 List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel()
                 {
-                Date = x.Date,
-                EakCode = x.Eak_Code,
-                InstallationId = x.InstallationId,
-                MustBeInspected = x.MustBeInspected,
-                Producer = x.Producer,
-                RegistrationNumber = x.RegistrationNumber,
-                Time = x.Time,
-                Transporter = x.Transporter,
-                TrashFraction = x.TrashFraction,
-                WeighingNumber = x.WeighingNumber
+                    Date = x.Date,
+                    EakCode = x.Eak_Code,
+                    InstallationId = x.InstallationId,
+                    MustBeInspected = x.MustBeInspected,
+                    Producer = x.Producer,
+                    RegistrationNumber = x.RegistrationNumber,
+                    Time = x.Time,
+                    Transporter = x.Transporter,
+                    TrashFraction = x.TrashFraction,
+                    WeighingNumber = x.WeighingNumber,
+                    Status = x.Status
             }).ToListAsync();
 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
@@ -109,7 +113,8 @@ namespace TrashInspection.Pn.Services
                     Time = x.Time,
                     Transporter = x.Transporter,
                     TrashFraction = x.TrashFraction,
-                    WeighingNumber = x.WeighingNumber
+                    WeighingNumber = x.WeighingNumber,
+                    Status = x.Status
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
 
@@ -132,8 +137,61 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
-            createModel.Save(_dbContext);
-            return new OperationResult(true);
+            var trashInspectionSettings = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+            if (trashInspectionSettings == null)
+            {
+                return new OperationResult(false);
+            }
+            else
+            {
+                if (createModel.Token == trashInspectionSettings.Token)
+                {
+                    createModel.Status = 33;
+                    createModel.Save(_dbContext);
+
+                    Installation installation =
+                        _dbContext.Installations.First(x => x.Name == createModel.InstallationName);
+
+                    if (installation != null)
+                    {
+                        Core core = _coreHelper.GetCore();
+                        var trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+                        var selectedeFormId = trashInspectionPnSetting?.SelectedeFormId;
+                        if (selectedeFormId != null)
+                        {
+                            int eFormId = (int) selectedeFormId;
+                    
+                            Template_Dto eForm = core.TemplateItemRead(eFormId);
+                            foreach (InstallationSite installationSite in installation.InstallationSites)
+                            {
+                                var mainElement = core.TemplateRead(eFormId);
+                                mainElement.Repeated =
+                                    0; // We set this right now hardcoded, this will let the eForm be deployed until end date or we actively retract it.
+                                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
+                                mainElement.StartDate = DateTime.Now.ToUniversalTime();
+                                string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
+                                TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
+                                trashInspectionCase.Status = 66;
+                                trashInspectionCase.TrashInspectionId = createModel.Id;
+                                trashInspectionCase.SdkCaseId = sdkCaseId;
+
+                                _dbContext.TrashInspectionCases.Add(trashInspectionCase);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                        }
+                    }
+                    createModel.Status = 66;
+                    createModel.Update(_dbContext);
+                    return new OperationResult(true);
+                }
+                else
+                {
+                    
+                    return new OperationResult(false);
+                }
+            }
+            
+            
                 
         }
 

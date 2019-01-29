@@ -38,15 +38,17 @@ export class TrashInspectionsPageComponent implements OnInit {
   }
 
   getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'TrashInspection').settings;
+    // debugger;
+    let bla = this.sharedPnService.getLocalPageSettings
+    ('trashInspectionsPnSettings', 'TrashInspections');
+    this.localPageSettings = bla.settings;
     this.getAllInitialData();
   }
 
   updateLocalPageSettings() {
     debugger;
     this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'TrashInspection');
+    ('trashInspectionsPnSettings', this.localPageSettings, 'TrashInspections');
     this.getLocalPageSettings();
   }
 

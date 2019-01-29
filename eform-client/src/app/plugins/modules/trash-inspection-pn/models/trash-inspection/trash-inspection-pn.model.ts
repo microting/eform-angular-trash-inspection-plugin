@@ -19,4 +19,5 @@ export class TrashInspectionPnModel {
   installationId: number;
   mustBeInspected: boolean;
   relatedAreasIds: Array<number> = [];
+  status: number;
 }

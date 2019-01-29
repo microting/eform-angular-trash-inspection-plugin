@@ -27,7 +27,7 @@ namespace TrashInspection.Pn.Controllers
         [HttpPost]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/settings")]
-        public OperationResult UpdateSettings(TrashInspectionPnSettingsModel trashInspectionSettingsModel)
+        public OperationResult UpdateSettings([FromBody] TrashInspectionPnSettingsModel trashInspectionSettingsModel)
         {
             return _trashInspectionPnSettingsService.UpdateSettings(trashInspectionSettingsModel);
         }

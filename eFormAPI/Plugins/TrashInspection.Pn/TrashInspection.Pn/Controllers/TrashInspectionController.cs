@@ -41,14 +41,7 @@ namespace TrashInspection.Pn.Conrtrollers
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
-            if (createModel.Token == _dbContext.TrashInspectionPnSettings.FirstOrDefault().Token)
-            {
-                return await _trashInspectionService.CreateTrashInspection(createModel);
-            }
-            else
-            {
-                return new OperationDataResult<AccessDeniedModel>(false);
-            }
+            return await _trashInspectionService.CreateTrashInspection(createModel);
         }
 
         [HttpPut]

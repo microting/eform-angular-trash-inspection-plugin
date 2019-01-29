@@ -8,5 +8,6 @@
 	"Producer":"Some company Inc.",
 	"Transporter":"Some other company Inc",
 	"InstallationName":"XXX",
-	"MustBeInspected":"false"	
+	"MustBeInspected":"false",
+	"Token":"sometoken"	
 }
