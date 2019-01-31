@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using eFormShared;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+﻿    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using eFormShared;
+    using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+    using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {

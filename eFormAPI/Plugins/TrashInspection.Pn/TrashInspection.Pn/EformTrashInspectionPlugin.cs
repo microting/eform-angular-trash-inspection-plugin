@@ -27,6 +27,7 @@ namespace TrashInspection.Pn
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IFractionService, FractionService>();
             services.AddTransient<IInstallationService, InstallationService>();
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
@@ -92,6 +93,13 @@ namespace TrashInspection.Pn
                         E2EId = "trash-inspection-pn-settings",
                         Link = "/plugins/trash-inspection-pn/settings",
                         Position = 2,
+                    },
+                    new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Fractions"),
+                        E2EId = "trash-inspection-pn-fractions",
+                        Link = "/plugins/trash-inspection-pn/fractions",
+                        Position = 3,
                     }
                 }
             });
