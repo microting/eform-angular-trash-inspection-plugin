@@ -16,12 +16,12 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int Version { get; set; }
         public int CreatedByUserId { get; set; }
         public int UpdatedByUserId { get; set; }
-        public int WeighingNumber { get; set; }
+        public string WeighingNumber { get; set; }
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }
         public string RegistrationNumber { get; set; }
-        public int TrashFraction { get; set; }
-        public int EakCode { get; set; }
+        public string TrashFraction { get; set; }
+        public string EakCode { get; set; }
         public string Producer { get; set; }
         public string Transporter { get; set; }
         public string InstallationName { get; set; }
