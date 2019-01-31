@@ -174,7 +174,7 @@
           {{trashInspection.id}}
         </td>
         <td>
-          {{trashInspection.date}}
+          <date-formatter [date]="trashInspection.date" [Format]="'date'"></date-formatter>
         </td>
         <td>
           {{trashInspection.eakCode}}
@@ -194,7 +194,7 @@
           {{trashInspection.registrationNumber}}
         </td>
         <td>
-          {{trashInspection.time}}
+            <date-formatter [date]="trashInspection.time" [Format]="'datetime'"></date-formatter>
         </td>
         <td>
           {{trashInspection.transporter}}

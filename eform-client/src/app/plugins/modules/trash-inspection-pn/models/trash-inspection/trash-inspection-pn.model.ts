@@ -9,8 +9,8 @@ export class TrashInspectionPnModel {
   id: number;
   name: string;
   weighingNumber: number;
-  date = new Date().getDate();
-  time = new Date().getTime();
+  date: Date;
+  time: Date;
   registrationNumber: string;
   trashFraction: number;
   eakCode: number;
