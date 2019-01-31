@@ -25,7 +25,6 @@ export class TrashInspectionsPageComponent implements OnInit {
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
   mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
   spinnerStatus = false;
-
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
               private authService: AuthService,

@@ -13,6 +13,9 @@ import {
 import {TrashInspectionPnLayoutComponent} from './layouts';
 import {TrashInspectionPnRouting} from './trash-inspection-pn.routing.module';
 import {SharedPnModule} from '../shared/shared-pn.module';
+// import {StatusBarComponent} from '../../../common/modules/eform-shared/components';
+import {EformSharedModule} from '../../../common/modules/eform-shared/eform-shared.module';
+
 import {
   InstallationCreateComponent,
   InstallationDeleteComponent,
@@ -22,7 +25,7 @@ import {
   TrashInspectionDeleteComponent,
   TrashInspectionsPageComponent,
   TrashInspectionEditComponent,
-  TrashInspectionSettingsComponent
+  TrashInspectionSettingsComponent,
 } from './components';
 
 
@@ -34,7 +37,8 @@ import {
     TrashInspectionPnRouting,
     TranslateModule,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    EformSharedModule
   ],
   declarations: [
     InstallationsPageComponent,
@@ -46,7 +50,7 @@ import {
     TrashInspectionEditComponent,
     TrashInspectionDeleteComponent,
     TrashInspectionPnLayoutComponent,
-    TrashInspectionSettingsComponent,
+    TrashInspectionSettingsComponent
   ],
   providers: [TrashInspectionPnInstallationsService, TrashInspectionPnTrashInspectionsService,   TrashInspectionPnSettingsService
   ]

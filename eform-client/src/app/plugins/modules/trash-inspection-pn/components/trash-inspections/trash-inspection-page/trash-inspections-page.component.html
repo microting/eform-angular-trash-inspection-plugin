@@ -150,7 +150,7 @@
           </div>
         </th>
 
-        <th scope="col" class="table-header-sortable" id="nameTableHeader"
+        <th scope="col" class="table-header-sortable" id="statusTableHeader"
             (click)="sortTable('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Status' | translate}}
@@ -209,25 +209,27 @@
           {{trashInspection.name}}
         </td>
         <td>
-          <!--<div class="progress-bar" role="progressbar" style="width: {{trashInspection.status}}%"></div>-->
-          <div class="progress" *ngIf="trashInspection.status == 0" style="height: 2em">
-            <div class="progress-bar grey" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for server' | translate}}</div>
-          </div>
-          <div class="progress" *ngIf="trashInspection.status == 33" style="height: 2em">
-            <div class="progress-bar orange text" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Received by server' | translate}}</div>
-          </div>
-          <div class="progress" *ngIf="trashInspection.status == 66" style="height: 2em">
-            <div class="progress-bar yellow text-black-60" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for device' | translate}}</div>
-          </div>
-          <div class="progress" *ngIf="trashInspection.status == 70" style="height: 2em">
-            <div class="progress-bar info-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Retrieved by device' | translate}}</div>
-          </div>
-          <div class="progress" *ngIf="trashInspection.status == 77" style="height: 2em">
-            <div class="progress-bar success-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Completed' | translate}}</div>
-          </div>
-          <div class="progress" *ngIf="trashInspection.status == 110" style="height: 2em; padding-left: 2px;">
-            <div class="progress-bar danger-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'System error: Contact Microting' | translate}}</div>
-          </div>
+          <status-bar [status]="trashInspection.status"></status-bar>
+          <!--{{trashInspection.status}}-->
+          <!--<div class="progress-bar" role="progressbar" style="width: {{trashInspection.status-bar}}%"></div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 0" style="height: 2em">-->
+            <!--<div class="progress-bar grey" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for server' | translate}}</div>-->
+          <!--</div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 33" style="height: 2em">-->
+            <!--<div class="progress-bar orange text" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Received by server' | translate}}</div>-->
+          <!--</div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 66" style="height: 2em">-->
+            <!--<div class="progress-bar yellow text-black-60" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for device' | translate}}</div>-->
+          <!--</div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 70" style="height: 2em">-->
+            <!--<div class="progress-bar info-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Retrieved by device' | translate}}</div>-->
+          <!--</div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 77" style="height: 2em">-->
+            <!--<div class="progress-bar success-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Completed' | translate}}</div>-->
+          <!--</div>-->
+          <!--<div class="progress" *ngIf="trashInspection.status == 110" style="height: 2em; padding-left: 2px;">-->
+            <!--<div class="progress-bar danger-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'System error: Contact Microting' | translate}}</div>-->
+          <!--</div>-->
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
