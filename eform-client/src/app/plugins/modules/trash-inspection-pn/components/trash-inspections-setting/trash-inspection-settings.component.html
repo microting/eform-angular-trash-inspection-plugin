@@ -14,17 +14,6 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-            <ng-select [items]="templatesModel.templates"
-                       bindLabel="label"
-                       [placeholder]=" settingsModel.selectedTemplateName || ('Selected template' | translate)"
-                       bindValue="id"
-                       [typeahead]="typeahead"
-                       (change)="onSelectedChanged($event)">
-            </ng-select>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
                      [mdbValidate]="false" [(ngModel)]="settingsModel.token"
