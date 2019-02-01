@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {InstallationPnCreateModel, TrashInspectionsPnModel} from '../../../models';
 import {TrashInspectionPnInstallationsService} from '../../../services';
-import {SiteNameDto, TemplateDto} from '../../../../../../common/models/dto';
+import {SiteNameDto} from '../../../../../../common/models/dto';
 import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eforms';
 import {EFormService} from '../../../../../../common/services/eform';
 import {SitesService} from '../../../../../../common/services/advanced';
@@ -48,9 +48,6 @@ export class InstallationCreateComponent implements OnInit {
     });
   }
 
-  // isChecked(relatedMachineId: number) {
-  //   return this.newInstallationModel.relatedMachinesIds.indexOf(relatedMachineId) !== -1;
-  // }
 
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {

@@ -2,6 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angula
 import {InstallationPnModel, InstallationPnUpdateModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
 import {TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
 import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
+import {SitesService} from '../../../../../../common/services/advanced';
+import {AuthService} from '../../../../../../common/services/auth';
+import {SiteNameDto} from '../../../../../../common/models/dto';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-edit',
@@ -14,9 +17,18 @@ export class InstallationEditComponent implements OnInit {
   @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
-  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
+  sitesDto: Array<SiteNameDto> = [];
+
+  get userClaims() {
+    return this.authService.userClaims;
+  }
+  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
+              private sitesService: SitesService,
+              private authService: AuthService) { }
 
   ngOnInit() {
+    this.loadAllSites();
+
   }
 
   show(installationModel: InstallationPnModel) {
@@ -44,7 +56,17 @@ export class InstallationEditComponent implements OnInit {
       } this.spinnerStatus = false;
     });
   }
-
+  loadAllSites() {
+    if (this.userClaims.eFormsPairingRead) {
+      this.sitesService.getAllSitesForPairing().subscribe(operation => {
+        this.spinnerStatus = true;
+        if (operation && operation.success) {
+          this.sitesDto = operation.model;
+        }
+        this.spinnerStatus = false;
+      });
+    }
+  }
   addToEditMapping(e: any, trashInspectionId: number) {
     debugger;
     if (e.target.checked) {

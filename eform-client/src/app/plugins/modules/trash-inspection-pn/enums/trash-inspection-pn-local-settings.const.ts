@@ -14,6 +14,15 @@ export const TrashInspectionPnLocalSettings = [
     }
   ),
   new ApplicationPageModel({
+      name: 'Fractions',
+      settings: new PageSettingsModel({
+        pageSize: 10,
+        sort: 'Id',
+        isSortDsc: false
+      })
+    }
+  ),
+  new ApplicationPageModel({
       name: 'TrashInspections',
       settings: new PageSettingsModel({
         pageSize: 10,

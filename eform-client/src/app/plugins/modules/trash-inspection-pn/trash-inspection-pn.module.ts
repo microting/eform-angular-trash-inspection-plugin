@@ -6,6 +6,7 @@ import {MDBBootstrapModule} from 'port/angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 
 import {
+  TrashInspectionPnFractionsService,
   TrashInspectionPnInstallationsService,
   TrashInspectionPnTrashInspectionsService,
   TrashInspectionPnSettingsService
@@ -17,6 +18,10 @@ import {SharedPnModule} from '../shared/shared-pn.module';
 import {EformSharedModule} from '../../../common/modules/eform-shared/eform-shared.module';
 
 import {
+  FractionCreateComponent,
+  FractionDeleteComponent,
+  FractionEditComponent,
+  FractionsPageComponent,
   InstallationCreateComponent,
   InstallationDeleteComponent,
   InstallationsPageComponent,
@@ -50,9 +55,16 @@ import {
     TrashInspectionEditComponent,
     TrashInspectionDeleteComponent,
     TrashInspectionPnLayoutComponent,
-    TrashInspectionSettingsComponent
+    TrashInspectionSettingsComponent,
+    FractionCreateComponent,
+    FractionDeleteComponent,
+    FractionEditComponent,
+    FractionsPageComponent,
   ],
-  providers: [TrashInspectionPnInstallationsService, TrashInspectionPnTrashInspectionsService,   TrashInspectionPnSettingsService
+  providers: [TrashInspectionPnFractionsService,
+              TrashInspectionPnInstallationsService,
+              TrashInspectionPnTrashInspectionsService,
+              TrashInspectionPnSettingsService
   ]
 })
 export class TrashInspectionPnModule { }

@@ -2,7 +2,12 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminGuard, AuthGuard} from 'src/app/common/guards';
 import {TrashInspectionPnLayoutComponent} from './layouts';
-import {TrashInspectionsPageComponent, InstallationsPageComponent, TrashInspectionSettingsComponent} from './components';
+import {
+  TrashInspectionsPageComponent,
+  InstallationsPageComponent,
+  TrashInspectionSettingsComponent,
+  FractionsPageComponent
+} from './components';
 
 export const routes: Routes = [
   {
@@ -23,6 +28,11 @@ export const routes: Routes = [
         path: 'settings',
         canActivate: [AdminGuard],
         component: TrashInspectionSettingsComponent
+      },
+      {
+        path: 'fractions',
+        canActivate: [AdminGuard],
+        component: FractionsPageComponent
       }
     ]
   }
