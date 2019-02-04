@@ -146,7 +146,7 @@ namespace TrashInspection.Pn.Services
             {
                 if (createModel.Token == trashInspectionSettings.Token)
                 {
-                    createModel.Status = 33;
+                    createModel.Status = 0;
                     createModel.Save(_dbContext);
 
                     Installation installation =

@@ -3,6 +3,6 @@ export class InstallationPnRequestModel {
   pageSize: number;
   sort: string;
   isSortDsc: boolean;
-  offset: 0;
+  offset = 0;
 
 }

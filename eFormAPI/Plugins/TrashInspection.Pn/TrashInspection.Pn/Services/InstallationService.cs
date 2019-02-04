@@ -94,12 +94,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var installation = await _dbContext.Installations.Select(x => new InstallationModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                })
-                .FirstOrDefaultAsync(x => x.Id == id);
+                Installation installation = await _dbContext.Installations.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (installation == null)
                 {
@@ -107,7 +102,24 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString($"InstallationWithID:{id}DoesNotExist"));
                 }
 
-                return new OperationDataResult<InstallationModel>(true, installation);
+//                List<InstallationSite> installationSites = _dbContext.InstallationSites.ToList(); 
+                List<InstallationSite> installationSites = _dbContext.InstallationSites
+                    .Where(x => x.InstallationId == installation.Id).ToList();
+                
+                InstallationModel installationModel = new InstallationModel();
+                installationModel.Name = installation.Name;
+                installationModel.Id = installation.Id;
+                installationModel.DeployCheckboxes = new List<DeployCheckbox>();
+                
+                foreach (InstallationSite installationSite in installationSites)
+                {
+                    DeployCheckbox deployCheckbox = new DeployCheckbox();
+                    deployCheckbox.Id = installationSite.SDKSiteId;
+                    deployCheckbox.IsChecked = true;
+                    installationModel.DeployCheckboxes.Add(deployCheckbox);
+                }
+
+                return new OperationDataResult<InstallationModel>(true, installationModel);
             }
             catch (Exception e)
             {

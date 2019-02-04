@@ -89,18 +89,18 @@ namespace TrashInspection.Pn
                     },
                     new MenuItemModel()
                     {
-                        Name = localizationService.GetString("Settings"),
-                        E2EId = "trash-inspection-pn-settings",
-                        Link = "/plugins/trash-inspection-pn/settings",
-                        Position = 2,
-                    },
-                    new MenuItemModel()
-                    {
                         Name = localizationService.GetString("Fractions"),
                         E2EId = "trash-inspection-pn-fractions",
                         Link = "/plugins/trash-inspection-pn/fractions",
+                        Position = 2,
+                    },
+                     new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Settings"),
+                        E2EId = "trash-inspection-pn-settings",
+                        Link = "/plugins/trash-inspection-pn/settings",
                         Position = 3,
-                    }
+                    },
                 }
             });
             return result;

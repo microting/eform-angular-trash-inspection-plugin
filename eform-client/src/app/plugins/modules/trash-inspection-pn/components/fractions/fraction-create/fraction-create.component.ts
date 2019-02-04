@@ -54,7 +54,7 @@ export class FractionCreateComponent implements OnInit {
     this.loadAllSites();
   }
 
-  createInstallation() {
+  createFraction() {
     this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.createFraction(this.newFractionModel).subscribe((data) => {
       if (data && data.success) {

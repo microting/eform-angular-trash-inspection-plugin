@@ -5,6 +5,7 @@ import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/tra
 import {SitesService} from '../../../../../../common/services/advanced';
 import {AuthService} from '../../../../../../common/services/auth';
 import {SiteNameDto} from '../../../../../../common/models/dto';
+import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eforms';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-edit',
@@ -16,23 +17,30 @@ export class InstallationEditComponent implements OnInit {
   @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
+  deployModel: DeployModel = new DeployModel();
+  deployViewModel: DeployModel = new DeployModel();
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
   sitesDto: Array<SiteNameDto> = [];
+  matchFound = false;
 
   get userClaims() {
     return this.authService.userClaims;
   }
+
   constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
               private sitesService: SitesService,
-              private authService: AuthService) { }
+              private authService: AuthService) {
+  }
 
   ngOnInit() {
     this.loadAllSites();
+    this.selectedInstallationModel.deployCheckboxes = new Array<DeployCheckbox>();
 
   }
 
   show(installationModel: InstallationPnModel) {
     this.getSelectedInstallation(installationModel.id);
+    this.deployViewModel = new DeployModel();
     this.frame.show();
   }
 
@@ -41,7 +49,9 @@ export class InstallationEditComponent implements OnInit {
     this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
       if (data && data.success) {
         this.selectedInstallationModel = data.model;
-      } this.spinnerStatus = false;
+        this.fillCheckboxes();
+      }
+      this.spinnerStatus = false;
     });
   }
 
@@ -49,13 +59,15 @@ export class InstallationEditComponent implements OnInit {
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
       .subscribe((data) => {
-      if (data && data.success) {
-        this.onInstallationUpdated.emit();
-        this.selectedInstallationModel = new InstallationPnModel();
-        this.frame.hide();
-      } this.spinnerStatus = false;
-    });
+        if (data && data.success) {
+          this.onInstallationUpdated.emit();
+          this.selectedInstallationModel = new InstallationPnModel();
+          this.frame.hide();
+        }
+        this.spinnerStatus = false;
+      });
   }
+
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
@@ -67,19 +79,50 @@ export class InstallationEditComponent implements OnInit {
       });
     }
   }
+
   addToEditMapping(e: any, trashInspectionId: number) {
-    debugger;
     if (e.target.checked) {
-      this.selectedInstallationModel.relatedMachinesIds.push(trashInspectionId);
+      this.selectedInstallationModel.relatedTrashInspectionsIds.push(trashInspectionId);
     } else {
-      this.selectedInstallationModel.relatedMachinesIds = this.selectedInstallationModel.relatedMachinesIds
+      this.selectedInstallationModel.relatedTrashInspectionsIds = this.selectedInstallationModel.relatedTrashInspectionsIds
         .filter(x => x !== trashInspectionId);
     }
   }
 
+  addToArray(e: any, deployId: number) {
+    const deployObject = new DeployCheckbox();
+    deployObject.id = deployId;
+    if (e.target.checked) {
+      deployObject.isChecked = true;
+      this.selectedInstallationModel.deployCheckboxes.push(deployObject);
+    } else {
+      this.selectedInstallationModel.deployCheckboxes = this.selectedInstallationModel.deployCheckboxes.filter(x => x.id !== deployId);
+    }
+  }
+
   isChecked(trashInspectionId: number) {
-    if (this.selectedInstallationModel.relatedMachinesIds && this.selectedInstallationModel.relatedMachinesIds.length > 0) {
-      return this.selectedInstallationModel.relatedMachinesIds.findIndex(x => x === trashInspectionId) !== -1;
-    } return false;
+    if (this.selectedInstallationModel.relatedTrashInspectionsIds && this.selectedInstallationModel.relatedTrashInspectionsIds.length > 0) {
+      return this.selectedInstallationModel.relatedTrashInspectionsIds.findIndex(x => x === trashInspectionId) !== -1;
+    }
+    return false;
+  }
+
+  fillCheckboxes() {
+    for (const siteDto of this.sitesDto) {
+      const deployObject = new DeployCheckbox();
+      for (const deployCheckboxes of this.selectedInstallationModel.deployCheckboxes) {
+        if (deployCheckboxes.id === siteDto.siteUId) {
+          this.matchFound = true;
+          deployObject.id = siteDto.siteUId;
+          deployObject.isChecked = true;
+          this.deployModel.deployCheckboxes.push(deployObject);
+        }
+      }
+      this.deployViewModel.id = this.selectedInstallationModel.id;
+      deployObject.id = siteDto.siteUId;
+      deployObject.isChecked = this.matchFound === true;
+      this.matchFound = false;
+      this.deployViewModel.deployCheckboxes.push(deployObject);
+    }
   }
 }

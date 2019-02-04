@@ -44,17 +44,14 @@ export class TrashInspectionSettingsComponent implements OnInit {
   }
 
   getSettings() {
-    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
       if (data && data.success) {
-        // debugger;
         this.settingsModel = data.model;
       } this.spinnerStatus = false;
     });
   }
   updateSettings() {
-    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.updateSettings(this.settingsModel)
       .subscribe((data) => {
@@ -64,7 +61,6 @@ export class TrashInspectionSettingsComponent implements OnInit {
       });
   }
   onSelectedChanged(e: any) {
-    // debugger;
     this.settingsModel.selectedTemplateId = e.id;
   }
 }

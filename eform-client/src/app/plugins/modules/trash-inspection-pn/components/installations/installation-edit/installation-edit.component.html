@@ -26,26 +26,22 @@
                   <th scope="col" id="idTableHeader">ID</th>
                   <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
                   <th scope="col">
-                    {{ 'Related Trash Inspection' | translate }}
+                    {{ 'Related Site' | translate }}
                   </th>
                 </tr>
                 </thead>
                 <tbody id="tableBody">
-                <tr *ngFor="let trashInspection of mappingTrashInspections.trashInspectionList">
-                  <td>
-                    {{trashInspection.id}}
-                  </td>
-                  <td>
-                    {{trashInspection.name}}
-                  </td>
-                  <td>
-                    <div class="mat-checkbox">
-                      <input id="update-checkbox{{trashInspection.id}}" [checked]="isChecked(trashInspection.id)"
-                             [value]="isChecked(trashInspection.id)"
-                             (change)="addToEditMapping($event, trashInspection.id)"
-                             color="primary" type="checkbox">
-                      <label for="update-checkbox{{trashInspection.id}}"></label>
-                    </div>
+                <tr *ngFor="let siteDto of sitesDto">
+                  <td class="align-middle">{{siteDto.siteUId}}</td>
+                  <td class="align-middle">{{siteDto.siteName}}</td>
+                  <td class="align-middle">
+                    <ng-container *ngFor="let checkboxModel of deployViewModel.deployCheckboxes">
+                      <div class="mat-checkbox" *ngIf="checkboxModel.id == siteDto.siteUId">
+                        <input id="checkbox{{checkboxModel.id}}" (change)="addToArray($event, checkboxModel.id)"
+                               [checked]="checkboxModel.isChecked" [value]="checkboxModel.isChecked" color="primary" type="checkbox">
+                        <label for="checkbox{{checkboxModel.id}}"></label>
+                      </div>
+                    </ng-container>
                   </td>
                 </tr>
                 </tbody>

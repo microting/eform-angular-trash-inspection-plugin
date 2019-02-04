@@ -41,6 +41,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
             _dbContext.SaveChanges();
+            Id = installation.Id;    
         }
         public void Update(TrashInspectionPnDbContext _dbContext)
         {
