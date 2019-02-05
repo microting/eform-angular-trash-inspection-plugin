@@ -1,5 +1,9 @@
 export class TrashInspectionSettingsModel {
-  selectedTemplateId: number;
-  selectedTemplateName: string;
-  token: string;
+  trashInspectionSettingsList: Array<TrashInspectionSettingModel> = [];
+}
+
+export class TrashInspectionSettingModel {
+  id: number;
+  name: number;
+  value: string;
 }
