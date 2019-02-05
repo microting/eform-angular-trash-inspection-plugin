@@ -137,51 +137,51 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
-            var trashInspectionSettings = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+            TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
             if (trashInspectionSettings == null)
             {
                 return new OperationResult(false);
             }
             else
             {
-                if (createModel.Token == trashInspectionSettings.Token)
+                if (createModel.Token == trashInspectionSettings.Value)
                 {
                     createModel.Status = 33;
                     createModel.Save(_dbContext);
 
-                    Installation installation =
-                        _dbContext.Installations.First(x => x.Name == createModel.InstallationName);
-
-                    if (installation != null)
-                    {
-                        Core core = _coreHelper.GetCore();
-                        var trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-                        var selectedeFormId = trashInspectionPnSetting?.SelectedeFormId;
-                        if (selectedeFormId != null)
-                        {
-                            int eFormId = (int) selectedeFormId;
-                    
-                            Template_Dto eForm = core.TemplateItemRead(eFormId);
-                            foreach (InstallationSite installationSite in installation.InstallationSites)
-                            {
-                                var mainElement = core.TemplateRead(eFormId);
-                                mainElement.Repeated =
-                                    0; // We set this right now hardcoded, this will let the eForm be deployed until end date or we actively retract it.
-                                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
-                                mainElement.StartDate = DateTime.Now.ToUniversalTime();
-                                string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
-                                TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
-                                trashInspectionCase.Status = 66;
-                                trashInspectionCase.TrashInspectionId = createModel.Id;
-                                trashInspectionCase.SdkCaseId = sdkCaseId;
-
-                                _dbContext.TrashInspectionCases.Add(trashInspectionCase);
-                                await _dbContext.SaveChangesAsync();
-                            }
-                        }
-                    }
-                    createModel.Status = 66;
-                    createModel.Update(_dbContext);
+//                    Installation installation =
+//                        _dbContext.Installations.First(x => x.Name == createModel.InstallationName);
+//
+//                    if (installation != null)
+//                    {
+//                        Core core = _coreHelper.GetCore();
+//                        var trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+//                        var selectedeFormId = trashInspectionPnSetting?.SelectedeFormId;
+//                        if (selectedeFormId != null)
+//                        {
+//                            int eFormId = (int) selectedeFormId;
+//                    
+//                            Template_Dto eForm = core.TemplateItemRead(eFormId);
+//                            foreach (InstallationSite installationSite in installation.InstallationSites)
+//                            {
+//                                var mainElement = core.TemplateRead(eFormId);
+//                                mainElement.Repeated =
+//                                    0; // We set this right now hardcoded, this will let the eForm be deployed until end date or we actively retract it.
+//                                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
+//                                mainElement.StartDate = DateTime.Now.ToUniversalTime();
+//                                string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
+//                                TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
+//                                trashInspectionCase.Status = 66;
+//                                trashInspectionCase.TrashInspectionId = createModel.Id;
+//                                trashInspectionCase.SdkCaseId = sdkCaseId;
+//
+//                                _dbContext.TrashInspectionCases.Add(trashInspectionCase);
+//                                await _dbContext.SaveChangesAsync();
+//                            }
+//                        }
+//                    }
+//                    createModel.Status = 66;
+//                    createModel.Update(_dbContext);
                     return new OperationResult(true);
                 }
                 else
