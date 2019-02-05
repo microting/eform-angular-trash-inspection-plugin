@@ -7,8 +7,7 @@ import {Router} from '@angular/router';
 import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
 import {BaseService} from 'src/app/common/services/base.service';
 
-import {FractionPnCreateModel,
-        FractionPnModel,
+import {FractionPnModel,
         FractionPnRequestModel,
         FractionPnUpdateModel,
         FractionsPnModel} from '../models/fraction';
