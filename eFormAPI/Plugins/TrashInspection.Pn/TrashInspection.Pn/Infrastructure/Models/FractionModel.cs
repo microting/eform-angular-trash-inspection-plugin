@@ -19,21 +19,21 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int CreatedByUserId { get; set; }
         public int UpdatedByUserId { get; set; }
         public string Name { get; set; }
-        public int EformID { get; set; }
+        public int eFormId { get; set; }
+        public string SelectedTemplateName { get; set; }
         public string Description { get; set; }
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Fraction fraction = new Fraction();
-            if (CreatedAt != null) {
-                fraction.CreatedAt = (DateTime)CreatedAt;                
-            }
+            fraction.CreatedAt = DateTime.Now;
             fraction.CreatedByUserId = CreatedByUserId;
             fraction.Description = Description;
             fraction.Name = Name;
             fraction.UpdatedAt = DateTime.Now;
             fraction.UpdatedByUserId = UpdatedByUserId;
             fraction.Version = Version;
+            fraction.eFormId = eFormId;
             fraction.WorkflowState = Constants.WorkflowStates.Created;
 
             _dbContext.Fractions.Add(fraction);
@@ -53,7 +53,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             fraction.Name = Name;
             fraction.Description = Description;
-            fraction.eFormId = EformID;
+            fraction.eFormId = eFormId;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -100,6 +100,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fractionVer.UpdatedAt = fraction.UpdatedAt;
             fractionVer.UpdatedByUserId = fraction.UpdatedByUserId;
             fractionVer.WorkflowState = fraction.WorkflowState;
+            fractionVer.eFormId = fraction.eFormId;
 
             return fractionVer;
         }
