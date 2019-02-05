@@ -93,7 +93,6 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             fractionVer.Name = fraction.Name;
             fractionVer.Description = fraction.Description;
-            fractionVer.eFormId = fraction.eFormId;
             fractionVer.Version = fraction.Version;
             fractionVer.CreatedAt = fraction.CreatedAt;
             fractionVer.CreatedByUserId = fraction.CreatedByUserId;

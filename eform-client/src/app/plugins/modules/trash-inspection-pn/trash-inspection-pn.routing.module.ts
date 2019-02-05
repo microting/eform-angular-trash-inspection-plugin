@@ -33,6 +33,11 @@ export const routes: Routes = [
         path: 'fractions',
         canActivate: [AdminGuard],
         component: FractionsPageComponent
+      },
+      {
+        path: 'segments',
+        canActivate: [AdminGuard],
+        component: FractionsPageComponent
       }
     ]
   }

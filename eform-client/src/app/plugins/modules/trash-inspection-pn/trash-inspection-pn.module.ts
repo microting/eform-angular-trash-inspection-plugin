@@ -32,6 +32,7 @@ import {
   TrashInspectionEditComponent,
   TrashInspectionSettingsComponent,
 } from './components';
+import {SegmentCreateComponent, SegmentDeleteComponent, SegmentEditComponent, SegmentsPageComponent} from './components/segments';
 
 
 @NgModule({
@@ -60,6 +61,10 @@ import {
     FractionDeleteComponent,
     FractionEditComponent,
     FractionsPageComponent,
+    SegmentCreateComponent,
+    SegmentDeleteComponent,
+    SegmentEditComponent,
+    SegmentsPageComponent
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,

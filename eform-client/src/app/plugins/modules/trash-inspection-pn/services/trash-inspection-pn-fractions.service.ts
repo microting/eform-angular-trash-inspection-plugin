@@ -36,7 +36,7 @@ export class TrashInspectionPnFractionsService extends BaseService {
     return this.put(TrashInspectionPnFractionMethods.Fractions, model);
   }
 
-  createFraction(model: FractionPnCreateModel): Observable<OperationResult> {
+  createFraction(model: FractionPnModel): Observable<OperationResult> {
     return this.post(TrashInspectionPnFractionMethods.Fractions, model);
   }
 
