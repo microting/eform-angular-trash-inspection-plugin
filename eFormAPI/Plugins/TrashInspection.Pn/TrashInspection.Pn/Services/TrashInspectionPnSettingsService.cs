@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using eFormCore;
 using eFormData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
@@ -19,6 +22,7 @@ namespace TrashInspection.Pn.Services
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly IEFormCoreService _coreHelper;
+        private readonly string _connectionString;
 
         public TrashInspectionPnSettingsService(ILogger<TrashInspectionPnSettingsService> logger,
             ITrashInspectionLocalizationService trashInspectionLocalizationService,
@@ -36,17 +40,22 @@ namespace TrashInspection.Pn.Services
             try
             {
                 TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
-                TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-                if (trashInspectionPnSetting?.SelectedeFormId != null)
+                List<TrashInspectionPnSetting> trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.ToList();
+                if (trashInspectionPnSetting.Count < 6)
                 {
-                    result.SelectedeFormId = (int)trashInspectionPnSetting.SelectedeFormId;
-                    result.SelectedeFormName = trashInspectionPnSetting.SelectedeFormName;
+                    TrashInspectionPnSettingsModel.SettingCreateDefaults(_dbContext);                    
+                    trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.AsNoTracking().ToList();
                 }
-                else
+                result.trashInspectionSettingsList = new List<TrashInspectionPnSettingModel>();
+                foreach (TrashInspectionPnSetting inspectionPnSetting in trashInspectionPnSetting)
                 {
-                    result.SelectedeFormId = null;
+                    TrashInspectionPnSettingModel trashInspectionPnSettingModel = new TrashInspectionPnSettingModel();
+                    trashInspectionPnSettingModel.Id = inspectionPnSetting.Id;
+                    trashInspectionPnSettingModel.Name = inspectionPnSetting.Name;
+                    trashInspectionPnSettingModel.Value = inspectionPnSetting.Value;
+                    result.trashInspectionSettingsList.Add(trashInspectionPnSettingModel);
                 }
-                result.Token = trashInspectionPnSetting?.Token;
+
                 return new OperationDataResult<TrashInspectionPnSettingsModel>(true, result);
             }
             catch(Exception e)
@@ -62,34 +71,14 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                if (trashInspectionSettingsModel.SelectedeFormId == 0)
+//                TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+//                if (trashInspectionPnSetting == null)
+//                {
+                foreach (TrashInspectionPnSettingModel trashInspectionPnSettingModel in trashInspectionSettingsModel.trashInspectionSettingsList)
                 {
-                    return new OperationResult(true);
+                    trashInspectionPnSettingModel.Update(_dbContext);
                 }
-                TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-                if (trashInspectionPnSetting == null)
-                {
-                    trashInspectionPnSetting = new TrashInspectionPnSetting()
-                    {
-                        SelectedeFormId = trashInspectionSettingsModel.SelectedeFormId,
-                    };
-                    _dbContext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
-                }
-                else
-                {
-                    trashInspectionPnSetting.SelectedeFormId = trashInspectionSettingsModel.SelectedeFormId;
-                }
-
-                if (trashInspectionSettingsModel.SelectedeFormId != null)
-                {
-                    Core core = _coreHelper.GetCore();
-                    MainElement template = core.TemplateRead((int)trashInspectionSettingsModel.SelectedeFormId);
-                    trashInspectionPnSetting.SelectedeFormName = template.Label;
-                }
-
-                trashInspectionPnSetting.Token = trashInspectionSettingsModel.Token;
-
-                _dbContext.SaveChanges();
+//                }
                 return new OperationResult(true,
                     _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccesfully"));
             }

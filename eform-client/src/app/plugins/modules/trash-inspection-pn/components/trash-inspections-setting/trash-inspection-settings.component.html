@@ -12,11 +12,56 @@
       <subheader-pn [title]="'Settings' | translate" [heandingSizeRem]="1">
       </subheader-pn>
       <div class="container-fluid">
-        <div class="row">
+        <div class="row" *ngIf="settingsModel.trashInspectionSettingsList.length > 0">
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.token"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[0].value"
+                     type="text" name="token" #token="ngModel"
+                     id="sdkconnectionstring" class="form-control">
+              <label for="sdkconnectionstring">{{'SDK connection string' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[1].value"
+                     type="text" name="token" #token="ngModel"
+                     id="loglevel" class="form-control">
+              <label for="loglevel">{{'Log Level' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[2].value"
+                     type="text" name="token" #token="ngModel"
+                     id="loglimit" class="form-control">
+              <label for="loglimit">{{'Log Limit' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[3].value"
+                     type="text" name="token" #token="ngModel"
+                     id="maxparallelism" class="form-control">
+              <label for="maxparallelism">{{'Max parallelism' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[4].value"
+                     type="text" name="token" #token="ngModel"
+                     id="numberofworkers" class="form-control">
+              <label for="numberofworkers">{{'Number of workers' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[5].value"
                      type="text" name="token" #token="ngModel"
                      id="token" class="form-control">
               <label for="token">{{'Token' | translate}}</label>
