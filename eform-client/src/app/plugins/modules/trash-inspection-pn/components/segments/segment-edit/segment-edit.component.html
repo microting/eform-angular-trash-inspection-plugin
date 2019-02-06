@@ -12,7 +12,7 @@
                 <div class="md-form">
                   <input mdbInputDirective
                          [mdbValidate]="false"
-                         [(ngModel)]="selectedFractionModel.name"
+                         [(ngModel)]="segmentPnModel.name"
                          type="text" id="updateFractionName"
                          name="updateFractionName" class="form-control">
                   <label for="updateFractionName">{{'Name' | translate}}</label>
@@ -24,23 +24,10 @@
                 <div class="md-form">
                   <input mdbInputDirective
                          [mdbValidate]="false"
-                         [(ngModel)]="selectedFractionModel.description"
+                         [(ngModel)]="segmentPnModel.description"
                          type="text" id="createFractionDescription"
                          name="createFractionDescription" class="form-control">
                   <label for="createFractionDescription">{{'Description' | translate}}</label>
-                </div>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col-md-12 col-xs-12">
-                <div class="md-form">
-                  <ng-select [items]="templatesModel.templates"
-                             bindLabel="label"
-                             [placeholder]="selectedFractionModel.selectedTemplateName || ('Selected template' | translate)"
-                             bindValue="id"
-                             [typeahead]="typeahead"
-                             (change)="onSelectedChanged($event)">
-                  </ng-select>
                 </div>
               </div>
             </div>
@@ -48,7 +35,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!selectedFractionModel.name" (click)="  updateFraction()">
+        <button class="btn btn-success" [disabled]="!segmentPnModel.name" (click)="  updateFraction()">
           {{ 'Save' | translate }}
         </button>
         <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>

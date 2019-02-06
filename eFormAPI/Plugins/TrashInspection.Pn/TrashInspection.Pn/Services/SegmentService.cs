@@ -1,35 +1,148 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using eFormCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
-
 namespace TrashInspection.Pn.Services
 {
     public class SegmentService : ISegmentService
     {
-        public Task<OperationResult> CreateSegment(SegmentModel model)
+        private readonly IEFormCoreService _coreHelper;
+        private readonly ILogger<InstallationService> _logger;
+        private readonly TrashInspectionPnDbContext _dbContext;
+        private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
+        
+        public SegmentService(ILogger<InstallationService> logger,
+            TrashInspectionPnDbContext dbContext,
+            IEFormCoreService coreHelper,
+            ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            throw new System.NotImplementedException();
+            _logger = logger;
+            _dbContext = dbContext;
+            _coreHelper = coreHelper;
+            _trashInspectionLocalizationService = trashInspectionLocalizationService;
+        }
+        
+        public async Task<OperationResult> CreateSegment(SegmentModel model)
+        {
+            
+            model.Save(_dbContext);
+            
+            return new OperationResult(true);
         }
 
-        public Task<OperationResult> DeleteSegment(int id)
+        public async Task<OperationResult> DeleteSegment(int id)
         {
-            throw new System.NotImplementedException();
+            SegmentModel deleteModel = new SegmentModel();
+            deleteModel.Id = id;
+            deleteModel.Delete(_dbContext);
+            return new OperationResult(true);
         }
 
-        public Task<OperationResult> UpdateSegment(SegmentModel updateModel)
+        public async Task<OperationResult> UpdateSegment(SegmentModel updateModel)
         {
-            throw new System.NotImplementedException();
+            updateModel.Update(_dbContext);
+            
+            return new OperationResult(true);
         }
 
-        public Task<OperationDataResult<SegmentsModel>> GetAllSegments(SegmentRequestModel requestModel)
+        public async Task<OperationDataResult<SegmentsModel>> GetAllSegments(SegmentRequestModel pnRequestModel)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                SegmentsModel segmentsModel = new SegmentsModel();
+                
+                IQueryable<Segment> segmentQuery = _dbContext.Segments.AsQueryable();
+                if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        segmentQuery = segmentQuery
+                            .CustomOrderByDescending(pnRequestModel.Sort);
+                    }
+                    else
+                    {
+                        segmentQuery = segmentQuery
+                            .CustomOrderBy(pnRequestModel.Sort);
+                    }
+                }
+                else
+                {
+                    segmentQuery = _dbContext.Segments
+                        .OrderBy(x => x.Id);
+                }
+
+                if (pnRequestModel.PageSize != null)
+                {
+                    segmentQuery = segmentQuery
+                        .Skip(pnRequestModel.Offset)
+                        .Take((int)pnRequestModel.PageSize);
+                }
+
+                segmentQuery = segmentQuery.Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
+
+                List<SegmentModel> segmentModels = await segmentQuery.Select(x => new SegmentModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description
+                }).ToListAsync();
+
+                segmentsModel.Total = await _dbContext.Installations.CountAsync();
+                segmentsModel.SegmentList = segmentModels;
+                Core _core = _coreHelper.GetCore();
+
+                
+                return new OperationDataResult<SegmentsModel>(true, segmentsModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<SegmentsModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingSegments"));
+
+            }
         }
 
-        public Task<OperationDataResult<SegmentModel>> GetSingleSegment(int fractionId)
+        public async Task<OperationDataResult<SegmentModel>> GetSingleSegment(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var segment = await _dbContext.Segments.Select(x => new SegmentModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description
+                    })
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                if (segment == null)
+                {                    
+                    return new OperationDataResult<SegmentModel>(false,
+                        _trashInspectionLocalizationService.GetString($"SegmentWithID:{id}DoesNotExist"));
+                }
+
+                return new OperationDataResult<SegmentModel>(true, segment);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<SegmentModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingSegment"));
+            }
+
         }
     }
 }

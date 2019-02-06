@@ -138,8 +138,6 @@ namespace TrashInspection.Pn.Services
         }
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            FractionModel fraction = new FractionModel();
-            fraction.Id = updateModel.Id;
             updateModel.Update(_dbContext);
             
             return new OperationResult(true);
@@ -151,7 +149,6 @@ namespace TrashInspection.Pn.Services
             deleteModel.Id = id;
             deleteModel.Delete(_dbContext);
             return new OperationResult(true);
-
         }
 
     }

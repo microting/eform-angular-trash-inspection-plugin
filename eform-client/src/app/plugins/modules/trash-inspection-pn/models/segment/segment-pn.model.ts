@@ -7,6 +7,4 @@ export class SegmentPnModel {
   id: number;
   name: string;
   description: string;
-  // eFormId: number;
-  // selectedTemplateName: string;
 }

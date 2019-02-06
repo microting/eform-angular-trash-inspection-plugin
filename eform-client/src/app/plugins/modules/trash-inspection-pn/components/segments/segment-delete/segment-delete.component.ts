@@ -1,8 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
-import {
-  TrashInspectionPnFractionsService
-} from 'src/app/plugins/modules/trash-inspection-pn/services';
-import {FractionPnModel} from '../../../models/fraction';
+import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspection-pn-segments.service';
+import {SegmentPnModel} from '../../../models/segment';
 
 @Component({
   selector: 'app-trash-inspection-pn-segment-delete',
@@ -11,24 +9,24 @@ import {FractionPnModel} from '../../../models/fraction';
 })
 export class SegmentDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onFractionDeleted: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onSegmentDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  selectedFractionModel: FractionPnModel = new FractionPnModel();
-  constructor(private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }
+  segmentPnModel: SegmentPnModel = new SegmentPnModel();
+  constructor(private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) { }
 
   ngOnInit() {
   }
 
-  show(fractionModel: FractionPnModel) {
-    this.selectedFractionModel = fractionModel;
+  show(segmentPnModel: SegmentPnModel) {
+    this.segmentPnModel = segmentPnModel;
     this.frame.show();
   }
 
-  deleteFraction() {
+  deleteSegment() {
     this.spinnerStatus = true;
-    this.trashInspectionPnFractionsService.deleteFraction(this.selectedFractionModel.id).subscribe((data) => {
+    this.trashInspectionPnSegmentsService.deleteSegment(this.segmentPnModel.id).subscribe((data) => {
       if (data && data.success) {
-        this.onFractionDeleted.emit();
+        this.onSegmentDeleted.emit();
         this.frame.hide();
       } this.spinnerStatus = false;
     });

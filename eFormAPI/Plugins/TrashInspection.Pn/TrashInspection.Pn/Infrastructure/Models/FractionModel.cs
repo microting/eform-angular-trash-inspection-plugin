@@ -37,10 +37,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.WorkflowState = Constants.WorkflowStates.Created;
 
             _dbContext.Fractions.Add(fraction);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
 
             _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
         public void Update(TrashInspectionPnDbContext _dbContext)
         {

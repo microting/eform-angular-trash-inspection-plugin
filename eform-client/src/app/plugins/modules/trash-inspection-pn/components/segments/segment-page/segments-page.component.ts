@@ -2,8 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {PageSettingsModel} from 'src/app/common/models/settings';
 
 import {SharedPnService} from 'src/app/plugins/modules/shared/services';
-import {FractionPnModel, FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
-import {TrashInspectionPnFractionsService} from '../../../services';
+import {SegmentsPnModel, SegmentPnRequestModel, SegmentPnModel} from '../../../models/segment';
+import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspection-pn-segments.service';
 
 @Component({
   selector: 'app-trash-inspection-pn-segments-page',
@@ -11,16 +11,16 @@ import {TrashInspectionPnFractionsService} from '../../../services';
   styleUrls: ['./segments-page.component.scss']
 })
 export class SegmentsPageComponent implements OnInit {
-  @ViewChild('createFractionModal') createFractionModal;
-  @ViewChild('editFractionModal') editFractionModal;
-  @ViewChild('deleteFractionModal') deleteFractionModal;
+  @ViewChild('createSegmentModal') createSegmentModal;
+  @ViewChild('editSegmentModal') editSegmentModal;
+  @ViewChild('deleteSegmentModal') deleteSegmentModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  fractionsModel: FractionsPnModel = new FractionsPnModel();
-  fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
+  segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
+  segmentPnRequestModel: SegmentPnRequestModel = new SegmentPnRequestModel();
   spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }
+              private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) { }
 
   ngOnInit() {
     this.getLocalPageSettings();
@@ -35,34 +35,34 @@ export class SegmentsPageComponent implements OnInit {
   updateLocalPageSettings() {
     this.sharedPnService.updateLocalPageSettings
     ('trashInspectionsPnSettings', this.localPageSettings, 'Segments');
-    this.getAllFractions();
+    this.getAllSegments();
   }
 
   getAllInitialData() {
-    this.getAllFractions();
+    this.getAllSegments();
   }
 
-  getAllFractions() {
+  getAllSegments() {
     this.spinnerStatus = true;
-    this.fractionRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.fractionRequestModel.sort = this.localPageSettings.sort;
-    this.fractionRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnFractionsService.getAllFractions(this.fractionRequestModel).subscribe((data) => {
+    this.segmentPnRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
+    this.segmentPnRequestModel.sort = this.localPageSettings.sort;
+    this.segmentPnRequestModel.pageSize = this.localPageSettings.pageSize;
+    this.trashInspectionPnSegmentsService.getAllSegments(this.segmentPnRequestModel).subscribe((data) => {
       if (data && data.success) {
-        this.fractionsModel = data.model;
+        this.segmentsPnModel = data.model;
       } this.spinnerStatus = false;
     });
   }
-  showEditFractionModal(fraction: FractionPnModel) {
-    this.editFractionModal.show(fraction);
+  showEditSegmentModal(segment: SegmentPnModel) {
+    this.editSegmentModal.show(segment);
   }
 
-  showDeleteFractionModal(fraction: FractionPnModel) {
-    this.deleteFractionModal.show(fraction);
+  showDeleteSegmentModal(segment: SegmentPnModel) {
+    this.deleteSegmentModal.show(segment);
   }
 
-  showCreateFractionModal() {
-    this.createFractionModal.show();
+  showCreateSegmentModal() {
+    this.createSegmentModal.show();
   }
 
   sortTable(sort: string) {
@@ -77,14 +77,14 @@ export class SegmentsPageComponent implements OnInit {
 
   changePage(e: any) {
     if (e || e === 0) {
-      this.fractionRequestModel.offset = e;
+      this.segmentPnRequestModel.offset = e;
       if (e === 0) {
-        this.fractionRequestModel.pageIndex = 0;
+        this.segmentPnRequestModel.pageIndex = 0;
       } else {
-        this.fractionRequestModel.pageIndex
-          = Math.floor(e / this.fractionRequestModel.pageSize);
+        this.segmentPnRequestModel.pageIndex
+          = Math.floor(e / this.segmentPnRequestModel.pageSize);
       }
-      this.getAllFractions();
+      this.getAllSegments();
     }
   }
 }

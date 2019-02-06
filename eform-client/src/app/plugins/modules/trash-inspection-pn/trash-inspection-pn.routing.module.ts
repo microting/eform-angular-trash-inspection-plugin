@@ -8,6 +8,7 @@ import {
   TrashInspectionSettingsComponent,
   FractionsPageComponent
 } from './components';
+import {SegmentsPageComponent} from './components/segments';
 
 export const routes: Routes = [
   {
@@ -37,7 +38,7 @@ export const routes: Routes = [
       {
         path: 'segments',
         canActivate: [AdminGuard],
-        component: FractionsPageComponent
+        component: SegmentsPageComponent
       }
     ]
   }

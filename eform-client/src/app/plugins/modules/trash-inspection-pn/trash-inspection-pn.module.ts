@@ -33,6 +33,7 @@ import {
   TrashInspectionSettingsComponent,
 } from './components';
 import {SegmentCreateComponent, SegmentDeleteComponent, SegmentEditComponent, SegmentsPageComponent} from './components/segments';
+import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from './services/trash-inspection-pn-segments.service';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import {SegmentCreateComponent, SegmentDeleteComponent, SegmentEditComponent, Se
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,
               TrashInspectionPnTrashInspectionsService,
+              TrashInspectionPnSegmentsService,
               TrashInspectionPnSettingsService
   ]
 })
