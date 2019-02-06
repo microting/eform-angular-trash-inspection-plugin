@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
@@ -33,6 +34,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             SettingCreate(_dbcontext, Settings.MaxParallelism);
             SettingCreate(_dbcontext, Settings.NumberOfWorkers);
             SettingCreate(_dbcontext, Settings.Token);
+            SettingCreate(_dbcontext, Settings.CallBackUrl);
 
             return true;
         }
@@ -50,17 +52,20 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 case Settings.MaxParallelism: defaultValue = "1"; break;
                 case Settings.NumberOfWorkers: defaultValue = "1"; break;
                 case Settings.Token: defaultValue = "..."; break;
+                case Settings.CallBackUrl: defaultValue = "..."; break;
                 
                 default:
                     throw new IndexOutOfRangeException(name.ToString() + " is not a known/mapped Settings type");
             }
             #endregion
-            
-            TrashInspectionPnSettingModel trashInspectionPnSettingModel = new TrashInspectionPnSettingModel();
-            trashInspectionPnSettingModel.Name = name.ToString();
-            trashInspectionPnSettingModel.Value = defaultValue;
-            trashInspectionPnSettingModel.Save(_dbcontext);
 
+            if (_dbcontext.TrashInspectionPnSettings.Count(x => x.Name == name.ToString()) < 1)
+            {
+                TrashInspectionPnSettingModel trashInspectionPnSettingModel = new TrashInspectionPnSettingModel();
+                trashInspectionPnSettingModel.Name = name.ToString();
+                trashInspectionPnSettingModel.Value = defaultValue;
+                trashInspectionPnSettingModel.Save(_dbcontext);                
+            }
         }      
         
 
@@ -124,7 +129,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             SdkConnectionString,
             MaxParallelism,
             NumberOfWorkers,
-            Token
+            Token,
+            CallBackUrl
         }
     }
 }

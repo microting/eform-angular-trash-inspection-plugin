@@ -41,7 +41,7 @@ namespace TrashInspection.Pn.Services
             {
                 TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
                 List<TrashInspectionPnSetting> trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.ToList();
-                if (trashInspectionPnSetting.Count < 6)
+                if (trashInspectionPnSetting.Count < 7)
                 {
                     TrashInspectionPnSettingsModel.SettingCreateDefaults(_dbContext);                    
                     trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.AsNoTracking().ToList();

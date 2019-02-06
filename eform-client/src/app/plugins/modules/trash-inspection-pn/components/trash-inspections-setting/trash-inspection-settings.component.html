@@ -67,6 +67,15 @@
               <label for="token">{{'Token' | translate}}</label>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[6].value"
+                     type="text" name="callBackUrl" #token="ngModel"
+                     id="callBackUrl" class="form-control">
+              <label for="callBackUrl">{{'CallbackURL' | translate}}</label>
+            </div>
+          </div>
         </div>
 
       </div>
