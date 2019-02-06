@@ -20,6 +20,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int UpdatedByUserId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int SdkFolderId { get; set; }
         
         
         public void Save(TrashInspectionPnDbContext _dbContext)
@@ -30,6 +31,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             segment.CreatedByUserId = CreatedByUserId;
             segment.Description = Description;
             segment.Name = Name;
+            segment.SdkFolderId = SdkFolderId;
             segment.UpdatedAt = DateTime.Now;
             segment.UpdatedByUserId = UpdatedByUserId;
             segment.Version = Version;
@@ -54,6 +56,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             segment.Name = Name;
             segment.Description = Description;
+            segment.SdkFolderId = SdkFolderId;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {

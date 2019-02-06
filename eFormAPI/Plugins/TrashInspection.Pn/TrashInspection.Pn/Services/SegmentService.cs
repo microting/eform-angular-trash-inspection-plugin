@@ -95,7 +95,8 @@ namespace TrashInspection.Pn.Services
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Description = x.Description
+                    Description = x.Description,
+                    SdkFolderId = x.SdkFolderId
                 }).ToListAsync();
 
                 segmentsModel.Total = await _dbContext.Installations.CountAsync();
@@ -123,7 +124,8 @@ namespace TrashInspection.Pn.Services
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Description = x.Description
+                        Description = x.Description,
+                        SdkFolderId = x.SdkFolderId
                     })
                     .FirstOrDefaultAsync(x => x.Id == id);
 

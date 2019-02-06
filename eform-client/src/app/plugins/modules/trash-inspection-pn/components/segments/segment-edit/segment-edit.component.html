@@ -13,9 +13,9 @@
                   <input mdbInputDirective
                          [mdbValidate]="false"
                          [(ngModel)]="segmentPnModel.name"
-                         type="text" id="updateFractionName"
-                         name="updateFractionName" class="form-control">
-                  <label for="updateFractionName">{{'Name' | translate}}</label>
+                         type="text" id="updateSegmentName"
+                         name="updateSegmentName" class="form-control">
+                  <label for="updateSegmentName">{{'Name' | translate}}</label>
                 </div>
               </div>
             </div>
@@ -25,9 +25,21 @@
                   <input mdbInputDirective
                          [mdbValidate]="false"
                          [(ngModel)]="segmentPnModel.description"
-                         type="text" id="createFractionDescription"
-                         name="createFractionDescription" class="form-control">
-                  <label for="createFractionDescription">{{'Description' | translate}}</label>
+                         type="text" id="updateSegmentDescription"
+                         name="updateSegmentDescription" class="form-control">
+                  <label for="updateSegmentDescription">{{'Description' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <input mdbInputDirective
+                         [mdbValidate]="false"
+                         [(ngModel)]="segmentPnModel.sdkFolderId"
+                         type="text" id="updateSegmentSdkFolderId"
+                         name="updateSegmentSdkFolderId" class="form-control">
+                  <label for="updateSegmentSdkFolderId">{{'SDk folder id' | translate}}</label>
                 </div>
               </div>
             </div>

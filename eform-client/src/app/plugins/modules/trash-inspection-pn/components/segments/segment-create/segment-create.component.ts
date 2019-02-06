@@ -34,7 +34,6 @@ export class SegmentCreateComponent implements OnInit {
   }
 
   createSegment() {
-    debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnSegmentsService.createSegment(this.segmentPnModel).subscribe((data) => {
       debugger;

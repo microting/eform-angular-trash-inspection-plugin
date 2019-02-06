@@ -7,4 +7,5 @@ export class SegmentPnModel {
   id: number;
   name: string;
   description: string;
+  sdkFolderId: number;
 }
