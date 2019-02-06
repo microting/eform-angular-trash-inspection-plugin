@@ -1,5 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {InstallationPnModel, InstallationPnUpdateModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
+import {
+  InstallationPnCreateModel,
+  InstallationPnModel,
+  InstallationPnUpdateModel
+} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
 import {TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
 import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
 import {SitesService} from '../../../../../../common/services/advanced';

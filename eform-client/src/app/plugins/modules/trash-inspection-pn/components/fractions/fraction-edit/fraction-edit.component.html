@@ -19,20 +19,30 @@
                 </div>
               </div>
             </div>
-            <div class="row p-1 table-responsive table-fixed-scrollable no-gutters">
-              <table class="table table-sm table-striped text-center z-depth-1">
-                <thead>
-                <tr>
-                  <th scope="col" id="idTableHeader">ID</th>
-                  <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
-                  <th scope="col">
-                    {{ 'Related Trash Inspection' | translate }}
-                  </th>
-                </tr>
-                </thead>
-                <tbody id="tableBody">
-                </tbody>
-              </table>
+            <div class="row mb-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <input mdbInputDirective
+                         [mdbValidate]="false"
+                         [(ngModel)]="selectedFractionModel.description"
+                         type="text" id="createFractionDescription"
+                         name="createFractionDescription" class="form-control">
+                  <label for="createFractionDescription">{{'Description' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <ng-select [items]="templatesModel.templates"
+                             bindLabel="label"
+                             [placeholder]="selectedFractionModel.selectedTemplateName || ('Selected template' | translate)"
+                             bindValue="id"
+                             [typeahead]="typeahead"
+                             (change)="onSelectedChanged($event)">
+                  </ng-select>
+                </div>
+              </div>
             </div>
           </form>
         </div>

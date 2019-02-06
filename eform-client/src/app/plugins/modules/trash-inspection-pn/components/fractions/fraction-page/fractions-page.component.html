@@ -35,6 +35,28 @@
                *ngIf="localPageSettings.sort == 'Name' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
+        <th scope="col" class="table-header-sortable" id="descriptionTableHeader"
+            (click)="sortTable('Name')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Description' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Description'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Description' && !fractionRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Description' && fractionRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="eFormTableHeader"
+            (click)="sortTable('eForm')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'eForm' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eForm'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'eForm' && !fractionRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'eForm' && fractionRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
 
         <th scope="col">
           {{ 'Actions' | translate }}
@@ -51,6 +73,9 @@
         </td>
         <td>
           {{fraction.description}}
+        </td>
+        <td>
+          {{fraction.selectedTemplateName}}
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">

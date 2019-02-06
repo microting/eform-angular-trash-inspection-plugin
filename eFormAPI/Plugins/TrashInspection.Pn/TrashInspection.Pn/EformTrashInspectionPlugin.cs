@@ -28,6 +28,7 @@ namespace TrashInspection.Pn
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IFractionService, FractionService>();
+            services.AddTransient<ISegmentService, SegmentService>();
             services.AddTransient<IInstallationService, InstallationService>();
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
@@ -101,6 +102,13 @@ namespace TrashInspection.Pn
                         Link = "/plugins/trash-inspection-pn/settings",
                         Position = 3,
                     },
+                    new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Segments"),
+                        E2EId = "trash-inspection-pn-segments",
+                        Link = "/plugins/trash-inspection-pn/segments",
+                        Position = 3,
+                }
                 }
             });
             return result;

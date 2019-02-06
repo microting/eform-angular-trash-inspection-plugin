@@ -19,28 +19,28 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int CreatedByUserId { get; set; }
         public int UpdatedByUserId { get; set; }
         public string Name { get; set; }
-        public int EformID { get; set; }
+        public int eFormId { get; set; }
+        public string SelectedTemplateName { get; set; }
         public string Description { get; set; }
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Fraction fraction = new Fraction();
-            if (CreatedAt != null) {
-                fraction.CreatedAt = (DateTime)CreatedAt;                
-            }
+            fraction.CreatedAt = DateTime.Now;
             fraction.CreatedByUserId = CreatedByUserId;
             fraction.Description = Description;
             fraction.Name = Name;
             fraction.UpdatedAt = DateTime.Now;
             fraction.UpdatedByUserId = UpdatedByUserId;
             fraction.Version = Version;
+            fraction.eFormId = eFormId;
             fraction.WorkflowState = Constants.WorkflowStates.Created;
             fraction.eFormId = EformID;
             _dbContext.Fractions.Add(fraction);
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
 
             _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-            _dbContext.SaveChanges();
+            _dbContext.SaveChangesAsync();
         }
         public void Update(TrashInspectionPnDbContext _dbContext)
         {
@@ -53,7 +53,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             fraction.Name = Name;
             fraction.Description = Description;
-            fraction.eFormId = EformID;
+            fraction.eFormId = eFormId;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -93,13 +93,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             fractionVer.Name = fraction.Name;
             fractionVer.Description = fraction.Description;
-            fractionVer.eFormId = fraction.eFormId;
             fractionVer.Version = fraction.Version;
             fractionVer.CreatedAt = fraction.CreatedAt;
             fractionVer.CreatedByUserId = fraction.CreatedByUserId;
             fractionVer.UpdatedAt = fraction.UpdatedAt;
             fractionVer.UpdatedByUserId = fraction.UpdatedByUserId;
             fractionVer.WorkflowState = fraction.WorkflowState;
+            fractionVer.eFormId = fraction.eFormId;
 
             return fractionVer;
         }

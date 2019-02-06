@@ -1,0 +1,57 @@
+<div mdbModal class="modal fade" #frame="mdbModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ 'New Segment' | translate }}</h3>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
+                       [(ngModel)]="segmentPnModel.name"
+                       type="text" id="createSegmentName"
+                       name="createSegmentName" class="form-control">
+                <label for="createSegmentName">{{'Name' | translate}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
+                       [(ngModel)]="segmentPnModel.description"
+                       type="text" id="createSegmentDescription"
+                       name="createSegmentDescription" class="form-control">
+                <label for="createSegmentDescription">{{'Description' | translate}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
+                       [(ngModel)]="segmentPnModel.sdkFolderId"
+                       type="text" id="createSegmentSdkFolderId"
+                       name="createSegmentSdkFolderId" class="form-control">
+                <label for="createSegmentSdkFolderId">{{'SDk folder id' | translate}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" [disabled]="!segmentPnModel.name" (click)="createSegment()">
+          {{ 'Create' | translate }}
+        </button>
+        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>

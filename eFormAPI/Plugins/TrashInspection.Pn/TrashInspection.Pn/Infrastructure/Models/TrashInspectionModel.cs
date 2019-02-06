@@ -26,27 +26,32 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string Transporter { get; set; }
         public string InstallationName { get; set; }
         public string Token { get; set; }
-        public int InstallationId { get; set; }
+        public int? InstallationId { get; set; }
+        public int? SegmentId { get; set; }
+        public int? FractionId { get; set; }
         public bool MustBeInspected { get; set; }
         public int Status { get; set; }
+        public string Segment { get; set; }
+
 
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();            
-            if (CreatedAt != null) {
-                trashInspection.CreatedAt = (DateTime)CreatedAt;                
-            }
+
+            trashInspection.CreatedAt = DateTime.Now;
+            trashInspection.UpdatedAt = DateTime.Now;
             trashInspection.CreatedByUserId = CreatedByUserId;
             trashInspection.Date = Date;
             trashInspection.Eak_Code = EakCode;
-            trashInspection.InstallationId = InstallationId;
+            if (InstallationId != null) trashInspection.InstallationId = (int)InstallationId;
+            if (SegmentId != null) trashInspection.SegmentId = (int)SegmentId;
+            if (FractionId != null) trashInspection.FractionId = (int)FractionId;
             trashInspection.MustBeInspected = MustBeInspected;
             trashInspection.Producer = Producer;
             trashInspection.RegistrationNumber = RegistrationNumber;
             trashInspection.Time = Time;
             trashInspection.Transporter = Transporter;
             trashInspection.TrashFraction = TrashFraction;
-            trashInspection.UpdatedAt = DateTime.Now;
             trashInspection.UpdatedByUserId = UpdatedByUserId;
             trashInspection.Version = Version;
             trashInspection.WeighingNumber = WeighingNumber;
@@ -71,7 +76,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspection.Date = Date;
             trashInspection.Eak_Code = EakCode;
-            trashInspection.InstallationId = InstallationId;
+            if (InstallationId != null) trashInspection.InstallationId = (int) InstallationId;
+            if (FractionId != null) trashInspection.FractionId = (int) FractionId;
+            if (SegmentId != null) trashInspection.SegmentId = (int) SegmentId;
             trashInspection.MustBeInspected = MustBeInspected;
             trashInspection.Producer = Producer;
             trashInspection.RegistrationNumber = RegistrationNumber;

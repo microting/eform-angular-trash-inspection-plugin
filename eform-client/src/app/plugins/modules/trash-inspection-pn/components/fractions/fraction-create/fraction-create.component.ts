@@ -6,7 +6,7 @@ import {DeployModel} from '../../../../../../common/models/eforms';
 import {EFormService} from '../../../../../../common/services/eform';
 import {SitesService} from '../../../../../../common/services/advanced';
 import {AuthService} from '../../../../../../common/services/auth';
-import {FractionPnCreateModel} from '../../../models/fraction';
+import {FractionPnModel} from '../../../models/fraction';
 import {TemplateListModel, TemplateRequestModel} from 'src/app/common/models/eforms';
 
 
@@ -20,7 +20,7 @@ export class FractionCreateComponent implements OnInit {
   @Output() onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
-  newFractionModel: FractionPnCreateModel = new FractionPnCreateModel();
+  newFractionModel: FractionPnModel = new FractionPnModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
@@ -55,12 +55,15 @@ export class FractionCreateComponent implements OnInit {
   }
 
   createFraction() {
+  createInstallation() {
+    debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.createFraction(this.newFractionModel).subscribe((data) => {
+      debugger;
       if (data && data.success) {
         this.onFractionCreated.emit();
         // this.submitDeployment();
-        this.newFractionModel = new FractionPnCreateModel();
+        this.newFractionModel = new FractionPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;
     });
@@ -84,7 +87,9 @@ export class FractionCreateComponent implements OnInit {
     this.deployViewModel = new DeployModel();
     this.frame.show();
   }
+
   onSelectedChanged(e: any) {
+    // debugger;
     this.newFractionModel.eFormId = e.id;
   }
   // submitDeployment() {

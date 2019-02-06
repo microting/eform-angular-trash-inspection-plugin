@@ -1,10 +1,10 @@
-﻿    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using eFormShared;
-    using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-    using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using eFormShared;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
@@ -25,9 +25,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = new Installation();
-            if (CreatedAt != null) {
-                installation.CreatedAt = (DateTime)CreatedAt;                
-            }
+            installation.CreatedAt = DateTime.Now;                
             installation.CreatedByUserId = CreatedByUserId;
             installation.Name = Name;
             installation.UpdatedAt = DateTime.Now;

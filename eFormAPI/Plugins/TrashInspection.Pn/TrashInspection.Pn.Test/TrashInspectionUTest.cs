@@ -19,15 +19,15 @@ namespace TrashInspection.Pn.Test
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
             trashInspectionModel.CreatedAt = DateTime.Now;
             trashInspectionModel.Date = DateTime.Now;
-            trashInspectionModel.EakCode = rnd.Next(1, 255);
+            trashInspectionModel.EakCode = rnd.Next(1, 255).ToString();
             trashInspectionModel.InstallationId = rnd.Next(1, 255);
             trashInspectionModel.MustBeInspected = true;
             trashInspectionModel.Producer = Guid.NewGuid().ToString();
             trashInspectionModel.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspectionModel.Time = DateTime.Now;
             trashInspectionModel.Transporter = Guid.NewGuid().ToString();
-            trashInspectionModel.TrashFraction = rnd.Next(1, 255);
-            trashInspectionModel.WeighingNumber = rnd.Next(1, 255);
+            trashInspectionModel.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspectionModel.WeighingNumber = rnd.Next(1, 255).ToString();
             // Act
             trashInspectionModel.Save(DbContext);
 
@@ -60,15 +60,15 @@ namespace TrashInspection.Pn.Test
             TrashInspectionModel trashInspectionModel = new TrashInspectionModel();
             trashInspectionModel.CreatedAt = DateTime.Now;
             trashInspectionModel.Date = DateTime.Now;
-            trashInspectionModel.EakCode = rnd.Next(1, 255);
+            trashInspectionModel.EakCode = rnd.Next(1, 255).ToString();
             trashInspectionModel.InstallationId = rnd.Next(1, 255);
             trashInspectionModel.MustBeInspected = false;
             trashInspectionModel.Producer = Guid.NewGuid().ToString();
             trashInspectionModel.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspectionModel.Time = DateTime.Now;
             trashInspectionModel.Transporter = Guid.NewGuid().ToString();
-            trashInspectionModel.TrashFraction = rnd.Next(1, 255);
-            trashInspectionModel.WeighingNumber = rnd.Next(1, 255);
+            trashInspectionModel.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspectionModel.WeighingNumber = rnd.Next(1, 255).ToString();
             // Act
             trashInspectionModel.Save(DbContext);
 
@@ -103,15 +103,15 @@ namespace TrashInspection.Pn.Test
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();
             trashInspection.CreatedAt = DateTime.Now;
             trashInspection.Date = DateTime.Now;
-            trashInspection.Eak_Code = rnd.Next(1, 255);
+            trashInspection.Eak_Code = rnd.Next(1, 255).ToString();
             trashInspection.InstallationId = rnd.Next(1, 255);
             trashInspection.MustBeInspected = true;
             trashInspection.Producer = Guid.NewGuid().ToString();
             trashInspection.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspection.Time = DateTime.Now;
             trashInspection.Transporter = Guid.NewGuid().ToString();
-            trashInspection.TrashFraction = rnd.Next(1, 255);
-            trashInspection.WeighingNumber = rnd.Next(1, 255);
+            trashInspection.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspection.WeighingNumber = rnd.Next(1, 255).ToString();
 
             DbContext.TrashInspections.Add(trashInspection);
             DbContext.SaveChanges();
@@ -162,15 +162,15 @@ namespace TrashInspection.Pn.Test
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();
             trashInspection.CreatedAt = DateTime.Now;
             trashInspection.Date = DateTime.Now;
-            trashInspection.Eak_Code = rnd.Next(1, 255);
+            trashInspection.Eak_Code = rnd.Next(1, 255).ToString();
             trashInspection.InstallationId = rnd.Next(1, 255);
             trashInspection.MustBeInspected = false;
             trashInspection.Producer = Guid.NewGuid().ToString();
             trashInspection.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspection.Time = DateTime.Now;
             trashInspection.Transporter = Guid.NewGuid().ToString();
-            trashInspection.TrashFraction = rnd.Next(1, 255);
-            trashInspection.WeighingNumber = rnd.Next(1, 255);
+            trashInspection.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspection.WeighingNumber = rnd.Next(1, 255).ToString();
 
             DbContext.TrashInspections.Add(trashInspection);
             DbContext.SaveChanges();
@@ -221,15 +221,15 @@ namespace TrashInspection.Pn.Test
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();
             trashInspection.CreatedAt = DateTime.Now;
             trashInspection.Date = DateTime.Now;
-            trashInspection.Eak_Code = rnd.Next(1, 255);
+            trashInspection.Eak_Code = rnd.Next(1, 255).ToString();
             trashInspection.InstallationId = rnd.Next(1, 255);
             trashInspection.MustBeInspected = true;
             trashInspection.Producer = Guid.NewGuid().ToString();
             trashInspection.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspection.Time = DateTime.Now;
             trashInspection.Transporter = Guid.NewGuid().ToString();
-            trashInspection.TrashFraction = rnd.Next(1, 255);
-            trashInspection.WeighingNumber = rnd.Next(1, 255);
+            trashInspection.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspection.WeighingNumber = rnd.Next(1, 255).ToString();
 
             DbContext.TrashInspections.Add(trashInspection);
             DbContext.SaveChanges();
@@ -281,15 +281,15 @@ namespace TrashInspection.Pn.Test
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection();
             trashInspection.CreatedAt = DateTime.Now;
             trashInspection.Date = DateTime.Now;
-            trashInspection.Eak_Code = rnd.Next(1, 255);
+            trashInspection.Eak_Code = rnd.Next(1, 255).ToString();
             trashInspection.InstallationId = rnd.Next(1, 255);
             trashInspection.MustBeInspected = false;
             trashInspection.Producer = Guid.NewGuid().ToString();
             trashInspection.RegistrationNumber = Guid.NewGuid().ToString();
             trashInspection.Time = DateTime.Now;
             trashInspection.Transporter = Guid.NewGuid().ToString();
-            trashInspection.TrashFraction = rnd.Next(1, 255);
-            trashInspection.WeighingNumber = rnd.Next(1, 255);
+            trashInspection.TrashFraction = rnd.Next(1, 255).ToString();
+            trashInspection.WeighingNumber = rnd.Next(1, 255).ToString();
 
             DbContext.TrashInspections.Add(trashInspection);
             DbContext.SaveChanges();

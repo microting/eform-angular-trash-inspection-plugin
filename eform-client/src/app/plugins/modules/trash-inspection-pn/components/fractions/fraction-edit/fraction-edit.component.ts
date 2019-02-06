@@ -1,8 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { InstallationPnUpdateModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
 import {
   TrashInspectionPnFractionsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
 import {FractionPnModel, FractionPnUpdateModel} from '../../../models/fraction';
+import {TemplateListModel, TemplateRequestModel} from '../../../../../../common/models/eforms';
+import {debounceTime, switchMap} from 'rxjs/operators';
+import {EFormService} from '../../../../../../common/services/eform';
 
 @Component({
   selector: 'app-trash-inspection-pn-fraction-edit',
@@ -14,7 +17,25 @@ export class FractionEditComponent implements OnInit {
   @Output() onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedFractionModel: FractionPnModel = new FractionPnModel();
-  constructor(private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }
+  templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
+  templatesModel: TemplateListModel = new TemplateListModel();
+  typeahead = new EventEmitter<string>();
+  constructor(private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
+              private cd: ChangeDetectorRef,
+              private eFormService: EFormService) {
+    this.typeahead
+      .pipe(
+        debounceTime(200),
+        switchMap(term => {
+          this.templateRequestModel.nameFilter = term;
+          return this.eFormService.getAll(this.templateRequestModel);
+        })
+      )
+      .subscribe(items => {
+        this.templatesModel = items.model;
+        this.cd.markForCheck();
+      });
+  }
 
   ngOnInit() {
   }
@@ -25,6 +46,7 @@ export class FractionEditComponent implements OnInit {
   }
 
   getSelectedFraction(id: number) {
+    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.getSingleFraction(id).subscribe((data) => {
       if (data && data.success) {
@@ -35,7 +57,7 @@ export class FractionEditComponent implements OnInit {
 
   updateFraction() {
     this.spinnerStatus = true;
-    this.trashInspectionPnFractionsService.updateFraction(new FractionPnUpdateModel(this.selectedFractionModel))
+    this.trashInspectionPnFractionsService.updateFraction(this.selectedFractionModel)
       .subscribe((data) => {
       if (data && data.success) {
         this.onFractionUpdated.emit();
@@ -43,6 +65,11 @@ export class FractionEditComponent implements OnInit {
         this.frame.hide();
       } this.spinnerStatus = false;
     });
+  }
+
+  onSelectedChanged(e: any) {
+    // debugger;
+    this.selectedFractionModel.eFormId = e.id;
   }
 
 }

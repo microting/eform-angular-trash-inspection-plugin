@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using eFormCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
@@ -72,13 +73,19 @@ namespace TrashInspection.Pn.Services
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    EformID = x.eFormId,
+                    eFormId = x.eFormId,
                     Description = x.Description
                 }).ToListAsync();
 
                 fractionsModel.Total = await _dbContext.Installations.CountAsync();
                 fractionsModel.FractionList = fractions;
-                
+                Core _core = _coreHelper.GetCore();
+
+                foreach (FractionModel fractionModel in fractions)
+                {
+                    string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
+                    fractionModel.SelectedTemplateName = eFormName;
+                }
                 
                 return new OperationDataResult<FractionsModel>(true, fractionsModel);
             }
@@ -99,17 +106,18 @@ namespace TrashInspection.Pn.Services
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        EformID = x.eFormId,
+                        eFormId = x.eFormId,
                         Description = x.Description
                     })
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (fraction == null)
-                {
+                {                    
                     return new OperationDataResult<FractionModel>(false,
                         _trashInspectionLocalizationService.GetString($"FractionWithID:{id}DoesNotExist"));
                 }
 
+                fraction.SelectedTemplateName = "Number 1";
                 return new OperationDataResult<FractionModel>(true, fraction);
             }
             catch (Exception e)
@@ -130,8 +138,6 @@ namespace TrashInspection.Pn.Services
         }
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            FractionModel fraction = new FractionModel();
-            fraction.Id = updateModel.Id;
             updateModel.Update(_dbContext);
             
             return new OperationResult(true);
@@ -143,7 +149,6 @@ namespace TrashInspection.Pn.Services
             deleteModel.Id = id;
             deleteModel.Delete(_dbContext);
             return new OperationResult(true);
-
         }
 
     }

@@ -21,6 +21,20 @@
 		}
 	},
 	{
+		"Key": "Fractions",
+		"LocalizedValue": {
+			"da": "Fraktioner",
+			"en-US": "Fractions"
+		}
+	},
+	{
+		"Key": "Segments",
+		"LocalizedValue": {
+			"da": "Områder",
+			"en-US": "Segments"
+		}
+	},
+	{
 		"Key": "Settings",
 		"LocalizedValue": {
 			"da": "Indstillinger",

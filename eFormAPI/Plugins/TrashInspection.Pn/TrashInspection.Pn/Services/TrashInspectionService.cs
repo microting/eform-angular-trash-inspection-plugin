@@ -137,58 +137,77 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
-            var trashInspectionSettings = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
+            TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
             if (trashInspectionSettings == null)
             {
                 return new OperationResult(false);
             }
             else
             {
-                if (createModel.Token == trashInspectionSettings.Token)
+                if (createModel.Token == trashInspectionSettings.Value && createModel.WeighingNumber != null)
                 {
-                    createModel.Status = 0;
+                    if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
+                    {
+                        return new OperationResult(true);
+                    } 
+                    
+                    createModel.Status = 33;
                     createModel.Save(_dbContext);
 
-                    Installation installation =
-                        _dbContext.Installations.First(x => x.Name == createModel.InstallationName);
+                    Segment segment = await _dbContext.Segments.FirstOrDefaultAsync(x => x.Name == createModel.Segment);
+                    Installation installation = await
+                        _dbContext.Installations.FirstOrDefaultAsync(x => x.Name == createModel.InstallationName);
+                    Fraction fraction = await
+                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.Name == createModel.TrashFraction);
 
-                    if (installation != null)
+                    if (segment != null && installation != null && fraction != null)
                     {
                         Core core = _coreHelper.GetCore();
-                        var trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-                        var selectedeFormId = trashInspectionPnSetting?.SelectedeFormId;
-                        if (selectedeFormId != null)
-                        {
-                            int eFormId = (int) selectedeFormId;
-                    
-                            Template_Dto eForm = core.TemplateItemRead(eFormId);
-                            foreach (InstallationSite installationSite in installation.InstallationSites)
-                            {
-                                var mainElement = core.TemplateRead(eFormId);
-                                mainElement.Repeated =
-                                    0; // We set this right now hardcoded, this will let the eForm be deployed until end date or we actively retract it.
-                                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
-                                mainElement.StartDate = DateTime.Now.ToUniversalTime();
-                                string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
-                                TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
-                                trashInspectionCase.Status = 66;
-                                trashInspectionCase.TrashInspectionId = createModel.Id;
-                                trashInspectionCase.SdkCaseId = sdkCaseId;
 
-                                _dbContext.TrashInspectionCases.Add(trashInspectionCase);
-                                await _dbContext.SaveChangesAsync();
-                            }
+                        var mainElement = core.TemplateRead(fraction.eFormId);
+                        List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
+                        foreach (InstallationSite installationSite in installationSites)
+                        {
+                            mainElement.Repeated = 1;
+                            mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
+                            mainElement.StartDate = DateTime.Now.ToUniversalTime();
+                            mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
+                            mainElement.Label = createModel.RegistrationNumber + ", " + createModel.Producer;
+                            CDataValue cDataValue = new CDataValue();
+                            cDataValue.InderValue = "<b>Vejenr:</b> " + createModel.WeighingNumber + "<br>";
+                            cDataValue.InderValue += "<b>Dato:</b> " + createModel.Date + " " + createModel.Time + "<br>";
+                            cDataValue.InderValue += "<b>Fraktion:</b> " + createModel.TrashFraction + "<br>";
+                            cDataValue.InderValue += "<b>Transportør:</b> " + createModel.Transporter;
+                            mainElement.ElementList[0].Description = cDataValue;
+                            mainElement.ElementList[0].Label = mainElement.Label;
+                            
+                            string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
+                            
+                            TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
+                            trashInspectionCase.SegmentId = segment.Id;
+                            trashInspectionCase.Status = 66;
+                            trashInspectionCase.TrashInspectionId = createModel.Id;
+                            trashInspectionCase.SdkCaseId = sdkCaseId;
+
+                            _dbContext.TrashInspectionCases.Add(trashInspectionCase);
+                            await _dbContext.SaveChangesAsync();
                         }
+
+                        createModel.SegmentId = segment.Id;
+                        createModel.FractionId = fraction.Id;
+                        createModel.InstallationId = installation.Id;
+                        createModel.Status = 66;
+                        createModel.Update(_dbContext);
                     }
-                    createModel.Status = 66;
-                    createModel.Update(_dbContext);
-                    return new OperationResult(true);
-                }
-                else
-                {
                     
-                    return new OperationResult(false);
-                }
+                    return new OperationResult(true);
+            }
+            else
+            {
+                    
+                return new OperationResult(false);
+            }
+                
             }
             
             

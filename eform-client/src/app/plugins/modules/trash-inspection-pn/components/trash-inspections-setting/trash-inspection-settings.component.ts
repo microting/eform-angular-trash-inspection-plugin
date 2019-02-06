@@ -61,6 +61,5 @@ export class TrashInspectionSettingsComponent implements OnInit {
       });
   }
   onSelectedChanged(e: any) {
-    this.settingsModel.selectedTemplateId = e.id;
   }
 }
