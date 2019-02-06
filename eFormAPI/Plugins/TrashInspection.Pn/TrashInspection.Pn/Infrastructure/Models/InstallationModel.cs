@@ -25,9 +25,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public void Save(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = new Installation();
-            if (CreatedAt != null) {
-                installation.CreatedAt = (DateTime)CreatedAt;                
-            }
+            installation.CreatedAt = DateTime.Now;                
             installation.CreatedByUserId = CreatedByUserId;
             installation.Name = Name;
             installation.UpdatedAt = DateTime.Now;
@@ -41,6 +39,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
             _dbContext.SaveChanges();
+            
+            Id = installation.Id;
         }
         public void Update(TrashInspectionPnDbContext _dbContext)
         {

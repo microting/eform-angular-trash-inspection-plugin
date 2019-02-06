@@ -98,16 +98,4 @@ export class InstallationCreateComponent implements OnInit {
       this.deployViewModel.deployCheckboxes.push(deployObject);
     }
   }
-
-  // submitDeployment() {
-  //   this.spinnerStatus = true;
-  //   // this.deployModel.id = this.newInstallationModel.id;
-  //   this.eFormService.deploySingle(this.deployModel).subscribe(operation => {
-  //     if (operation && operation.success) {
-  //       this.frame.hide();
-  //       this.onDeploymentFinished.emit();
-  //     }
-  //     this.spinnerStatus = false;
-  //   });
-  // }
 }
