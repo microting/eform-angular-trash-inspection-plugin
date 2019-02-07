@@ -83,8 +83,11 @@ namespace TrashInspection.Pn.Services
 
                 foreach (FractionModel fractionModel in fractions)
                 {
-                    string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
-                    fractionModel.SelectedTemplateName = eFormName;
+                    if (fractionModel.eFormId > 0)
+                    {
+                        string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
+                        fractionModel.SelectedTemplateName = eFormName;
+                    }                    
                 }
                 
                 return new OperationDataResult<FractionsModel>(true, fractionsModel);
@@ -117,7 +120,13 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString($"FractionWithID:{id}DoesNotExist"));
                 }
 
-                fraction.SelectedTemplateName = "Number 1";
+                Core _core = _coreHelper.GetCore();
+
+                if (fraction.eFormId > 0)
+                {
+                    string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
+                    fraction.SelectedTemplateName = eFormName;
+                }
                 return new OperationDataResult<FractionModel>(true, fraction);
             }
             catch (Exception e)
