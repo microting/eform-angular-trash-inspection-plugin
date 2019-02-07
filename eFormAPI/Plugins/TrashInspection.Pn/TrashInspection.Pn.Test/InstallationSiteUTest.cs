@@ -69,7 +69,7 @@ namespace TrashInspection.Pn.Test
             // Act
             InstallationSiteModel installationSiteModel = new InstallationSiteModel();
             installationSiteModel.CreatedAt = installation.CreatedAt;
-            installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
+            installationSiteModel.SdkSiteId = rnd.Next(1, 355);
             installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
 
@@ -77,6 +77,7 @@ namespace TrashInspection.Pn.Test
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();
+            
             // Assert
             Assert.NotNull(dbInstallationSite);
 

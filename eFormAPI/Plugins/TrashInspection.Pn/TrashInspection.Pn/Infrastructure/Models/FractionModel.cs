@@ -35,7 +35,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.Version = Version;
             fraction.eFormId = eFormId;
             fraction.WorkflowState = Constants.WorkflowStates.Created;
-            fraction.eFormId = EformID;
+            
             _dbContext.Fractions.Add(fraction);
             _dbContext.SaveChangesAsync();
 

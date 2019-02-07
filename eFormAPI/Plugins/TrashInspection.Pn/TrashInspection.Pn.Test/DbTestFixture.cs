@@ -81,6 +81,10 @@ namespace TrashInspection.Pn.Test
             modelNames.Add("InstallationVersions");
             modelNames.Add("InstallationSites");
             modelNames.Add("InstallationSiteVersions");
+            modelNames.Add("FractionVersions");
+            modelNames.Add("Fractions");
+            modelNames.Add("SegmentVersions");
+            modelNames.Add("Segments");
 
 
 
