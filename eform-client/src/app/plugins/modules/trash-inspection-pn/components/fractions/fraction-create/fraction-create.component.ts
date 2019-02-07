@@ -54,7 +54,6 @@ export class FractionCreateComponent implements OnInit {
     this.loadAllSites();
   }
 
-  createFraction() {
   createInstallation() {
     debugger;
     this.spinnerStatus = true;
