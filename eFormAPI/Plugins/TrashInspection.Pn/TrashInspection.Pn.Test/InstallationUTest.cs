@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -12,7 +13,7 @@ namespace TrashInspection.Pn.Test
     public class InstallationUTest : DbTestFixture
     {
         [Test]
-        public void InstallationModel_Save_DoesSave()
+        public async Task  InstallationModel_Save_DoesSave()
         {
             // Arrange
             Random rnd = new Random();
@@ -21,7 +22,7 @@ namespace TrashInspection.Pn.Test
             installation.Name = Guid.NewGuid().ToString();
             
             // Act
-            installation.Save(DbContext);
+          await  installation.Save(DbContext);
 
             Installation dbInstallation = DbContext.Installations.AsNoTracking().First();
             List<Installation> installationList = DbContext.Installations.AsNoTracking().ToList();
@@ -37,7 +38,7 @@ namespace TrashInspection.Pn.Test
         }
         
         [Test]
-        public void InstalationModel_Update_DoesUpdate()
+        public async Task  InstalationModel_Update_DoesUpdate()
         {
             // Arrange
             Installation installation = new Installation();
@@ -54,7 +55,7 @@ namespace TrashInspection.Pn.Test
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
-            installationModel.Update(DbContext);
+           await installationModel.Update(DbContext);
 
             Installation dbInstallation = DbContext.Installations.AsNoTracking().First();
             List<Installation> installationList = DbContext.Installations.AsNoTracking().ToList();
@@ -70,7 +71,7 @@ namespace TrashInspection.Pn.Test
         }
         
         [Test]
-        public void InstallationModel_Delete_DoesDelete()
+        public async Task  InstallationModel_Delete_DoesDelete()
         {
             // Arrange
             Installation installation = new Installation();
@@ -87,7 +88,7 @@ namespace TrashInspection.Pn.Test
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
-            installationModel.Delete(DbContext);
+            await installationModel.Delete(DbContext);
 
             Installation dbInstallation = DbContext.Installations.AsNoTracking().First();
             List<Installation> installationList = DbContext.Installations.AsNoTracking().ToList();

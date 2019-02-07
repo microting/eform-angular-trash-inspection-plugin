@@ -23,12 +23,14 @@
               <table class="table table-xs table-bordered text-center z-depth-1">
                 <thead>
                 <tr>
-                  <th>Microting ID</th>
-                  <th>{{ 'Device user' | translate }}</th>
-                  <th>{{ 'Check to pair' | translate }}</th>
+                  <th scope="col" id="idTableHeader">ID</th>
+                  <th scope="col" id="nameTableHeader">{{'Name' | translate}}</th>
+                  <th scope="col">
+                    {{ 'Related Site' | translate }}
+                  </th>
                 </tr>
                 </thead>
-                <tbody id="pairingModalTableBody">
+                <tbody id="tableBody">
                 <tr *ngFor="let siteDto of sitesDto">
                   <td class="align-middle">{{siteDto.siteUId}}</td>
                   <td class="align-middle">{{siteDto.siteName}}</td>

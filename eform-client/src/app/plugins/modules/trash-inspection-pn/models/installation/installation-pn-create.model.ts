@@ -4,7 +4,7 @@ import {DeployCheckbox} from '../../../../../common/models/eforms';
 export class InstallationPnCreateModel {
   id: number;
   name: string;
-  relatedMachinesIds: Array<number> = [];
+  relatedTrashInspectionsIds: Array<number> = [];
   deployedSites: Array<SiteNameDto>;
   deployCheckboxes: Array<DeployCheckbox> = [];
 

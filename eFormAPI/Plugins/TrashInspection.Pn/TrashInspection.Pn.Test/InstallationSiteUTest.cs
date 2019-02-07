@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -12,7 +13,7 @@ namespace TrashInspection.Pn.Test
     public class InstallationSiteUTest : DbTestFixture
     {
         [Test]
-        public void InstallationSiteModel_Save_DoesSave()
+        public async Task  InstallationSiteModel_Save_DoesSave()
         {
             // Arrange
             Installation installation = new Installation();
@@ -31,7 +32,7 @@ namespace TrashInspection.Pn.Test
             installationSite.SdkSiteId = rnd.Next(1, 255);
 
             // Act
-            installationSite.Save(DbContext);
+            await installationSite.Save(DbContext);
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();
@@ -47,7 +48,7 @@ namespace TrashInspection.Pn.Test
         }
 
         [Test]
-        public void InstalationSiteModel_Update_DoesUpdate()
+        public async Task  InstalationSiteModel_Update_DoesUpdate()
         {
             // Arrange
             Installation installation = new Installation();
@@ -69,14 +70,15 @@ namespace TrashInspection.Pn.Test
             // Act
             InstallationSiteModel installationSiteModel = new InstallationSiteModel();
             installationSiteModel.CreatedAt = installation.CreatedAt;
-            installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
+            installationSiteModel.SdkSiteId = rnd.Next(1, 355);
             installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
 
-            installationSiteModel.Update(DbContext);
+           await installationSiteModel.Update(DbContext);
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();
+            
             // Assert
             Assert.NotNull(dbInstallationSite);
 
@@ -89,7 +91,7 @@ namespace TrashInspection.Pn.Test
         }
 
         [Test]
-        public void InstallationSiteModel_Delete_DoesDelete()
+        public async Task  InstallationSiteModel_Delete_DoesDelete()
         {
             // Arrange
             Installation installation = new Installation();
@@ -113,7 +115,7 @@ namespace TrashInspection.Pn.Test
             installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
             installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
-            installationSiteModel.Delete(DbContext);
+            await installationSiteModel.Delete(DbContext);
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();

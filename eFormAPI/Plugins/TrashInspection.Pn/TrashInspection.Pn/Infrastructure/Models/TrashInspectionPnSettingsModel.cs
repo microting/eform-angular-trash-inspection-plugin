@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -11,17 +12,17 @@ namespace TrashInspection.Pn.Infrastructure.Models
     {
         public List<TrashInspectionPnSettingModel> trashInspectionSettingsList { get; set; }
         
-        public void Save(TrashInspectionPnDbContext _dbcontext)
+        public Task Save(TrashInspectionPnDbContext _dbcontext)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Update(TrashInspectionPnDbContext _dbcontext)
+        public Task Update(TrashInspectionPnDbContext _dbcontext)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Delete(TrashInspectionPnDbContext _dbcontext)
+        public Task Delete(TrashInspectionPnDbContext _dbcontext)
         {
             throw new System.NotImplementedException();
         }

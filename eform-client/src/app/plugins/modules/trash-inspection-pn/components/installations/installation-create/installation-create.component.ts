@@ -82,7 +82,6 @@ export class InstallationCreateComponent implements OnInit {
   fillCheckboxes() {
     for (const siteDto of this.sitesDto) {
       const deployObject = new DeployCheckbox();
-      // debugger;
       // for (const deployedSite of this.newInstallationModel.deployedSites) {
       //   if (deployedSite.siteUId === siteDto.siteUId) {
       //     this.matchFound = true;

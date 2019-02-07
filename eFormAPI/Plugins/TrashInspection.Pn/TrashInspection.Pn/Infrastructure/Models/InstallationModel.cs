@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using eFormShared;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -22,7 +23,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public List<SiteName_Dto> DeployedSites { get; set; }
         public List<DeployCheckbox> DeployCheckboxes { get; set; }
 
-        public void Save(TrashInspectionPnDbContext _dbContext)
+        public async Task Save(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = new Installation();
             installation.CreatedAt = DateTime.Now;                
@@ -35,14 +36,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             
             _dbContext.Installations.Add(installation);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-            _dbContext.SaveChanges();
-            
+            await _dbContext.SaveChangesAsync();
             Id = installation.Id;
         }
-        public void Update(TrashInspectionPnDbContext _dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
@@ -59,10 +59,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installation.Version += 1;
 
                 _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
+
         }
-        public void Delete(TrashInspectionPnDbContext _dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
         {
             Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
@@ -79,8 +80,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installation.Version += 1;
                 //_dbContext.Installations.Remove(installation);
                 _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
+
         }
 
         private InstallationVersion MapInstallationVersion(TrashInspectionPnDbContext _dbContext, Installation installation)

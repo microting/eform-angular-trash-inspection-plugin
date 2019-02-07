@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using eFormShared;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -23,7 +24,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int SdkFolderId { get; set; }
         
         
-        public void Save(TrashInspectionPnDbContext _dbContext)
+        public async Task Save(TrashInspectionPnDbContext _dbContext)
         {
             
             Segment segment = new Segment();
@@ -38,13 +39,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
             segment.WorkflowState = Constants.WorkflowStates.Created;
 
             _dbContext.Segments.Add(segment);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Update(TrashInspectionPnDbContext _dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
             
             Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Id == Id);
@@ -65,11 +66,12 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 segment.Version += 1;
 
                 _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-                _dbContext.SaveChanges();
+                await  _dbContext.SaveChangesAsync();
             }
+
         }
 
-        public void Delete(TrashInspectionPnDbContext _dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
         {
             
             Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Id == Id);
@@ -88,8 +90,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 segment.Version += 1;
 
                 _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-                _dbContext.SaveChanges();
+                await  _dbContext.SaveChangesAsync();
             }
+
         }
 
         private SegmentVersion MapSegmentVersion(TrashInspectionPnDbContext _dbContext, Segment segment)
