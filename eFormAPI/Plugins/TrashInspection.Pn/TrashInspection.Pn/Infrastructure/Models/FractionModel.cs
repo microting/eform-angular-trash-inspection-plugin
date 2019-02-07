@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using eFormShared;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -23,7 +24,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string SelectedTemplateName { get; set; }
         public string Description { get; set; }
 
-        public void Save(TrashInspectionPnDbContext _dbContext)
+        public async Task Save(TrashInspectionPnDbContext _dbContext)
         {
             Fraction fraction = new Fraction();
             fraction.CreatedAt = DateTime.Now;
@@ -37,12 +38,14 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.WorkflowState = Constants.WorkflowStates.Created;
             
             _dbContext.Fractions.Add(fraction);
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
             _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-            _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+
+             
         }
-        public void Update(TrashInspectionPnDbContext _dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
             Fraction fraction = _dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
 
@@ -62,10 +65,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 fraction.Version += 1;
 
                 _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-                _dbContext.SaveChanges();
+               await _dbContext.SaveChangesAsync();
             }
+
         }
-        public void Delete(TrashInspectionPnDbContext _dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
         {
             Fraction fraction = _dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
 
@@ -83,8 +87,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 fraction.Version += 1;
 
                 _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-                _dbContext.SaveChanges();
+               await _dbContext.SaveChangesAsync();
             }
+
         }
 
         private FractionVersion MapFractionVersion(TrashInspectionPnDbContext _dbContext, Fraction fraction)

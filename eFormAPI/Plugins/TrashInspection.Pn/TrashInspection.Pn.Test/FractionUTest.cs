@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -12,19 +13,20 @@ namespace TrashInspection.Pn.Test
     public class FractionUTest : DbTestFixture
     {
         [Test]
-        public void FractionModel_Save_DoesSave()
+        public async Task FractionModel_Save_DoesSave()
         {
             //Arrange
             Random rnd = new Random();
             
             FractionModel fraction = new FractionModel();
+            fraction.CreatedAt = DateTime.Now;
             fraction.Name = Guid.NewGuid().ToString();
             fraction.Description = Guid.NewGuid().ToString();
-            fraction.eFormId = rnd.Next(1, 355);
+            fraction.eFormId = rnd.Next(1, 255);
             fraction.SelectedTemplateName = Guid.NewGuid().ToString();
             
             //Act
-            fraction.Save(DbContext);
+            await fraction.Save(DbContext);
 
             Fraction dbFraction = DbContext.Fractions.AsNoTracking().First();
             List<Fraction> fractionList = DbContext.Fractions.AsNoTracking().ToList();
@@ -40,7 +42,7 @@ namespace TrashInspection.Pn.Test
         }
  
         [Test]
-        public void FractionModel_Update_DoesUpdate()
+        public async Task FractionModel_Update_DoesUpdate()
         {
             //Arrange
             Random rnd = new Random();
@@ -61,7 +63,7 @@ namespace TrashInspection.Pn.Test
             fractionModel.CreatedAt = fraction.CreatedAt;
             fractionModel.Id = fraction.Id;
             
-            fractionModel.Update(DbContext);
+            await fractionModel.Update(DbContext);
             
             Fraction dbFraction = DbContext.Fractions.AsNoTracking().First();
             List<Fraction> fractionList = DbContext.Fractions.AsNoTracking().ToList();
@@ -79,7 +81,7 @@ namespace TrashInspection.Pn.Test
             Assert.AreEqual(fractionModel.CreatedAt, dbFraction.CreatedAt);
         }
         [Test]
-        public void FractionModel_Delete_DoesSetWorkflowStateToRemoved()
+        public async Task FractionModel_Delete_DoesSetWorkflowStateToRemoved()
         {
             //Arrange
             Random rnd = new Random();
@@ -100,7 +102,7 @@ namespace TrashInspection.Pn.Test
             fractionModel.CreatedAt = fraction.CreatedAt;
             fractionModel.Id = fraction.Id;
             
-            fractionModel.Delete(DbContext);
+            await fractionModel.Delete(DbContext);
             
             Fraction dbFraction = DbContext.Fractions.AsNoTracking().First();
             List<Fraction> fractionList = DbContext.Fractions.AsNoTracking().ToList();

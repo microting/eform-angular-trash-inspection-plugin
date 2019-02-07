@@ -1,13 +1,14 @@
 ﻿using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using System.Threading.Tasks;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
     interface IModel
     {
-        void Save(TrashInspectionPnDbContext _dbcontext);
+        Task Save(TrashInspectionPnDbContext _dbcontext);
 
-        void Update(TrashInspectionPnDbContext _dbcontext);
+        Task Update(TrashInspectionPnDbContext _dbcontext);
 
-        void Delete(TrashInspectionPnDbContext _dbcontext);
+        Task Delete(TrashInspectionPnDbContext _dbcontext);
     }
 }
