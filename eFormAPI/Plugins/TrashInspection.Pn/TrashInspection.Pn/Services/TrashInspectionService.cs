@@ -14,6 +14,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using System.Globalization;
 
 namespace TrashInspection.Pn.Services
 {
@@ -166,6 +167,7 @@ namespace TrashInspection.Pn.Services
 
                         var mainElement = core.TemplateRead(fraction.eFormId);
                         List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
+                        CultureInfo cultureInfo = new CultureInfo("de-DE");
                         foreach (InstallationSite installationSite in installationSites)
                         {
                             mainElement.Repeated = 1;
@@ -175,9 +177,13 @@ namespace TrashInspection.Pn.Services
                             mainElement.Label = createModel.RegistrationNumber + ", " + createModel.Producer;
                             CDataValue cDataValue = new CDataValue();
                             cDataValue.InderValue = "<b>Vejenr:</b> " + createModel.WeighingNumber + "<br>";
-                            cDataValue.InderValue += "<b>Dato:</b> " + createModel.Date + " " + createModel.Time + "<br>";
+                            cDataValue.InderValue += "<b>Dato:</b> " + createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo) + "<br>";
                             cDataValue.InderValue += "<b>Fraktion:</b> " + createModel.TrashFraction + "<br>";
                             cDataValue.InderValue += "<b>Transportør:</b> " + createModel.Transporter;
+                            if (createModel.MustBeInspected)
+                            {
+                                cDataValue.InderValue += "<br><b>SKAL INSPICERES</b>";
+                            }
                             mainElement.ElementList[0].Description = cDataValue;
                             mainElement.ElementList[0].Label = mainElement.Label;
                             
