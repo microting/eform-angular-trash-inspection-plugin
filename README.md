@@ -22,9 +22,9 @@ On front-end part plugins will be included into `eform-client/src/app/plugins/mo
     ...
 },
 {
-    path: 'trashinspection-pn',
+    path: 'trash-inspection-pn',
     canActivate: [AuthGuard],
-    loadChildren: './modules/trashinspection-pn/trashinspection-pn.module#TrashInspectionPnModule'
+    loadChildren: './modules/trash-inspection-pn/trash-inspection-pn.module#TrashInspectionPnModule'
 }
 ```
 
