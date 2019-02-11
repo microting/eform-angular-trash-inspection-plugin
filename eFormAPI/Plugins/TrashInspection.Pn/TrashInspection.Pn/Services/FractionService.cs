@@ -131,14 +131,14 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateFraction(FractionModel createModel)
         {
-            createModel.Save(_dbContext);
+            await createModel.Save(_dbContext);
             
             return new OperationResult(true);
 
         }
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            updateModel.Update(_dbContext);
+            await updateModel.Update(_dbContext);
             
             return new OperationResult(true);
 
@@ -147,7 +147,7 @@ namespace TrashInspection.Pn.Services
         {
             FractionModel deleteModel = new FractionModel();
             deleteModel.Id = id;
-            deleteModel.Delete(_dbContext);
+            await deleteModel.Delete(_dbContext);
             return new OperationResult(true);
         }
 
