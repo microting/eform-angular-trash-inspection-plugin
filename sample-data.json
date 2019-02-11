@@ -1,13 +1,14 @@
 {
-	"WeighingNumber":"SomeNumber",
-	"Date":"YY-MM-DD",
-	"Time":"HH:mm:ss",
-	"RegistrationNumber":"XX22222",
-	"TrashFraction":"22",
-	"EakCode":"10.00.00",
-	"Producer":"Some company Inc.",
-	"Transporter":"Some other company Inc",
-	"InstallationName":"XXX",
-	"MustBeInspected":"false",
-	"Token":"sometoken"	
+	"weighingNumber":"SomeNumber",
+	"date":"YY-MM-DD",
+	"time":"HH:mm:ss",
+	"registrationNumber":"XX22222",
+	"trashFraction":"22",
+	"eakCode":"10.00.00",
+	"producer":"Some company Inc.",
+	"transporter":"Some other company Inc",
+	"token":"authToken",
+	"installationName":"Some location ",
+	"mustBeInspected":"false",
+	"segment":"FolderName"	
 }
