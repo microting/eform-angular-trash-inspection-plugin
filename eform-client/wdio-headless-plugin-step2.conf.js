@@ -12,7 +12,7 @@ exports.config = {
     specs: [
          'e2e/Tests/trash-inspections-settings/application-settings.plugins-page.spec.ts',
          'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.add.spec.ts',
-        'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts',
+         'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts'
     ],
     suites: {
         settings: [
