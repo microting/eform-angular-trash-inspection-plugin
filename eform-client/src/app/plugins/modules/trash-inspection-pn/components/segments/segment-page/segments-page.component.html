@@ -1,6 +1,7 @@
 <subheader-pn [title]="'Segments' | translate">
   <div class="p-3">
     <button
+      id="createSegmentBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Segment' | translate }}"
       (click)="showCreateSegmentModal()">{{ 'New Segment' | translate }}
@@ -78,15 +79,17 @@
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Installation' | translate }}"
+            <button id="editSegmentBtn"
+              class="btn btn-accent text-black-50 btn-icon mb-2"
+                    mdbTooltip="{{ 'Edit Segment' | translate }}"
                     (click)="showEditSegmentModal(fraction)">
               <i class="material-icons">
                 edit
               </i>
             </button>
-            <button class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Installation' | translate }}"
+            <button id="deleteSegmentBtn"
+              class="btn btn-danger btn-icon mb-2 "
+                    mdbTooltip="{{ 'Delete Segment' | translate }}"
                     (click)="showDeleteSegmentModal(fraction)">
               <i class="material-icons">
                 delete_forever

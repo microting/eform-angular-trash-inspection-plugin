@@ -51,10 +51,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!selectedInstallationModel.name" (click)="updateInstallation()">
+          <button id="installationUpdateSaveBtn" class="btn btn-success" [disabled]="!selectedInstallationModel.name" (click)="updateInstallation()">
           {{ 'Save' | translate }}
         </button>
-        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button id="installationUpdateCancelBtn" class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

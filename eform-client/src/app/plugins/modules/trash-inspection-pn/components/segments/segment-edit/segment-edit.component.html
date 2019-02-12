@@ -47,10 +47,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!segmentPnModel.name" (click)="  updateFraction()">
+        <button id="segmentUpdateSaveBtn" class="btn btn-success" [disabled]="!segmentPnModel.name" (click)="  updateFraction()">
           {{ 'Save' | translate }}
         </button>
-        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button id="segmentUpdateCancelBtn" class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

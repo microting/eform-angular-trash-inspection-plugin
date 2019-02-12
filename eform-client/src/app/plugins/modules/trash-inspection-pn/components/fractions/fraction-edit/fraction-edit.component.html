@@ -25,9 +25,9 @@
                   <input mdbInputDirective
                          [mdbValidate]="false"
                          [(ngModel)]="selectedFractionModel.description"
-                         type="text" id="createFractionDescription"
+                         type="text" id="editFractionDescription"
                          name="createFractionDescription" class="form-control">
-                  <label for="createFractionDescription">{{'Description' | translate}}</label>
+                  <label for="editFractionDescription">{{'Description' | translate}}</label>
                 </div>
               </div>
             </div>
@@ -39,7 +39,8 @@
                              [placeholder]="selectedFractionModel.selectedTemplateName || ('Selected template' | translate)"
                              bindValue="id"
                              [typeahead]="typeahead"
-                             (change)="onSelectedChanged($event)">
+                             (change)="onSelectedChanged($event)"
+                  id="fractionUpdateSelector">
                   </ng-select>
                 </div>
               </div>
@@ -48,10 +49,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!selectedFractionModel.name" (click)="  updateFraction()">
+        <button id="fractionUpdateSaveBtn" class="btn btn-success" [disabled]="!selectedFractionModel.name" (click)="  updateFraction()">
           {{ 'Save' | translate }}
         </button>
-        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button id="fractionUpdateCancelBtn" class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

@@ -54,11 +54,11 @@ export class FractionCreateComponent implements OnInit {
     this.loadAllSites();
   }
 
-  createFraction() {
-    debugger;
+  createInstallation() {
+    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.createFraction(this.newFractionModel).subscribe((data) => {
-      debugger;
+      // debugger;
       if (data && data.success) {
         this.onFractionCreated.emit();
         // this.submitDeployment();

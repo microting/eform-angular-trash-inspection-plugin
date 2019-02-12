@@ -18,15 +18,14 @@ import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eform
 })
 export class InstallationEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
+
   deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
   sitesDto: Array<SiteNameDto> = [];
   matchFound = false;
-
+  spinnerStatus = false;
   get userClaims() {
     return this.authService.userClaims;
   }
@@ -49,6 +48,7 @@ export class InstallationEditComponent implements OnInit {
   }
 
   getSelectedInstallation(id: number) {
+    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
       if (data && data.success) {
@@ -60,6 +60,7 @@ export class InstallationEditComponent implements OnInit {
   }
 
   updateInstallation() {
+    debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
       .subscribe((data) => {
@@ -84,16 +85,17 @@ export class InstallationEditComponent implements OnInit {
     }
   }
 
-  addToEditMapping(e: any, trashInspectionId: number) {
+  addToEditMapping(e: any, sdkSiteId: number) {
     if (e.target.checked) {
-      this.selectedInstallationModel.relatedTrashInspectionsIds.push(trashInspectionId);
+      this.selectedInstallationModel.SdkSiteIds.push(sdkSiteId);
     } else {
-      this.selectedInstallationModel.relatedTrashInspectionsIds = this.selectedInstallationModel.relatedTrashInspectionsIds
-        .filter(x => x !== trashInspectionId);
+      this.selectedInstallationModel.SdkSiteIds = this.selectedInstallationModel.SdkSiteIds
+        .filter(x => x !== sdkSiteId);
     }
   }
 
   addToArray(e: any, deployId: number) {
+    debugger;
     const deployObject = new DeployCheckbox();
     deployObject.id = deployId;
     if (e.target.checked) {
@@ -104,12 +106,13 @@ export class InstallationEditComponent implements OnInit {
     }
   }
 
-  isChecked(trashInspectionId: number) {
-    if (this.selectedInstallationModel.relatedTrashInspectionsIds && this.selectedInstallationModel.relatedTrashInspectionsIds.length > 0) {
-      return this.selectedInstallationModel.relatedTrashInspectionsIds.findIndex(x => x === trashInspectionId) !== -1;
-    }
-    return false;
-  }
+  // isChecked(sdkSiteId: number) {
+  //   debugger;
+  //   if (this.selectedInstallationModel.SdkSiteIds && this.selectedInstallationModel.SdkSiteIds.length > 0) {
+  //     return this.selectedInstallationModel.SdkSiteIds.findIndex(x => x === sdkSiteId) !== -1;
+  //   }
+  //   return false;
+  // }
 
   fillCheckboxes() {
     for (const siteDto of this.sitesDto) {

@@ -1,6 +1,7 @@
 <subheader-pn [title]="'Fractions' | translate">
   <div class="p-3">
     <button
+      id="fractionCreateBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Fraction' | translate }}"
       (click)="showCreateFractionModal()">{{ 'New Fraction' | translate }}
@@ -79,15 +80,17 @@
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Installation' | translate }}"
+            <button id="updateFractionBtn"
+              class="btn btn-accent text-black-50 btn-icon mb-2"
+                    mdbTooltip="{{ 'Edit Fraction' | translate }}"
                     (click)="showEditFractionModal(fraction)">
               <i class="material-icons">
                 edit
               </i>
             </button>
-            <button class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Installation' | translate }}"
+            <button id="deleteFractionBtn"
+              class="btn btn-danger btn-icon mb-2 "
+                    mdbTooltip="{{ 'Delete Fraction' | translate }}"
                     (click)="showDeleteFractionModal(fraction)">
               <i class="material-icons">
                 delete_forever

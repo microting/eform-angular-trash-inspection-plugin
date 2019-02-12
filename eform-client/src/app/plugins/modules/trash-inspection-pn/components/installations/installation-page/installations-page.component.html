@@ -1,6 +1,7 @@
 <subheader-pn [title]="'Installations' | translate">
   <div class="p-3">
     <button
+      id="createInstallationBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Installation' | translate }}"
       (click)="showCreateInstallationModal()">{{ 'New Installation' | translate }}
@@ -43,22 +44,24 @@
       </thead>
       <tbody id="tableBody">
       <tr *ngFor="let installation of installationsModel.installationList">
-        <td>
+        <td id="installationId">
           {{installation.id}}
         </td>
-        <td>
+        <td id="installationName">
           {{installation.name}}
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+            <button id="updateInstallationBtn"
+              class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Edit Installation' | translate }}"
                     (click)="showEditInstallationModal(installation)">
               <i class="material-icons">
                 edit
               </i>
             </button>
-            <button class="btn btn-danger btn-icon mb-2 "
+            <button id="deleteInstallationBtn"
+              class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Installation' | translate }}"
                     (click)="showDeleteInstallationModal(installation)">
               <i class="material-icons">
@@ -96,7 +99,7 @@
                                              (onInstallationCreated)="getAllInstallations()">
 </app-trash-inspection-pn-installation-create>
 <app-trash-inspection-pn-installation-edit #editInstallationModal
-                               [mappingTrashInspections]="mappingTrashInspections"
+
                                (onInstallationUpdated)="getAllInstallations()"></app-trash-inspection-pn-installation-edit>
 <app-trash-inspection-pn-installation-delete #deleteInstallationModal
                                      (onInstallationDeleted)="getAllInstallations()"></app-trash-inspection-pn-installation-delete>

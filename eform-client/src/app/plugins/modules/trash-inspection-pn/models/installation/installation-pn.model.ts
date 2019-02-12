@@ -9,7 +9,7 @@ export class InstallationsPnModel {
 export class InstallationPnModel {
   id: number;
   name: string;
-  relatedTrashInspectionsIds: Array<number> = [];
+  SdkSiteIds: Array<number> = [];
   deployedSites: Array<SiteNameDto>;
   deployCheckboxes: Array<DeployCheckbox> = [];
 }
