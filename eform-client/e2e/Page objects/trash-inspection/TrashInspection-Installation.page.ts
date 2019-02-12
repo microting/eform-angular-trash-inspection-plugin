@@ -62,7 +62,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.trashInspectionDropDown();
     browser.pause(1000);
     this.installationBtn.click();
-    browser.pause(8000);
+    browser.pause(160000);
   }
   createInstallation_AddSite(name: string) {
     this.installationCreateBtn.click();
@@ -75,11 +75,11 @@ export class TrashInspectionInstallationPage extends Page {
   }
   createInstallation_DoesntAddSite(name: string) {
     this.installationCreateBtn.click();
-    browser.pause(8000);
+    browser.pause(10000);
     this.installationCreateNameBox.addValue(name);
     browser.pause(1000);
     this.installationCreateSaveBtn.click();
-    browser.pause(8000);
+    browser.pause(160000);
   }
   createInstallation_AddSite_Cancels(name: string) {
     this.installationCreateBtn.click();
@@ -124,12 +124,12 @@ export class TrashInspectionInstallationPage extends Page {
     browser.pause(8000);
   }editInstallation_OnlyEditsName(name: string) {
     this.installationEditBtn.click();
-    browser.pause(8000);
+    browser.pause(10000);
     this.installationUpdateNameBox.clearElement();
     this.installationUpdateNameBox.addValue(name);
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
-    browser.pause(8000);
+    browser.pause(160000);
   }
   editInstallation_AddSite_Cancels(name: string) {
     this.installationEditBtn.click();
