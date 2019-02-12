@@ -14,6 +14,7 @@ script:
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspections-settings microting/eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspection-general microting/eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Page\ objects/trash-inspection microting/eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
   - cd microting/eform-angular-frontend
   - dotnet restore -v q eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
