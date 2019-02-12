@@ -79,7 +79,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationCreateNameBox.addValue(name);
     browser.pause(1000);
     this.installationCreateSaveBtn.click();
-    browser.pause(160000);
+    browser.pause(16000);
   }
   createInstallation_AddSite_Cancels(name: string) {
     this.installationCreateBtn.click();
@@ -129,7 +129,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationUpdateNameBox.addValue(name);
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
-    browser.pause(160000);
+    browser.pause(16000);
   }
   editInstallation_AddSite_Cancels(name: string) {
     this.installationEditBtn.click();
