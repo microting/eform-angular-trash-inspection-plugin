@@ -9,7 +9,7 @@ export class TrashInspectionFractionPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get fractionBtn() {
     return browser.element('#trash-inspection-pn-fractions');
@@ -82,3 +82,23 @@ export class TrashInspectionFractionPage extends Page {
 
 }
 
+const fractionsPage = new TrashInspectionFractionPage();
+export default fractionsPage;
+
+export class FractionsRowObject {
+  constructor(rowNum) {
+  this.id = $$('#idTableHeader')[rowNum - 1].getText();
+  this.name = $$('#nameTableHeader')[rowNum - 1].getText();
+  this.description = $$('#descriptionTableHeader')[rowNum - 1].getText();
+  this.eForm = $$('#eFormTableHeader')[rowNum - 1].getText();
+  this.editBtn = $$('#updateFractionBtn')[rowNum - 1];
+  this.deleteBtn = $$('#deleteFractionBtn')[rowNum - 1];
+  }
+  id;
+  name;
+  description;
+  eForm;
+  editBtn;
+  deleteBtn;
+
+}

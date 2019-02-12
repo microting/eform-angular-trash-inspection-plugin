@@ -8,7 +8,7 @@ export class TrashInspectionInstallationPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get installationBtn() {
     return browser.element('#trash-inspection-pn-installations');
@@ -98,7 +98,12 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationCreateCancelBtn.click();
     browser.pause(8000);
   }
-
+  createInstallation_cancels() {
+    this.installationCreateBtn.click();
+    browser.pause(8000);
+    this.installationCreateCancelBtn.click();
+    browser.pause(8000);
+  }
 
   editInstallation_AddSite(name: string) {
     this.installationEditBtn.click();
@@ -114,6 +119,14 @@ export class TrashInspectionInstallationPage extends Page {
     browser.pause(8000);
     this.installationUpdateNameBox.addValue(name);
     this.installationUpdateSiteCheckbox.click();
+    browser.pause(1000);
+    this.installationUpdateSaveBtn.click();
+    browser.pause(8000);
+  }editInstallation_OnlyEditsName(name: string) {
+    this.installationEditBtn.click();
+    browser.pause(8000);
+    this.installationUpdateNameBox.clearElement();
+    this.installationUpdateNameBox.addValue(name);
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
     browser.pause(8000);
@@ -146,6 +159,9 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationDeleteBtn.click();
     browser.pause(8000);
     this.installationDeleteCancelBtn.click();
+  }
+  getFirstRowObject(): InstallationPageRowObject {
+    return new InstallationPageRowObject(1);
   }
 }
 

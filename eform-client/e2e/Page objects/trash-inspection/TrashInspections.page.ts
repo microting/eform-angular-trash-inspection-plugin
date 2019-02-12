@@ -8,7 +8,7 @@ export class TrashInspectionsPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionBtn() {
     return browser.element('#trash-inspection-pn-trash-inspection');

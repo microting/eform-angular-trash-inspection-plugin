@@ -8,7 +8,7 @@ export class TrashInspectionSegemtnsPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get segmentnBtn() {
     return browser.element('#trash-inspection-pn-segments');
@@ -73,7 +73,24 @@ export class TrashInspectionSegemtnsPage extends Page {
     this.segmentnBtn.click();
     browser.pause(8000);
   }
-
-
 }
 
+const segmentsPage = new TrashInspectionSegemtnsPage();
+export default segmentsPage;
+
+export class SegmentsRowObject {
+  constructor(rowNum) {
+    this.id = $$('#idTableHeader')[rowNum - 1].getText();
+    this.name = $$('#nameTableHeader')[rowNum - 1].getText();
+    this.description = $$('#descriptionTableHeader')[rowNum - 1].getText();
+    this.sdkFolderId = $$('#sdkFolderIdTableHeader')[rowNum - 1].getText();
+    this.editBtn = $$('#editSegmentBtn')[rowNum - 1];
+    this.deleteBtn = $$('#deleteSegmentBtn')[rowNum - 1];
+  }
+  id;
+  name;
+  description;
+  sdkFolderId;
+  editBtn;
+  deleteBtn
+}
