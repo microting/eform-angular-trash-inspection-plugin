@@ -62,7 +62,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.trashInspectionDropDown();
     browser.pause(1000);
     this.installationBtn.click();
-    browser.pause(160000);
+    browser.pause(16000);
   }
   createInstallation_AddSite(name: string) {
     this.installationCreateBtn.click();
