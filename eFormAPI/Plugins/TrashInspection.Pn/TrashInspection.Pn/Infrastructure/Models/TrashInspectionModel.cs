@@ -60,10 +60,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
 
             _dbContext.TrashInspections.Add(trashInspection);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
-            await  _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
             Id = trashInspection.Id;
         }
 
@@ -95,7 +95,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 trashInspection.Version += 1;
 
                 _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
-                await  _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
@@ -117,7 +117,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 trashInspection.Version += 1;
                 //_dbContext.TrashInspections.Remove(trashInspection);
                 _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
-                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
 
             }
 

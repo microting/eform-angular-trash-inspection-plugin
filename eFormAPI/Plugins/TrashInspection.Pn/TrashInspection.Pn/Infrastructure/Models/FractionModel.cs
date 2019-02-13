@@ -38,12 +38,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.WorkflowState = Constants.WorkflowStates.Created;
             
             _dbContext.Fractions.Add(fraction);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
+            Id = fraction.Id;
 
-             
+
         }
         public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
@@ -65,7 +66,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 fraction.Version += 1;
 
                 _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-               await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
@@ -87,7 +88,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 fraction.Version += 1;
 
                 _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
-               await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }

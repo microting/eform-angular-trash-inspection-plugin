@@ -39,10 +39,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             
             _dbcontext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
-            await  _dbcontext.SaveChangesAsync();
+            _dbcontext.SaveChanges();
 
             _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
-            await _dbcontext.SaveChangesAsync();
+            _dbcontext.SaveChanges();
         }
 
         public async Task Update(TrashInspectionPnDbContext _dbcontext)
@@ -63,7 +63,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 trashInspectionPnSetting.Version += 1;
 
                 _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
-                await _dbcontext.SaveChangesAsync();
+                _dbcontext.SaveChanges();
             }
 
         }
@@ -85,7 +85,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 trashInspectionPnSetting.UpdatedByUserId = UpdatedByUserId;
                 trashInspectionPnSetting.Version += 1;
                 _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
-                await  _dbcontext.SaveChangesAsync();
+                _dbcontext.SaveChanges();
             }
 
         }
