@@ -1,4 +1,5 @@
-﻿using TrashInspection.Pn.Abstractions;
+﻿using System.Threading.Tasks;
+using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +20,17 @@ namespace TrashInspection.Pn.Controllers
         [HttpGet]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/settings")]
-        public OperationDataResult<TrashInspectionPnSettingsModel> GetSettings()
+        public async Task<OperationDataResult<TrashInspectionPnSettingsModel>> GetSettings()
         {
-            return _trashInspectionPnSettingsService.GetSettings();
+            return await _trashInspectionPnSettingsService.GetSettings();
         }
 
         [HttpPost]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/settings")]
-        public OperationResult UpdateSettings([FromBody] TrashInspectionPnSettingsModel trashInspectionSettingsModel)
+        public async Task<OperationResult> UpdateSettings([FromBody] TrashInspectionPnSettingsModel trashInspectionSettingsModel)
         {
-            return _trashInspectionPnSettingsService.UpdateSettings(trashInspectionSettingsModel);
+            return await _trashInspectionPnSettingsService.UpdateSettings(trashInspectionSettingsModel);
         }
     }
 }

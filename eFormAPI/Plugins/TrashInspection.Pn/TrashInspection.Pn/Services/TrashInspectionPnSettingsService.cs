@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using eFormCore;
@@ -35,7 +36,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public OperationDataResult<TrashInspectionPnSettingsModel> GetSettings()
+        public async Task<OperationDataResult<TrashInspectionPnSettingsModel>> GetSettings()
         {
             try
             {
@@ -67,7 +68,7 @@ namespace TrashInspection.Pn.Services
             }
         }
 
-        public OperationResult UpdateSettings(TrashInspectionPnSettingsModel trashInspectionSettingsModel)
+        public async Task<OperationResult> UpdateSettings(TrashInspectionPnSettingsModel trashInspectionSettingsModel)
         {
             try
             {
