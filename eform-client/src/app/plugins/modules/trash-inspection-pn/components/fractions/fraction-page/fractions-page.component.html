@@ -66,16 +66,16 @@
       </thead>
       <tbody id="tableBody">
       <tr *ngFor="let fraction of fractionsModel.fractionList">
-        <td>
+        <td id="fractionId">
           {{fraction.id}}
         </td>
-        <td>
+        <td id="fractionName">
           {{fraction.name}}
         </td>
-        <td>
+        <td id="fractionDescription">
           {{fraction.description}}
         </td>
-        <td>
+        <td id="fractionSelectedeForm">
           {{fraction.selectedTemplateName}}
         </td>
         <td>
