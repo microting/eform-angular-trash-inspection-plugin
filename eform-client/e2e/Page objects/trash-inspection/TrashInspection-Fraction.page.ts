@@ -34,7 +34,7 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element('#fractionCreateBtn');
   }
   public getBtnTxt(text: string) {
-    return browser.getText(text);
+    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
   }
   public get fractionCreateNameBox() {
     return browser.element('#createFractionName');
