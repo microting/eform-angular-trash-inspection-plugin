@@ -36,10 +36,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             
             _dbContext.Installations.Add(installation);
-            await _dbContext.SaveChangesAsync();
-
+            _dbContext.SaveChanges();
+            
             _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
             Id = installation.Id;
         }
         public async Task Update(TrashInspectionPnDbContext _dbContext)
@@ -59,8 +59,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installation.Version += 1;
 
                 _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                await _dbContext.SaveChangesAsync();
-            }
+                _dbContext.SaveChanges();            }
 
         }
         public async Task Delete(TrashInspectionPnDbContext _dbContext)
@@ -80,7 +79,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installation.Version += 1;
                 //_dbContext.Installations.Remove(installation);
                 _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }

@@ -39,10 +39,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             segment.WorkflowState = Constants.WorkflowStates.Created;
 
             _dbContext.Segments.Add(segment);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
         public async Task Update(TrashInspectionPnDbContext _dbContext)
@@ -66,7 +66,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 segment.Version += 1;
 
                 _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-                await  _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
@@ -90,7 +90,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 segment.Version += 1;
 
                 _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
-                await  _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
