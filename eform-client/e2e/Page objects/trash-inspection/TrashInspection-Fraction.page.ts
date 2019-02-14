@@ -28,7 +28,7 @@ export class TrashInspectionFractionPage extends Page {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get fractionBtn() {
-    return browser.element('#trash-inspection-pn-fractions');
+    return browser.element(`//*[contains(text(), 'Fraktioner')]`);
   }
   public get fractionCreateBtn() {
     return browser.element('#fractionCreateBtn');
