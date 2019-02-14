@@ -33,6 +33,9 @@ export class TrashInspectionFractionPage extends Page {
   public get fractionCreateBtn() {
     return browser.element('#fractionCreateBtn');
   }
+  public getBtnTxt(text: string) {
+    return browser.getText(text);
+  }
   public get fractionCreateNameBox() {
     return browser.element('#createFractionName');
   }
@@ -98,6 +101,9 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionCreateOption.click();
     browser.pause(1000);
     this.createSaveBtn.click();
+    browser.pause(6000);
+    browser.refresh();
+    browser.pause(14000);
   }
   getFirstRowObject(): FractionsRowObject {
     return new FractionsRowObject(1);
