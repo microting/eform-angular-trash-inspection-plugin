@@ -9,15 +9,15 @@ describe('Trash Inspection Plugin - Fraction', function () {
     loginPage.login();
   });
   it('Should create Fraction', function () {
-    // const name = Guid.create().toString();
-    // const description = Guid.create().toString();
-    // const newEformLabel = 'Number 1';
-    // fractionsPage.createNewEform(newEformLabel);
+    const name = Guid.create().toString();
+    const description = Guid.create().toString();
+    const newEformLabel = 'Number 1';
+    fractionsPage.createNewEform(newEformLabel);
     fractionsPage.goToFractionsPage();
     fractionsPage.getBtnTxt('Ny Fraktion');
-    // fractionsPage.createFraction(name, description);
-    // const fraction = fractionsPage.getFirstRowObject();
-    // expect(fraction.name).equal(name);
-    // expect(fraction.description).equal(description);
+    fractionsPage.createFraction(name, description);
+    const fraction = fractionsPage.getFirstRowObject();
+    expect(fraction.name).equal(name);
+    expect(fraction.description).equal(description);
   });
 });
