@@ -90,8 +90,8 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionBtn.click();
     browser.pause(8000);
   }
-  createFraction(name: string, description: string) {
-    this.fractionCreateBtn.click();
+  createFraction(name: string, description: string, btnTxt: string) {
+    this.getBtnTxt(btnTxt).click();
     browser.pause(8000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
