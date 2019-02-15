@@ -10,11 +10,12 @@ describe('Trash Inspection Plugin - Fraction', function () {
     loginPage.open('/auth');
     loginPage.login();
   });
-  it('Should create Fraction', function () {
-    const name = Guid.create().toString();
-    const description = Guid.create().toString();
+  it('Should create eForm', function () {
     const newEformLabel = 'Number 1';
     fractionsPage.createNewEform(newEformLabel);
+
+  });
+  it('should check if activated', function () {
     myEformsPage.Navbar.advancedDropdown();
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
     browser.pause(8000);
@@ -23,6 +24,10 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(plugin.name).equal('Microting Trash Inspection Plugin');
     expect(plugin.version).equal('1.0.0.0');
     expect(plugin.status).equal('Aktiveret');
+  });
+  it('should create Fraction', function () {
+    const name = Guid.create().toString();
+    const description = Guid.create().toString();
     fractionsPage.goToFractionsPage();
     fractionsPage.getBtnTxt();
     fractionsPage.createFraction(name, description);
