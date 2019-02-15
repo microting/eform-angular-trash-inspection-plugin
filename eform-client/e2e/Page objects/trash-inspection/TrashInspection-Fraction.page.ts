@@ -30,11 +30,11 @@ export class TrashInspectionFractionPage extends Page {
   public get fractionBtn() {
     return browser.element(`//*[contains(text(), 'Fraktioner')]`);
   }
-  public get fractionCreateBtn() {
-    return browser.element('#fractionCreateBtn');
+  public  fractionCreateBtn() {
+    browser.element(`//*[contains(@class, 'p-3')]//*[contains(text(), 'Ny Fraktion')]`).click();
   }
-  public getBtnTxt(text: string) {
-    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
+  public getBtnTxt() {
+    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`);
   }
   public get fractionCreateNameBox() {
     return browser.element('#createFractionName');
@@ -90,8 +90,8 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionBtn.click();
     browser.pause(8000);
   }
-  createFraction(name: string, description: string, btnTxt: string) {
-    this.getBtnTxt(btnTxt).click();
+  createFraction(name: string, description: string) {
+    this.fractionCreateBtn();
     browser.pause(8000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
