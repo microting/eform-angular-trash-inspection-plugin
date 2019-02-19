@@ -27,14 +27,20 @@ export class TrashInspectionFractionPage extends Page {
   public trashInspectionDropDown() {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
+  public get trashInspectionDropdownName() {
+    return browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).element('..');
+  }
+  public get trashInspectionDropdownItemName() {
+    return browser.element(`//*[contains(text(), 'Fraktioner')]`);
+  }
   public get fractionBtn() {
     return browser.element(`//*[contains(text(), 'Fraktioner')]`);
   }
   public  fractionCreateBtn() {
-    browser.element(`//*[contains(@class, 'p-3')]//*[contains(text(), 'Ny Fraktion')]`).click();
+    browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`).click();
   }
   public getBtnTxt() {
-    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`);
+    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion "]`);
   }
   public get fractionCreateNameBox() {
     return browser.element('#createFractionName');
@@ -51,37 +57,37 @@ export class TrashInspectionFractionPage extends Page {
   public get createSaveBtn() {
     return browser.element('#fractionCreateSaveBtn');
   }
-  fractionEditBtn() {
+  public get fractionEditBtn() {
     return browser.element('#updateFractionBtn');
   }
-  fractionUpdateNameBox() {
+  public get fractionUpdateNameBox() {
     return browser.element('#updateFractionName');
   }
-  fractionUpdateDescriptionBox() {
+  public get fractionUpdateDescriptionBox() {
     return browser.element('#editFractionDescription');
   }
-  fractionUpdateSelecterBox() {
+  public get fractionUpdateSelecterBox() {
     return browser.element('#fractionUpdateSelector');
   }
-  fractionUpdateSaveBtn() {
+  public get fractionUpdateSaveBtn() {
     return browser.element('#fractionUpdateSaveBtn');
   }
-  fractionUpdateCancelBtn() {
+  public get fractionUpdateCancelBtn() {
     return browser.element('#fractionUpdateCancelBtn');
   }
-  fractionDeleteBtn() {
+  public get fractionDeleteBtn() {
     return browser.element('#deleteFractionBtn');
   }
-  fractionDeleteId() {
+  public get fractionDeleteId() {
     return browser.element('#selectedFractionId');
   }
-  fractionDeleteName() {
+  public get fractionDeleteName() {
     return browser.element('#selectedFractionName');
   }
-  fractionDeleteDeleteBtn() {
+  public get fractionDeleteDeleteBtn() {
     return browser.element('#fractionDeleteDeleteBtn');
   }
-  fractionDelteCancelBtn() {
+  public get fractionDelteCancelBtn() {
     return browser.element('#fractionDeleteCancelBtn');
   }
   goToFractionsPage() {
@@ -91,7 +97,7 @@ export class TrashInspectionFractionPage extends Page {
     browser.pause(8000);
   }
   createFraction(name: string, description: string) {
-    this.fractionCreateBtn();
+    this.getBtnTxt().click();
     browser.pause(8000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
@@ -104,6 +110,14 @@ export class TrashInspectionFractionPage extends Page {
     browser.pause(6000);
     browser.refresh();
     browser.pause(14000);
+  }
+  editFraction(newName: string, newDescription: string) {
+    this.fractionEditBtn.click();
+    browser.pause(8000);
+    this.fractionUpdateNameBox.clearElement();
+    this.fractionUpdateNameBox.addValue(newName);
+    this.fractionUpdateDescriptionBox.clearElement();
+    this.fractionUpdateDescriptionBox.addValue(newDescription);
   }
   getFirstRowObject(): FractionsRowObject {
     return new FractionsRowObject(1);
@@ -160,5 +174,4 @@ export class FractionsRowObject {
   eForm;
   editBtn;
   deleteBtn;
-
 }
