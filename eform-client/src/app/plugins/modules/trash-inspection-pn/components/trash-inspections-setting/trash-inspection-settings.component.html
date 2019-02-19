@@ -76,6 +76,42 @@
               <label for="callBackUrl">{{'CallbackURL' | translate}}</label>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[7].value"
+                     type="text" name="callBackCredentialDomain" #token="ngModel"
+                     id="callBackCredentialDomain" class="form-control">
+              <label for="callBackCredentialDomain">{{'CallBackCredentialDomain' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[8].value"
+                     type="text" name="callbackCredentialUserName" #token="ngModel"
+                     id="callbackCredentialUserName" class="form-control">
+              <label for="callbackCredentialUserName">{{'CallbackCredentialUserName' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[9].value"
+                     type="text" name="callbackCredentialPassword" #token="ngModel"
+                     id="callbackCredentialPassword" class="form-control">
+              <label for="callbackCredentialPassword">{{'CallbackCredentialPassword' | translate}}</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[10].value"
+                     type="text" name="callbackCredentialAuthType" #token="ngModel"
+                     id="callbackCredentialAuthType" class="form-control">
+              <label for="callbackCredentialAuthType">{{'CallbackCredentialAuthType' | translate}}</label>
+            </div>
+          </div>
         </div>
 
       </div>
