@@ -36,6 +36,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             SettingCreate(_dbcontext, Settings.NumberOfWorkers);
             SettingCreate(_dbcontext, Settings.Token);
             SettingCreate(_dbcontext, Settings.CallBackUrl);
+            SettingCreate(_dbcontext, Settings.CallBackCredentialDomain);
+            SettingCreate(_dbcontext, Settings.CallbackCredentialUserName);
+            SettingCreate(_dbcontext, Settings.CallbackCredentialPassword);
+            SettingCreate(_dbcontext, Settings.CallbackCredentialAuthType);
 
             return true;
         }
@@ -54,6 +58,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 case Settings.NumberOfWorkers: defaultValue = "1"; break;
                 case Settings.Token: defaultValue = "..."; break;
                 case Settings.CallBackUrl: defaultValue = "..."; break;
+                case Settings.CallBackCredentialDomain: defaultValue = "..."; break;
+                case Settings.CallbackCredentialUserName: defaultValue = "..."; break;
+                case Settings.CallbackCredentialPassword: defaultValue = "..."; break;
+                case Settings.CallbackCredentialAuthType: defaultValue = "NTLM"; break;
                 
                 default:
                     throw new IndexOutOfRangeException(name.ToString() + " is not a known/mapped Settings type");
@@ -131,7 +139,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
             MaxParallelism,
             NumberOfWorkers,
             Token,
-            CallBackUrl
+            CallBackUrl,
+            CallBackCredentialDomain,
+            CallbackCredentialUserName,
+            CallbackCredentialPassword,
+            CallbackCredentialAuthType
         }
     }
 }
