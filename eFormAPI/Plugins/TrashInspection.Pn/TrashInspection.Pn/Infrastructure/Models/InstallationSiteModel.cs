@@ -13,7 +13,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public DateTime? CreatedAt { get; set; }
         public DateTime? Updated_at { get; set; }
         [StringLength(255)]
-        public string Workflow_state { get; set; }
+        public string WorkflowState { get; set; }
         public int Version { get; set; }
         public int CreatedByUserId { get; set; }
         public int UpdatedByUserId { get; set; }
@@ -34,10 +34,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             installationSite.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
 
             _dbContext.InstallationSites.Add(installationSite);
-            await  _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             _dbContext.InstallationSiteVersions.Add(MapInstallationSiteVersion(_dbContext, installationSite));
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
         public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
@@ -49,6 +49,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             installationSite.InstallationId = InstallationId;
             installationSite.SDKSiteId = SdkSiteId;
+            installationSite.WorkflowState = WorkflowState;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -57,7 +58,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installationSite.Version += 1;
 
                 _dbContext.InstallationSiteVersions.Add(MapInstallationSiteVersion(_dbContext, installationSite));
-                await  _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
@@ -78,7 +79,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 installationSite.Version += 1;
                 //_dbContext.InstallationSites.Remove(installationSite);
                 _dbContext.InstallationSiteVersions.Add(MapInstallationSiteVersion(_dbContext, installationSite));
-                await  _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
             }
 
         }
