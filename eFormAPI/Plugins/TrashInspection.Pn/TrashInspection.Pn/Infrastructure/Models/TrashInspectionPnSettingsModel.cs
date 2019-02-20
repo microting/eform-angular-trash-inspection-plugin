@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -51,13 +52,29 @@ namespace TrashInspection.Pn.Infrastructure.Models
             string defaultValue = "default";
             switch (name)
             {
-                case Settings.SdkConnectionString: defaultValue = "..."; break;
+                case Settings.SdkConnectionString:
+                {
+                    string connectionString = _dbcontext.Database.GetDbConnection().ConnectionString;
+
+                    string dbNameSection = Regex.Match(connectionString, @"(Database=\w*;)").Groups[0].Value;
+                    string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
+                    string sdk = $"Database={dbPrefix}_SDK;";
+                    connectionString = connectionString.Replace(dbNameSection, sdk);
+                    defaultValue = connectionString; break;
+                }
                 case Settings.LogLevel: defaultValue = "4"; break;
                 case Settings.LogLimit: defaultValue = "25000"; break;
                 case Settings.MaxParallelism: defaultValue = "1"; break;
                 case Settings.NumberOfWorkers: defaultValue = "1"; break;
-                case Settings.Token: defaultValue = "..."; break;
-                case Settings.CallBackUrl: defaultValue = "..."; break;
+                case Settings.Token: 
+                {
+                    string chars = "abcdefghijklmnopqrstuvwzyxABCDEFGHIJKLMNOPQRSTVWXYZ0123456789";
+                    Random random = new Random();
+                    string result = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(32).ToArray());
+                    defaultValue = result; 
+                }
+                    break; 
+                case Settings.CallBackUrl: defaultValue = "..."; break;                  
                 case Settings.CallBackCredentialDomain: defaultValue = "..."; break;
                 case Settings.CallbackCredentialUserName: defaultValue = "..."; break;
                 case Settings.CallbackCredentialPassword: defaultValue = "..."; break;
