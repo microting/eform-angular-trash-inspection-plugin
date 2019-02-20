@@ -25,14 +25,26 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(plugin.version).equal('1.0.0.0');
     expect(plugin.status).equal('Aktiveret');
   });
+  it('should check if menupoint is there', function () {
+    expect(fractionsPage.trashInspectionDropdownName.getText()).equal('Affaldsinspektion');
+    fractionsPage.trashInspectionDropDown();
+    browser.pause(4000);
+    expect(fractionsPage.fractionBtn.getText()).equal('Fraktioner');
+    browser.pause(4000);
+    fractionsPage.trashInspectionDropDown();
+    browser.refresh();
+  });
+  it('should get btn text', function () {
+    fractionsPage.goToFractionsPage();
+    fractionsPage.getBtnTxt();
+  });
   it('should create Fraction', function () {
     const name = Guid.create().toString();
     const description = Guid.create().toString();
-    fractionsPage.goToFractionsPage();
-    fractionsPage.getBtnTxt();
     fractionsPage.createFraction(name, description);
     const fraction = fractionsPage.getFirstRowObject();
     expect(fraction.name).equal(name);
     expect(fraction.description).equal(description);
   });
+
 });
