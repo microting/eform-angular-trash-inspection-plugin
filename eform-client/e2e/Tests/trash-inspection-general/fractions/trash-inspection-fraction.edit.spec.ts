@@ -10,11 +10,6 @@ describe('Trash Inspection Plugin - Fraction', function () {
     loginPage.open('/auth');
     loginPage.login();
   });
-  it('Should create eForm', function () {
-    const newEformLabel = 'Number 1';
-    fractionsPage.createNewEform(newEformLabel);
-
-  });
   it('should check if activated', function () {
     myEformsPage.Navbar.advancedDropdown();
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
@@ -34,17 +29,14 @@ describe('Trash Inspection Plugin - Fraction', function () {
     fractionsPage.trashInspectionDropDown();
     browser.refresh();
   });
-  it('should get btn text', function () {
+  it('should edit Fraction', function () {
     fractionsPage.goToFractionsPage();
-    fractionsPage.getBtnTxt('Ny Fraktion');
-  });
-  it('should create Fraction', function () {
-    const name = Guid.create().toString();
-    const description = Guid.create().toString();
-    fractionsPage.createFraction(name, description);
+    const newName = Guid.create().toString();
+    const newDescription = Guid.create().toString();
+    fractionsPage.editFraction(newName, newDescription);
     const fraction = fractionsPage.getFirstRowObject();
-    expect(fraction.name).equal(name);
-    expect(fraction.description).equal(description);
+    expect(fraction.name).equal(newName);
+    expect(fraction.description).equal(newDescription);
   });
 
 });

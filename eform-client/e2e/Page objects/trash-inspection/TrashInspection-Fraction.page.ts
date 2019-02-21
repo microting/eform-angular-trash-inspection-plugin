@@ -39,8 +39,8 @@ export class TrashInspectionFractionPage extends Page {
   public  fractionCreateBtn() {
     browser.element('#fractionCreateBtn').click();
   }
-  public getBtnTxt() {
-    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`);
+  public getBtnTxt(text: string) {
+    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
   }
   public get fractionCreateNameBox() {
     return browser.element('#createFractionName');
@@ -94,7 +94,7 @@ export class TrashInspectionFractionPage extends Page {
     this.trashInspectionDropDown();
     browser.pause(1000);
     this.fractionBtn.click();
-    browser.pause(16000);
+    browser.pause(8000);
   }
   createFraction(name: string, description: string) {
     this.fractionCreateBtn();
@@ -118,6 +118,16 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionUpdateNameBox.addValue(newName);
     this.fractionUpdateDescriptionBox.clearElement();
     this.fractionUpdateDescriptionBox.addValue(newDescription);
+    this.fractionUpdateSaveBtn.click();
+    browser.pause(8000);
+  }
+  deleteFraction() {
+  const fractionForDelete = this.getFirstRowObject();
+  fractionForDelete.deleteBtn.click();
+  browser.pause(4000);
+  this.fractionDeleteDeleteBtn.click();
+  browser.pause(8000);
+  browser.refresh();
   }
   getFirstRowObject(): FractionsRowObject {
     return new FractionsRowObject(1);
@@ -161,12 +171,20 @@ export default fractionsPage;
 
 export class FractionsRowObject {
   constructor(rowNum) {
-  this.id = $$('#fractionId')[rowNum - 1].getText();
-  this.name = $$('#fractionName')[rowNum - 1].getText();
-  this.description = $$('#fractionDescription')[rowNum - 1].getText();
-  this.eForm = $$('#fractionSelectedeForm')[rowNum - 1].getText();
-  this.editBtn = $$('#updateFractionBtn')[rowNum - 1];
-  this.deleteBtn = $$('#deleteFractionBtn')[rowNum - 1];
+     if ($$('#fractionId')[rowNum - 1]) {
+       this.id = +$$('#fractionId')[rowNum - 1];
+       try {
+         this.name = $$('#fractionName')[rowNum - 1].getText();
+       } catch (e) {}
+       try {
+        this.description = $$('#fractionDescription')[rowNum - 1].getText();
+       } catch (e) {}
+       try {
+        this.eForm = $$('#fractionSelectedeForm')[rowNum - 1].getText();
+       } catch (e) {}
+      this.editBtn = $$('#updateFractionBtn')[rowNum - 1];
+      this.deleteBtn = $$('#deleteFractionBtn')[rowNum - 1];
+     }
   }
   id;
   name;
