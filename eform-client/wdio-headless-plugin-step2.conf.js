@@ -14,6 +14,8 @@ exports.config = {
          'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.add.spec.ts',
          'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts',
         'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.add.spec.ts',
+        'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.edit.spec.ts',
+        'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.delete.spec.ts',
 
     ],
     suites: {
