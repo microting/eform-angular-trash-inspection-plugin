@@ -37,7 +37,7 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element(`//*[contains(text(), 'Fraktioner')]`);
   }
   public  fractionCreateBtn() {
-    browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`).click();
+    browser.element('#fractionCreateBtn').click();
   }
   public getBtnTxt() {
     return browser.element(`//*[contains(@class, 'p-3')]//*[text()="Ny Fraktion"]`);
