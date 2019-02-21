@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using eFormShared;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -103,9 +104,8 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString($"InstallationWithID:{id}DoesNotExist"));
                 }
 
-//                List<InstallationSite> installationSites = _dbContext.InstallationSites.ToList(); 
                 List<InstallationSite> installationSites = _dbContext.InstallationSites
-                    .Where(x => x.InstallationId == installation.Id).ToList();
+                    .Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
                 
                 InstallationModel installationModel = new InstallationModel();
                 installationModel.Name = installation.Name;
@@ -158,26 +158,45 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> UpdateInstallation(InstallationModel updateModel)
         {
-            InstallationModel installation = new InstallationModel();
-            installation.Id = updateModel.Id;
             updateModel.Update(_dbContext);
+
+            List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == updateModel.Id).ToList();
+            List<InstallationSite> toBeRemovedInstallationSites = installationSites;
+
             foreach (DeployCheckbox deployedCheckbox in updateModel.DeployCheckboxes)
             {
-                InstallationSite installationSite = _dbContext.InstallationSites.FirstOrDefault(x => x.Id == deployedCheckbox.Id);
-                if (installationSite == null)
+                if (installationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id) == null)
                 {
-                    if (deployedCheckbox.IsChecked == true)
+                    InstallationSiteModel installationSiteModel = new InstallationSiteModel();
+                    installationSiteModel.SdkSiteId = deployedCheckbox.Id;
+                    installationSiteModel.InstallationId = updateModel.Id;
+
+                    installationSiteModel.Save(_dbContext);
+                }
+                else
+                {
+                    // Site already there, so pop from list of sites to be removed
+                    InstallationSite installationSite =
+                        toBeRemovedInstallationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id);
+                    if (installationSite.WorkflowState == Constants.WorkflowStates.Removed)
                     {
                         InstallationSiteModel installationSiteModel = new InstallationSiteModel();
+                        installationSiteModel.Id = installationSite.Id;
                         installationSiteModel.SdkSiteId = deployedCheckbox.Id;
                         installationSiteModel.InstallationId = updateModel.Id;
+                        installationSiteModel.WorkflowState = Constants.WorkflowStates.Created;
+                        installationSiteModel.Update(_dbContext);
 
-                        installationSiteModel.Save(_dbContext);
-
-                    }
+                    } 
+                    toBeRemovedInstallationSites.Remove(installationSite);
                 }
+            }
 
-
+            foreach (InstallationSite installationSite in toBeRemovedInstallationSites)
+            {
+                InstallationSiteModel installationSiteModel = new InstallationSiteModel();
+                installationSiteModel.Id = installationSite.Id;
+                installationSiteModel.Delete(_dbContext);
             }
             return new OperationResult(true);
         }

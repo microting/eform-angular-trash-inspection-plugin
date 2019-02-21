@@ -24,7 +24,8 @@ script:
   - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
   - cd microting/eform-angular-frontend
   - cd eform-client && npm install
-  - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
+  - /home/travis/build/microting/eform-angular-trashinspection-plugin/testinginstallpn.sh
+  - cat src/app/plugins/plugins.routing.ts
   - npm start &
   - sleep 40
   - dotnet run --project ../eFormAPI/eFormAPI.Web/eFormAPI.Web.csproj > dotnet_log 2>&1 &
