@@ -15,6 +15,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using System.Globalization;
+using eFormData;
 
 namespace TrashInspection.Pn.Services
 {
@@ -71,6 +72,7 @@ namespace TrashInspection.Pn.Services
 
                 List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel()
                 {
+                    Id = x.Id,
                     Date = x.Date,
                     EakCode = x.Eak_Code,
                     InstallationId = x.InstallationId,
@@ -105,6 +107,7 @@ namespace TrashInspection.Pn.Services
             {
                 var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
                 {
+                    Id = x.Id,
                     Date = x.Date,
                     EakCode = x.Eak_Code,
                     InstallationId = x.InstallationId,
@@ -174,7 +177,9 @@ namespace TrashInspection.Pn.Services
                             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
                             mainElement.StartDate = DateTime.Now.ToUniversalTime();
                             mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
-                            mainElement.Label = createModel.RegistrationNumber + ", " + createModel.Producer;
+                            mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Producer;
+                            mainElement.EnableQuickSync = true;
+                            mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
                             CDataValue cDataValue = new CDataValue();
                             cDataValue.InderValue = "<b>Vejenr:</b> " + createModel.WeighingNumber + "<br>";
                             cDataValue.InderValue += "<b>Dato:</b> " + createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo) + "<br>";
@@ -182,11 +187,18 @@ namespace TrashInspection.Pn.Services
                             cDataValue.InderValue += "<b>Transportør:</b> " + createModel.Transporter;
                             if (createModel.MustBeInspected)
                             {
-                                cDataValue.InderValue += "<br><b>SKAL INSPICERES</b>";
+                                cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
                             }
                             mainElement.ElementList[0].Description = cDataValue;
                             mainElement.ElementList[0].Label = mainElement.Label;
-                            
+                            DataElement dataElement = (DataElement)mainElement.ElementList[0];
+                            dataElement.DataItemList[0].Label = mainElement.Label;
+                            dataElement.DataItemList[0].Description = cDataValue;
+                            if (createModel.MustBeInspected)
+                            {
+                                dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
+                            }
+
                             string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
                             
                             TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
@@ -206,7 +218,7 @@ namespace TrashInspection.Pn.Services
                         createModel.Update(_dbContext);
                     }
                     
-                    return new OperationResult(true);
+                    return new OperationResult(true, createModel.Id.ToString());
             }
             else
             {
