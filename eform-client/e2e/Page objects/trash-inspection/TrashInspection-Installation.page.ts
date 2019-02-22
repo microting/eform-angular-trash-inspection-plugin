@@ -170,10 +170,14 @@ export default installationPage;
 
 export class InstallationPageRowObject {
   constructor(rowNum) {
-  this.id = $$('#installationId')[rowNum - 1].getText();
-  this.name = $$('#installationName')[rowNum - 1].getText();
-  this.editBtn = $$('#updateInstallationBtn')[rowNum - 1];
-  this.deleteBtn = $$('#deleteInstallationBtn')[rowNum - 1];
+    if ($$('#installationId')[rowNum - 1]) {
+      this.id = $$('#installationId')[rowNum - 1];
+      try {
+        this.name = $$('#installationName')[rowNum - 1].getText();
+      } catch (e) {}
+      this.editBtn = $$('#updateInstallationBtn')[rowNum - 1];
+      this.deleteBtn = $$('#deleteInstallationBtn')[rowNum - 1];
+    }
   }
 
   id;
