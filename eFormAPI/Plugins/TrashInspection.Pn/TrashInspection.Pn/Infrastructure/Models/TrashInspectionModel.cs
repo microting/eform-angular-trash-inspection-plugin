@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -33,6 +34,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public bool MustBeInspected { get; set; }
         public int Status { get; set; }
         public string Segment { get; set; }
+        public bool IsApproved { get; set; }
+        public bool InspectionDone { get; set; }
+        public bool ExtendedInspection { get; set; }
 
 
         public async Task Save(TrashInspectionPnDbContext _dbContext)
@@ -58,6 +62,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.WeighingNumber = WeighingNumber;
             trashInspection.Status = Status;
             trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
+            trashInspection.InspectionDone = InspectionDone;
+            trashInspection.ExtendedInspection = ExtendedInspection;
 
             _dbContext.TrashInspections.Add(trashInspection);
             _dbContext.SaveChanges();
@@ -88,6 +94,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.TrashFraction = TrashFraction;
             trashInspection.WeighingNumber = WeighingNumber;
             trashInspection.Status = Status;
+            trashInspection.InspectionDone = InspectionDone;
+            trashInspection.ExtendedInspection = ExtendedInspection;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -144,6 +152,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionVer.Version = trashInspection.Version;
             trashInspectionVer.WeighingNumber = trashInspection.WeighingNumber;
             trashInspectionVer.WorkflowState = trashInspection.WorkflowState;
+            trashInspectionVer.InspectionDone = trashInspection.InspectionDone;
+            trashInspectionVer.ExtendedInspection = trashInspection.ExtendedInspection;
 //            trashInspectionVer.Status = trashInspection.Status;
 
             trashInspectionVer.TrashInspctionId = trashInspection.Id;
