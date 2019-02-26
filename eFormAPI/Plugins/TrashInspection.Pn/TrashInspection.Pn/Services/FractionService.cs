@@ -60,15 +60,12 @@ namespace TrashInspection.Pn.Services
                         .OrderBy(x => x.Id);
                 }
 
-                if (pnRequestModel.PageSize != null)
-                {
-                    fractionsQuery = fractionsQuery
+                fractionsQuery
+                    = fractionsQuery
+                        .Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
-                        .Take((int)pnRequestModel.PageSize);
-                }
-
-                fractionsQuery = fractionsQuery.Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
-
+                        .Take(pnRequestModel.PageSize);
+                
                 List<FractionModel> fractions = await fractionsQuery.Select(x => new FractionModel()
                 {
                     Id = x.Id,
@@ -77,7 +74,7 @@ namespace TrashInspection.Pn.Services
                     Description = x.Description
                 }).ToListAsync();
 
-                fractionsModel.Total = await _dbContext.Installations.CountAsync();
+                fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
                 fractionsModel.FractionList = fractions;
                 Core _core = _coreHelper.GetCore();
 

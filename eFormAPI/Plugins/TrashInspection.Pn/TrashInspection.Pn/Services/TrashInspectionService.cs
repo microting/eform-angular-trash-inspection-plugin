@@ -65,7 +65,9 @@ namespace TrashInspection.Pn.Services
 
                 if (pnRequestModel.PageSize != null)
                 {
-                    trashInspectionsQuery = trashInspectionsQuery
+                    trashInspectionsQuery
+                        = trashInspectionsQuery
+                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take((int)pnRequestModel.PageSize);
                 }

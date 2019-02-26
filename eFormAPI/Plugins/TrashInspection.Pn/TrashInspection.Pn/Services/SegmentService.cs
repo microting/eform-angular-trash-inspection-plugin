@@ -82,14 +82,15 @@ namespace TrashInspection.Pn.Services
                         .OrderBy(x => x.Id);
                 }
 
-                if (pnRequestModel.PageSize != null)
-                {
-                    segmentQuery = segmentQuery
-                        .Skip(pnRequestModel.Offset)
-                        .Take((int)pnRequestModel.PageSize);
-                }
+              
+                 segmentQuery
+                     = segmentQuery
+                     .Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed)
+                     .Skip(pnRequestModel.Offset)
+                     .Take(pnRequestModel.PageSize);
+                
 
-                segmentQuery = segmentQuery.Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
+                
 
                 List<SegmentModel> segmentModels = await segmentQuery.Select(x => new SegmentModel()
                 {
@@ -99,7 +100,7 @@ namespace TrashInspection.Pn.Services
                     SdkFolderId = x.SdkFolderId
                 }).ToListAsync();
 
-                segmentsModel.Total = await _dbContext.Installations.CountAsync();
+                segmentsModel.Total = await _dbContext.Segments.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
                 segmentsModel.SegmentList = segmentModels;
                 Core _core = _coreHelper.GetCore();
 
