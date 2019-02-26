@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -8,9 +8,16 @@
     <OutputPath>..\..\..\eFormAPI.Web\Plugins\TrashInspection\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\eFormAPI.Web\Plugins\TrashInspection\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\localization.json" />
   </ItemGroup>
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\localization.json" />

@@ -74,7 +74,9 @@ namespace TrashInspection.Pn.Services
                     Id = x.Id,
                     Name = x.Name,
                     eFormId = x.eFormId,
-                    Description = x.Description
+                    Description = x.Description,
+                    LocationCode = x.LocationCode,
+                    ItemNumber = x.ItemNumber
                 }).ToListAsync();
 
                 fractionsModel.Total = await _dbContext.Installations.CountAsync();
@@ -110,7 +112,9 @@ namespace TrashInspection.Pn.Services
                         Id = x.Id,
                         Name = x.Name,
                         eFormId = x.eFormId,
-                        Description = x.Description
+                        Description = x.Description,
+                        LocationCode = x.LocationCode,
+                        ItemNumber = x.ItemNumber
                     })
                     .FirstOrDefaultAsync(x => x.Id == id);
 

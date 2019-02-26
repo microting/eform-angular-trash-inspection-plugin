@@ -25,6 +25,17 @@
                *ngIf="localPageSettings.sort == 'Id' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
+        <th scope="col" class="table-header-sortable" id="itemNumberTableHeader"
+            (click)="sortTable('Item number')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Item number' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Item number'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Item number' && !fractionRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Item number' && fractionRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
         <th scope="col" class="table-header-sortable" id="nameTableHeader"
             (click)="sortTable('Name')">
           <div class="d-flex align-items-center justify-content-center">
@@ -45,6 +56,17 @@
                *ngIf="localPageSettings.sort == 'Description' && !fractionRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'Description' && fractionRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="locationCodeTableHeader"
+            (click)="sortTable('Location code')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Location code' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Location code'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Location code' && !fractionRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Location code' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="eFormTableHeader"
@@ -69,11 +91,17 @@
         <td id="fractionId">
           {{fraction.id}}
         </td>
+        <td id="fractionItemNumber">
+          {{fraction.itemNumber}}
+        </td>
         <td id="fractionName">
           {{fraction.name}}
         </td>
         <td id="fractionDescription">
           {{fraction.description}}
+        </td>
+        <td id="fractionLocationCode">
+          {{fraction.locationCode}}
         </td>
         <td id="fractionSelectedeForm">
           {{fraction.selectedTemplateName}}

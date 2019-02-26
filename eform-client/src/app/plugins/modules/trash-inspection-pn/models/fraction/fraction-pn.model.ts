@@ -9,4 +9,6 @@ export class FractionPnModel {
   description: string;
   eFormId: number;
   selectedTemplateName: string;
+  itemNumber: string;
+  locationCode: string;
 }

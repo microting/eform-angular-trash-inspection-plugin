@@ -11,6 +11,18 @@
               <div class="md-form">
                 <input mdbInputDirective
                        [mdbValidate]="false"
+                       [(ngModel)]="newFractionModel.itemNumber"
+                       type="text" id="createFractionItemNumber"
+                       name="createFractionItemNumber" class="form-control">
+                <label for="createFractionItemNumber">{{'Item number' | translate}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
                        [(ngModel)]="newFractionModel.name"
                        type="text" id="createFractionName"
                        name="createFractionName" class="form-control">
@@ -27,6 +39,18 @@
                        type="text" id="createFractionDescription"
                        name="createFractionDescription" class="form-control">
                 <label for="createFractionDescription">{{'Description' | translate}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
+                <input mdbInputDirective
+                       [mdbValidate]="false"
+                       [(ngModel)]="newFractionModel.locationCode"
+                       type="text" id="createFractionLocationCode"
+                       name="createFractionLocationCode" class="form-control">
+                <label for="createFractionLocationCode">{{'Location code' | translate}}</label>
               </div>
             </div>
           </div>
