@@ -61,22 +61,19 @@ namespace TrashInspection.Pn.Services
                         .OrderBy(x => x.Id);
                 }
 
-                if (pnRequestModel.PageSize != null)
-                {
-                    installationsQuery = installationsQuery
+                installationsQuery
+                    = installationsQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
-                        .Take((int)pnRequestModel.PageSize);
-                }
-
-                installationsQuery = installationsQuery.Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
-
+                        .Take(pnRequestModel.PageSize);
+                
                 List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel()
                 {
                     Id = x.Id,
-                    Name = x.Name,
+                    Name = x.Name
                 }).ToListAsync();
 
-                installationsModel.Total = await _dbContext.Installations.CountAsync();
+                installationsModel.Total = _dbContext.Installations.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 installationsModel.InstallationList = installations;
                 
                 
