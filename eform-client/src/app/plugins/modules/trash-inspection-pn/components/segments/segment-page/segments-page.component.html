@@ -64,25 +64,25 @@
       </tr>
       </thead>
       <tbody id="tableBody">
-      <tr *ngFor="let fraction of segmentsPnModel.segmentList">
-        <td>
-          {{fraction.id}}
+      <tr *ngFor="let segment of segmentsPnModel.segmentList">
+        <td id="segmentId">
+          {{segment.id}}
         </td>
-        <td>
-          {{fraction.name}}
+        <td id="segmentName">
+          {{segment.name}}
         </td>
-        <td>
-          {{fraction.description}}
+        <td id="segmentDescription">
+          {{segment.description}}
         </td>
-        <td>
-          {{fraction.sdkFolderId}}
+        <td id="segmentSDKFolderID">
+          {{segment.sdkFolderId}}
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
             <button id="editSegmentBtn"
               class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Edit Segment' | translate }}"
-                    (click)="showEditSegmentModal(fraction)">
+                    (click)="showEditSegmentModal(segment)">
               <i class="material-icons">
                 edit
               </i>
@@ -90,7 +90,7 @@
             <button id="deleteSegmentBtn"
               class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Segment' | translate }}"
-                    (click)="showDeleteSegmentModal(fraction)">
+                    (click)="showDeleteSegmentModal(segment)">
               <i class="material-icons">
                 delete_forever
               </i>

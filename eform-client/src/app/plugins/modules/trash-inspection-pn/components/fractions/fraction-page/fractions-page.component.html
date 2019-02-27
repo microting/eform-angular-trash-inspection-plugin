@@ -15,7 +15,7 @@
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="idTableHeader"
-            (click)="sortTable('id')">
+            (click)="sortTable('Id')">
           <div class="d-flex align-items-center justify-content-center">
             ID
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Id'">unfold_more</i>
@@ -37,7 +37,7 @@
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="descriptionTableHeader"
-            (click)="sortTable('Name')">
+            (click)="sortTable('Description')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Description' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Description'">unfold_more</i>

@@ -81,8 +81,7 @@ export class SegmentsPageComponent implements OnInit {
       if (e === 0) {
         this.segmentPnRequestModel.pageIndex = 0;
       } else {
-        this.segmentPnRequestModel.pageIndex
-          = Math.floor(e / this.segmentPnRequestModel.pageSize);
+        this.segmentPnRequestModel.pageIndex = Math.floor(e / this.segmentPnRequestModel.pageSize);
       }
       this.getAllSegments();
     }

@@ -17,7 +17,7 @@ export const TrashInspectionPnLocalSettings = [
       name: 'Fractions',
       settings: new PageSettingsModel({
         pageSize: 10,
-        sort: 'Id',
+        sort: '',
         isSortDsc: false
       })
     }
