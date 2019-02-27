@@ -338,60 +338,64 @@ namespace TrashInspection.Pn.Services
         public async Task<OperationResult> DeleteTrashInspection(string weighingNumber, string token)
         {
             TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
+            
             if (trashInspectionSettings == null)
             {
-                return new OperationResult(false);
+                return new OperationResult(false, "Unauthorized Access");
             }
-            else
+
+            if (token != trashInspectionSettings.Value)
             {
-                if (token == trashInspectionSettings.Value && weighingNumber != null)
-                {
-//                    Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection =
-//                        _dbContext.TrashInspections.SingleOrDefault(x => x.WeighingNumber == weighingNumber);
-                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
-                        {
-                            Id = x.Id,
-                            Date = x.Date,
-                            EakCode = x.Eak_Code,
-                            InstallationId = x.InstallationId,
-                            MustBeInspected = x.MustBeInspected,
-                            Producer = x.Producer,
-                            RegistrationNumber = x.RegistrationNumber,
-                            Time = x.Time,
-                            Transporter = x.Transporter,
-                            TrashFraction = x.TrashFraction,
-                            WeighingNumber = x.WeighingNumber,
-                            Status = x.Status,
-                            Version = x.Version,
-                            WorkflowState = x.WorkflowState,
-                            ExtendedInspection = x.ExtendedInspection,
-                            InspectionDone = x.InspectionDone
-                        })
-                        .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
-
-                    if (trashInspection != null)
-                    {
-                        Core core = _coreHelper.GetCore();
-
-                        List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases.Where(x =>
-                            x.TrashInspectionId == trashInspection.Id).ToList();
-                    
-                        foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
-                        {
-                            Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
-                            string microtingUId = caseDto.MicrotingUId;
-                            core.CaseDelete(microtingUId);
-                        }
-
-                        trashInspection.InspectionDone = true;
-                        trashInspection.Update(_dbContext);
-                    }
-                    
-                }
+                return new OperationResult(false, "Unauthorized Access");
             }
-            return new OperationResult(true);
+            
+            if (weighingNumber != null)
+            {
+                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                    {
+                        Id = x.Id,
+                        Date = x.Date,
+                        EakCode = x.Eak_Code,
+                        InstallationId = x.InstallationId,
+                        MustBeInspected = x.MustBeInspected,
+                        Producer = x.Producer,
+                        RegistrationNumber = x.RegistrationNumber,
+                        Time = x.Time,
+                        Transporter = x.Transporter,
+                        TrashFraction = x.TrashFraction,
+                        WeighingNumber = x.WeighingNumber,
+                        Status = x.Status,
+                        Version = x.Version,
+                        WorkflowState = x.WorkflowState,
+                        ExtendedInspection = x.ExtendedInspection,
+                        InspectionDone = x.InspectionDone
+                    })
+                    .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
 
+                if (trashInspection != null)
+                {
+                    Core core = _coreHelper.GetCore();
+
+                    List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases.Where(x =>
+                        x.TrashInspectionId == trashInspection.Id).ToList();
+                    
+                    foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
+                    {
+                        Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
+                        string microtingUId = caseDto.MicrotingUId;
+                        core.CaseDelete(microtingUId);
+                    }
+
+                    trashInspection.InspectionDone = true;
+                    trashInspection.Update(_dbContext);
+
+                    return new OperationResult(true);
+                }               
+
+                return new OperationResult(false);                                    
+            }
+
+            return new OperationResult(false);
         }
-
     }
 }
