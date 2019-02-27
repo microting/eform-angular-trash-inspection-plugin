@@ -7,6 +7,9 @@ export class TrashInspectionInstallationPage extends Page {
   public get rowNum(): number {
     return $$('#tableBody > tr').length;
   }
+  // public get paginationElement() {
+  //   return browser.element(`//*[contains`)
+  // }
   public trashInspectionDropDown() {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
@@ -57,6 +60,9 @@ export class TrashInspectionInstallationPage extends Page {
   }
   public get installationDeleteCancelBtn() {
     return browser.element('#installationDeleteCancelBtn');
+  }
+  public get page2Object() {
+    return browser.element(`//*[div]//*[contains(@class, 'd-flex justify-content-center')]//*[ul]//*[contains(@class, 'page-item')]//*[contains(text(), '2')]`);
   }
   goToInstallationsPage() {
     this.trashInspectionDropDown();
@@ -163,6 +169,9 @@ export class TrashInspectionInstallationPage extends Page {
   getFirstRowObject(): InstallationPageRowObject {
     return new InstallationPageRowObject(1);
   }
+  getInstallation(num): InstallationPageRowObject {
+    return new InstallationPageRowObject(num);
+  }
 }
 
 const installationPage = new TrashInspectionInstallationPage();
@@ -170,14 +179,10 @@ export default installationPage;
 
 export class InstallationPageRowObject {
   constructor(rowNum) {
-    if ($$('#installationId')[rowNum - 1]) {
-      this.id = $$('#installationId')[rowNum - 1];
-      try {
-        this.name = $$('#installationName')[rowNum - 1].getText();
-      } catch (e) {}
-      this.editBtn = $$('#updateInstallationBtn')[rowNum - 1];
-      this.deleteBtn = $$('#deleteInstallationBtn')[rowNum - 1];
-    }
+  this.id = $$('#installationId')[rowNum - 1].getText();
+  this.name = $$('#installationName')[rowNum - 1].getText();
+  this.editBtn = $$('#updateInstallationBtn')[rowNum - 1];
+  this.deleteBtn = $$('#deleteInstallationBtn')[rowNum - 1];
   }
 
   id;

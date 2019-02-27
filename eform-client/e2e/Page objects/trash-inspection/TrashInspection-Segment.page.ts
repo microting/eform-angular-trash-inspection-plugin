@@ -73,6 +73,33 @@ export class TrashInspectionSegemtnsPage extends Page {
     this.segmentnBtn.click();
     browser.pause(8000);
   }
+  createSegment(name: string, description?: any, sdkFolderId?: any) {
+    this.createSegmentBtn.click();
+    this.segmentCreateNameBox.addValue(name);
+    browser.pause(1000);
+    if (description != null) {
+      this.segmentCreateDescriptionBox.addValue(description);
+    }
+    browser.pause(1000);
+    if (sdkFolderId != null) {
+      this.segmentCreateSDKFolderId.addValue(sdkFolderId);
+    }
+    browser.pause(1000);
+    this.segmentCreateSaveBtn.click();
+    browser.pause(8000);
+  }
+  deleteSegment() {
+    const segmentForDelete = this.getFirstRowObject();
+    segmentForDelete.deleteBtn.click();
+    browser.pause(4000);
+    this.segmentDeleteDeleteBtn.click();
+    browser.pause(8000);
+    browser.refresh();
+    browser.pause(10000);
+  }
+  getFirstRowObject(): SegmentsRowObject {
+    return new SegmentsRowObject(1);
+  }
 }
 
 const segmentsPage = new TrashInspectionSegemtnsPage();
@@ -80,17 +107,25 @@ export default segmentsPage;
 
 export class SegmentsRowObject {
   constructor(rowNum) {
-    this.id = $$('#idTableHeader')[rowNum - 1].getText();
-    this.name = $$('#nameTableHeader')[rowNum - 1].getText();
-    this.description = $$('#descriptionTableHeader')[rowNum - 1].getText();
-    this.sdkFolderId = $$('#sdkFolderIdTableHeader')[rowNum - 1].getText();
-    this.editBtn = $$('#editSegmentBtn')[rowNum - 1];
-    this.deleteBtn = $$('#deleteSegmentBtn')[rowNum - 1];
+    if ($$('#segmentId')[rowNum - 1]) {
+      this.id = +$$('#segmentId')[rowNum - 1];
+      try {
+        this.name = $$('#segmentName')[rowNum - 1].getText();
+      } catch (e) {}
+      try {
+        this.description = $$('#segmentDescription')[rowNum - 1].getText();
+      } catch (e) {}
+      try {
+        this.sdkFolderId = $$('#segmentSDKFolderID')[rowNum - 1].getText();
+      } catch (e) {}
+      this.editBtn = $$('#editSegmentBtn')[rowNum - 1];
+      this.deleteBtn = $$('#deleteSegmentBtn')[rowNum - 1];
+    }
   }
   id;
   name;
   description;
   sdkFolderId;
   editBtn;
-  deleteBtn
+  deleteBtn;
 }
