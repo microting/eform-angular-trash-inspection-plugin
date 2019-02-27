@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -166,7 +166,22 @@ namespace TrashInspection.Pn.Services
                     int eFormId = 0;
                     var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
                         {
-                            Id = x.Id
+                            Id = x.Id,
+                            Date = x.Date,
+                            EakCode = x.Eak_Code,
+                            InstallationId = x.InstallationId,
+                            MustBeInspected = x.MustBeInspected,
+                            Producer = x.Producer,
+                            RegistrationNumber = x.RegistrationNumber,
+                            Time = x.Time,
+                            Transporter = x.Transporter,
+                            TrashFraction = x.TrashFraction,
+                            WeighingNumber = x.WeighingNumber,
+                            Status = x.Status,
+                            Version = x.Version,
+                            WorkflowState = x.WorkflowState,
+                            ExtendedInspection = x.ExtendedInspection,
+                            InspectionDone = x.InspectionDone
                         })
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
                     
