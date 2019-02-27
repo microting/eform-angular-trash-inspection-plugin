@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,16 +32,33 @@ namespace TrashInspection.Pn.Conrtrollers
         {
             return await _trashInspectionService.GetAllTrashInspections(requestModel);
         }
-                        
+
         [HttpGet]
         [AllowAnonymous]
         [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}", Name = "token")]
         public async Task<IActionResult> DownloadEFormPdf(string weighingNumber, string token)
         {
-            string filePath =  await _trashInspectionService.DownloadEFormPdf(weighingNumber, token);
-            
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            return File(fileStream, "application/pdf", Path.GetFileName(filePath));
+            try
+            {
+                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token);
+                
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return NotFound();
+                }
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                return File(fileStream, "application/pdf", Path.GetFileName(filePath));
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch 
+            {
+                return BadRequest();
+                
+            }
+
         }
 
         [HttpGet]

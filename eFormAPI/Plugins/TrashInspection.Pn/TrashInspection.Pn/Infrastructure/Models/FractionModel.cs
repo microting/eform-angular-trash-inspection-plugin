@@ -23,6 +23,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int eFormId { get; set; }
         public string SelectedTemplateName { get; set; }
         public string Description { get; set; }
+        public string ItemNumber { get; set; }
+        public string LocationCode { get; set; }
 
         public async Task Save(TrashInspectionPnDbContext _dbContext)
         {
@@ -35,6 +37,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.UpdatedByUserId = UpdatedByUserId;
             fraction.Version = Version;
             fraction.eFormId = eFormId;
+            fraction.ItemNumber = ItemNumber;
+            fraction.LocationCode = LocationCode;
             fraction.WorkflowState = Constants.WorkflowStates.Created;
             
             _dbContext.Fractions.Add(fraction);
@@ -58,6 +62,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.Name = Name;
             fraction.Description = Description;
             fraction.eFormId = eFormId;
+            fraction.LocationCode = LocationCode;
+            fraction.ItemNumber = ItemNumber;
 
             if (_dbContext.ChangeTracker.HasChanges())
             {
@@ -106,6 +112,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fractionVer.UpdatedByUserId = fraction.UpdatedByUserId;
             fractionVer.WorkflowState = fraction.WorkflowState;
             fractionVer.eFormId = fraction.eFormId;
+            fractionVer.ItemNumber = fraction.ItemNumber;
+            fractionVer.LocationCode = fraction.LocationCode;
 
             return fractionVer;
         }

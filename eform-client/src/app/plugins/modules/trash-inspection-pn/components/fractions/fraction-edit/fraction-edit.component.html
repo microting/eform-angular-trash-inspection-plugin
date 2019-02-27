@@ -12,6 +12,18 @@
                 <div class="md-form">
                   <input mdbInputDirective
                          [mdbValidate]="false"
+                         [(ngModel)]="selectedFractionModel.itemNumber"
+                         type="text" id="updateFractionItemNumber"
+                         name="updateFractionItemNumber" class="form-control">
+                  <label for="updateFractionItemNumber">{{'Item number' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <input mdbInputDirective
+                         [mdbValidate]="false"
                          [(ngModel)]="selectedFractionModel.name"
                          type="text" id="updateFractionName"
                          name="updateFractionName" class="form-control">
@@ -26,8 +38,20 @@
                          [mdbValidate]="false"
                          [(ngModel)]="selectedFractionModel.description"
                          type="text" id="editFractionDescription"
-                         name="createFractionDescription" class="form-control">
+                         name="editFractionDescription" class="form-control">
                   <label for="editFractionDescription">{{'Description' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-12 col-xs-12">
+                <div class="md-form">
+                  <input mdbInputDirective
+                         [mdbValidate]="false"
+                         [(ngModel)]="selectedFractionModel.locationCode"
+                         type="text" id="editFractionLocationCode"
+                         name="editFractionLocationCode" class="form-control">
+                  <label for="editFractionLocationCode">{{'Location code' | translate}}</label>
                 </div>
               </div>
             </div>
