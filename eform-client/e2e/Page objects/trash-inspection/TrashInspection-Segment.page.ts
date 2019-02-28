@@ -75,6 +75,7 @@ export class TrashInspectionSegemtnsPage extends Page {
   }
   createSegment(name: string, description?: any, sdkFolderId?: any) {
     this.createSegmentBtn.click();
+    browser.pause(10000);
     this.segmentCreateNameBox.addValue(name);
     browser.pause(1000);
     if (description != null) {
@@ -88,6 +89,25 @@ export class TrashInspectionSegemtnsPage extends Page {
     this.segmentCreateSaveBtn.click();
     browser.pause(8000);
   }
+  editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
+    this.editSegmentBtn.click();
+    browser.pause(10000);
+    this.segmentUpdateNameBox.clearElement();
+    this.segmentUpdateNameBox.addValue(newName);
+    browser.pause(1000);
+    if (newDescription != null) {
+      this.segmentUpdateDesciptionBox.clearElement();
+      this.segmentUpdateDesciptionBox.addValue(newDescription);
+    }
+    browser.pause(1000);
+    if (newSDKFolderId != null) {
+      this.segmentUpdateSDKFolderId.clearElement();
+      this.segmentUpdateSDKFolderId.addValue(newSDKFolderId);
+    }
+    browser.pause(1000);
+    this.segmentUpdateSaveBtn.click();
+    browser.pause(8000);
+  }
   deleteSegment() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
@@ -99,6 +119,9 @@ export class TrashInspectionSegemtnsPage extends Page {
   }
   getFirstRowObject(): SegmentsRowObject {
     return new SegmentsRowObject(1);
+  }
+  getRowObject(rowNum): SegmentsRowObject {
+    return new SegmentsRowObject(rowNum);
   }
 }
 

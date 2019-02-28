@@ -10,6 +10,7 @@ describe('Trash Inspection Plugin - Installation', function () {
   });
   it('Should delete installation.', function () {
     installationPage.goToInstallationsPage();
+    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
     installationPage.deleteInstallation_Deletes();
     const installation = installationPage.getFirstRowObject();
     expect(installation.id === 0);
