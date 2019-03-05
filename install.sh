@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /var/www/microting/eform-angular-trashinspection-plugin
 dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
 dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln --runtime linux-x64 --configuration Release
 cd ../..
