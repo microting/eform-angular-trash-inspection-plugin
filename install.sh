@@ -16,4 +16,4 @@ su ubuntu -c \
 "npm run build"
 echo "Recompiling angular done"
 
-export plugin_db_name="EFormTrashInspectionPn"
+
