@@ -13,11 +13,10 @@ using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using System.Globalization;
 using System.IO;
 using eFormData;
-using Microsoft.AspNetCore.Mvc;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 
 namespace TrashInspection.Pn.Services
 {
@@ -201,7 +200,7 @@ namespace TrashInspection.Pn.Services
                     {
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetHttpServerAddress()}/" + "api/template-files/get-image/");
+                            $"{core.GetHttpServerAddress()}/" + "api/template-files/get-image/"); // TODO core.GetHttpServerAddress()
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();

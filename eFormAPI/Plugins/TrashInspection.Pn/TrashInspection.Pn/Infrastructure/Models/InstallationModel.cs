@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormShared;
+using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class InstallationModel : IModel
+    public class InstallationModel : IDataAccessObject<TrashInspectionPnDbContext>
     {
         public int Id { get; set; }
         public DateTime? CreatedAt { get; set; }
@@ -42,9 +43,15 @@ namespace TrashInspection.Pn.Infrastructure.Models
             _dbContext.SaveChanges();
             Id = installation.Id;
         }
-        public async Task Update(TrashInspectionPnDbContext _dbContext)
+
+        public void Create(TrashInspectionPnDbContext dbContext)
         {
-            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
+            throw new NotImplementedException();
+        }
+
+        public void Update(TrashInspectionPnDbContext dbContext)
+        {
+            Installation installation = dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
             if( installation == null)
             {
@@ -52,19 +59,19 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             installation.Name = Name;
 
-            if (_dbContext.ChangeTracker.HasChanges())
+            if (dbContext.ChangeTracker.HasChanges())
             {
                 installation.UpdatedAt = DateTime.Now;
                 installation.UpdatedByUserId = UpdatedByUserId;
                 installation.Version += 1;
 
-                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();            }
+                dbContext.InstallationVersions.Add(MapInstallationVersion(dbContext, installation));
+                dbContext.SaveChanges();            }
 
         }
-        public async Task Delete(TrashInspectionPnDbContext _dbContext)
+        public void Delete(TrashInspectionPnDbContext dbContext)
         {
-            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
+            Installation installation = dbContext.Installations.FirstOrDefault(x => x.Id == Id);
 
             if (installation == null)
             {
@@ -72,14 +79,14 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             installation.WorkflowState = eFormShared.Constants.WorkflowStates.Removed;
 
-            if (_dbContext.ChangeTracker.HasChanges())
+            if (dbContext.ChangeTracker.HasChanges())
             {
                 installation.UpdatedAt = DateTime.Now;
                 installation.UpdatedByUserId = UpdatedByUserId;
                 installation.Version += 1;
                 //_dbContext.Installations.Remove(installation);
-                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();
+                dbContext.InstallationVersions.Add(MapInstallationVersion(dbContext, installation));
+                dbContext.SaveChanges();
             }
 
         }

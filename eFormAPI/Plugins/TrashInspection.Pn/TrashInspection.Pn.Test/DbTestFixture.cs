@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 
 namespace TrashInspection.Pn.Test
 {

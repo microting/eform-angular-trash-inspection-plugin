@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 
 namespace TrashInspection.Pn
 {
@@ -33,6 +33,10 @@ namespace TrashInspection.Pn
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
+        }
+
+        public void AddPluginConfig(IConfigurationBuilder builder, string connectionString)
+        {
         }
 
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
@@ -117,6 +121,10 @@ namespace TrashInspection.Pn
         public void SeedDatabase(string connectionString)
         {
 
+        }
+
+        public void ConfigureOptionsServices(IServiceCollection services, IConfiguration configuration)
+        {
         }
     }
 }

@@ -132,7 +132,7 @@ namespace TrashInspection.Pn.Test
             trashInspectionModel.TrashFraction = trashInspection.TrashFraction;
             trashInspectionModel.WeighingNumber = trashInspection.WeighingNumber;
 
-            await trashInspectionModel.Update(DbContext);
+             trashInspectionModel.Update(DbContext);
 
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection dbTrashInspection = DbContext.TrashInspections.AsNoTracking().First();
             List<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionList = DbContext.TrashInspections.AsNoTracking().ToList();
@@ -191,7 +191,7 @@ namespace TrashInspection.Pn.Test
             trashInspectionModel.TrashFraction = trashInspection.TrashFraction;
             trashInspectionModel.WeighingNumber = trashInspection.WeighingNumber;
 
-            await trashInspectionModel.Update(DbContext);
+             trashInspectionModel.Update(DbContext);
 
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection dbTrashInspection = DbContext.TrashInspections.AsNoTracking().First();
             List<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionList = DbContext.TrashInspections.AsNoTracking().ToList();
@@ -250,7 +250,7 @@ namespace TrashInspection.Pn.Test
             trashInspectionModel.TrashFraction = trashInspection.TrashFraction;
             trashInspectionModel.WeighingNumber = trashInspection.WeighingNumber;
 
-            await trashInspectionModel.Delete(DbContext);
+             trashInspectionModel.Delete(DbContext);
 
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection dbTrashInspection = DbContext.TrashInspections.AsNoTracking().First();
             List<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionList = DbContext.TrashInspections.AsNoTracking().ToList();
@@ -310,7 +310,7 @@ namespace TrashInspection.Pn.Test
             trashInspectionModel.TrashFraction = trashInspection.TrashFraction;
             trashInspectionModel.WeighingNumber = trashInspection.WeighingNumber;
 
-            await trashInspectionModel.Delete(DbContext);
+             trashInspectionModel.Delete(DbContext);
 
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection dbTrashInspection = DbContext.TrashInspections.AsNoTracking().First();
             List<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionList = DbContext.TrashInspections.AsNoTracking().ToList();

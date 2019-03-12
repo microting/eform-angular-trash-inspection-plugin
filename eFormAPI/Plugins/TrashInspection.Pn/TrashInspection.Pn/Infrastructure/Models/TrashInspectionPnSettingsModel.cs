@@ -4,29 +4,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class TrashInspectionPnSettingsModel : IModel
+    public class TrashInspectionPnSettingsModel : IDataAccessObject<TrashInspectionPnDbContext>
     {
         public List<TrashInspectionPnSettingModel> trashInspectionSettingsList { get; set; }
-        
-        public Task Save(TrashInspectionPnDbContext _dbcontext)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task Update(TrashInspectionPnDbContext _dbcontext)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task Delete(TrashInspectionPnDbContext _dbcontext)
-        {
-            throw new System.NotImplementedException();
-        }
         
         public static bool SettingCreateDefaults(TrashInspectionPnDbContext _dbcontext)
         {
@@ -161,6 +147,21 @@ namespace TrashInspection.Pn.Infrastructure.Models
             CallbackCredentialUserName,
             CallbackCredentialPassword,
             CallbackCredentialAuthType
+        }
+
+        public void Create(TrashInspectionPnDbContext dbContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(TrashInspectionPnDbContext dbContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(TrashInspectionPnDbContext dbContext)
+        {
+            throw new NotImplementedException();
         }
     }
 }
