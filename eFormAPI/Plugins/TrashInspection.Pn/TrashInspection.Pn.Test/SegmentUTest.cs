@@ -62,7 +62,7 @@ namespace TrashInspection.Pn.Test
             segmentModel.SdkFolderId = rnd.Next(1, 255);
             segmentModel.Id = segment.Id;
             
-            await segmentModel.Update(DbContext);
+             segmentModel.Update(DbContext);
             
             Segment dbSegment = DbContext.Segments.AsNoTracking().First();
             List<Segment> segmentList = DbContext.Segments.AsNoTracking().ToList();
@@ -101,7 +101,7 @@ namespace TrashInspection.Pn.Test
             segmentModel.SdkFolderId = segment.SdkFolderId;
             segmentModel.Id = segment.Id;
             
-            await segmentModel.Delete(DbContext);
+             segmentModel.Delete(DbContext);
             
             Segment dbSegment = DbContext.Segments.AsNoTracking().First();
             List<Segment> segmentList = DbContext.Segments.AsNoTracking().ToList();

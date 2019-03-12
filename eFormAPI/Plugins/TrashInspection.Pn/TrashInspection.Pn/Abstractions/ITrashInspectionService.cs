@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using eFormData;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 namespace TrashInspection.Pn.Abstractions

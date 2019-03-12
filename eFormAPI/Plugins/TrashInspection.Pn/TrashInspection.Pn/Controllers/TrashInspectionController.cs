@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using eFormData;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
-using Microsoft.AspNetCore.Mvc;
-using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
-using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
-namespace TrashInspection.Pn.Conrtrollers
+namespace TrashInspection.Pn.Controllers
 {
     public class TrashInspectionController : Controller
     {
         private readonly ITrashInspectionService _trashInspectionService;
-        private readonly TrashInspectionPnDbContext _dbContext;
 
         public TrashInspectionController(ITrashInspectionService trashInspectionService)
         {
