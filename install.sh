@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -d "/var/www/microting/eform-angular-trashinspection-plugin" ]; then
+if [ ! -d "/var/www/microting/eform-angular-trashinspection-plugin" ]; then
   cd /var/www/microting
   su ubuntu -c \
   "git clone git@github.com:microting/eform-angular-trashinspection-plugin.git"
