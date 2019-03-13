@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -d "/var/www/microting/eform-angular-trashinspection-plugin" ]; then
+  cd /var/www/microting
+  su ubuntu -c \
+  "git clone git@github.com:microting/eform-angular-trashinspection-plugin.git"
+fi
+
 cd /var/www/microting/eform-angular-trashinspection-plugin
 dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
 dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln --runtime linux-x64 --configuration Release
