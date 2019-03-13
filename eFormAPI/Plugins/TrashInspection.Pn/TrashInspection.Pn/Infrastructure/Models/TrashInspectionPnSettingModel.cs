@@ -23,7 +23,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string Name { get; set; }
 
 
-        public async Task Save(TrashInspectionPnDbContext db—ontext)
+        public async Task Save(TrashInspectionPnDbContext dbContext)
         {
             
             TrashInspectionPnSetting trashInspectionPnSetting = new TrashInspectionPnSetting();
@@ -39,11 +39,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionPnSetting.WorkflowState = Constants.WorkflowStates.Created;
 
             
-            db—ontext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
-            db—ontext.SaveChanges();
+            dbContext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
+            dbContext.SaveChanges();
 
-            db—ontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(db—ontext, trashInspectionPnSetting));
-            db—ontext.SaveChanges();
+            dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
+            dbContext.SaveChanges();
         }
 
         public void Create(TrashInspectionPnDbContext dbContext)
@@ -51,10 +51,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             throw new NotImplementedException();
         }
 
-        public void Update(TrashInspectionPnDbContext db—ontext)
+        public void Update(TrashInspectionPnDbContext dbContext)
         {
             
-            TrashInspectionPnSetting trashInspectionPnSetting = db—ontext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
+            TrashInspectionPnSetting trashInspectionPnSetting = dbContext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
 
             if( trashInspectionPnSetting == null)
             {
@@ -62,22 +62,22 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspectionPnSetting.Value = Value;
 
-            if (db—ontext.ChangeTracker.HasChanges())
+            if (dbContext.ChangeTracker.HasChanges())
             {
                 trashInspectionPnSetting.UpdatedAt = DateTime.Now;
                 trashInspectionPnSetting.UpdatedByUserId = UpdatedByUserId;
                 trashInspectionPnSetting.Version += 1;
 
-                db—ontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(db—ontext, trashInspectionPnSetting));
-                db—ontext.SaveChanges();
+                dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
+                dbContext.SaveChanges();
             }
 
         }
 
-        public void Delete(TrashInspectionPnDbContext db—ontext)
+        public void Delete(TrashInspectionPnDbContext dbContext)
         {
 
-            TrashInspectionPnSetting trashInspectionPnSetting = db—ontext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
+            TrashInspectionPnSetting trashInspectionPnSetting = dbContext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
 
             if (trashInspectionPnSetting == null)
             {
@@ -85,13 +85,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspectionPnSetting.WorkflowState = Constants.WorkflowStates.Removed;
 
-            if (db—ontext.ChangeTracker.HasChanges())
+            if (dbContext.ChangeTracker.HasChanges())
             {
                 trashInspectionPnSetting.UpdatedAt = DateTime.Now;
                 trashInspectionPnSetting.UpdatedByUserId = UpdatedByUserId;
                 trashInspectionPnSetting.Version += 1;
-                db—ontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(db—ontext, trashInspectionPnSetting));
-                db—ontext.SaveChanges();
+                dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
+                dbContext.SaveChanges();
             }
 
         }

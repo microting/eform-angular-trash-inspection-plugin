@@ -200,7 +200,8 @@ namespace TrashInspection.Pn.Services
                     {
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/"); // TODO core.GetHttpServerAddress()
+                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/");
+
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
