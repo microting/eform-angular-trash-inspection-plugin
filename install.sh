@@ -7,17 +7,28 @@ if [ ! -d "/var/www/microting/eform-angular-trashinspection-plugin" ]; then
 fi
 
 cd /var/www/microting/eform-angular-trashinspection-plugin
-dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
-dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln --runtime linux-x64 --configuration Release
+su ubuntu -c \
+"dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln"
 
-cp -av /var/www/microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn /var/www/microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
-mkdir -p /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
-cp -av /var/www/microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/TrashInspection
+echo "################## START GITVERSION ##################"
+export GITVERSION=`git describe --abbrev=0 --tags | cut -d "v" -f 2`
+echo $GITVERSION
+echo "################## END GITVERSION ##################"
+su ubuntu -c \
+"dotnet publish eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln -o out /p:Version=$GITVERSION --runtime linux-x64 --configuration Release"
+
+su ubuntu -c \
+"cp -av /var/www/microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn /var/www/microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn"
+su ubuntu -c \
+"mkdir -p /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/"
+su ubuntu -c \
+"cp -av /var/www/microting/eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn/out /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/TrashInspection"
 
 
 echo "Recompile angular"
 cd /var/www/microting/eform-angular-frontend/eform-client
-/var/www/microting/eform-angular-trashinspection-plugin/testinginstallpn.sh
+su ubuntu -c \
+"/var/www/microting/eform-angular-trashinspection-plugin/testinginstallpn.sh"
 su ubuntu -c \
 "npm run build"
 echo "Recompiling angular done"
