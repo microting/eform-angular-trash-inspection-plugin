@@ -56,7 +56,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 {
                     string connectionString = _dbcontext.Database.GetDbConnection().ConnectionString;
 
-                    string dbNameSection = Regex.Match(connectionString, @"(Database=\w*;)").Groups[0].Value;
+                    string dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
+                    //string dbNameSection = Regex.Match(connectionString, @"(Database=\w*;)").Groups[0].Value;
                     string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
                     string sdk = $"Database={dbPrefix}_SDK;";
                     connectionString = connectionString.Replace(dbNameSection, sdk);
