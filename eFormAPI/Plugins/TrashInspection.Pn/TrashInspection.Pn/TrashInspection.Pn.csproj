@@ -29,9 +29,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
-    <PackageReference Include="Microting.eForm" Version="3.0.185" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.118" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.38" />
+    <PackageReference Include="Microting.eForm" Version="3.0.195" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.122" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.40" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
   </ItemGroup>
 

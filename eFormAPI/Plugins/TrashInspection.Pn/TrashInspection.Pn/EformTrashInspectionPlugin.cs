@@ -17,7 +17,7 @@ namespace TrashInspection.Pn
     public class EformTrashInspectionPlugin : IEformPlugin
     {
         public string Name => "Microting Trash Inspection Plugin";
-        public string PluginId => "EFormTrashInspectionPn";
+        public string PluginId => "eform-angular-trashinspection-plugin";
         public string PluginPath => PluginAssembly().Location;
 
         public Assembly PluginAssembly()
