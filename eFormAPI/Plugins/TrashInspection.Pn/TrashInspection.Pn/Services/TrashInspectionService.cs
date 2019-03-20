@@ -251,6 +251,7 @@ namespace TrashInspection.Pn.Services
                     Fraction fraction = await
                         _dbContext.Fractions.FirstOrDefaultAsync(x => x.Name == createModel.TrashFraction);
 
+                    LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
                     {
                         Core core = _coreHelper.GetCore();
@@ -285,7 +286,8 @@ namespace TrashInspection.Pn.Services
                             {
                                 dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
                             }
-
+                            
+                            LogEvent("CreateTrashInspection: Trying to create case");
                             string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
                             
                             TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
@@ -396,6 +398,35 @@ namespace TrashInspection.Pn.Services
             }
 
             return new OperationResult(false);
+        }
+        
+        public void LogEvent(string appendText)
+        {
+            try
+            {                
+                var oldColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("[DBG] " + appendText);
+                Console.ForegroundColor = oldColor;
+            }
+            catch
+            {
+            }
+        }
+
+        public void LogException(string appendText)
+        {
+            try
+            {
+                var oldColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[ERR] " + appendText);
+                Console.ForegroundColor = oldColor;
+            }
+            catch
+            {
+
+            }
         }
     }
 }
