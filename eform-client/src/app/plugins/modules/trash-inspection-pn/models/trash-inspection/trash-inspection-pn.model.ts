@@ -3,6 +3,9 @@ import {Time} from '@angular/common';
 export class TrashInspectionsPnModel {
   total: number;
   trashInspectionList: Array<TrashInspectionPnModel> = [];
+  token: string;
+  numOfElements: number;
+  pageNum: number;
 }
 
 export class TrashInspectionPnModel {

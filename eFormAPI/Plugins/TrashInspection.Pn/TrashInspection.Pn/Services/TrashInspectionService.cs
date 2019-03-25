@@ -97,6 +97,7 @@ namespace TrashInspection.Pn.Services
             }).ToListAsync();
 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
+                trashInspectionsModel.Token = _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
                 trashInspectionsModel.TrashInspectionList = trashInspections;
 
                 return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);
@@ -157,6 +158,7 @@ namespace TrashInspection.Pn.Services
         {
             TrashInspectionPnSetting trashInspectionSettings =
                 await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
+            LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
             if (token == trashInspectionSettings.Value && weighingNumber != null)
             {
                 try
@@ -188,6 +190,7 @@ namespace TrashInspection.Pn.Services
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
 
                     Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
+                    LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
                     
                     string xmlContent = new XElement("TrashInspection", 
                         new XElement("EakCode", trashInspection.EakCode), 
@@ -198,6 +201,7 @@ namespace TrashInspection.Pn.Services
                         new XElement("Segment", trashInspection.Segment),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
+                    LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
                     
                     foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
@@ -209,12 +213,13 @@ namespace TrashInspection.Pn.Services
                             caseId = (int)caseDto.CaseId;
                             eFormId = caseDto.CheckListId;
                         }
-                        }
+                    }
 
                     if (caseId != 0 && eFormId != 0)
                     {
 
-                        
+
+                        LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
                             $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", "pdf", xmlContent);
@@ -233,6 +238,7 @@ namespace TrashInspection.Pn.Services
                 }
                 catch (Exception exception)
                 {
+                    LogException($"DownloadEFormPdf: We got the following exception: {exception.Message}");
                     throw new Exception("Something went wrong!", exception);
                 }
             }

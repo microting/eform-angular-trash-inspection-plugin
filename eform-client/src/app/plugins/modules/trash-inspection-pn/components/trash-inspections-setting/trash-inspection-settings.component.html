@@ -112,6 +112,15 @@
               <label for="callbackCredentialAuthType">{{'CallbackCredentialAuthType' | translate}}</label>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <input mdbInputDirective
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[11].value"
+                     type="text" name="extendedInspectioneFormId" #token="ngModel"
+                     id="extendedInspectioneFormId" class="form-control">
+              <label for="extendedInspectioneFormId">{{'Extended inspection eForm' | translate}}</label>
+            </div>
+          </div>
         </div>
 
       </div>
