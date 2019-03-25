@@ -249,7 +249,7 @@ namespace TrashInspection.Pn.Services
                     Installation installation = await
                         _dbContext.Installations.FirstOrDefaultAsync(x => x.Name == createModel.InstallationName);
                     Fraction fraction = await
-                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.Name == createModel.TrashFraction);
+                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.ItemNumber == createModel.TrashFraction);
 
                     LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
