@@ -3,7 +3,7 @@
 if [ ! -d "/var/www/microting/eform-angular-trashinspection-plugin" ]; then
   cd /var/www/microting
   su ubuntu -c \
-  "git clone https://github.com/microting/eform-angular-trashinspection-plugin.git"
+  "git clone https://github.com/microting/eform-angular-trashinspection-plugin.git -b stable"
 fi
 
 cd /var/www/microting/eform-angular-trashinspection-plugin
