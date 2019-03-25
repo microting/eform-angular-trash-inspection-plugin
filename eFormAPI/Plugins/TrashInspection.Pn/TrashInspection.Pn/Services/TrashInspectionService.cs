@@ -190,6 +190,10 @@ namespace TrashInspection.Pn.Services
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
 
                     Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
+                    if (fraction == null)
+                    {
+                        fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Name == trashInspection.TrashFraction);
+                    }
                     LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
                     
                     string xmlContent = new XElement("TrashInspection", 
