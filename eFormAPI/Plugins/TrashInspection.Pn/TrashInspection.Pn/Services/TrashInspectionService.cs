@@ -194,6 +194,8 @@ namespace TrashInspection.Pn.Services
                         new XElement("Producer", trashInspection.Producer), 
                         new XElement("RegistrationNumber", trashInspection.RegistrationNumber), 
                         new XElement("Transporter", trashInspection.Transporter), 
+                        new XElement("WeighingNumber", trashInspection.WeighingNumber),
+                        new XElement("Segment", trashInspection.Segment),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
                     
