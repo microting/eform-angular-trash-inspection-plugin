@@ -16,6 +16,8 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using System.Globalization;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
 using eFormData;
 using Microsoft.AspNetCore.Mvc;
 
@@ -184,6 +186,16 @@ namespace TrashInspection.Pn.Services
                             InspectionDone = x.InspectionDone
                         })
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
+
+                    Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
+                    
+                    string xmlContent = new XElement("TrashInspection", 
+                        new XElement("EakCode", trashInspection.EakCode), 
+                        new XElement("Producer", trashInspection.Producer), 
+                        new XElement("RegistrationNumber", trashInspection.RegistrationNumber), 
+                        new XElement("Transporter", trashInspection.Transporter), 
+                        new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
+                    ).ToString();
                     
                     foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
@@ -199,9 +211,11 @@ namespace TrashInspection.Pn.Services
 
                     if (caseId != 0 && eFormId != 0)
                     {
+
+                        
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/");
+                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", "pdf", xmlContent);
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
