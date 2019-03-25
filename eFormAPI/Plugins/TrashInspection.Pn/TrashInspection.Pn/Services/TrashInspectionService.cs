@@ -272,7 +272,16 @@ namespace TrashInspection.Pn.Services
                     {
                         Core core = _coreHelper.GetCore();
 
-                        var mainElement = core.TemplateRead(fraction.eFormId);
+                        int eFormId = fraction.eFormId;
+                        
+                        if (createModel.ExtendedInspection)
+                        {
+                            var result = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x =>
+                                x.Name == "ExtendedInspectioneFormId");
+                            eFormId = int.Parse(result.Value);
+                        }
+                        
+                        var mainElement = core.TemplateRead(eFormId);
                         List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
                         CultureInfo cultureInfo = new CultureInfo("de-DE");
                         foreach (InstallationSite installationSite in installationSites)

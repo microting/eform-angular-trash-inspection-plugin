@@ -41,6 +41,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             SettingCreate(_dbcontext, Settings.CallbackCredentialUserName);
             SettingCreate(_dbcontext, Settings.CallbackCredentialPassword);
             SettingCreate(_dbcontext, Settings.CallbackCredentialAuthType);
+            SettingCreate(_dbcontext, Settings.ExtendedInspectioneFormId);
 
             return true;
         }
@@ -80,6 +81,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
                 case Settings.CallbackCredentialUserName: defaultValue = "..."; break;
                 case Settings.CallbackCredentialPassword: defaultValue = "..."; break;
                 case Settings.CallbackCredentialAuthType: defaultValue = "NTLM"; break;
+                case Settings.ExtendedInspectioneFormId: defaultValue = "..."; break;
                 
                 default:
                     throw new IndexOutOfRangeException(name.ToString() + " is not a known/mapped Settings type");
@@ -161,7 +163,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             CallBackCredentialDomain,
             CallbackCredentialUserName,
             CallbackCredentialPassword,
-            CallbackCredentialAuthType
+            CallbackCredentialAuthType,
+            ExtendedInspectioneFormId
         }
     }
 }
