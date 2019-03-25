@@ -247,6 +247,13 @@
                 delete_forever
               </i>
             </button>
+            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+                    mdbTooltip="{{ 'Get PDF' | translate }}"
+                    (click)="downloadPDF(trashInspection)">
+              <i class="material-icons">
+                picture_as_pdf
+              </i>
+            </button>
           </div>
         </td>
       </tr>

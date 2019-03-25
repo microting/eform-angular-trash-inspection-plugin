@@ -83,6 +83,11 @@ export class TrashInspectionsPageComponent implements OnInit {
     this.deleteTrashInspectionModal.show(trashInspection);
   }
 
+  downloadPDF(trashInspection: any) {
+    window.open('/api/trash-inspection-pn/inspection-results/' +
+      trashInspection.weighingNumber + '?token=WH4YajYqNAfdsSbFaYa2gr2BWiRcOv1V&fileType=pdf', '_blank');
+  }
+
   showCreateTrashInspectionModal() {
     this.createTrashInspectionModal.show();
   }
