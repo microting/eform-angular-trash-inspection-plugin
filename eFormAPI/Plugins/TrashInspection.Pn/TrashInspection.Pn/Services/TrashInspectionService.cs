@@ -194,10 +194,16 @@ namespace TrashInspection.Pn.Services
                     {
                         fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Name == trashInspection.TrashFraction);
                     }
-
-                    Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
-                    
                     LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
+
+                    string segmentName = "";
+                    
+                    Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
+                    if (segment != null)
+                    {
+                        segmentName = segment.Name;
+                    }
+                    LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
                     
                     string xmlContent = new XElement("TrashInspection", 
                         new XElement("EakCode", trashInspection.EakCode), 
@@ -205,7 +211,7 @@ namespace TrashInspection.Pn.Services
                         new XElement("RegistrationNumber", trashInspection.RegistrationNumber), 
                         new XElement("Transporter", trashInspection.Transporter), 
                         new XElement("WeighingNumber", trashInspection.WeighingNumber),
-                        new XElement("Segment", segment.Name),
+                        new XElement("Segment", segmentName),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
                     LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
