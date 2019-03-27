@@ -102,11 +102,19 @@ namespace TrashInspection.Pn.Services
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)
                 {
-                    trashInspectionModel.InstallationName = _dbContext.Installations
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.InstallationId).Result.Name;
+                    Installation installation = await _dbContext.Installations
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.InstallationId);
+                    if (installation != null)
+                    {
+                        trashInspectionModel.InstallationName = installation.Name;
+                    }
+                     
                     Fraction fraction = await _dbContext.Fractions
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.FractionId);
-                    trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
+                    if (fraction != null)
+                    {
+                        trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
+                    }                    
                 }
                 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
