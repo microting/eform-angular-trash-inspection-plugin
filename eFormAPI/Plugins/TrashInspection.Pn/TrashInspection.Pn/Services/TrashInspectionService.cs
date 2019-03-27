@@ -185,7 +185,8 @@ namespace TrashInspection.Pn.Services
                             Version = x.Version,
                             WorkflowState = x.WorkflowState,
                             ExtendedInspection = x.ExtendedInspection,
-                            InspectionDone = x.InspectionDone
+                            InspectionDone = x.InspectionDone,
+                            SegmentId = x.SegmentId
                         })
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
 
