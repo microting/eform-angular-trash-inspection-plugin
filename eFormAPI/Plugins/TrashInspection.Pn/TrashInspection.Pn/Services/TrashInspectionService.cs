@@ -87,15 +87,28 @@ namespace TrashInspection.Pn.Services
                     RegistrationNumber = x.RegistrationNumber,
                     Time = x.Time,
                     Transporter = x.Transporter,
-                    TrashFraction = x.TrashFraction,
+//                    TrashFraction = x.TrashFraction,
                     WeighingNumber = x.WeighingNumber,
                     Status = x.Status,
                     Version = x.Version,
                     WorkflowState = x.WorkflowState,
                     ExtendedInspection = x.ExtendedInspection,
-                    InspectionDone = x.InspectionDone
+                    InspectionDone = x.InspectionDone,
+                    FractionId = x.FractionId,
+                    IsApproved = x.IsApproved,
+                    Comment = x.Comment
+//                    InstallationName = 
             }).ToListAsync();
 
+                foreach (TrashInspectionModel trashInspectionModel in trashInspections)
+                {
+                    trashInspectionModel.InstallationName = _dbContext.Installations
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.InstallationId).Result.Name;
+                    Fraction fraction = await _dbContext.Fractions
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.FractionId);
+                    trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
+                }
+                
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
                 trashInspectionsModel.Token = _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
                 trashInspectionsModel.TrashInspectionList = trashInspections;

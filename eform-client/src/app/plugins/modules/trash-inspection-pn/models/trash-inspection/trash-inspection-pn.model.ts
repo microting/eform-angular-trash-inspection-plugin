@@ -19,8 +19,10 @@ export class TrashInspectionPnModel {
   eakCode: number;
   producer: string;
   transporter: string;
-  installationId: number;
+  installationName: string;
   mustBeInspected: boolean;
   relatedAreasIds: Array<number> = [];
   status: number;
+  isApproved: boolean;
+  comment: string;
 }
