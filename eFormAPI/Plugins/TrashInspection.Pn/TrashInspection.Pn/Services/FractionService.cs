@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 
@@ -148,7 +148,7 @@ namespace TrashInspection.Pn.Services
         }
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            updateModel.Update(_dbContext);
+            await updateModel.Update(_dbContext);
             
             return new OperationResult(true);
 
@@ -157,7 +157,7 @@ namespace TrashInspection.Pn.Services
         {
             FractionModel deleteModel = new FractionModel();
             deleteModel.Id = id;
-            deleteModel.Delete(_dbContext);
+            await deleteModel.Delete(_dbContext);
             return new OperationResult(true);
         }
 

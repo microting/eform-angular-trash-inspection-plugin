@@ -55,7 +55,7 @@ namespace TrashInspection.Pn.Test
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
-            installationModel.Update(DbContext);
+           await installationModel.Update(DbContext);
 
             Installation dbInstallation = DbContext.Installations.AsNoTracking().First();
             List<Installation> installationList = DbContext.Installations.AsNoTracking().ToList();
@@ -88,7 +88,7 @@ namespace TrashInspection.Pn.Test
             installationModel.Name = installation.Name;
             installationModel.Id = installation.Id;
 
-             installationModel.Delete(DbContext);
+            await installationModel.Delete(DbContext);
 
             Installation dbInstallation = DbContext.Installations.AsNoTracking().First();
             List<Installation> installationList = DbContext.Installations.AsNoTracking().ToList();

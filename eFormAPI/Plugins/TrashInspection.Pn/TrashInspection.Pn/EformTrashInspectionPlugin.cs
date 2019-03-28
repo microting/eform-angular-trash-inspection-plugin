@@ -9,8 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 
 namespace TrashInspection.Pn
 {
@@ -53,7 +53,7 @@ namespace TrashInspection.Pn
             }
 
             TrashInspectionPnContextFactory contextFactory = new TrashInspectionPnContextFactory();
-            var context = contextFactory.CreateDbContext(new[] { connectionString });
+            var context = contextFactory.CreateDbContext(new[] {connectionString});
             context.Database.Migrate();
 
             // Seed database
@@ -72,7 +72,6 @@ namespace TrashInspection.Pn
             var result = new MenuModel();
             result.LeftMenu.Add(new MenuItemModel()
             {
-
                 Name = localizationService.GetString("TrashInspection"),
                 E2EId = "",
                 Link = "",
@@ -80,14 +79,14 @@ namespace TrashInspection.Pn
                 {
                     new MenuItemModel()
                     {
-                        Name =  localizationService.GetString("TrashInspections"),
+                        Name = localizationService.GetString("TrashInspections"),
                         E2EId = "trash-inspection-pn-trash-inspection",
                         Link = "/plugins/trash-inspection-pn/trash-inspections",
                         Position = 0,
                     },
                     new MenuItemModel()
                     {
-                        Name =  localizationService.GetString("Installations"),
+                        Name = localizationService.GetString("Installations"),
                         E2EId = "trash-inspection-pn-installations",
                         Link = "/plugins/trash-inspection-pn/installations",
                         Position = 1,
@@ -99,7 +98,7 @@ namespace TrashInspection.Pn
                         Link = "/plugins/trash-inspection-pn/fractions",
                         Position = 2,
                     },
-                     new MenuItemModel()
+                    new MenuItemModel()
                     {
                         Name = localizationService.GetString("Settings"),
                         E2EId = "trash-inspection-pn-settings",
@@ -112,7 +111,7 @@ namespace TrashInspection.Pn
                         E2EId = "trash-inspection-pn-segments",
                         Link = "/plugins/trash-inspection-pn/segments",
                         Position = 3,
-                }
+                    }
                 }
             });
             return result;
@@ -120,11 +119,10 @@ namespace TrashInspection.Pn
 
         public void SeedDatabase(string connectionString)
         {
-
         }
 
         public void ConfigureOptionsServices(IServiceCollection services, IConfiguration configuration)
         {
-        }
+       }
     }
 }

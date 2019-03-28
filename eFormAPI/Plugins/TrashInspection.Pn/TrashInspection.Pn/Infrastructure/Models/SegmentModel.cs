@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormShared;
-using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class SegmentModel : IDataAccessObject<TrashInspectionPnDbContext>
+    public class SegmentModel : IModel
     {
         public int Id { get; set; }
         public DateTime? CreatedAt { get; set; }
@@ -45,15 +44,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
             _dbContext.SaveChanges();
         }
 
-        public void Create(TrashInspectionPnDbContext dbContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TrashInspectionPnDbContext dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
             
-            Segment segment = dbContext.Segments.FirstOrDefault(x => x.Id == Id);
+            Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Id == Id);
 
             if (segment == null)
             {
@@ -64,22 +58,22 @@ namespace TrashInspection.Pn.Infrastructure.Models
             segment.Description = Description;
             segment.SdkFolderId = SdkFolderId;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbContext.ChangeTracker.HasChanges())
             {
                 segment.UpdatedAt = DateTime.Now;
                 segment.UpdatedByUserId = UpdatedByUserId;
                 segment.Version += 1;
 
-                dbContext.SegmentVersions.Add(MapSegmentVersion(dbContext, segment));
-                dbContext.SaveChanges();
+                _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
+                _dbContext.SaveChanges();
             }
 
         }
 
-        public void Delete(TrashInspectionPnDbContext dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
         {
             
-            Segment segment = dbContext.Segments.FirstOrDefault(x => x.Id == Id);
+            Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Id == Id);
 
             if (segment == null)
             {
@@ -88,14 +82,14 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             segment.WorkflowState = Constants.WorkflowStates.Removed;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbContext.ChangeTracker.HasChanges())
             {
                 segment.UpdatedAt = DateTime.Now;
                 segment.UpdatedByUserId = UpdatedByUserId;
                 segment.Version += 1;
 
-                dbContext.SegmentVersions.Add(MapSegmentVersion(dbContext, segment));
-                dbContext.SaveChanges();
+                _dbContext.SegmentVersions.Add(MapSegmentVersion(_dbContext, segment));
+                _dbContext.SaveChanges();
             }
 
         }

@@ -1,15 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using eFormShared;
+using System.Linq;
 using System.Threading.Tasks;
-using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class TrashInspectionPnSettingModel : IDataAccessObject<TrashInspectionPnDbContext>
+    public class TrashInspectionPnSettingModel : IModel
     {
         public int Id { get; set; }
         public string Value { get; set; }
@@ -23,7 +22,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string Name { get; set; }
 
 
-        public async Task Save(TrashInspectionPnDbContext dbContext)
+        public async Task Save(TrashInspectionPnDbContext _dbcontext)
         {
             
             TrashInspectionPnSetting trashInspectionPnSetting = new TrashInspectionPnSetting();
@@ -39,22 +38,17 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionPnSetting.WorkflowState = Constants.WorkflowStates.Created;
 
             
-            dbContext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
-            dbContext.SaveChanges();
+            _dbcontext.TrashInspectionPnSettings.Add(trashInspectionPnSetting);
+            _dbcontext.SaveChanges();
 
-            dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
-            dbContext.SaveChanges();
+            _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
+            _dbcontext.SaveChanges();
         }
 
-        public void Create(TrashInspectionPnDbContext dbContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TrashInspectionPnDbContext dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbcontext)
         {
             
-            TrashInspectionPnSetting trashInspectionPnSetting = dbContext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
+            TrashInspectionPnSetting trashInspectionPnSetting = _dbcontext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
 
             if( trashInspectionPnSetting == null)
             {
@@ -62,22 +56,22 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspectionPnSetting.Value = Value;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbcontext.ChangeTracker.HasChanges())
             {
                 trashInspectionPnSetting.UpdatedAt = DateTime.Now;
                 trashInspectionPnSetting.UpdatedByUserId = UpdatedByUserId;
                 trashInspectionPnSetting.Version += 1;
 
-                dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
-                dbContext.SaveChanges();
+                _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
+                _dbcontext.SaveChanges();
             }
 
         }
 
-        public void Delete(TrashInspectionPnDbContext dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbcontext)
         {
 
-            TrashInspectionPnSetting trashInspectionPnSetting = dbContext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
+            TrashInspectionPnSetting trashInspectionPnSetting = _dbcontext.TrashInspectionPnSettings.FirstOrDefault(x => x.Name == Name);
 
             if (trashInspectionPnSetting == null)
             {
@@ -85,13 +79,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
             }
             trashInspectionPnSetting.WorkflowState = Constants.WorkflowStates.Removed;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbcontext.ChangeTracker.HasChanges())
             {
                 trashInspectionPnSetting.UpdatedAt = DateTime.Now;
                 trashInspectionPnSetting.UpdatedByUserId = UpdatedByUserId;
                 trashInspectionPnSetting.Version += 1;
-                dbContext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(dbContext, trashInspectionPnSetting));
-                dbContext.SaveChanges();
+                _dbcontext.TrashInspectionPnSettingVersions.Add(MapTrashInspectionPnSettingVersion(_dbcontext, trashInspectionPnSetting));
+                _dbcontext.SaveChanges();
             }
 
         }
