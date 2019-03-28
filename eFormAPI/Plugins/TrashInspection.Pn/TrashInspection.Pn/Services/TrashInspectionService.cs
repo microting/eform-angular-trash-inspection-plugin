@@ -16,10 +16,8 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using System.Globalization;
 using System.IO;
-using System.Xml;
 using System.Xml.Linq;
 using eFormData;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TrashInspection.Pn.Services
 {
