@@ -1,4 +1,4 @@
-import {FractionPnHeadersModel} from "./fraction-pn-headers.model";
+import {FractionPnHeadersModel} from './fraction-pn-headers.model';
 
 export class FractionPnImportModel {
     importList: string;

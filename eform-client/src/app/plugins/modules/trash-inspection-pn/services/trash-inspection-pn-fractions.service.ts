@@ -45,6 +45,6 @@ export class TrashInspectionPnFractionsService extends BaseService {
     return this.delete(TrashInspectionPnFractionMethods.Fractions + '/' + fractionId);
   }
   importFraction(model: FractionPnImportModel): Observable<OperationResult> {
-    return this.post(TrashInspectionPnFractionMethods.Fractions + '/import')
+    return this.post(TrashInspectionPnFractionMethods.Fractions + '/import', model);
   }
 }

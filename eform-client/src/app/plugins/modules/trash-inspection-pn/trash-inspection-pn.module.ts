@@ -34,6 +34,7 @@ import {
 } from './components';
 import {SegmentCreateComponent, SegmentDeleteComponent, SegmentEditComponent, SegmentsPageComponent} from './components/segments';
 import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from './services/trash-inspection-pn-segments.service';
+import {FractionsPnImportComponent} from './components/fractions/fraction-import/fractions-pn-import.component';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from 
     FractionCreateComponent,
     FractionDeleteComponent,
     FractionEditComponent,
+    FractionsPnImportComponent,
     FractionsPageComponent,
     SegmentCreateComponent,
     SegmentDeleteComponent,

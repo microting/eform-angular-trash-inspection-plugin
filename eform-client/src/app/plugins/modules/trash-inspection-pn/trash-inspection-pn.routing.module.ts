@@ -6,7 +6,8 @@ import {
   TrashInspectionsPageComponent,
   InstallationsPageComponent,
   TrashInspectionSettingsComponent,
-  FractionsPageComponent
+  FractionsPageComponent,
+  FractionsPnImportComponent
 } from './components';
 import {SegmentsPageComponent} from './components/segments';
 
@@ -39,6 +40,11 @@ export const routes: Routes = [
         path: 'segments',
         canActivate: [AdminGuard],
         component: SegmentsPageComponent
+      },
+      {
+        path: 'importfraction',
+        canActivate: [AdminGuard],
+        component: FractionsPnImportComponent
       }
     ]
   }

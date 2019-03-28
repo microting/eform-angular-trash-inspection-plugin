@@ -1,18 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
 import {Papa} from 'ngx-papaparse';
-import {TrashInspectionPnFractionsService} from "../../../services";
+import {TrashInspectionPnFractionsService} from '../../../services';
 import {forEach} from '@angular/router/src/utils/collection';
-import {FractionPnImportModel} from "../../../models/fraction";
-import {FractionPnHeadersModel} from "../../../models/fraction/fraction-pn-headers.model";
+import {FractionPnImportModel} from '../../../models/fraction';
+import {FractionPnHeadersModel} from '../../../models/fraction/fraction-pn-headers.model';
 
 const URL = '';
 @Component({
-  selector: 'app-customer-pn-import',
-  templateUrl: './trash-inspection-pn-import.component.html',
-  styleUrls: ['./trash-inspection-pn-import.component.scss']
+  selector: 'app-trash-inspection-pn-fraction-import',
+  templateUrl: './fractions-pn-import.component.html',
+  styleUrls: ['./fractions-pn-import.component.scss']
 })
-export class TrashInspectionPnImportComponent implements OnInit {
+export class FractionsPnImportComponent implements OnInit {
   public data: any = [];
   uploader: FileUploader;
   fractionsImportModel: FractionPnImportModel;
@@ -26,15 +26,16 @@ export class TrashInspectionPnImportComponent implements OnInit {
   papa: Papa = new Papa();
   tableData: any = null;
   options = [
-    {value: 0, label: 'Nummer'},
-    {value: 1, label: 'Beskrivelse'},
-    {value: 2, label: 'Lokations Kode'},
+    {value: 0, label: 'Number'},
+    {value: 1, label: 'Name'},
+    {value: 2, label: 'Location Nr'},
     {value: 3, label: 'eForm nr'},
-    {value: 4, label: 'lovpligtig eForm'},
+    {value: 4, label: 'Statutory eForm'},
+    {value: 5, label: 'Description'}
 
 
   ];
-  constructor(private fracionsService: TrashInspectionPnFractionsService) {
+  constructor(private fractionsService: TrashInspectionPnFractionsService) {
     this.fractionsImportModel = new FractionPnImportModel();
     // forEach(Option in this.options) {
     //   this.customerHeaderModel = new CustomerPnHeadersModel();
@@ -89,9 +90,9 @@ export class TrashInspectionPnImportComponent implements OnInit {
     // this.customerImportModel.importList = this.tableData;
     // debugger;
     this.fractionsImportModel.headers = JSON.stringify(this.fractionsImportModel.headerList);
-    return this.fracionsService.importFraction(this.fractionsImportModel).subscribe(((data) => {
+    return this.fractionsService.importFraction(this.fractionsImportModel).subscribe(((data) => {
       if (data && data.success) {
-        this.fractionsImportModel = new CustomersPnImportModel();
+        this.fractionsImportModel = new FractionPnImportModel();
       } this.spinnerStatus = false;
     }));
   }

@@ -64,7 +64,6 @@ export class FractionsPageComponent implements OnInit {
   showCreateFractionModal() {
     this.createFractionModal.show();
   }
-
   sortTable(sort: string) {
     if (this.localPageSettings.sort === sort) {
       this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
