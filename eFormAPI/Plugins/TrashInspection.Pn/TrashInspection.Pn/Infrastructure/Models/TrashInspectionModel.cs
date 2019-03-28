@@ -164,7 +164,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionVer.ExtendedInspection = trashInspection.ExtendedInspection;
 //            trashInspectionVer.Status = trashInspection.Status;
 
-            trashInspectionVer.TrashInspctionId = trashInspection.Id;
+            trashInspectionVer.TrashInspectionId = trashInspection.Id;
             
             return trashInspectionVer;
         }

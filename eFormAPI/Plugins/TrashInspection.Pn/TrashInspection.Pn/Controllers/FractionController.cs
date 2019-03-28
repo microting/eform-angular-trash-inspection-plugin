@@ -53,7 +53,6 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("api/trash-inspection-pn/fractions/import")]
         public async Task<OperationResult> ImportFraction([FromBody] FractionImportModel fractionImportModel)
         {
