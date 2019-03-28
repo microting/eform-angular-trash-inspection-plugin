@@ -51,5 +51,13 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _fractionService.DeleteFraction(id);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/fractions/import")]
+        public async Task<OperationResult> ImportFraction([FromBody] FractionImportModel fractionImportModel)
+        {
+            return await _fractionService.ImportFraction(fractionImportModel);
+        }
     }
 }

@@ -16,8 +16,6 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using System.Globalization;
 using System.IO;
-using System.Xml;
-using System.Xml.Linq;
 using eFormData;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,38 +85,16 @@ namespace TrashInspection.Pn.Services
                     RegistrationNumber = x.RegistrationNumber,
                     Time = x.Time,
                     Transporter = x.Transporter,
-//                    TrashFraction = x.TrashFraction,
+                    TrashFraction = x.TrashFraction,
                     WeighingNumber = x.WeighingNumber,
                     Status = x.Status,
                     Version = x.Version,
                     WorkflowState = x.WorkflowState,
                     ExtendedInspection = x.ExtendedInspection,
-                    InspectionDone = x.InspectionDone,
-                    FractionId = x.FractionId,
-                    IsApproved = x.IsApproved,
-                    Comment = x.Comment
-//                    InstallationName = 
+                    InspectionDone = x.InspectionDone
             }).ToListAsync();
 
-                foreach (TrashInspectionModel trashInspectionModel in trashInspections)
-                {
-                    Installation installation = await _dbContext.Installations
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.InstallationId);
-                    if (installation != null)
-                    {
-                        trashInspectionModel.InstallationName = installation.Name;
-                    }
-                     
-                    Fraction fraction = await _dbContext.Fractions
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.FractionId);
-                    if (fraction != null)
-                    {
-                        trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
-                    }                    
-                }
-                
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
-                trashInspectionsModel.Token = _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
                 trashInspectionsModel.TrashInspectionList = trashInspections;
 
                 return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);
@@ -179,7 +155,6 @@ namespace TrashInspection.Pn.Services
         {
             TrashInspectionPnSetting trashInspectionSettings =
                 await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
-            LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
             if (token == trashInspectionSettings.Value && weighingNumber != null)
             {
                 try
@@ -206,37 +181,9 @@ namespace TrashInspection.Pn.Services
                             Version = x.Version,
                             WorkflowState = x.WorkflowState,
                             ExtendedInspection = x.ExtendedInspection,
-                            InspectionDone = x.InspectionDone,
-                            SegmentId = x.SegmentId
+                            InspectionDone = x.InspectionDone
                         })
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
-
-                    Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
-                    if (fraction == null)
-                    {
-                        fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Name == trashInspection.TrashFraction);
-                    }
-                    LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
-
-                    string segmentName = "";
-                    
-                    Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
-                    if (segment != null)
-                    {
-                        segmentName = segment.Name;
-                    }
-                    LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
-                    
-                    string xmlContent = new XElement("TrashInspection", 
-                        new XElement("EakCode", trashInspection.EakCode), 
-                        new XElement("Producer", trashInspection.Producer), 
-                        new XElement("RegistrationNumber", trashInspection.RegistrationNumber), 
-                        new XElement("Transporter", trashInspection.Transporter), 
-                        new XElement("WeighingNumber", trashInspection.WeighingNumber),
-                        new XElement("Segment", segmentName),
-                        new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
-                    ).ToString();
-                    LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
                     
                     foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
@@ -248,16 +195,13 @@ namespace TrashInspection.Pn.Services
                             caseId = (int)caseDto.CaseId;
                             eFormId = caseDto.CheckListId;
                         }
-                    }
+                        }
 
                     if (caseId != 0 && eFormId != 0)
                     {
-
-
-                        LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", "pdf", xmlContent);
+                            $"{core.GetHttpServerAddress()}/" + "api/template-files/get-image/");
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
@@ -273,7 +217,6 @@ namespace TrashInspection.Pn.Services
                 }
                 catch (Exception exception)
                 {
-                    LogException($"DownloadEFormPdf: We got the following exception: {exception.Message}");
                     throw new Exception("Something went wrong!", exception);
                 }
             }
@@ -306,23 +249,13 @@ namespace TrashInspection.Pn.Services
                     Installation installation = await
                         _dbContext.Installations.FirstOrDefaultAsync(x => x.Name == createModel.InstallationName);
                     Fraction fraction = await
-                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.ItemNumber == createModel.TrashFraction);
+                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.Name == createModel.TrashFraction);
 
-                    LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
                     {
                         Core core = _coreHelper.GetCore();
 
-                        int eFormId = fraction.eFormId;
-                        
-                        if (createModel.ExtendedInspection)
-                        {
-                            var result = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x =>
-                                x.Name == "ExtendedInspectioneFormId");
-                            eFormId = int.Parse(result.Value);
-                        }
-                        
-                        var mainElement = core.TemplateRead(eFormId);
+                        var mainElement = core.TemplateRead(fraction.eFormId);
                         List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
                         CultureInfo cultureInfo = new CultureInfo("de-DE");
                         foreach (InstallationSite installationSite in installationSites)
@@ -352,8 +285,7 @@ namespace TrashInspection.Pn.Services
                             {
                                 dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
                             }
-                            
-                            LogEvent("CreateTrashInspection: Trying to create case");
+
                             string sdkCaseId = core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
                             
                             TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
@@ -464,35 +396,6 @@ namespace TrashInspection.Pn.Services
             }
 
             return new OperationResult(false);
-        }
-        
-        public void LogEvent(string appendText)
-        {
-            try
-            {                
-                var oldColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine("[DBG] " + appendText);
-                Console.ForegroundColor = oldColor;
-            }
-            catch
-            {
-            }
-        }
-
-        public void LogException(string appendText)
-        {
-            try
-            {
-                var oldColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[ERR] " + appendText);
-                Console.ForegroundColor = oldColor;
-            }
-            catch
-            {
-
-            }
         }
     }
 }

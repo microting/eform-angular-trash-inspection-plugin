@@ -10,7 +10,8 @@ import {BaseService} from 'src/app/common/services/base.service';
 import {FractionPnModel,
         FractionPnRequestModel,
         FractionPnUpdateModel,
-        FractionsPnModel} from '../models/fraction';
+        FractionsPnModel,
+        FractionPnImportModel} from '../models/fraction';
 
 export let TrashInspectionPnFractionMethods = {
   Fractions: 'api/trash-inspection-pn/fractions',
@@ -42,5 +43,8 @@ export class TrashInspectionPnFractionsService extends BaseService {
 
   deleteFraction(fractionId: number): Observable<OperationResult> {
     return this.delete(TrashInspectionPnFractionMethods.Fractions + '/' + fractionId);
+  }
+  importFraction(model: FractionPnImportModel): Observable<OperationResult> {
+    return this.post(TrashInspectionPnFractionMethods.Fractions + '/import')
   }
 }

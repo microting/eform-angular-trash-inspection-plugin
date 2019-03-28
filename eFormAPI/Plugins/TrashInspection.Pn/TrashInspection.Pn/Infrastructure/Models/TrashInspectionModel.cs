@@ -37,7 +37,6 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public bool IsApproved { get; set; }
         public bool InspectionDone { get; set; }
         public bool ExtendedInspection { get; set; }
-        public string Comment { get; set; }
 
 
         public async Task Save(TrashInspectionPnDbContext _dbContext)
@@ -157,7 +156,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionVer.ExtendedInspection = trashInspection.ExtendedInspection;
 //            trashInspectionVer.Status = trashInspection.Status;
 
-            trashInspectionVer.TrashInspectionId = trashInspection.Id;
+            trashInspectionVer.TrashInspctionId = trashInspection.Id;
             
             return trashInspectionVer;
         }

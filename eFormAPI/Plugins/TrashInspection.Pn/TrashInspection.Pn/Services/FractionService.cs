@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using eFormCore;
+using eFormData;
+using eFormShared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
@@ -11,7 +14,9 @@ using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Newtonsoft.Json.Linq;
 using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Services
@@ -139,6 +144,76 @@ namespace TrashInspection.Pn.Services
             }
         }
 
+        public async Task<OperationResult> ImportFraction(FractionImportModel fractionsAsJson)
+        {
+            try
+            {
+                {
+                    JToken rawJson = JRaw.Parse(fractionsAsJson.ImportList);
+                    JToken rawHeadersJson = JRaw.Parse(fractionsAsJson.Headers);
+
+                    JToken headers = rawHeadersJson;
+                    IEnumerable<JToken> fractionObjects = rawJson.Skip(1);
+                    
+                    foreach (JToken fractionObj in fractionObjects)
+                    {
+                        bool numberExists = int.TryParse(headers[0]["headerValue"].ToString(), out int numberColumn);
+                        bool fractionNameExists = int.TryParse(headers[1]["headerValue"].ToString(),
+                            out int nameColumn);
+                        if (numberExists || fractionNameExists)
+                        {
+                            Fraction existingFraction = FindFraction(numberExists, numberColumn, fractionNameExists,
+                                nameColumn, headers, fractionObj);
+                            if (existingFraction == null)
+                            {
+                                FractionModel fractionModel =
+                                    FractionsHelper.ComposeValues(new FractionModel(), headers, fractionObj);
+
+                                FractionModel newFraction = new FractionModel
+                                {
+                                    ItemNumber = fractionModel.ItemNumber,
+                                    Name = fractionModel.Name,
+                                    Description = fractionModel.Description,
+                                    LocationCode = fractionModel.LocationCode,
+                                    eFormId = fractionModel.eFormId
+
+                                };
+                               await newFraction.Save(_dbContext);
+  
+                            }
+                            else
+                            {
+                                if (existingFraction.WorkflowState == Constants.WorkflowStates.Removed)
+                                {
+                                    FractionModel fraction = new FractionModel
+                                    {
+                                        Id = existingFraction.Id,
+                                        Description = existingFraction.Description,
+                                        Name = existingFraction.Name,
+                                        LocationCode = existingFraction.LocationCode,
+                                        eFormId = existingFraction.eFormId,
+
+                                    };
+                                    fraction.WorkflowState = Constants.WorkflowStates.Created;
+                                    await fraction.Update(_dbContext);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                return new OperationResult(true,
+                    _trashInspectionLocalizationService.GetString("FractionCreated"));
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("ErrorWhileCreatingFraction"));
+            }
+        }
+        
         public async Task<OperationResult> CreateFraction(FractionModel createModel)
         {
             await createModel.Save(_dbContext);
@@ -161,5 +236,24 @@ namespace TrashInspection.Pn.Services
             return new OperationResult(true);
         }
 
+        private Fraction FindFraction(bool numberExists, int numberColumn, bool fractionNameExists,
+            int fractionNameColumn, JToken headers, JToken fractionObj)
+        {
+            Fraction fraction = null;
+
+            if (numberExists)
+            {
+                string itemNo = fractionObj[numberColumn].ToString();
+                fraction = _dbContext.Fractions.SingleOrDefault(x => x.ItemNumber == itemNo);
+            }
+
+            if (fractionNameExists)
+            {
+                string fractionName = fractionObj[fractionNameColumn].ToString();
+                fraction = _dbContext.Fractions.SingleOrDefault(x => x.Name == fractionName);
+            }
+
+            return fraction;
+        }
     }
 }
