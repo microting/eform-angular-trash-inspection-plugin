@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
-using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class TrashInspectionModel : IDataAccessObject<TrashInspectionPnDbContext>
+    public class TrashInspectionModel : IModel
     {
         public int Id { get; set; }
         public DateTime? CreatedAt { get; set; }
@@ -73,14 +73,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
             Id = trashInspection.Id;
         }
 
-        public void Create(TrashInspectionPnDbContext dbContext)
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TrashInspectionPnDbContext dbContext)
-        {
-            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
 
             if (trashInspection == null)
             {
@@ -102,20 +97,20 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.InspectionDone = InspectionDone;
             trashInspection.ExtendedInspection = ExtendedInspection;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbContext.ChangeTracker.HasChanges())
             {
                 trashInspection.UpdatedAt = DateTime.Now;
                 trashInspection.Version += 1;
 
-                dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(dbContext, trashInspection));
-                dbContext.SaveChanges();
+                _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
+                _dbContext.SaveChanges();
             }
 
         }
 
-        public void Delete(TrashInspectionPnDbContext dbContext)
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
         {
-            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = _dbContext.TrashInspections.FirstOrDefault(x => x.Id == Id);
 
             if(trashInspection == null)
             {
@@ -124,13 +119,13 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
             trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Removed;
 
-            if (dbContext.ChangeTracker.HasChanges())
+            if (_dbContext.ChangeTracker.HasChanges())
             {
                 trashInspection.UpdatedAt = DateTime.Now;
                 trashInspection.Version += 1;
                 //_dbContext.TrashInspections.Remove(trashInspection);
-                dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(dbContext, trashInspection));
-                dbContext.SaveChanges();
+                _dbContext.TrashInspectionVersions.Add(MapTrashInspectionVersion(_dbContext, trashInspection));
+                _dbContext.SaveChanges();
 
             }
 
@@ -161,7 +156,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspectionVer.ExtendedInspection = trashInspection.ExtendedInspection;
 //            trashInspectionVer.Status = trashInspection.Status;
 
-            trashInspectionVer.TrashInspctionId = trashInspection.Id;
+            trashInspectionVer.TrashInspectionId = trashInspection.Id;
             
             return trashInspectionVer;
         }

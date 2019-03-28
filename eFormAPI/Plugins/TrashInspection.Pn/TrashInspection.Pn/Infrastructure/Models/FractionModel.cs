@@ -1,20 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormShared;
-using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class FractionModel : IDataAccessObject<TrashInspectionPnDbContext>
+    public class FractionModel : IModel
     {
         public int Id { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        [StringLength(255)] public string WorkflowState { get; set; }
+        [StringLength(255)]
+        public string WorkflowState { get; set; }
         public int Version { get; set; }
         public int CreatedByUserId { get; set; }
         public int UpdatedByUserId { get; set; }
@@ -39,13 +40,63 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fraction.ItemNumber = ItemNumber;
             fraction.LocationCode = LocationCode;
             fraction.WorkflowState = Constants.WorkflowStates.Created;
-
+            
             _dbContext.Fractions.Add(fraction);
             _dbContext.SaveChanges();
 
             _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
             _dbContext.SaveChanges();
             Id = fraction.Id;
+
+
+        }
+        public async Task Update(TrashInspectionPnDbContext _dbContext)
+        {
+            Fraction fraction = _dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
+
+            if (fraction == null)
+            {
+                throw new NullReferenceException($"Could not find fraction with id: {Id}");
+            }
+
+            fraction.Name = Name;
+            fraction.Description = Description;
+            fraction.eFormId = eFormId;
+            fraction.LocationCode = LocationCode;
+            fraction.ItemNumber = ItemNumber;
+
+            if (_dbContext.ChangeTracker.HasChanges())
+            {
+                fraction.UpdatedAt = DateTime.Now;
+                fraction.UpdatedByUserId = UpdatedByUserId;
+                fraction.Version += 1;
+
+                _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
+                _dbContext.SaveChanges();
+            }
+
+        }
+        public async Task Delete(TrashInspectionPnDbContext _dbContext)
+        {
+            Fraction fraction = _dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
+
+            if (fraction == null)
+            {
+                throw new NullReferenceException($"Could not find fraction with id: {Id}");
+            }
+
+            fraction.WorkflowState = Constants.WorkflowStates.Removed;
+
+            if (_dbContext.ChangeTracker.HasChanges())
+            {
+                fraction.UpdatedAt = DateTime.Now;
+                fraction.UpdatedByUserId = UpdatedByUserId;
+                fraction.Version += 1;
+
+                _dbContext.FractionVersions.Add(MapFractionVersion(_dbContext, fraction));
+                _dbContext.SaveChanges();
+            }
+
         }
 
         private FractionVersion MapFractionVersion(TrashInspectionPnDbContext _dbContext, Fraction fraction)
@@ -65,59 +116,6 @@ namespace TrashInspection.Pn.Infrastructure.Models
             fractionVer.LocationCode = fraction.LocationCode;
 
             return fractionVer;
-        }
-
-        public void Create(TrashInspectionPnDbContext dbContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(TrashInspectionPnDbContext dbContext)
-        {
-            Fraction fraction = dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
-
-            if (fraction == null)
-            {
-                throw new NullReferenceException($"Could not find fraction with id: {Id}");
-            }
-
-            fraction.Name = Name;
-            fraction.Description = Description;
-            fraction.eFormId = eFormId;
-            fraction.LocationCode = LocationCode;
-            fraction.ItemNumber = ItemNumber;
-
-            if (dbContext.ChangeTracker.HasChanges())
-            {
-                fraction.UpdatedAt = DateTime.Now;
-                fraction.UpdatedByUserId = UpdatedByUserId;
-                fraction.Version += 1;
-
-                dbContext.FractionVersions.Add(MapFractionVersion(dbContext, fraction));
-                dbContext.SaveChanges();
-            }
-        }
-
-        public void Delete(TrashInspectionPnDbContext dbContext)
-        {
-            Fraction fraction = dbContext.Fractions.FirstOrDefault(x => x.Id == Id);
-
-            if (fraction == null)
-            {
-                throw new NullReferenceException($"Could not find fraction with id: {Id}");
-            }
-
-            fraction.WorkflowState = Constants.WorkflowStates.Removed;
-
-            if (dbContext.ChangeTracker.HasChanges())
-            {
-                fraction.UpdatedAt = DateTime.Now;
-                fraction.UpdatedByUserId = UpdatedByUserId;
-                fraction.Version += 1;
-
-                dbContext.FractionVersions.Add(MapFractionVersion(dbContext, fraction));
-                dbContext.SaveChanges();
-            }
         }
     }
 }

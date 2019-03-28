@@ -74,7 +74,7 @@ namespace TrashInspection.Pn.Test
             installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
 
-            installationSiteModel.Update(DbContext);
+           await installationSiteModel.Update(DbContext);
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();
@@ -115,7 +115,7 @@ namespace TrashInspection.Pn.Test
             installationSiteModel.SdkSiteId = installationSite.SDKSiteId;
             installationSiteModel.InstallationId = installation.Id;
             installationSiteModel.Id = installationSite.Id;
-             installationSiteModel.Delete(DbContext);
+            await installationSiteModel.Delete(DbContext);
 
             InstallationSite dbInstallationSite = DbContext.InstallationSites.AsNoTracking().First();
             List<InstallationSite> installationSiteList = DbContext.InstallationSites.AsNoTracking().ToList();

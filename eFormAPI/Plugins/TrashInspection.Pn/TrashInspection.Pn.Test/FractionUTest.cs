@@ -63,7 +63,7 @@ namespace TrashInspection.Pn.Test
             fractionModel.CreatedAt = fraction.CreatedAt;
             fractionModel.Id = fraction.Id;
             
-            fractionModel.Update(DbContext);
+            await fractionModel.Update(DbContext);
             
             Fraction dbFraction = DbContext.Fractions.AsNoTracking().First();
             List<Fraction> fractionList = DbContext.Fractions.AsNoTracking().ToList();
@@ -102,7 +102,7 @@ namespace TrashInspection.Pn.Test
             fractionModel.CreatedAt = fraction.CreatedAt;
             fractionModel.Id = fraction.Id;
             
-             fractionModel.Delete(DbContext);
+            await fractionModel.Delete(DbContext);
             
             Fraction dbFraction = DbContext.Fractions.AsNoTracking().First();
             List<Fraction> fractionList = DbContext.Fractions.AsNoTracking().ToList();

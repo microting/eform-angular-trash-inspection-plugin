@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
+using eFormCore;
+using eFormData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Services
 {
@@ -39,7 +42,7 @@ namespace TrashInspection.Pn.Services
             {
                 TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
                 List<TrashInspectionPnSetting> trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.ToList();
-                if (trashInspectionPnSetting.Count < 9)
+                if (trashInspectionPnSetting.Count < 12)
                 {
                     TrashInspectionPnSettingsModel.SettingCreateDefaults(_dbContext);                    
                     trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.AsNoTracking().ToList();
