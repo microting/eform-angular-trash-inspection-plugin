@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Castle.DynamicProxy;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
@@ -38,6 +39,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public bool InspectionDone { get; set; }
         public bool ExtendedInspection { get; set; }
         public string Comment { get; set; }
+        public string ProducerForeignId { get; set; }
+        public string TransporterForeignId { get; set; }
+        public int ProducerId { get; set; }
+        public int TransporterId { get; set; }
 
 
         public async Task Save(TrashInspectionPnDbContext _dbContext)
@@ -65,6 +70,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
             trashInspection.WorkflowState = eFormShared.Constants.WorkflowStates.Created;
             trashInspection.InspectionDone = InspectionDone;
             trashInspection.ExtendedInspection = ExtendedInspection;
+            if (ProducerId != null) trashInspection.ProducerId = ProducerId;
+            if (TransporterId != null) trashInspection.TransporterId = TransporterId;
 
             _dbContext.TrashInspections.Add(trashInspection);
             _dbContext.SaveChanges();
