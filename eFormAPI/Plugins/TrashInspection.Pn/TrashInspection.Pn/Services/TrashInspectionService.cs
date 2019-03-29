@@ -285,6 +285,7 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
+            LogEvent($"CreateTrashInspection: createModel is {createModel.ToString()}");
             TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
             if (trashInspectionSettings == null)
             {
@@ -335,13 +336,20 @@ namespace TrashInspection.Pn.Services
                             mainElement.EnableQuickSync = true;
                             mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
                             CDataValue cDataValue = new CDataValue();
-                            cDataValue.InderValue = "<b>Vejenr:</b> " + createModel.WeighingNumber + "<br>";
-                            cDataValue.InderValue += "<b>Dato:</b> " + createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo) + "<br>";
-                            cDataValue.InderValue += "<b>Fraktion:</b> " + createModel.TrashFraction + "<br>";
-                            cDataValue.InderValue += "<b>Transportør:</b> " + createModel.Transporter;
+                            cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
+                            cDataValue.InderValue +=
+                                $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy")} {createModel.Time.ToString("T", cultureInfo)}<br>";
+                            cDataValue.InderValue += $"<b>Fraktion:</b> {fraction.ItemNumber} {fraction.Name}<br>";
+                            cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
+                            cDataValue.InderValue += $"<b>Transportør:</b> {createModel.Transporter}";
                             if (createModel.MustBeInspected)
                             {
                                 cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
+                            }
+
+                            if (createModel.ExtendedInspection)
+                            {
+                                cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
                             }
                             mainElement.ElementList[0].Description = cDataValue;
                             mainElement.ElementList[0].Label = mainElement.Label;
