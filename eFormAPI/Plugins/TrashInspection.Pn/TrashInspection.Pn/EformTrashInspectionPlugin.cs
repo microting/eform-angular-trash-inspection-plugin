@@ -1,7 +1,32 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 microting
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Castle.Windsor;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Services;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +36,8 @@ using Microting.eFormApi.BasePn;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
+using Rebus.Bus;
+using TrashInspection.Pn.Installers;
 
 namespace TrashInspection.Pn
 {
@@ -19,6 +46,7 @@ namespace TrashInspection.Pn
         public string Name => "Microting Trash Inspection Plugin";
         public string PluginId => "eform-angular-trashinspection-plugin";
         public string PluginPath => PluginAssembly().Location;
+        private string _connectionString;
 
         public Assembly PluginAssembly()
         {
@@ -33,10 +61,12 @@ namespace TrashInspection.Pn
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
+            services.AddSingleton<IRebusService, RebusService>();
         }
 
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
         {
+            _connectionString = connectionString;
             if (connectionString.ToLower().Contains("convert zero datetime"))
             {
                 services.AddDbContext<TrashInspectionPnDbContext>(o => o.UseMySql(connectionString,
@@ -58,6 +88,10 @@ namespace TrashInspection.Pn
 
         public void Configure(IApplicationBuilder appBuilder)
         {
+            var serviceProvider = appBuilder.ApplicationServices;
+            IRebusService rebusService = serviceProvider.GetService<IRebusService>();
+            rebusService.Start(_connectionString);
+
         }
 
         public MenuModel HeaderMenu(IServiceProvider serviceProvider)
