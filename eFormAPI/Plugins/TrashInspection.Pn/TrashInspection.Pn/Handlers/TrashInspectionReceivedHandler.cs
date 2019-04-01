@@ -53,15 +53,15 @@ namespace TrashInspection.Pn.Handlers
                 mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
                 mainElement.StartDate = DateTime.Now.ToUniversalTime();
                 mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
-                mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Producer;
+                mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
                 mainElement.EnableQuickSync = true;
                 mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
                 CDataValue cDataValue = new CDataValue();
                 cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
                 cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
-                cDataValue.InderValue += $"<b>Fraktion:</b> {fraction.ItemNumber} {fraction.Name}<br>";
-                cDataValue.InderValue += $"<b>Transportør:</b> {createModel.Transporter}<br>";
-                cDataValue.InderValue += $"<b>Område:</b> {segment.Name}";
+                cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
+                cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
+                cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
                 if (createModel.MustBeInspected)
                 {
                     cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
