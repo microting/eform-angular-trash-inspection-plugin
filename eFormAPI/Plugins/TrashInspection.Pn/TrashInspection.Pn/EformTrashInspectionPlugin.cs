@@ -33,6 +33,8 @@ namespace TrashInspection.Pn
             services.AddSingleton<ITrashInspectionLocalizationService, TrashInspectionLocalizationService>();
             services.AddTransient<ITrashInspectionService, TrashInspectionService>();
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
+            services.AddTransient<ITransporterService, TransporterService>();
+            services.AddTransient<IProducerService, ProducerService>();
         }
 
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
@@ -108,7 +110,21 @@ namespace TrashInspection.Pn
                         E2EId = "trash-inspection-pn-segments",
                         Link = "/plugins/trash-inspection-pn/segments",
                         Position = 3,
-                }
+                    },
+                    new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Producers"),
+                        E2EId = "trash-inspection-pn-producers",
+                        Link = "/plugins/trash-inspection-pn/producers",
+                        Position = 4,
+                    },
+                    new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Transporters"),
+                        E2EId = "trash-inspection-pn-transporters",
+                        Link = "/plugins/trash-inspection-pn/transporters",
+                        Position = 5,
+                    }
                 }
             });
             return result;
