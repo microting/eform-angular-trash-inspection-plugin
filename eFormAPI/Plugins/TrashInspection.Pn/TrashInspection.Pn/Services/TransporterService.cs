@@ -67,7 +67,7 @@ namespace TrashInspection.Pn.Services
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
-                List<TransporterModel> producers = await transporterQuery.Select(x => new TransporterModel()
+                List<TransporterModel> transporters = await transporterQuery.Select(x => new TransporterModel()
                 {
                     Name = x.Name,
                     Description = x.Description,
@@ -81,7 +81,7 @@ namespace TrashInspection.Pn.Services
 
                 transportersModel.Total =
                     _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                transportersModel.TransporterList = producers;
+                transportersModel.TransporterList = transporters;
                 
                 return new OperationDataResult<TransportersModel>(true, transportersModel);
             }

@@ -10,7 +10,7 @@ import {TrashInspectionPnTransporterService} from '../../../services';
 })
 export class TransporterEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onTransporterUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedTransporter: TransporterPnModel = new TransporterPnModel();
   constructor(private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
@@ -34,7 +34,7 @@ export class TransporterEditComponent implements OnInit {
     this.spinnerStatus = true;
     this.trashInspectionPnTransporterService.updateTransporter(this.selectedTransporter).subscribe((data) => {
       if (data && data.success) {
-        this.onProducerUpdated.emit();
+        this.onTransporterUpdated.emit();
         this.selectedTransporter = new ProducerPnModel();
         this.frame.hide();
       } this.spinnerStatus = false;

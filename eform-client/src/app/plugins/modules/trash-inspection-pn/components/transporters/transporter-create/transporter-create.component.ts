@@ -10,7 +10,7 @@ import {ProducerPnModel} from '../../../models/producer';
 })
 export class TransporterCreateComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
+  @Output() onTransporterCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   newTransporterModel: TransporterPnModel = new TransporterPnModel();
@@ -23,7 +23,7 @@ export class TransporterCreateComponent implements OnInit {
     this.trashInspectionPnTransporterService.createTransporter(this.newTransporterModel).subscribe((data) => {
       // debugger;
       if (data && data.success) {
-        this.onProducerCreated.emit();
+        this.onTransporterCreated.emit();
         // this.submitDeployment();
         this.newTransporterModel = new TransporterPnModel();
         this.frame.hide();
