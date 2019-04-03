@@ -22,21 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using Rebus.Handlers;
-using TrashInspection.Pn.Handlers;
-using TrashInspection.Pn.Messages;
+using TrashInspection.Pn.Infrastructure.Models;
 
-namespace TrashInspection.Pn.Installers
+namespace TrashInspection.Pn.Messages
 {
-    public class RebusHandlerInstaller : IWindsorInstaller
+    public class TrashInspectionDeleted
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public TrashInspectionModel TrashInspectionModel { get; protected set; }
+        
+        public TrashInspectionDeleted(TrashInspectionModel trashInspectionModel)
         {
-            container.Register(Component.For<IHandleMessages<TrashInspectionReceived>>().ImplementedBy<TrashInspectionReceivedHandler>().LifestyleTransient());            
-            container.Register(Component.For<IHandleMessages<TrashInspectionDeleted>>().ImplementedBy<TrashInspectionDeleteHandler>().LifestyleTransient());            
+            TrashInspectionModel = trashInspectionModel;
         }
     }
 }

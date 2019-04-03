@@ -343,9 +343,28 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> DeleteTrashInspection(int trashInspectionId)
         {
-            TrashInspectionModel trashInspection = new TrashInspectionModel();
-            trashInspection.Id = trashInspectionId;
-            trashInspection.Delete(_dbContext);
+            var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                {
+                    Id = x.Id,
+                    Date = x.Date,
+                    EakCode = x.Eak_Code,
+                    InstallationId = x.InstallationId,
+                    MustBeInspected = x.MustBeInspected,
+                    Producer = x.Producer,
+                    RegistrationNumber = x.RegistrationNumber,
+                    Time = x.Time,
+                    Transporter = x.Transporter,
+                    TrashFraction = x.TrashFraction,
+                    WeighingNumber = x.WeighingNumber,
+                    Status = x.Status,
+                    Version = x.Version,
+                    WorkflowState = x.WorkflowState,
+                    ExtendedInspection = x.ExtendedInspection,
+                    InspectionDone = x.InspectionDone
+                })
+                .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
+            _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+            //trashInspection.Delete(_dbContext);
             return new OperationResult(true);
 
         }
@@ -389,20 +408,21 @@ namespace TrashInspection.Pn.Services
 
                 if (trashInspection != null)
                 {
-                    Core core = _coreHelper.GetCore();
-
-                    List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases.Where(x =>
-                        x.TrashInspectionId == trashInspection.Id).ToList();
-                    
-                    foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
-                    {
-                        Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
-                        string microtingUId = caseDto.MicrotingUId;
-                        core.CaseDelete(microtingUId);
-                    }
-
-                    trashInspection.InspectionDone = true;
-                    trashInspection.Update(_dbContext);
+                    _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+//                    Core core = _coreHelper.GetCore();
+//
+//                    List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases.Where(x =>
+//                        x.TrashInspectionId == trashInspection.Id).ToList();
+//                    
+//                    foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
+//                    {
+//                        Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
+//                        string microtingUId = caseDto.MicrotingUId;
+//                        core.CaseDelete(microtingUId);
+//                    }
+//
+//                    trashInspection.InspectionDone = true;
+//                    trashInspection.Update(_dbContext);
 
                     return new OperationResult(true);
                 }               

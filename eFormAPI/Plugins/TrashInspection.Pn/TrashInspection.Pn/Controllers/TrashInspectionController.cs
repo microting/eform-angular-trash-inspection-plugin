@@ -91,9 +91,9 @@ namespace TrashInspection.Pn.Conrtrollers
         [HttpDelete]
         [Authorize]
         [Route("api/trash-inspection-pn/inspections/{id}")]
-        public async Task<OperationResult> DeleteTrashInspection(int trashInspectionId)
+        public async Task<OperationResult> DeleteTrashInspection(int id)
         {
-            return await _trashInspectionService.DeleteTrashInspection(trashInspectionId);
+            return await _trashInspectionService.DeleteTrashInspection(id);
         }
                 
         [HttpDelete]
