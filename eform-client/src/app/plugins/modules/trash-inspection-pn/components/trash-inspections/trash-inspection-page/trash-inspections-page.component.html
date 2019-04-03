@@ -30,6 +30,19 @@
                *ngIf="localPageSettings.sort == 'Date' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
+
+        <th scope="col" class="table-header-sortable" id="timeTableHeader"
+            (click)="sortTable('Time')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Time' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Time'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Time' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Time' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
         <th scope="col" class="table-header-sortable" id="eakCodeTableHeader"
             (click)="sortTable('eakCode')">
           <div class="d-flex align-items-center justify-content-center">
@@ -42,15 +55,15 @@
           </div>
         </th>
 
-        <th scope="col" class="table-header-sortable" id="installationIdTableHeader"
+        <th scope="col" class="table-header-sortable" id="installationTableHeader"
             (click)="sortTable('InstallationId')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'InstallationId' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'InstallationId'">unfold_more</i>
+            {{'Installation' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Installation'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'InstallationId' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Installation' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'InstallationId' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Installation' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -90,18 +103,6 @@
           </div>
         </th>
 
-        <th scope="col" class="table-header-sortable" id="timeTableHeader"
-            (click)="sortTable('Time')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Time' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Time'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Time' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Time' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-
         <th scope="col" class="table-header-sortable" id="transporterTableHeader"
             (click)="sortTable('Transporter')">
           <div class="d-flex align-items-center justify-content-center">
@@ -138,15 +139,27 @@
           </div>
         </th>
 
-        <th scope="col" class="table-header-sortable" id="nameTableHeader"
-            (click)="sortTable('Name')">
+        <th scope="col" class="table-header-sortable" id="isApprovedTableHeader"
+            (click)="sortTable('IsApproved')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Name' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
+            {{'Is approved' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'IsApproved'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'IsApproved' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'IsApproved' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
+        <th scope="col" class="table-header-sortable" id="commentTableHeader"
+            (click)="sortTable('Comment')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Comment' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Comment'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Comment' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Comment' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -177,10 +190,13 @@
           <date-formatter [date]="trashInspection.date" [Format]="'date'"></date-formatter>
         </td>
         <td>
+          <date-formatter [date]="trashInspection.time" [Format]="'time'"></date-formatter>
+        </td>
+        <td>
           {{trashInspection.eakCode}}
         </td>
         <td>
-          {{trashInspection.installationId}}
+          {{trashInspection.installationName}}
         </td>
         <td>
           <i class="material-icons green-text" *ngIf="trashInspection.mustBeInspected">
@@ -194,9 +210,6 @@
           {{trashInspection.registrationNumber}}
         </td>
         <td>
-            <date-formatter [date]="trashInspection.time" [Format]="'time'"></date-formatter>
-        </td>
-        <td>
           {{trashInspection.transporter}}
         </td>
         <td>
@@ -206,7 +219,16 @@
           {{trashInspection.weighingNumber}}
         </td>
         <td>
-          {{trashInspection.name}}
+          <i class="material-icons green-text" *ngIf="trashInspection.isApproved">
+            done
+          </i>
+
+          <i class="material-icons red-text" *ngIf="!trashInspection.isApproved">
+            clear
+          </i>
+        </td>
+        <td>
+          {{trashInspection.comment}}
         </td>
         <td>
           <status-bar [status]="trashInspection.status"></status-bar>
@@ -245,6 +267,13 @@
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
               <i class="material-icons">
                 delete_forever
+              </i>
+            </button>
+            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+                    mdbTooltip="{{ 'Get PDF' | translate }}"
+                    (click)="downloadPDF(trashInspection)">
+              <i class="material-icons">
+                picture_as_pdf
               </i>
             </button>
           </div>
