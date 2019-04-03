@@ -9,9 +9,11 @@ using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Newtonsoft.Json;
 
 namespace TrashInspection.Pn.Conrtrollers
 {
@@ -71,6 +73,7 @@ namespace TrashInspection.Pn.Conrtrollers
 
         [HttpPost]
         [AllowAnonymous]
+        [DebuggingFilter]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
@@ -100,6 +103,27 @@ namespace TrashInspection.Pn.Conrtrollers
         {
             return await _trashInspectionService.DeleteTrashInspection(weighingNumber, token);
 
+        }
+    }
+    
+    public class DebuggingFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.HttpContext.Request.Method != "POST")
+            {
+                return;
+            }
+            
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+
+            string text = new StreamReader(filterContext.HttpContext.Request.Body).ReadToEndAsync().Result;
+
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+            
+            Console.WriteLine(text);
+
+            base.OnActionExecuting(filterContext);
         }
     }
 }

@@ -291,7 +291,7 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
-            LogEvent($"CreateTrashInspection: createModel is {createModel.ToString()}");
+//            LogEvent($"CreateTrashInspection: createModel is {createModel.ToString()}");
             TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
             if (trashInspectionSettings == null)
             {
