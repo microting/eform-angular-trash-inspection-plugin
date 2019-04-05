@@ -22,5 +22,24 @@
   "Update Trash Inspection": "Opdater Affalds Inspektion",
   "Delete Trash Inspection": "Slet Affalds Inspektion",
   "Related Trash Inspection": "Relateret Affalds Inspektion",
-  "Trash Inspection plugin settings": "Affalds Inspektion plugin indstillinger"
+  "Trash Inspection plugin settings": "Affalds Inspektion plugin indstillinger",
+  "Producers" : "Producenter",
+  "Transporters" : "Transportørere",
+  "Producer" : "Producent",
+  "New Producer" : "Ny Producent",
+  "Import Producer" : "Importer Producent",
+  "Edit Producer" : "Rediger Producent",
+  "Import Producers" : "Importer Producenter",
+  "Transporter" : "Transportør",
+  "Import Transporter" : "Importer Transportør",
+  "New Transporter" : "Ny Transportør",
+  "Import transporters" : "Importer Transportørere",
+  "Edit Transporter" : "Rediger Transportør",
+  "Continue Import" : "Fortsæt Import",
+  "Segments" : "Områder",
+  "Zip code" : "Post Nr.",
+  "Contact Person" : "Kontakt person",
+  "New Segment" : "Nyt Område",
+  "Update Segment" : "Opdater Segment"
 }
+

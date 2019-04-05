@@ -69,6 +69,7 @@ namespace TrashInspection.Pn.Services
                         .Take(pnRequestModel.PageSize);
                 List<ProducerModel> producers = await producersQuery.Select(x => new ProducerModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,

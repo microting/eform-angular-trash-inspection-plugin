@@ -117,17 +117,13 @@
               class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Edit Fraction' | translate }}"
                     (click)="showEditFractionModal(fraction)">
-              <i class="material-icons">
-                edit
-              </i>
+              <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
             </button>
             <button id="deleteFractionBtn"
               class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Fraction' | translate }}"
                     (click)="showDeleteFractionModal(fraction)">
-              <i class="material-icons">
-                delete_forever
-              </i>
+              <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true"></fa-icon>
             </button>
           </div>
         </td>

@@ -50,6 +50,7 @@ import {
   TransporterEditComponent,
   TransporterImportComponent
 } from './components';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import {
     TranslateModule,
     FormsModule,
     NgSelectModule,
-    EformSharedModule
+    EformSharedModule,
+    FontAwesomeModule
   ],
   declarations: [
     InstallationsPageComponent,

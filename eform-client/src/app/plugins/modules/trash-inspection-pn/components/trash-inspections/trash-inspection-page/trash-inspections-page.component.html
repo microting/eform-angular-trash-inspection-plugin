@@ -199,9 +199,7 @@
           {{trashInspection.installationName}}
         </td>
         <td>
-          <i class="material-icons green-text" *ngIf="trashInspection.mustBeInspected">
-            done
-          </i>
+          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
         </td>
         <td>
           {{trashInspection.producer}}
@@ -219,13 +217,11 @@
           {{trashInspection.weighingNumber}}
         </td>
         <td>
-          <i class="material-icons green-text" *ngIf="trashInspection.isApproved">
-            done
-          </i>
 
-          <i class="material-icons red-text" *ngIf="!trashInspection.isApproved">
-            clear
-          </i>
+          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+
+          <fa-icon icon="times" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+
         </td>
         <td>
           {{trashInspection.comment}}
@@ -258,23 +254,19 @@
             <button class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Edit Trash Inspection' | translate }}"
                     (click)="showEditTrashInspectionModal(trashInspection)">
-              <i class="material-icons">
-                edit
-              </i>
+              <fa-icon icon="pen" size="lg" [fixedWidth]="true" ></fa-icon>
+
             </button>
             <button class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Trash Inspection' | translate }}"
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
-              <i class="material-icons">
-                delete_forever
-              </i>
+              <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true" ></fa-icon>
             </button>
             <button class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PDF' | translate }}"
                     (click)="downloadPDF(trashInspection)">
-              <i class="material-icons">
-                picture_as_pdf
-              </i>
+              <fa-icon icon="file-pdf" size="lg" [fixedWidth]="true" ></fa-icon>
+
             </button>
           </div>
         </td>

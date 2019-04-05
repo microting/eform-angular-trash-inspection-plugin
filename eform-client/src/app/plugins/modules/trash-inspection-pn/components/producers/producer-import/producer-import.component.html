@@ -66,11 +66,12 @@
   <button class="btn btn-danger"
           routerLink="/plugins/trash-inspection-pn/producers"
           id="cancelImportBtn"
-          mdbTooltip="{{'Cancel' | translate}}"><i class="material-icons">cancel</i></button>
+          mdbTooltip="{{'Cancel' | translate}}">
+  <fa-icon icon="times-circle" size="lg"></fa-icon></button>
   <button class="btn btn-success"
           (click)="importProducer()"
           routerLink="/plugins/trash-inspection-pn/producers"
           id="continueImportBtn"
-          mdbTooltip="{{'Import the producer' | translate}}">Continue Import
+          mdbTooltip="{{'Import the producer' | translate}}">{{"Continue Import" | translate}}
   </button>
 </div>

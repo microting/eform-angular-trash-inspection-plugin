@@ -69,6 +69,7 @@ namespace TrashInspection.Pn.Services
                         .Take(pnRequestModel.PageSize);
                 List<TransporterModel> transporters = await transporterQuery.Select(x => new TransporterModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,
