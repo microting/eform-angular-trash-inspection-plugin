@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 
 namespace TrashInspection.Pn.Test
 {
@@ -35,14 +35,14 @@ namespace TrashInspection.Pn.Test
         [SetUp]
         public void Setup()
         {
-            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            //{
-            //    ConnectionString = @"data source=(LocalDb)\SharedInstance;Initial catalog=trash-inspection-pn-tests;Integrated Security=true";
-            //}
-            //else
-            //{
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                ConnectionString = @"data source=(LocalDb)\SharedInstance;Initial catalog=trash-inspection-pn-tests;Integrated Security=true";
+            }
+            else
+            {
                 ConnectionString = @"Server = localhost; port = 3306; Database = trash-inspection-pn-tests; user = root; Convert Zero Datetime = true;";
-            //}
+            }
 
             GetContext(ConnectionString);
 
