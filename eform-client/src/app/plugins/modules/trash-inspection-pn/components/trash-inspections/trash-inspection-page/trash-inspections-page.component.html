@@ -271,16 +271,14 @@
             <button class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get DOCX' | translate }}"
                     (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status == 100">
-              <i class="material-icons">
-                picture_as_pdf
-              </i>
+              <fa-icon icon="file-word-o" size="lg" [fixedWidth]="true" ></fa-icon>
+
             </button>
             <button class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PPTX' | translate }}"
                     (click)="downloadPptx(trashInspection)" *ngIf="trashInspection.status == 100">
-              <i class="material-icons">
-                picture_as_pdf
-              </i>
+              <fa-icon icon="file-powerpoint-o" size="lg" [fixedWidth]="true" ></fa-icon>
+
             </button>
           </div>
         </td>
