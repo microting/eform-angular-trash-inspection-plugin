@@ -181,7 +181,7 @@ namespace TrashInspection.Pn.Services
             }
         }
 
-        public async Task<string> DownloadEFormPdf(string weighingNumber, string token)
+        public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
             TrashInspectionPnSetting trashInspectionSettings =
                 await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
@@ -263,7 +263,7 @@ namespace TrashInspection.Pn.Services
                         LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", "pdf", xmlContent);
+                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
