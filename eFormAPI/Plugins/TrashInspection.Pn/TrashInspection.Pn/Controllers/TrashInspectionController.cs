@@ -3,7 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Newtonsoft.Json;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 
@@ -64,6 +68,7 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [DebuggingFilter]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
@@ -81,9 +86,9 @@ namespace TrashInspection.Pn.Controllers
         [HttpDelete]
         [Authorize]
         [Route("api/trash-inspection-pn/inspections/{id}")]
-        public async Task<OperationResult> DeleteTrashInspection(int trashInspectionId)
+        public async Task<OperationResult> DeleteTrashInspection(int id)
         {
-            return await _trashInspectionService.DeleteTrashInspection(trashInspectionId);
+            return await _trashInspectionService.DeleteTrashInspection(id);
         }
                 
         [HttpDelete]
@@ -93,6 +98,27 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _trashInspectionService.DeleteTrashInspection(weighingNumber, token);
 
+        }
+    }
+    
+    public class DebuggingFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.HttpContext.Request.Method != "POST")
+            {
+                return;
+            }
+            
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+
+            string text = new StreamReader(filterContext.HttpContext.Request.Body).ReadToEndAsync().Result;
+
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+            
+            Console.WriteLine(text);
+
+            base.OnActionExecuting(filterContext);
         }
     }
 }

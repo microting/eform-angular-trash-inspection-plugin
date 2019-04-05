@@ -3,6 +3,9 @@ import {Time} from '@angular/common';
 export class TrashInspectionsPnModel {
   total: number;
   trashInspectionList: Array<TrashInspectionPnModel> = [];
+  token: string;
+  numOfElements: number;
+  pageNum: number;
 }
 
 export class TrashInspectionPnModel {
@@ -16,8 +19,10 @@ export class TrashInspectionPnModel {
   eakCode: number;
   producer: string;
   transporter: string;
-  installationId: number;
+  installationName: string;
   mustBeInspected: boolean;
   relatedAreasIds: Array<number> = [];
   status: number;
+  isApproved: boolean;
+  comment: string;
 }
