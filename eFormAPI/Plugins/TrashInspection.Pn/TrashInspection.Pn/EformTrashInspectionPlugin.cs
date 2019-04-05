@@ -35,7 +35,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories.Factories;
 using Rebus.Bus;
 using TrashInspection.Pn.Installers;
 

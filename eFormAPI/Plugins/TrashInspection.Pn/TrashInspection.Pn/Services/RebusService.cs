@@ -45,19 +45,8 @@ namespace TrashInspection.Pn.Services
         }
         private TrashInspectionPnDbContext GetContext()
         {
-
-            DbContextOptionsBuilder dbContextOptionsBuilder = new DbContextOptionsBuilder();
-
-            if (_connectionString.ToLower().Contains("convert zero datetime"))
-            {
-                dbContextOptionsBuilder.UseMySql(_connectionString);
-            }
-            else
-            {
-                dbContextOptionsBuilder.UseSqlServer(_connectionString);
-            }
-            dbContextOptionsBuilder.UseLazyLoadingProxies(true);
-            return new TrashInspectionPnDbContext(dbContextOptionsBuilder.Options);
+            TrashInspectionPnContextFactory contextFactory = new TrashInspectionPnContextFactory();
+            return contextFactory.CreateDbContext(new[] {_connectionString});
 
         }
     }
