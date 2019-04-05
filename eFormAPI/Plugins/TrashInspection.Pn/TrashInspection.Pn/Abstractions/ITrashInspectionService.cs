@@ -13,7 +13,7 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> DeleteTrashInspection(string weighingNumber, string token);
         Task<OperationResult> UpdateTrashInspection(TrashInspectionModel updateModel);
         Task<OperationDataResult<TrashInspectionsModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel);
-        Task<string> DownloadEFormPdf(string weighingNumber, string token);
+        Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType);
         Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId);
     }
 }

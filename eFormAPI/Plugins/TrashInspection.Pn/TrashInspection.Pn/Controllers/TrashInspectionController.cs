@@ -37,12 +37,16 @@ namespace TrashInspection.Pn.Conrtrollers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}", Name = "token")]
-        public async Task<IActionResult> DownloadEFormPdf(string weighingNumber, string token)
+        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}")]
+        public async Task<IActionResult> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
             try
             {
-                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token);
+                if (string.IsNullOrEmpty(fileType))
+                {
+                    fileType = "pdf";
+                }
+                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token, fileType);
                 
                 if (!System.IO.File.Exists(filePath))
                 {

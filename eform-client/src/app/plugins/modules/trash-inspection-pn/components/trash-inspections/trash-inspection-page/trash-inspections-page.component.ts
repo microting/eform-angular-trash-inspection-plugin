@@ -88,6 +88,16 @@ export class TrashInspectionsPageComponent implements OnInit {
       trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=pdf', '_blank');
   }
 
+  downloadDocx(trashInspection: any) {
+    window.open('/api/trash-inspection-pn/inspection-results/' +
+      trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=docx', '_blank');
+  }
+
+  downloadPptx(trashInspection: any) {
+    window.open('/api/trash-inspection-pn/inspection-results/' +
+      trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=pptx', '_blank');
+  }
+
   showCreateTrashInspectionModal() {
     this.createTrashInspectionModal.show();
   }
