@@ -17,10 +17,21 @@ echo "################## END GITVERSION ##################"
 su ubuntu -c \
 "dotnet publish eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln -o out /p:Version=$GITVERSION --runtime linux-x64 --configuration Release"
 
+if [ -d "/var/www/microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn"]; then
+	su ubuntu -c \
+	"rm -fR /var/www/microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn"
+fi
+
 su ubuntu -c \
 "cp -av /var/www/microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn /var/www/microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn"
 su ubuntu -c \
 "mkdir -p /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/"
+
+if [ -d "/var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/TrashInspection"]; then
+	su ubuntu -c \
+	"rm -fR /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/TrashInspection"
+fi
+
 su ubuntu -c \
 "cp -av /var/www/microting/eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn/out /var/www/microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/out/Plugins/TrashInspection"
 
