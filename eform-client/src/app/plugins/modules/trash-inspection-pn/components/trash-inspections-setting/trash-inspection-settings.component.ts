@@ -1,11 +1,11 @@
 import {ChangeDetectorRef, Component, EventEmitter, OnInit} from '@angular/core';
 import { TrashInspectionPnSettingsService} from '../../services';
 import {Router} from '@angular/router';
-import {TrashInspectionSettingsModel} from '../../models';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {EntitySearchService} from '../../../../../common/services/advanced';
 import {TemplateListModel, TemplateRequestModel} from '../../../../../common/models/eforms';
 import {EFormService} from '../../../../../common/services/eform';
+import {TrashInspectionBaseSettingsModel} from '../../models/trash-inspection-base-settings.model';
 
 @Component({
   selector: 'app-trash-inspection-settings',
@@ -15,7 +15,7 @@ import {EFormService} from '../../../../../common/services/eform';
 export class TrashInspectionSettingsComponent implements OnInit {
   spinnerStatus = false;
   typeahead = new EventEmitter<string>();
-  settingsModel: TrashInspectionSettingsModel = new TrashInspectionSettingsModel();
+  settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   templatesModel: TemplateListModel = new TemplateListModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
 
@@ -60,6 +60,8 @@ export class TrashInspectionSettingsComponent implements OnInit {
         } this.spinnerStatus = false;
       });
   }
+
   onSelectedChanged(e: any) {
+    this.settingsModel.extendedInspectioneFormId = e.id;
   }
 }

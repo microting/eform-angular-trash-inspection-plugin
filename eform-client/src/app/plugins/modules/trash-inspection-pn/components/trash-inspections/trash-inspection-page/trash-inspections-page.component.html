@@ -251,12 +251,7 @@
         </td>
         <td>
           <div class="d-flex flex-row justify-content-center">
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Trash Inspection' | translate }}"
-                    (click)="showEditTrashInspectionModal(trashInspection)">
-              <fa-icon icon="pen" size="lg" [fixedWidth]="true" ></fa-icon>
 
-            </button>
             <button class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Trash Inspection' | translate }}"
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
@@ -306,12 +301,5 @@
 
 <spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>
 
-<app-trash-inspection-pn-trash-inspection-create #createTrashInspectionModal
-                                    [mappingInstallation]="mappingInstallations"
-                                    (onTrashInspectionCreated)="getAllTrashInspections()">
-</app-trash-inspection-pn-trash-inspection-create>
-<app-trash-inspection-pn-trash-inspection-edit #editTrashInspectionModal
-                                  [mappingInstallations]="mappingInstallations"
-                                  (onTrashInspectionUpdated)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-edit>
 <app-trash-inspection-pn-trash-inspection-delete #deleteTrashInspectionModal
                                                  (onTrashInspectionDeleted)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-delete>

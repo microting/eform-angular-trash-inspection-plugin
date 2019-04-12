@@ -20,7 +20,7 @@ namespace TrashInspection.Pn.Controllers
         [HttpGet]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/settings")]
-        public async Task<OperationDataResult<TrashInspectionPnSettingsModel>> GetSettings()
+        public async Task<OperationDataResult<TrashInspectionBaseSettings>> GetSettings()
         {
             return await _trashInspectionPnSettingsService.GetSettings();
         }
@@ -28,7 +28,7 @@ namespace TrashInspection.Pn.Controllers
         [HttpPost]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/settings")]
-        public async Task<OperationResult> UpdateSettings([FromBody] TrashInspectionPnSettingsModel trashInspectionSettingsModel)
+        public async Task<OperationResult> UpdateSettings([FromBody] TrashInspectionBaseSettings trashInspectionSettingsModel)
         {
             return await _trashInspectionPnSettingsService.UpdateSettings(trashInspectionSettingsModel);
         }

@@ -3,11 +3,9 @@ import {PageSettingsModel} from 'src/app/common/models/settings';
 import {
   TrashInspectionsPnRequestModel,
   TrashInspectionsPnModel,
-  InstallationsPnModel,
-  InstallationPnRequestModel,
   TrashInspectionPnModel
 } from '../../../models';
-import {TrashInspectionPnInstallationsService, TrashInspectionPnTrashInspectionsService} from '../../../services';
+import { TrashInspectionPnTrashInspectionsService} from '../../../services';
 import {SharedPnService} from '../../../../shared/services';
 import {AuthService} from '../../../../../../common/services/auth';
 
@@ -23,12 +21,10 @@ export class TrashInspectionsPageComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
-  mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
   spinnerStatus = false;
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
-              private authService: AuthService,
-              private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
+              private authService: AuthService) { }
   get currentRole(): string {
     return this.authService.currentRole;
   }
@@ -51,7 +47,7 @@ export class TrashInspectionsPageComponent implements OnInit {
 
   getAllInitialData() {
     this.getAllTrashInspections();
-    this.getMappedInstallations();
+    // this.getMappedInstallations();
   }
 
   getAllTrashInspections() {
@@ -64,19 +60,6 @@ export class TrashInspectionsPageComponent implements OnInit {
         this.trashInspectionsModel = data.model;
       } this.spinnerStatus = false;
     });
-  }
-
-  getMappedInstallations() {
-    this.spinnerStatus = true;
-    this.trashInspectionPnInstallationsService.getAllInstallations(new InstallationPnRequestModel()).subscribe((data) => {
-      if (data && data.success) {
-        this.mappingInstallations = data.model;
-      } this.spinnerStatus = false;
-    });
-  }
-
-  showEditTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
-    this.editTrashInspectionModal.show(trashInspection);
   }
 
   showDeleteTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
@@ -98,9 +81,7 @@ export class TrashInspectionsPageComponent implements OnInit {
       trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=pptx', '_blank');
   }
 
-  showCreateTrashInspectionModal() {
-    this.createTrashInspectionModal.show();
-  }
+
 
   sortTable(sort: string) {
     if (this.localPageSettings.sort === sort) {

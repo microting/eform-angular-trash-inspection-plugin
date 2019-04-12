@@ -12,56 +12,55 @@
       <subheader-pn [title]="'Settings' | translate" [heandingSizeRem]="1">
       </subheader-pn>
       <div class="container-fluid">
-        <div class="row" *ngIf="settingsModel.trashInspectionSettingsList.length > 0">
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[0].value"
-                     type="text" name="token" #token="ngModel"
-                     id="sdkconnectionstring" class="form-control">
-              <label for="sdkconnectionstring">{{'SDK connection string' | translate}}</label>
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.sdkConnectionString"
+                     type="text" name="sdkConnectionString" #sdkConnectionString="ngModel"
+                     id="sdkConnectionString" class="form-control">
+              <label for="sdkConnectionString">{{'SDK connection string' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[1].value"
-                     type="text" name="token" #token="ngModel"
-                     id="loglevel" class="form-control">
-              <label for="loglevel">{{'Log Level' | translate}}</label>
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.logLevel"
+                     type="text" name="logLevel" #loglevel="ngModel"
+                     id="logLevel" class="form-control">
+              <label for="logLevel">{{'Log Level' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[2].value"
-                     type="text" name="token" #token="ngModel"
-                     id="loglimit" class="form-control">
-              <label for="loglimit">{{'Log Limit' | translate}}</label>
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.logLimit"
+                     type="text" name="logLimit" #loglimit="ngModel"
+                     id="logLimit" class="form-control">
+              <label for="logLimit">{{'Log Limit' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[3].value"
-                     type="text" name="token" #token="ngModel"
-                     id="maxparallelism" class="form-control">
-              <label for="maxparallelism">{{'Max parallelism' | translate}}</label>
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.maxParallelism"
+                     type="text" name="maxParallelism" #maxparallelism="ngModel"
+                     id="maxParallelism" class="form-control">
+              <label for="maxParallelism">{{'Max parallelism' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[4].value"
-                     type="text" name="token" #token="ngModel"
-                     id="numberofworkers" class="form-control">
-              <label for="numberofworkers">{{'Number of workers' | translate}}</label>
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.numberOfWorkers"
+                     type="text" name="numberOfWorkers" #numberofworkers="ngModel"
+                     id="numberOfWorkers" class="form-control">
+              <label for="numberOfWorkers">{{'Number of workers' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[5].value"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.token"
                      type="text" name="token" #token="ngModel"
                      id="token" class="form-control">
               <label for="token">{{'Token' | translate}}</label>
@@ -70,50 +69,48 @@
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[6].value"
-                     type="text" name="callBackUrl" #token="ngModel"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.callBackUrl"
+                     type="text" name="callBackUrl" #callBackUrl="ngModel"
                      id="callBackUrl" class="form-control">
-              <label for="callBackUrl">{{'CallbackURL' | translate}}</label>
+              <label for="callBackUrl">{{'Callback URL' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[7].value"
-                     type="text" name="callBackCredentialDomain" #token="ngModel"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.callBackCredentialDomain"
+                     type="text" name="callBackCredentialDomain" #callBackCredentialDomain="ngModel"
                      id="callBackCredentialDomain" class="form-control">
-              <label for="callBackCredentialDomain">{{'CallBackCredentialDomain' | translate}}</label>
+              <label for="callBackCredentialDomain">{{'CallBack Credential Domain' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[8].value"
-                     type="text" name="callbackCredentialUserName" #token="ngModel"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialUserName"
+                     type="text" name="callbackCredentialUserName" #callbackCredentialUserName="ngModel"
                      id="callbackCredentialUserName" class="form-control">
-              <label for="callbackCredentialUserName">{{'CallbackCredentialUserName' | translate}}</label>
+              <label for="callbackCredentialUserName">{{'Callback Credential UserName' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[9].value"
-                     type="text" name="callbackCredentialPassword" #token="ngModel"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialPassword"
+                     type="text" name="callbackCredentialPassword" #callbackCredentialPassword="ngModel"
                      id="callbackCredentialPassword" class="form-control">
-              <label for="callbackCredentialPassword">{{'CallbackCredentialPassword' | translate}}</label>
+              <label for="callbackCredentialPassword">{{'Callback Credential Password' | translate}}</label>
             </div>
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
               <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.trashInspectionSettingsList[10].value"
-                     type="text" name="callbackCredentialAuthType" #token="ngModel"
+                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialAuthType"
+                     type="text" name="callbackCredentialAuthType" #callbackCredentialAuthType="ngModel"
                      id="callbackCredentialAuthType" class="form-control">
-              <label for="callbackCredentialAuthType">{{'CallbackCredentialAuthType' | translate}}</label>
+              <label for="callbackCredentialAuthType">{{'Callback Credential AuthType' | translate}}</label>
             </div>
           </div>
-        </div>
-
       </div>
     </div>
   </div>

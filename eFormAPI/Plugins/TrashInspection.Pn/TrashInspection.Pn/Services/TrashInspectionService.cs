@@ -124,7 +124,9 @@ namespace TrashInspection.Pn.Services
                 }
                 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
-                trashInspectionsModel.Token = _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
+//                string lookup = $"TrashInspectionSettings:{MachineAreaSettingsEnum.SdkeFormId.ToString()}"; 
+
+//                trashInspectionsModel.Token = _dbContext.PluginConfigurationValues.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
                 trashInspectionsModel.TrashInspectionList = trashInspections;
 
                 return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);

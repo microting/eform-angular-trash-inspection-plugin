@@ -6,7 +6,7 @@ namespace TrashInspection.Pn.Abstractions
 {
     public interface ITrashInspectionPnSettingsService
     {
-        Task<OperationDataResult<TrashInspectionPnSettingsModel>> GetSettings();
-        Task<OperationResult> UpdateSettings(TrashInspectionPnSettingsModel trashInspectionSettingsModel);
+        Task<OperationDataResult<TrashInspectionBaseSettings>> GetSettings();
+        Task<OperationResult> UpdateSettings(TrashInspectionBaseSettings trashInspectionSettingsModel);
     }
 }

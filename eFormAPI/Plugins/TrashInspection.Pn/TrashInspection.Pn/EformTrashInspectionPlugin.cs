@@ -33,9 +33,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
+using Microting.eFormApi.BasePn.Infrastructure.Settings;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Rebus.Bus;
+using TrashInspection.Pn.Infrastructure.Data.Seed;
+using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
+using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Installers;
 
 namespace TrashInspection.Pn
@@ -67,6 +72,12 @@ namespace TrashInspection.Pn
 
         public void AddPluginConfig(IConfigurationBuilder builder, string connectionString)
         {
+            var seedData = new TrashInspectionConfigurationSeedData();
+            var contextFactory = new TrashInspectionPnContextFactory();
+            builder.AddPluginConfiguration(
+                connectionString, 
+                seedData, 
+                contextFactory);
         }
 
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
@@ -168,10 +179,17 @@ namespace TrashInspection.Pn
 
         public void SeedDatabase(string connectionString)
         {
+            var contextFactory = new TrashInspectionPnContextFactory();
+            using (var context = contextFactory.CreateDbContext(new []{connectionString}))
+            {
+                TrashInspectionPluginSeed.SeedData(context);
+            }
         }
 
         public void ConfigureOptionsServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.ConfigurePluginDbOptions<TrashInspectionBaseSettings>(
+                configuration.GetSection("TrashInspectionBaseSettings"));
        }
     }
 }
