@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using eFormSqlController;
 using Microsoft.AspNetCore.Http;
@@ -48,25 +49,28 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-//                TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
-//                List<TrashInspectionPnSetting> trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.ToList();
-//                if (trashInspectionPnSetting.Count < 12)
-//                {
-//                    TrashInspectionPnSettingsModel.SettingCreateDefaults(_dbContext);                    
-//                    trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.AsNoTracking().ToList();
-//                }
-//                result.trashInspectionSettingsList = new List<TrashInspectionPnSettingModel>();
-//                foreach (TrashInspectionPnSetting inspectionPnSetting in trashInspectionPnSetting)
-//                {
-//                    TrashInspectionPnSettingModel trashInspectionPnSettingModel = new TrashInspectionPnSettingModel();
-//                    trashInspectionPnSettingModel.Id = inspectionPnSetting.Id;
-//                    trashInspectionPnSettingModel.Name = inspectionPnSetting.Name;
-//                    trashInspectionPnSettingModel.Value = inspectionPnSetting.Value;
-//                    result.trashInspectionSettingsList.Add(trashInspectionPnSettingModel);
-//                }
-                var result = _options.Value;
+                var option = _options.Value;
+                if (option.Token == "...")
+                {
+                    string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    Random random = new Random();
+                    string result = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(32).ToArray());
+                    await _options.UpdateDb(settings => { settings.Token = result;}, _dbContext, UserId);
+                }
 
-                return new OperationDataResult<TrashInspectionBaseSettings>(true, result);
+                if (option.SdkConnectionString == "...")
+                {
+                    string connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+
+                    string dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
+                    string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
+                    string sdk = $"Database={dbPrefix}_SDK;";
+                    connectionString = connectionString.Replace(dbNameSection, sdk);
+                    await _options.UpdateDb(settings => { settings.SdkConnectionString = connectionString;}, _dbContext, UserId);
+
+                }
+
+                return new OperationDataResult<TrashInspectionBaseSettings>(true, option);
             }
             catch(Exception e)
             {
@@ -96,16 +100,9 @@ namespace TrashInspection.Pn.Services
                     settings.CallbackCredentialAuthType = trashInspectionSettingsModel.CallbackCredentialAuthType;
                     settings.CallbackCredentialUserName = trashInspectionSettingsModel.CallbackCredentialUserName;
                 }, _dbContext, UserId);
-//                TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-//                if (trashInspectionPnSetting == null)
-//                {
-//                foreach (TrashInspectionPnSettingModel trashInspectionPnSettingModel in trashInspectionSettingsModel.trashInspectionSettingsList)
-//                {
-//                    trashInspectionPnSettingModel.Update(_dbContext);
-//                }
-//                }
+
                 return new OperationResult(true,
-                    _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccesfully"));
+                    _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccessfully"));
             }
             catch(Exception e)
             {
