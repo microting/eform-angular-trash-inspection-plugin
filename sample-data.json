@@ -22,7 +22,7 @@
   "transporterForeignId": "trasnportor id from your system",
   "transporterInformation":true,
   "transporterAddress":"Some address",
-  "trasnporterCity":"Some city",
+  "transporterCity":"Some city",
   "transporterZip":"5000",
   "transporterPhone":"0011223355",
   "transporterContact":"Jane Doe"
