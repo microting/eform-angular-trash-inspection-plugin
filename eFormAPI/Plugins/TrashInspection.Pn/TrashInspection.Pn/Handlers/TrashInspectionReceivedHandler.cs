@@ -69,6 +69,10 @@ namespace TrashInspection.Pn.Handlers
             }
             
             var mainElement = _core.TemplateRead(eFormId);
+            if (mainElement == null)
+            {
+                return;
+            }
             List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             foreach (InstallationSite installationSite in installationSites)
@@ -137,11 +141,8 @@ namespace TrashInspection.Pn.Handlers
                 await _dbContext.SaveChangesAsync();
             }
 
-            createModel.SegmentId = segment.Id;
-            createModel.FractionId = fraction.Id;
-            createModel.InstallationId = installation.Id;
             createModel.Status = 66;
-            createModel.Update(_dbContext);
+            await createModel.Update(_dbContext);
         }
 
         private void LogEvent(string appendText)

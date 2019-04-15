@@ -294,14 +294,14 @@ namespace TrashInspection.Pn.Services
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
 //            LogEvent($"CreateTrashInspection: createModel is {createModel.ToString()}");
-            TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
-            if (trashInspectionSettings == null)
+            var pluginConfiguration = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
+            if (pluginConfiguration == null)
             {
                 return new OperationResult(false);
             }
             else
             {
-                if (createModel.Token == trashInspectionSettings.Value && createModel.WeighingNumber != null)
+                if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
                 {
                     if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
                     {
@@ -309,17 +309,22 @@ namespace TrashInspection.Pn.Services
                     } 
                     
                     createModel.Status = 33;
-                    createModel.Save(_dbContext);
+                    await createModel.Save(_dbContext);
 
-                    Segment segment = await _dbContext.Segments.FirstOrDefaultAsync(x => x.Name == createModel.Segment);
-                    Installation installation = await
-                        _dbContext.Installations.FirstOrDefaultAsync(x => x.Name == createModel.InstallationName);
-                    Fraction fraction = await
-                        _dbContext.Fractions.FirstOrDefaultAsync(x => x.ItemNumber == createModel.TrashFraction);
+                    Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
+                    Installation installation = 
+                        _dbContext.Installations.FirstOrDefault(x => x.Name == createModel.InstallationName);
+                    Fraction fraction = 
+                        _dbContext.Fractions.FirstOrDefault(x => x.ItemNumber == createModel.TrashFraction);                    
 
                     LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
-                    {
+                    {                                            
+                        createModel.SegmentId = segment.Id;
+                        createModel.FractionId = fraction.Id;
+                        createModel.InstallationId = installation.Id;
+                        await createModel.Update(_dbContext);
+                        
                         _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                     }
                     

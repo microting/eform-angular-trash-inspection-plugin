@@ -10,6 +10,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
 {
     public class TrashInspectionModel : IModel
     {
+        #region vars
+        #region global vars
         public int Id { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
@@ -22,27 +24,54 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }
         public string RegistrationNumber { get; set; }
-        public string TrashFraction { get; set; }
         public string EakCode { get; set; }
-        public string Producer { get; set; }
-        public string Transporter { get; set; }
-        public string InstallationName { get; set; }
         public string Token { get; set; }
-        public int? InstallationId { get; set; }
-        public int? SegmentId { get; set; }
-        public int? FractionId { get; set; }
         public bool MustBeInspected { get; set; }
         public int Status { get; set; }
-        public string Segment { get; set; }
         public bool IsApproved { get; set; }
         public bool InspectionDone { get; set; }
         public bool ExtendedInspection { get; set; }
         public string Comment { get; set; }
-        public string ProducerForeignId { get; set; }
-        public string TransporterForeignId { get; set; }
-        public int ProducerId { get; set; }
-        public int TransporterId { get; set; }
 
+        #endregion
+        
+        #region producer vars 
+        public string ProducerForeignId { get; set; }
+        public int ProducerId { get; set; }
+        public string Producer { get; set; }
+        public string ProducerAddress { get; set; }
+        public string ProducerCity { get; set; }
+        public string ProducerZip { get; set; }
+        public string ProducerPhone { get; set; }
+        public string ProducerContact { get; set; }
+        #endregion
+
+        #region transporter vars
+        public string TransporterForeignId { get; set; }
+        public int TransporterId { get; set; }
+        public string Transporter { get; set; }
+        public string TransporterAddress { get; set; }
+        public string TransporterCity { get; set; }
+        public string TransporterZip { get; set; }
+        public string TransporterPhone { get; set; }
+        public string TransporterContact { get; set; }
+        #endregion
+
+        #region fraction vars
+        public int? FractionId { get; set; }
+        public string TrashFraction { get; set; }
+        #endregion
+
+        #region installation vars
+        public int? InstallationId { get; set; }
+        public string InstallationName { get; set; }
+        #endregion
+
+        #region segment vars
+        public int? SegmentId { get; set; }
+        public string Segment { get; set; }
+        #endregion
+        #endregion      
 
         public async Task Save(TrashInspectionPnDbContext _dbContext)
         {
