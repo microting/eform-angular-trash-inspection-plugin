@@ -111,6 +111,18 @@
               <label for="callbackCredentialAuthType">{{'Callback Credential AuthType' | translate}}</label>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="md-form input-group">
+              <ng-select [items]="templatesModel.templates"
+                         bindLabel="label"
+                         [placeholder]="settingsModel.extendedInspectioneFormId || ('Selected template for extended inspection' | translate)"
+                         bindValue="id"
+                         [typeahead]="typeahead"
+                         (change)="onSelectedChanged($event)">
+              </ng-select>
+              <label >{{'Selected template for extended inspection' | translate}}</label>
+            </div>
+          </div>
       </div>
     </div>
   </div>
