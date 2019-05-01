@@ -1,5 +1,6 @@
 export class FractionPnRequestModel {
   pageSize: number;
+  nameFilter: string;
   sort: string;
   pageIndex: number;
   isSortDsc: boolean;

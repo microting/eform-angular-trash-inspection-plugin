@@ -21,6 +21,7 @@ export class TrashInspectionPnModel {
   transporter: string;
   installationName: string;
   mustBeInspected: boolean;
+  token: string;
   relatedAreasIds: Array<number> = [];
   status: number;
   isApproved: boolean;

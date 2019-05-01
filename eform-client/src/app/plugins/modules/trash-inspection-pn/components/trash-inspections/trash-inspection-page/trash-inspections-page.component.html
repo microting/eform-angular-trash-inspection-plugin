@@ -1,5 +1,11 @@
 <subheader-pn [title]="'Trash Inspections' | translate">
   <div class="p-3">
+    <button
+      id="createInstallationBtn"
+      class="btn btn-success"
+      mdbTooltip="{{ 'Create Trash Inspection' | translate }}"
+      (click)="showCreateTrashInspection()">{{ 'New Trash Inspection' | translate }}
+    </button>
   </div>
 </subheader-pn>
 
@@ -301,5 +307,7 @@
 
 <spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>
 
+<app-trash-inspection-pn-trash-inspection-create #createTrashInspectionModal
+                                                 (onTrashInspectionCreated)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-create>
 <app-trash-inspection-pn-trash-inspection-delete #deleteTrashInspectionModal
                                                  (onTrashInspectionDeleted)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-delete>

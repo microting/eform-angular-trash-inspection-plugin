@@ -36,7 +36,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
     return this.put(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }
 
-  createTrashInspection(model: TrashInspectionPnCreateModel): Observable<OperationResult> {
+  createTrashInspection(model: TrashInspectionPnModel): Observable<OperationResult> {
     return this.post(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }
 
