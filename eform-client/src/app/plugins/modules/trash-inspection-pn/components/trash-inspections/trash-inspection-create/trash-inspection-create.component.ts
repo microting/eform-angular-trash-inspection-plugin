@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewC
 import {
   TrashInspectionPnFractionsService,
   TrashInspectionPnInstallationsService,
-  TrashInspectionPnProducersService,
+  TrashInspectionPnProducersService, TrashInspectionPnSegmentsService,
   TrashInspectionPnSettingsService,
   TrashInspectionPnTransporterService,
   TrashInspectionPnTrashInspectionsService
@@ -10,7 +10,7 @@ import {
 import {
   InstallationPnCreateModel,
   InstallationPnModel, InstallationPnRequestModel,
-  InstallationsPnModel,
+  InstallationsPnModel, SegmentPnRequestModel, SegmentsPnModel,
   TrashInspectionPnCreateModel, TrashInspectionPnModel,
   TrashInspectionsPnModel,
 } from '../../../models';
@@ -21,6 +21,9 @@ import {TransporterPnRequestModel, TransportersPnModel} from '../../../models/tr
 import {ProducerPnRequestModel, ProducersPnModel} from '../../../models/producer';
 import {FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
 import {TrashInspectionBaseSettingsModel} from '../../../models/trash-inspection-base-settings.model';
+import * as moment from 'moment';
+import _date = moment.unitOfTime._date;
+import DateTimeFormat = Intl.DateTimeFormat;
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-create',
@@ -34,10 +37,14 @@ export class TrashInspectionCreateComponent implements OnInit {
   producersModel: ProducersPnModel = new ProducersPnModel();
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
   fractionsModel: FractionsPnModel = new FractionsPnModel();
+  segmentsModel: SegmentsPnModel = new SegmentsPnModel();
   producerRequestModel: ProducerPnRequestModel = new ProducerPnRequestModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
+  segmentRequestModel: SegmentPnRequestModel = new SegmentPnRequestModel();
   checked = false;
+  dateNow = new Date;
+  timeNow = new Date;
   spinnerStatus = false;
   settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   newTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
@@ -46,10 +53,12 @@ export class TrashInspectionCreateComponent implements OnInit {
   typeaheadProducer = new EventEmitter<string>();
   typeaheadTransporter = new EventEmitter<string>();
   typeaheadFraction = new EventEmitter<string>();
+  typeaheadSegment = new EventEmitter<string>();
 
 
-  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
+  constructor(private InstallationsService: TrashInspectionPnInstallationsService,
               private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
+              private segmentsService: TrashInspectionPnSegmentsService,
               private eFormService: EFormService,
               private installationsService: TrashInspectionPnInstallationsService,
               private producersService: TrashInspectionPnProducersService,
@@ -105,6 +114,18 @@ export class TrashInspectionCreateComponent implements OnInit {
         this.fractionsModel = items.model;
         this.cd.markForCheck();
       });
+    this.typeaheadSegment
+      .pipe(
+        debounceTime(200),
+        switchMap(term => {
+          this.segmentRequestModel.nameFilter = term;
+          return this.segmentsService.getAllSegments(this.segmentRequestModel);
+        })
+      )
+      .subscribe(items => {
+        this.segmentsModel = items.model;
+        this.cd.markForCheck();
+      });
     }
 
   ngOnInit() {
@@ -125,6 +146,8 @@ export class TrashInspectionCreateComponent implements OnInit {
   createTrashInspection() {
     this.spinnerStatus = true;
     this.newTrashInspectionModel.token = this.settingsModel.token;
+    this.newTrashInspectionModel.date = this.dateNow;
+    this.newTrashInspectionModel.time = this.timeNow;
     this.trashInspectionPnTrashInspectionsService.createTrashInspection(this.newTrashInspectionModel).subscribe((data) => {
       if (data && data.success) {
         this.onTrashInspectionCreated.emit();
@@ -155,7 +178,11 @@ export class TrashInspectionCreateComponent implements OnInit {
   }
   onFractionSelectedChanged(e: any) {
     // debugger;
-    this.newTrashInspectionModel.trashFraction = e.itemNumber;
+    this.newTrashInspectionModel.trashFraction = Number(e.itemNumber);
+  }
+  onSegmentSelectedChanged(e: any) {
+    // debugger;
+    this.newTrashInspectionModel.segment = e.name;
   }
   isChecked(status: boolean) {
     this.newTrashInspectionModel.mustBeInspected = status;

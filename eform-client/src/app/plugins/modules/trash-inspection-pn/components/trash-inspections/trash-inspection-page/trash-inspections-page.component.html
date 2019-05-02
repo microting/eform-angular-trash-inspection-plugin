@@ -73,6 +73,18 @@
           </div>
         </th>
 
+        <th scope="col" class="table-header-sortable" id="segmentTableHeader"
+            (click)="sortTable('SegmentId')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Segment' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Segment'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Segment' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Segment' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
         <th scope="col" class="table-header-sortable" id="mustBeInspectedTableHeader"
             (click)="sortTable('MustBeInspected')">
           <div class="d-flex align-items-center justify-content-center">
@@ -205,6 +217,9 @@
           {{trashInspection.installationName}}
         </td>
         <td>
+          {{trashInspection.segment}}
+        </td>
+        <td>
           <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
         </td>
         <td>
@@ -224,9 +239,9 @@
         </td>
         <td>
 
-          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.isApproved"></fa-icon>
 
-          <fa-icon icon="times" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+          <fa-icon icon="times" size="lg" [fixedWidth]="true" *ngIf="!trashInspection.isApproved"></fa-icon>
 
         </td>
         <td>

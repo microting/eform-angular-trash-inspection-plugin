@@ -35,6 +35,20 @@
           <div class="row mt-2">
             <div class="col-md-12 col-xs-12">
               <div class="md-form">
+                <ng-select [items]="segmentsModel.segmentList"
+                           bindLabel="name"
+                           [placeholder]="('Selected segment' | translate)"
+                           bindValue="name"
+                           [typeahead]="typeaheadSegment"
+                           (change)="onSegmentSelectedChanged($event)"
+                           id="createTrashInspectionSegmentSelector">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12 col-xs-12">
+              <div class="md-form">
                 <div class="mat-checkbox">
                   <input id="checkbox{{newTrashInspectionModel.mustBeInspected}}"
                          color="primary" type="checkbox" [(ngModel)]="newTrashInspectionModel.mustBeInspected">
