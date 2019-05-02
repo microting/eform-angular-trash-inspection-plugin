@@ -1,5 +1,6 @@
 export class InstallationPnRequestModel {
   pageIndex: number;
+  nameFilter: string;
   pageSize: number;
   sort: string;
   isSortDsc: boolean;

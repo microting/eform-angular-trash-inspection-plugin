@@ -12,6 +12,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Newtonsoft.Json.Linq;
+using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -43,6 +44,13 @@ namespace TrashInspection.Pn.Services
                 TransportersModel transportersModel = new TransportersModel();
 
                 IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
+
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    transporterQuery = transporterQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
                     if (pnRequestModel.IsSortDsc)

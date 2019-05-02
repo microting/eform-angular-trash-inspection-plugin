@@ -1,5 +1,11 @@
 <subheader-pn [title]="'Trash Inspections' | translate">
   <div class="p-3">
+    <button
+      id="createInstallationBtn"
+      class="btn btn-success"
+      mdbTooltip="{{ 'Create Trash Inspection' | translate }}"
+      (click)="showCreateTrashInspection()">{{ 'New Trash Inspection' | translate }}
+    </button>
   </div>
 </subheader-pn>
 
@@ -64,6 +70,18 @@
                *ngIf="localPageSettings.sort == 'Installation' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'Installation' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
+        <th scope="col" class="table-header-sortable" id="segmentTableHeader"
+            (click)="sortTable('SegmentId')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Segment' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Segment'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Segment' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Segment' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -199,6 +217,9 @@
           {{trashInspection.installationName}}
         </td>
         <td>
+          {{trashInspection.segment}}
+        </td>
+        <td>
           <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
         </td>
         <td>
@@ -218,9 +239,9 @@
         </td>
         <td>
 
-          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.isApproved"></fa-icon>
 
-          <fa-icon icon="times" size="lg" [fixedWidth]="true" *ngIf="trashInspection.mustBeInspected"></fa-icon>
+          <fa-icon icon="times" size="lg" [fixedWidth]="true" *ngIf="!trashInspection.isApproved"></fa-icon>
 
         </td>
         <td>
@@ -301,5 +322,7 @@
 
 <spinner-pn [spinnerVisibility]="spinnerStatus"></spinner-pn>
 
+<app-trash-inspection-pn-trash-inspection-create #createTrashInspectionModal
+                                                 (onTrashInspectionCreated)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-create>
 <app-trash-inspection-pn-trash-inspection-delete #deleteTrashInspectionModal
                                                  (onTrashInspectionDeleted)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-delete>

@@ -88,6 +88,7 @@ namespace TrashInspection.Pn.Services
                     Date = x.Date,
                     EakCode = x.Eak_Code,
                     InstallationId = x.InstallationId,
+                    SegmentId = x.SegmentId,
                     MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
                     RegistrationNumber = x.RegistrationNumber,
@@ -120,7 +121,13 @@ namespace TrashInspection.Pn.Services
                     if (fraction != null)
                     {
                         trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
-                    }                    
+                    }       
+                    Segment segment = await _dbContext.Segments
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.SegmentId);
+                    if (segment != null)
+                    {
+                        trashInspectionModel.Segment = segment.Name;
+                    }             
                 }
                 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
@@ -306,7 +313,7 @@ namespace TrashInspection.Pn.Services
                     if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
                     {
                         return new OperationResult(true);
-                    } 
+                    }
                     
                     createModel.Status = 33;
                     await createModel.Save(_dbContext);

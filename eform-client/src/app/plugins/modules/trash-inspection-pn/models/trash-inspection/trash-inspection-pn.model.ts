@@ -11,7 +11,7 @@ export class TrashInspectionsPnModel {
 export class TrashInspectionPnModel {
   id: number;
   name: string;
-  weighingNumber: number;
+  weighingNumber: string;
   date: Date;
   time: Date;
   registrationNumber: string;
@@ -19,8 +19,10 @@ export class TrashInspectionPnModel {
   eakCode: number;
   producer: string;
   transporter: string;
+  segment: string;
   installationName: string;
   mustBeInspected: boolean;
+  token: string;
   relatedAreasIds: Array<number> = [];
   status: number;
   isApproved: boolean;

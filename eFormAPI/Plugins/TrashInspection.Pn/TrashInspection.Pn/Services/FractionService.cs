@@ -15,6 +15,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Newtonsoft.Json.Linq;
+using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -46,6 +47,12 @@ namespace TrashInspection.Pn.Services
                 FractionsModel fractionsModel = new FractionsModel();
                 
                 IQueryable<Fraction> fractionsQuery = _dbContext.Fractions.AsQueryable();
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    fractionsQuery = fractionsQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
                     if (pnRequestModel.IsSortDsc)

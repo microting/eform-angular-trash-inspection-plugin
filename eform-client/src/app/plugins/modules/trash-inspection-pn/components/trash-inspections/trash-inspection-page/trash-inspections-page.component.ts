@@ -62,6 +62,9 @@ export class TrashInspectionsPageComponent implements OnInit {
     });
   }
 
+  showCreateTrashInspection() {
+    this.createTrashInspectionModal.show();
+  }
   showDeleteTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
     this.deleteTrashInspectionModal.show(trashInspection);
   }

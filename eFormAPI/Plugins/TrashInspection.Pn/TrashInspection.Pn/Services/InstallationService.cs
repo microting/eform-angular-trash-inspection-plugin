@@ -13,6 +13,7 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using OpenStack.NetCoreSwiftClient.Extensions;
 
 namespace TrashInspection.Pn.Services
 {
@@ -41,6 +42,11 @@ namespace TrashInspection.Pn.Services
                 InstallationsModel installationsModel = new InstallationsModel();
                 
                 IQueryable<Installation> installationsQuery = _dbContext.Installations.AsQueryable();
+
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    installationsQuery = installationsQuery.Where(x => x.Name.Contains(pnRequestModel.NameFilter));
+                }
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
                     if (pnRequestModel.IsSortDsc)
