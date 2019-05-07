@@ -4,7 +4,7 @@ using eFormShared;
 using System.Linq;
 using System.Threading.Tasks;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {

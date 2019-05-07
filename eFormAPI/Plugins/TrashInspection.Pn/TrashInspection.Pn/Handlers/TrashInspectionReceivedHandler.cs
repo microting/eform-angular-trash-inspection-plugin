@@ -33,8 +33,9 @@ using eFormCore;
 using eFormData;
 using eFormShared;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Handlers
@@ -145,10 +146,72 @@ namespace TrashInspection.Pn.Handlers
 
             if (trashInspection.Status < 66)
             {
-                createModel.Status = 66;
-                await createModel.Update(_dbContext);
+                trashInspection.Status = 66;
+                trashInspection.Update(_dbContext);
             }
-            
+
+            var producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Name == createModel.Producer);
+
+            if (producer == null)
+            {
+                producer = new Producer
+                {
+                    Name = createModel.Producer,
+                    Address = createModel.ProducerAddress,
+                    City = createModel.ProducerCity,
+                    ContactPerson = createModel.ProducerContact,
+                    Phone = createModel.ProducerPhone,
+                    ZipCode = createModel.ProducerZip,
+                    ForeignId = createModel.ProducerForeignId
+                };
+                
+                producer.Create(_dbContext);
+            }
+            else
+            {
+                producer.Address = createModel.ProducerAddress;
+                producer.City = createModel.ProducerCity;
+                producer.ContactPerson = createModel.ProducerContact;
+                producer.Phone = createModel.ProducerPhone;
+                producer.ZipCode = createModel.ProducerZip;
+                producer.ForeignId = createModel.ProducerForeignId;
+                producer.Update(_dbContext);
+            }
+
+            trashInspection.ProducerId = producer.Id;
+
+            var transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Name == createModel.Transporter);
+
+            if (transporter == null)
+            {
+                transporter = new Transporter
+                {
+                    Name = createModel.Transporter,
+                    Address = createModel.TransporterAddress,
+                    City = createModel.TransporterCity,
+                    ZipCode = createModel.TransporterZip,
+                    Phone = createModel.TransporterPhone,
+                    ContactPerson = createModel.TransporterContact,
+                    ForeignId = createModel.TransporterForeignId
+                };
+                
+                transporter.Create(_dbContext);
+            }
+            else
+            {
+                transporter.Address = createModel.TransporterAddress;
+                transporter.City = createModel.TransporterCity;
+                transporter.ZipCode = createModel.TransporterZip;
+                transporter.Phone = createModel.TransporterPhone;
+                transporter.ContactPerson = createModel.TransporterContact;
+                transporter.ForeignId = createModel.TransporterForeignId;
+                transporter.Update(_dbContext);
+            }
+
+            trashInspection.TransporterId = transporter.Id;
+
+            trashInspection.Update(_dbContext);
+
         }
 
         private void LogEvent(string appendText)

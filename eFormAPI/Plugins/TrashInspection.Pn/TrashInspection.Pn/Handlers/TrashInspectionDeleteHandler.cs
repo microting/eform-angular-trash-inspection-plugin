@@ -28,8 +28,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
 using eFormShared;
+using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Rebus.Handlers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
@@ -81,9 +82,12 @@ namespace TrashInspection.Pn.Handlers
                 }
                 
             }
-            
-            createModel.InspectionDone = true;
-            createModel.Update(_dbContext);
+
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = await 
+                _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
+
+            trashInspection.InspectionDone = true;
+            trashInspection.Update(_dbContext);
 
         }
     }

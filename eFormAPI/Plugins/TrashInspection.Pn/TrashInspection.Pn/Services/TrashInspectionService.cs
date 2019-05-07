@@ -13,7 +13,7 @@ using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using System.Globalization;
 using System.IO;
 using System.Xml;
@@ -312,12 +312,30 @@ namespace TrashInspection.Pn.Services
                 {
                     if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
                     {
-                        return new OperationResult(true);
+                        var result =
+                            _dbContext.TrashInspections.SingleOrDefault(x =>
+                                x.WeighingNumber == createModel.WeighingNumber);
+                        return new OperationResult(true, result.Id.ToString());
                     }
-                    
-                    createModel.Status = 33;
-                    await createModel.Save(_dbContext);
 
+                    Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection =
+                        new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
+                        {
+                            WeighingNumber = createModel.WeighingNumber,
+                            Date = createModel.Date,
+                            Time = createModel.Time,
+                            Eak_Code = createModel.EakCode,
+                            ExtendedInspection = createModel.ExtendedInspection,
+                            RegistrationNumber = createModel.RegistrationNumber,
+                            TrashFraction = createModel.TrashFraction,
+                            Producer = createModel.Producer,
+                            Transporter = createModel.Transporter,
+                            MustBeInspected = createModel.MustBeInspected,
+                            Status = 33
+                        };
+                    
+                    trashInspection.Create(_dbContext);
+                    
                     Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
                     Installation installation = 
                         _dbContext.Installations.FirstOrDefault(x => x.Name == createModel.InstallationName);
@@ -326,11 +344,15 @@ namespace TrashInspection.Pn.Services
 
                     LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
-                    {                                            
+                    {
+                        trashInspection.SegmentId = segment.Id;
+                        trashInspection.FractionId = fraction.Id;
+                        trashInspection.InstallationId = installation.Id;
+                        trashInspection.Update(_dbContext);
                         createModel.SegmentId = segment.Id;
                         createModel.FractionId = fraction.Id;
                         createModel.InstallationId = installation.Id;
-                        await createModel.Update(_dbContext);
+                        createModel.Id = trashInspection.Id;
                         
                         _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                     }
@@ -344,14 +366,33 @@ namespace TrashInspection.Pn.Services
             }
                 
             }
-            
-            
                 
         }
 
         public async Task<OperationResult> UpdateTrashInspection(TrashInspectionModel updateModel)
         {
-            updateModel.Update(_dbContext);
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection selectedTrashInspection =
+                new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection()
+                {
+                    Id = updateModel.Id,
+                    Date = updateModel.Date,
+                    Eak_Code = updateModel.EakCode,
+                    InstallationId = updateModel.InstallationId,
+                    MustBeInspected = updateModel.MustBeInspected,
+                    Producer = updateModel.Producer,
+                    RegistrationNumber = updateModel.RegistrationNumber,
+                    Time = updateModel.Time,
+                    Transporter = updateModel.Transporter,
+                    TrashFraction = updateModel.TrashFraction,
+                    WeighingNumber = updateModel.WeighingNumber,
+                    Status = updateModel.Status,
+                    Version = updateModel.Version,
+                    WorkflowState = updateModel.WorkflowState,
+                    ExtendedInspection = updateModel.ExtendedInspection,
+                    InspectionDone = updateModel.InspectionDone
+                };
+            
+            selectedTrashInspection.Update(_dbContext);
             return new OperationResult(true);
         }
 

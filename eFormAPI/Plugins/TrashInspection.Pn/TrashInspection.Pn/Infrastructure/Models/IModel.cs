@@ -1,4 +1,4 @@
-﻿using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+﻿using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using System.Threading.Tasks;
 
 namespace TrashInspection.Pn.Infrastructure.Models

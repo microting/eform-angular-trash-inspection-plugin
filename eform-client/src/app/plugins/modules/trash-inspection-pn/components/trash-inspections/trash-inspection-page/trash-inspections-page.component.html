@@ -278,22 +278,22 @@
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
               <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true" ></fa-icon>
             </button>
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+            <button class="btn btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PDF' | translate }}"
-                    (click)="downloadPDF(trashInspection)">
+                    (click)="downloadPDF(trashInspection)" *ngIf="trashInspection.status == 100">
               <fa-icon icon="file-pdf" size="lg" [fixedWidth]="true" ></fa-icon>
 
             </button>
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+            <button class="btn btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get DOCX' | translate }}"
                     (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status == 100">
-              <fa-icon icon="file-word-o" size="lg" [fixedWidth]="true" ></fa-icon>
+              <fa-icon icon="file-word" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
-            <button class="btn btn-accent text-black-50 btn-icon mb-2"
+            <button class="btn btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PPTX' | translate }}"
                     (click)="downloadPptx(trashInspection)" *ngIf="trashInspection.status == 100">
-              <fa-icon icon="file-powerpoint-o" size="lg" [fixedWidth]="true" ></fa-icon>
+              <fa-icon icon="file-powerpoint" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
           </div>

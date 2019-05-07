@@ -1,4 +1,4 @@
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using System;
