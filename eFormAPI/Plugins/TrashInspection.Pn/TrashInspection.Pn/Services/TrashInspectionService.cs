@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using eFormCore;
 using eFormShared;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -14,12 +13,8 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
-using System.Globalization;
 using System.IO;
-using System.Xml;
 using System.Xml.Linq;
-using eFormData;
-using Microsoft.AspNetCore.Mvc;
 using Rebus.Bus;
 using TrashInspection.Pn.Messages;
 
@@ -94,7 +89,6 @@ namespace TrashInspection.Pn.Services
                     RegistrationNumber = x.RegistrationNumber,
                     Time = x.Time,
                     Transporter = x.Transporter,
-//                    TrashFraction = x.TrashFraction,
                     WeighingNumber = x.WeighingNumber,
                     Status = x.Status,
                     Version = x.Version,
@@ -104,7 +98,6 @@ namespace TrashInspection.Pn.Services
                     FractionId = x.FractionId,
                     IsApproved = x.IsApproved,
                     Comment = x.Comment
-//                    InstallationName = 
             }).ToListAsync();
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)
@@ -131,9 +124,6 @@ namespace TrashInspection.Pn.Services
                 }
                 
                 trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
-//                string lookup = $"TrashInspectionSettings:{MachineAreaSettingsEnum.SdkeFormId.ToString()}"; 
-
-//                trashInspectionsModel.Token = _dbContext.PluginConfigurationValues.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token").Result.Value;
                 trashInspectionsModel.TrashInspectionList = trashInspections;
 
                 return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);
@@ -194,7 +184,7 @@ namespace TrashInspection.Pn.Services
         {
             TrashInspectionPnSetting trashInspectionSettings =
                 await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
-            LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
+            _coreHelper.LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
             if (token == trashInspectionSettings.Value && weighingNumber != null)
             {
                 try
@@ -231,7 +221,7 @@ namespace TrashInspection.Pn.Services
                     {
                         fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Name == trashInspection.TrashFraction);
                     }
-                    LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
+                    _coreHelper.LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
 
                     string segmentName = "";
                     
@@ -240,7 +230,7 @@ namespace TrashInspection.Pn.Services
                     {
                         segmentName = segment.Name;
                     }
-                    LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
+                    _coreHelper.LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
                     
                     string xmlContent = new XElement("TrashInspection", 
                         new XElement("EakCode", trashInspection.EakCode), 
@@ -251,7 +241,7 @@ namespace TrashInspection.Pn.Services
                         new XElement("Segment", segmentName),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
-                    LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
+                    _coreHelper.LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
                     
                     foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
@@ -269,7 +259,7 @@ namespace TrashInspection.Pn.Services
                     {
 
 
-                        LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
+                        _coreHelper.LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
                         var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
                             $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
@@ -288,7 +278,7 @@ namespace TrashInspection.Pn.Services
                 }
                 catch (Exception exception)
                 {
-                    LogException($"DownloadEFormPdf: We got the following exception: {exception.Message}");
+                    _coreHelper.LogException($"DownloadEFormPdf: We got the following exception: {exception.Message}");
                     throw new Exception("Something went wrong!", exception);
                 }
             }
@@ -300,7 +290,6 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateTrashInspection(TrashInspectionModel createModel)
         {
-//            LogEvent($"CreateTrashInspection: createModel is {createModel.ToString()}");
             var pluginConfiguration = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             if (pluginConfiguration == null)
             {
@@ -342,7 +331,7 @@ namespace TrashInspection.Pn.Services
                     Fraction fraction = 
                         _dbContext.Fractions.FirstOrDefault(x => x.ItemNumber == createModel.TrashFraction);                    
 
-                    LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
+                    _coreHelper.LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
                     if (segment != null && installation != null && fraction != null)
                     {
                         trashInspection.SegmentId = segment.Id;
@@ -464,20 +453,6 @@ namespace TrashInspection.Pn.Services
                 if (trashInspection != null)
                 {
                     _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
-//                    Core core = _coreHelper.GetCore();
-//
-//                    List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases.Where(x =>
-//                        x.TrashInspectionId == trashInspection.Id).ToList();
-//                    
-//                    foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
-//                    {
-//                        Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
-//                        string microtingUId = caseDto.MicrotingUId;
-//                        core.CaseDelete(microtingUId);
-//                    }
-//
-//                    trashInspection.InspectionDone = true;
-//                    trashInspection.Update(_dbContext);
 
                     return new OperationResult(true);
                 }               
@@ -486,35 +461,6 @@ namespace TrashInspection.Pn.Services
             }
 
             return new OperationResult(false);
-        }
-        
-        public void LogEvent(string appendText)
-        {
-            try
-            {                
-                var oldColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine("[DBG] " + appendText);
-                Console.ForegroundColor = oldColor;
-            }
-            catch
-            {
-            }
-        }
-
-        public void LogException(string appendText)
-        {
-            try
-            {
-                var oldColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[ERR] " + appendText);
-                Console.ForegroundColor = oldColor;
-            }
-            catch
-            {
-
-            }
         }
     }
 }

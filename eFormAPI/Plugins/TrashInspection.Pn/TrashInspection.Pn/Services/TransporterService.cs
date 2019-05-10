@@ -22,16 +22,13 @@ namespace TrashInspection.Pn.Services
     public class TransporterService : ITransporterService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<TransporterService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public TransporterService(ILogger<TransporterService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public TransporterService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -97,7 +94,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<TransportersModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
             }
@@ -131,7 +128,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<TransporterModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporter"));
             }
@@ -206,7 +203,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingTransporter"));
             }

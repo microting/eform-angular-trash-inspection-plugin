@@ -25,16 +25,13 @@ namespace TrashInspection.Pn.Services
     public class FractionService : IFractionService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<InstallationService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public FractionService(ILogger<InstallationService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public FractionService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -106,7 +103,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<FractionsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFractions"));
 
@@ -145,7 +142,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<FractionModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFraction"));
             }
@@ -215,7 +212,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingFraction"));
             }

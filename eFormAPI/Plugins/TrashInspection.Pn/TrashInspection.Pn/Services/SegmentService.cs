@@ -18,16 +18,13 @@ namespace TrashInspection.Pn.Services
     public class SegmentService : ISegmentService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<InstallationService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         
-        public SegmentService(ILogger<InstallationService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public SegmentService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -45,13 +42,13 @@ namespace TrashInspection.Pn.Services
         {
             SegmentModel deleteModel = new SegmentModel();
             deleteModel.Id = id;
-            deleteModel.Delete(_dbContext);
+            await deleteModel.Delete(_dbContext);
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> UpdateSegment(SegmentModel updateModel)
         {
-            updateModel.Update(_dbContext);
+            await updateModel.Update(_dbContext);
             
             return new OperationResult(true);
         }
@@ -110,7 +107,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<SegmentsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingSegments"));
 
@@ -141,7 +138,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<SegmentModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingSegment"));
             }

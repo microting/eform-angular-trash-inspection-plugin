@@ -22,16 +22,13 @@ namespace TrashInspection.Pn.Services
     public class ProducerService : IProducerService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<ProducerService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public ProducerService(ILogger<ProducerService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public ProducerService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -97,7 +94,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<ProducersModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducers"));
             }
@@ -131,7 +128,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<ProducerModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducer"));
             }
@@ -206,7 +203,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingProducer"));
             }

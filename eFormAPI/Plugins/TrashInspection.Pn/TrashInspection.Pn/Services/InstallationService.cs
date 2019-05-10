@@ -20,16 +20,13 @@ namespace TrashInspection.Pn.Services
     public class InstallationService : IInstallationService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<InstallationService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public InstallationService(ILogger<InstallationService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public InstallationService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -87,7 +84,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<InstallationsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallations"));
 
@@ -127,7 +124,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<InstallationModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallation"));
             }
@@ -147,7 +144,7 @@ namespace TrashInspection.Pn.Services
                         installationSiteModel.SdkSiteId = deployedCheckbox.Id;
                         installationSiteModel.InstallationId = createModel.Id;
 
-                        installationSiteModel.Save(_dbContext);
+                        await installationSiteModel.Save(_dbContext);
 
                     }
                 }
@@ -173,7 +170,7 @@ namespace TrashInspection.Pn.Services
                     installationSiteModel.SdkSiteId = deployedCheckbox.Id;
                     installationSiteModel.InstallationId = updateModel.Id;
 
-                    installationSiteModel.Save(_dbContext);
+                    await installationSiteModel.Save(_dbContext);
                 }
                 else
                 {
@@ -187,7 +184,7 @@ namespace TrashInspection.Pn.Services
                         installationSiteModel.SdkSiteId = deployedCheckbox.Id;
                         installationSiteModel.InstallationId = updateModel.Id;
                         installationSiteModel.WorkflowState = Constants.WorkflowStates.Created;
-                        installationSiteModel.Update(_dbContext);
+                        await installationSiteModel.Update(_dbContext);
 
                     } 
                     toBeRemovedInstallationSites.Remove(installationSite);
@@ -198,7 +195,7 @@ namespace TrashInspection.Pn.Services
             {
                 InstallationSiteModel installationSiteModel = new InstallationSiteModel();
                 installationSiteModel.Id = installationSite.Id;
-                installationSiteModel.Delete(_dbContext);
+                await installationSiteModel.Delete(_dbContext);
             }
             return new OperationResult(true);
         }
@@ -207,7 +204,7 @@ namespace TrashInspection.Pn.Services
         {
             InstallationModel installation = new InstallationModel();
             installation.Id = id;
-            installation.Delete(_dbContext);
+            await installation.Delete(_dbContext);
             return new OperationResult(true);
 
         }
