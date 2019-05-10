@@ -173,7 +173,7 @@ namespace TrashInspection.Pn.Services
                                 FractionModel fractionModel =
                                     FractionsHelper.ComposeValues(new FractionModel(), headers, fractionObj);
 
-                                FractionModel newFraction = new FractionModel
+                                Fraction newFraction = new Fraction
                                 {
                                     ItemNumber = fractionModel.ItemNumber,
                                     Name = fractionModel.Name,
@@ -182,24 +182,24 @@ namespace TrashInspection.Pn.Services
                                     eFormId = fractionModel.eFormId
 
                                 };
-                               await newFraction.Save(_dbContext);
+                               newFraction.Create(_dbContext);
   
                             }
                             else
                             {
                                 if (existingFraction.WorkflowState == Constants.WorkflowStates.Removed)
-                                {
-                                    FractionModel fraction = new FractionModel
+                                {                                    
+                                    Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == existingFraction.Id);
+                                    if (fraction != null)
                                     {
-                                        Id = existingFraction.Id,
-                                        Description = existingFraction.Description,
-                                        Name = existingFraction.Name,
-                                        LocationCode = existingFraction.LocationCode,
-                                        eFormId = existingFraction.eFormId,
+                                        fraction.Name = existingFraction.Name;
+                                        fraction.Description = existingFraction.Description;
+                                        fraction.ItemNumber = existingFraction.ItemNumber;
+                                        fraction.LocationCode = existingFraction.LocationCode;
+                                        fraction.WorkflowState = Constants.WorkflowStates.Created;
 
-                                    };
-                                    fraction.WorkflowState = Constants.WorkflowStates.Created;
-                                    await fraction.Update(_dbContext);
+                                        fraction.Update(_dbContext);
+                                    }
                                 }
                             }
                         }
@@ -220,23 +220,42 @@ namespace TrashInspection.Pn.Services
         
         public async Task<OperationResult> CreateFraction(FractionModel createModel)
         {
-            await createModel.Save(_dbContext);
+            Fraction fraction = new Fraction
+            {
+                Name = createModel.Name,
+                Description = createModel.Description,
+                ItemNumber = createModel.ItemNumber,
+                LocationCode = createModel.LocationCode
+            };
+            fraction.Create(_dbContext);
             
             return new OperationResult(true);
 
         }
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            await updateModel.Update(_dbContext);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
+            if (fraction != null)
+            {
+                fraction.Name = updateModel.Name;
+                fraction.Description = updateModel.Description;
+                fraction.ItemNumber = updateModel.ItemNumber;
+                fraction.LocationCode = updateModel.LocationCode;
+
+                fraction.Update(_dbContext);
+            }
             
             return new OperationResult(true);
 
         }
         public async Task<OperationResult> DeleteFraction(int id)
         {
-            FractionModel deleteModel = new FractionModel();
-            deleteModel.Id = id;
-            await deleteModel.Delete(_dbContext);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (fraction != null)
+            {
+                fraction.Delete(_dbContext);
+            }
             return new OperationResult(true);
         }
 
