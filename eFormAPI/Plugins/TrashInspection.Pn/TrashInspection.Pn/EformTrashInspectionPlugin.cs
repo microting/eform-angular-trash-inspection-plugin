@@ -25,7 +25,6 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Castle.Windsor;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,11 +37,9 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormApi.BasePn.Infrastructure.Settings;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
-using Rebus.Bus;
 using TrashInspection.Pn.Infrastructure.Data.Seed;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using TrashInspection.Pn.Infrastructure.Models;
-using TrashInspection.Pn.Installers;
 
 namespace TrashInspection.Pn
 {

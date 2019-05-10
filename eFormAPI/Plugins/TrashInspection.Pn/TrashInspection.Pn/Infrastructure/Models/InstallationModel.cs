@@ -1,104 +1,55 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 microting
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using eFormShared;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class InstallationModel : IModel
+    public class InstallationModel
     {
         public int Id { get; set; }
+        
         public DateTime? CreatedAt { get; set; }
+        
         public DateTime? Updated_at { get; set; }
+        
         [StringLength(255)]
         public string Workflow_state { get; set; }
+        
         public int Version { get; set; }
+        
         public int CreatedByUserId { get; set; }
+        
         public int UpdatedByUserId { get; set; }
+        
         public string Name { get; set; }
+        
         public List<SiteName_Dto> DeployedSites { get; set; }
-        public List<DeployCheckbox> DeployCheckboxes { get; set; }
-
-        public async Task Save(TrashInspectionPnDbContext _dbContext)
-        {
-            Installation installation = new Installation();
-            installation.CreatedAt = DateTime.Now;                
-            installation.CreatedByUserId = CreatedByUserId;
-            installation.Name = Name;
-            installation.UpdatedAt = DateTime.Now;
-            installation.UpdatedByUserId = UpdatedByUserId;
-            installation.Version = Version;
-            installation.WorkflowState = Constants.WorkflowStates.Created;
-
-            
-            _dbContext.Installations.Add(installation);
-            _dbContext.SaveChanges();
-            
-            _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-            _dbContext.SaveChanges();
-            Id = installation.Id;
-        }
-        public async Task Update(TrashInspectionPnDbContext _dbContext)
-        {
-            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
-
-            if( installation == null)
-            {
-                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
-            }
-            installation.Name = Name;
-
-            if (_dbContext.ChangeTracker.HasChanges())
-            {
-                installation.UpdatedAt = DateTime.Now;
-                installation.UpdatedByUserId = UpdatedByUserId;
-                installation.Version += 1;
-
-                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();            }
-
-        }
-        public async Task Delete(TrashInspectionPnDbContext _dbContext)
-        {
-            Installation installation = _dbContext.Installations.FirstOrDefault(x => x.Id == Id);
-
-            if (installation == null)
-            {
-                throw new NullReferenceException($"Could not find Installation with ID: {Id}");
-            }
-            installation.WorkflowState = eFormShared.Constants.WorkflowStates.Removed;
-
-            if (_dbContext.ChangeTracker.HasChanges())
-            {
-                installation.UpdatedAt = DateTime.Now;
-                installation.UpdatedByUserId = UpdatedByUserId;
-                installation.Version += 1;
-                //_dbContext.Installations.Remove(installation);
-                _dbContext.InstallationVersions.Add(MapInstallationVersion(_dbContext, installation));
-                _dbContext.SaveChanges();
-            }
-
-        }
-
-        private InstallationVersion MapInstallationVersion(TrashInspectionPnDbContext _dbContext, Installation installation)
-        {
-            InstallationVersion installationVer = new InstallationVersion();
-
-            installationVer.CreatedAt = installation.CreatedAt;
-            installationVer.CreatedByUserId = installation.CreatedByUserId;
-            installationVer.Name = installation.Name;
-            installationVer.UpdatedAt = installation.UpdatedAt;
-            installationVer.UpdatedByUserId = installation.UpdatedByUserId;
-            installationVer.Version = installation.Version;
-            installationVer.WorkflowState = installation.WorkflowState;
-
-            installationVer.InstallationId = installation.Id;
-
-            return installationVer;
-        }
+        
+        public List<DeployCheckbox> DeployCheckboxes { get; set; }        
     }
 }
