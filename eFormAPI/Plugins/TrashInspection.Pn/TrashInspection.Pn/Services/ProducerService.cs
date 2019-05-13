@@ -129,6 +129,7 @@ namespace TrashInspection.Pn.Services
             {
                 var producer = await _dbContext.Producers.Select(x => new ProducerModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,
@@ -137,8 +138,7 @@ namespace TrashInspection.Pn.Services
                     ZipCode = x.ZipCode,
                     Phone = x.Phone,
                     ContactPerson = x.ContactPerson
-                }).FirstOrDefaultAsync(x => x.Id == id);
-
+                }).FirstOrDefaultAsync(y => y.Id == id);
 
                 if (producer == null)
                 {
@@ -253,6 +253,7 @@ namespace TrashInspection.Pn.Services
                 producer.Name = producerModel.Name;
                 producer.Description = producerModel.Description;
                 producer.Address = producerModel.Address;
+                producer.ForeignId = producerModel.ForeignId;
                 producer.City = producerModel.City;
                 producer.ZipCode = producerModel.ZipCode;
                 producer.Phone = producerModel.Phone;

@@ -127,8 +127,9 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var transporter = await _dbContext.Producers.Select(x => new TransporterModel()
+                var transporter = await _dbContext.Transporters.Select(x => new TransporterModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,
@@ -137,8 +138,8 @@ namespace TrashInspection.Pn.Services
                     ZipCode = x.ZipCode,
                     Phone = x.Phone,
                     ContactPerson = x.ContactPerson
-                }).FirstOrDefaultAsync(x => x.Id == id);
-
+                    
+                }).FirstOrDefaultAsync(y => y.Id == id);
 
                 if (transporter == null)
                 {
@@ -236,6 +237,7 @@ namespace TrashInspection.Pn.Services
             {
                 Name = transporterModel.Name,
                 Description = transporterModel.Description,
+                ForeignId = transporterModel.ForeignId,
                 City = transporterModel.City,
                 Address = transporterModel.Address,
                 Phone = transporterModel.Phone,
@@ -256,6 +258,7 @@ namespace TrashInspection.Pn.Services
             {
                 transporter.Name = transporterModel.Name;
                 transporter.Description = transporterModel.Description;
+                transporter.ForeignId = transporterModel.ForeignId;
                 transporter.City = transporterModel.City;
                 transporter.Address = transporterModel.Address;
                 transporter.Phone = transporterModel.Phone;
