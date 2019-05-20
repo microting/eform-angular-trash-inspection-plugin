@@ -141,14 +141,8 @@ namespace TrashInspection.Pn.Handlers
                 await _dbContext.SaveChangesAsync();
             }
 
-            var trashInspection = await _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
-
-            if (trashInspection.Status < 66)
-            {
-                createModel.Status = 66;
-                await createModel.Update(_dbContext);
-            }
-            
+            createModel.Status = 66;
+            await createModel.Update(_dbContext);
         }
 
         private void LogEvent(string appendText)
