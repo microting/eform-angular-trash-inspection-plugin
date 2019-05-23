@@ -5,9 +5,10 @@ import {
   TrashInspectionsPnModel,
   TrashInspectionPnModel
 } from '../../../models';
-import { TrashInspectionPnTrashInspectionsService} from '../../../services';
+import {TrashInspectionPnSettingsService, TrashInspectionPnTrashInspectionsService} from '../../../services';
 import {SharedPnService} from '../../../../shared/services';
 import {AuthService} from '../../../../../../common/services/auth';
+import {TrashInspectionBaseSettingsModel} from '../../../models/trash-inspection-base-settings.model';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
@@ -21,8 +22,10 @@ export class TrashInspectionsPageComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
+  settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   spinnerStatus = false;
   constructor(private sharedPnService: SharedPnService,
+              private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
               private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
               private authService: AuthService) { }
   get currentRole(): string {
@@ -37,6 +40,7 @@ export class TrashInspectionsPageComponent implements OnInit {
     ('trashInspectionsPnSettings', 'TrashInspections');
     this.localPageSettings = bla.settings;
     this.getAllInitialData();
+    this.getSettings();
   }
 
   updateLocalPageSettings() {
@@ -61,7 +65,15 @@ export class TrashInspectionsPageComponent implements OnInit {
       } this.spinnerStatus = false;
     });
   }
-
+  getSettings() {
+    // debugger;
+    this.spinnerStatus = true;
+    this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
+      if (data && data.success) {
+        this.settingsModel = data.model;
+      } this.spinnerStatus = false;
+    });
+  }
   showCreateTrashInspection() {
     this.createTrashInspectionModal.show();
   }
@@ -71,17 +83,17 @@ export class TrashInspectionsPageComponent implements OnInit {
 
   downloadPDF(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=pdf', '_blank');
+      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=pdf', '_blank');
   }
 
   downloadDocx(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=docx', '_blank');
+      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=docx', '_blank');
   }
 
   downloadPptx(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.trashInspectionsModel.token + '&fileType=pptx', '_blank');
+      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=pptx', '_blank');
   }
 
 
