@@ -71,6 +71,9 @@ namespace TrashInspection.Pn.Services
             try
             {
                 var trashInspectionsModel = new TrashInspectionsModel();
+                
+                TrashInspectionPnSetting trashInspectionSettings =
+                    await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
 
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
@@ -121,7 +124,8 @@ namespace TrashInspection.Pn.Services
                     InspectionDone = x.InspectionDone,
                     FractionId = x.FractionId,
                     IsApproved = x.IsApproved,
-                    Comment = x.Comment
+                    Comment = x.Comment,
+                    Token = trashInspectionSettings.Value
             }).ToListAsync();
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)

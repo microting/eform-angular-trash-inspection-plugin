@@ -8,7 +8,6 @@ import {
 import {TrashInspectionPnSettingsService, TrashInspectionPnTrashInspectionsService} from '../../../services';
 import {SharedPnService} from '../../../../shared/services';
 import {AuthService} from '../../../../../../common/services/auth';
-import {TrashInspectionBaseSettingsModel} from '../../../models/trash-inspection-base-settings.model';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
@@ -19,11 +18,13 @@ export class TrashInspectionsPageComponent implements OnInit {
   @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
   @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
   @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
+
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
-  settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
+  // settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   spinnerStatus = false;
+
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
               private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
@@ -31,16 +32,15 @@ export class TrashInspectionsPageComponent implements OnInit {
   get currentRole(): string {
     return this.authService.currentRole;
   }
+
   ngOnInit() {
     this.getLocalPageSettings();
   }
 
   getLocalPageSettings() {
-    let bla = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'TrashInspections');
-    this.localPageSettings = bla.settings;
+    this.localPageSettings = this.sharedPnService.getLocalPageSettings
+    ('trashInspectionsPnSettings', 'TrashInspections').settings;
     this.getAllInitialData();
-    this.getSettings();
   }
 
   updateLocalPageSettings() {
@@ -51,7 +51,6 @@ export class TrashInspectionsPageComponent implements OnInit {
 
   getAllInitialData() {
     this.getAllTrashInspections();
-    // this.getMappedInstallations();
   }
 
   getAllTrashInspections() {
@@ -65,35 +64,28 @@ export class TrashInspectionsPageComponent implements OnInit {
       } this.spinnerStatus = false;
     });
   }
-  getSettings() {
-    // debugger;
-    this.spinnerStatus = true;
-    this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
-      if (data && data.success) {
-        this.settingsModel = data.model;
-      } this.spinnerStatus = false;
-    });
-  }
+
   showCreateTrashInspection() {
     this.createTrashInspectionModal.show();
   }
+
   showDeleteTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
     this.deleteTrashInspectionModal.show(trashInspection);
   }
 
   downloadPDF(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=pdf', '_blank');
+      trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=pdf', '_blank');
   }
 
   downloadDocx(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=docx', '_blank');
+      trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=docx', '_blank');
   }
 
   downloadPptx(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + this.settingsModel.token + '&fileType=pptx', '_blank');
+      trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=pptx', '_blank');
   }
 
 
