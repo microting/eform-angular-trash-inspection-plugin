@@ -24,12 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="McMaster.NETCore.Plugins" Version="0.2.4" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="0.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microting.eForm" Version="3.0.246" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.149" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.79" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.150" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.81" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
   </ItemGroup>
 

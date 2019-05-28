@@ -49,6 +49,8 @@ namespace TrashInspection.Pn
         public string PluginId => "eform-angular-trashinspection-plugin";
         public string PluginPath => PluginAssembly().Location;
         private string _connectionString;
+        private int _maxParallelism = 1;
+        private int _numberOfWorkers = 1;
 
         public Assembly PluginAssembly()
         {
@@ -104,7 +106,8 @@ namespace TrashInspection.Pn
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-            rebusService.Start(_connectionString);
+//            TrashInspectionPnDbContext _dbContext = serviceProvider.GetService<TrashInspectionPnDbContext>();
+            rebusService.Start(_connectionString, _maxParallelism, _numberOfWorkers);
 
         }
 

@@ -43,17 +43,16 @@ namespace TrashInspection.Pn.Services
 
         public RebusService(IEFormCoreService coreHelper)
         {            
-            //_dbContext = dbContext;
             _coreHelper = coreHelper;
         }
 
-        public void Start(string connectionString)
+        public void Start(string connectionString, int maxParallelism, int numberOfWorkers)
         {
             _connectionString = connectionString;   
             _container = new WindsorContainer();
             _container.Install(
                 new RebusHandlerInstaller()
-                , new RebusInstaller(connectionString, 1, 1)
+                , new RebusInstaller(connectionString, maxParallelism, numberOfWorkers)
             );
             
             Core _core = _coreHelper.GetCore();
