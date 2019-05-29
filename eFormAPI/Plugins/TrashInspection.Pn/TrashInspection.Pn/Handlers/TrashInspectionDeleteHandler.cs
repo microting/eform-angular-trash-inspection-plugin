@@ -61,24 +61,7 @@ namespace TrashInspection.Pn.Handlers
                 bool result = _core.CaseDelete(trashInspectionCase.SdkCaseId);
                 if (result)
                 {
-                    trashInspectionCase.WorkflowState = Constants.WorkflowStates.Removed;
-                    trashInspectionCase.Version += 1;
-                    trashInspectionCase.UpdatedAt = DateTime.Now;
-                    await _dbContext.SaveChangesAsync();
-                    
-                    TrashInspectionCaseVersion trashInspectionCaseVersion = new TrashInspectionCaseVersion();
-                    trashInspectionCaseVersion.TrashInspectionCaseId = trashInspectionCase.Id;
-                    trashInspectionCaseVersion.SegmentId = trashInspectionCase.SegmentId;
-                    trashInspectionCaseVersion.TrashInspectionId = trashInspectionCase.TrashInspectionId;
-                    trashInspectionCaseVersion.SdkCaseId = trashInspectionCase.SdkCaseId;
-                    trashInspectionCaseVersion.SdkSiteId = trashInspectionCase.SdkSiteId;
-                    trashInspectionCaseVersion.CreatedAt = trashInspectionCase.CreatedAt;
-                    trashInspectionCaseVersion.UpdatedAt = trashInspectionCase.UpdatedAt;
-                    trashInspectionCaseVersion.Version = trashInspectionCase.Version;
-
-                    _dbContext.TrashInspectionCaseVersions.Add(trashInspectionCaseVersion);
-                    
-                    await _dbContext.SaveChangesAsync();
+                    trashInspectionCase.Delete(_dbContext);
                 }
                 
             }

@@ -113,33 +113,17 @@ namespace TrashInspection.Pn.Handlers
                 
                 LogEvent("CreateTrashInspection: Trying to create case");
                 string sdkCaseId = _core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
-                
-                TrashInspectionCase trashInspectionCase = new TrashInspectionCase();
-                trashInspectionCase.SegmentId = segment.Id;
-                trashInspectionCase.Status = 66;
-                trashInspectionCase.TrashInspectionId = createModel.Id;
-                trashInspectionCase.SdkCaseId = sdkCaseId;
-                trashInspectionCase.SdkSiteId = installationSite.SDKSiteId;
-                trashInspectionCase.CreatedAt = DateTime.Now;
-                trashInspectionCase.UpdatedAt = DateTime.Now;
-                trashInspectionCase.Version = 1;
-                trashInspectionCase.WorkflowState = Constants.WorkflowStates.Created;
 
-                _dbContext.TrashInspectionCases.Add(trashInspectionCase);
-                
-                TrashInspectionCaseVersion trashInspectionCaseVersion = new TrashInspectionCaseVersion();
-                trashInspectionCaseVersion.TrashInspectionCaseId = trashInspectionCase.Id;
-                trashInspectionCaseVersion.SegmentId = trashInspectionCase.SegmentId;
-                trashInspectionCaseVersion.TrashInspectionId = trashInspectionCase.TrashInspectionId;
-                trashInspectionCaseVersion.SdkCaseId = trashInspectionCase.SdkCaseId;
-                trashInspectionCaseVersion.SdkSiteId = trashInspectionCase.SdkSiteId;
-                trashInspectionCaseVersion.CreatedAt = trashInspectionCase.CreatedAt;
-                trashInspectionCaseVersion.UpdatedAt = trashInspectionCase.UpdatedAt;
-                trashInspectionCaseVersion.Version = trashInspectionCase.Version;
+                TrashInspectionCase trashInspectionCase = new TrashInspectionCase
+                {
+                    SegmentId = segment.Id,
+                    Status = 66,
+                    TrashInspectionId = createModel.Id,
+                    SdkCaseId = sdkCaseId,
+                    SdkSiteId = installationSite.SDKSiteId,
+                };
 
-                _dbContext.TrashInspectionCaseVersions.Add(trashInspectionCaseVersion);
-                
-                await _dbContext.SaveChangesAsync();
+                trashInspectionCase.Create(_dbContext);
             }
 
             var trashInspection = await _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
