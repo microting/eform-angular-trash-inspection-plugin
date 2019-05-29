@@ -22,43 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.ComponentModel.DataAnnotations;
+using eFormData;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using TrashInspection.Pn.Infrastructure.Models;
 
-namespace TrashInspection.Pn.Infrastructure.Models
+namespace TrashInspection.Pn.Messages
 {
-    public class ProducerModel
+    public class TrashInspectionCaseCreated
     {
-        public int Id { get; set; }
-        
-        public DateTime? CreatedAt { get; set; }
-        
-        public DateTime? UpdatedAt { get; set; }
-        
-        [StringLength(255)]
-        public string WorkflowState { get; set; }
-        
-        public int CreatedByUserId { get; set; }
-        
-        public int UpdatedByUserId { get; set; }
-        
-        public int Version { get; set; }
+        public MainElement MainElement { get; protected set; }
+        public TrashInspectionCase TrashInspectionCase { get; protected set; }
+        public TrashInspectionModel TrashInspectionModel { get; protected set; }
+        public Fraction Fraction  { get; protected set; }
+        public Segment Segment  { get; protected set; }
 
-
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        public string ForeignId { get; set; }
-
-        public string Address { get; set; }
-
-        public string City { get; set; }
-
-        public string ZipCode { get; set; }
-
-        public string Phone { get; set; }
-
-        public string ContactPerson { get; set; }                
+        public TrashInspectionCaseCreated(MainElement mainElement, TrashInspectionCase trashInspectionCase,
+            TrashInspectionModel trashInspectionModel, Segment segment, Fraction fraction)
+        {
+            MainElement = mainElement;
+            TrashInspectionCase = trashInspectionCase;
+            TrashInspectionModel = trashInspectionModel;
+            Segment = segment;
+            Fraction = fraction;
+        }
     }
 }

@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2019 microting
+Copyright (c) 2007 - 2019 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,7 @@ using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Rebus.Bus;
 using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Handlers
@@ -44,11 +45,13 @@ namespace TrashInspection.Pn.Handlers
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
+        private readonly IBus _bus;
         
-        public TrashInspectionReceivedHandler(Core core, TrashInspectionPnDbContext context)
+        public TrashInspectionReceivedHandler(Core core, TrashInspectionPnDbContext context, IBus bus)
         {
             _core = core;
             _dbContext = context;
+            _bus = bus;
         }
         
         #pragma warning disable 1998
@@ -78,52 +81,20 @@ namespace TrashInspection.Pn.Handlers
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             foreach (InstallationSite installationSite in installationSites)
             {
-                mainElement.Repeated = 1;
-                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
-                mainElement.StartDate = DateTime.Now.ToUniversalTime();
-                mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
-                mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
-                mainElement.EnableQuickSync = true;
-                mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
-                CDataValue cDataValue = new CDataValue();
-                cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
-                cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
-                cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
-                cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
-                cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
-                if (createModel.MustBeInspected)
-                {
-                    cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
-                }
-
-                if (createModel.ExtendedInspection)
-                {
-                    cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
-                }
-                mainElement.ElementList[0].Description = cDataValue;
-                mainElement.ElementList[0].Label = mainElement.Label;
-                DataElement dataElement = (DataElement)mainElement.ElementList[0];
-                dataElement.DataItemList[0].Label = mainElement.Label;
-                dataElement.DataItemList[0].Description = cDataValue;
-                
-                if (createModel.MustBeInspected || createModel.ExtendedInspection)
-                {
-                    dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
-                }
-                
-                LogEvent("CreateTrashInspection: Trying to create case");
-                string sdkCaseId = _core.CaseCreate(mainElement, "", installationSite.SDKSiteId);
-
                 TrashInspectionCase trashInspectionCase = new TrashInspectionCase
                 {
                     SegmentId = segment.Id,
-                    Status = 66,
+                    Status = 0,
                     TrashInspectionId = createModel.Id,
-                    SdkCaseId = sdkCaseId,
                     SdkSiteId = installationSite.SDKSiteId,
                 };
 
                 trashInspectionCase.Create(_dbContext);
+                LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
+
+                _bus.SendLocal(new TrashInspectionCaseCreated(mainElement, trashInspectionCase, createModel, segment,
+                    fraction));
+                LogEvent("CreateTrashInspection: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }
 
             var trashInspection = await _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
@@ -133,9 +104,6 @@ namespace TrashInspection.Pn.Handlers
                 trashInspection.Status = 66;
                 trashInspection.Update(_dbContext);
             }
-
-            
-
         }
 
         private void LogEvent(string appendText)
