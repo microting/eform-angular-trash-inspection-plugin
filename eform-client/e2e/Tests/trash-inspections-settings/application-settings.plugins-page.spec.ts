@@ -38,6 +38,7 @@ describe('Application settings page - site header section', function () {
         expect(plugin.name).equal('Microting Trash Inspection Plugin');
         expect(plugin.version).equal('1.0.0.0');
         expect(plugin.status).equal('Aktiveret');
+        expect(browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).isExisting()).equal(true);
         // click on plugin settings
         // enter connectionstring for customers plugin
         // select activate
