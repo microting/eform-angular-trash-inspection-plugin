@@ -296,6 +296,12 @@
               <fa-icon icon="file-powerpoint" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
+            <button class="btn btn-success text-black-50 btn-icon mb-2"
+                    mdbTooltip="{{ 'Analytics' | translate }}"
+                    (click)="showVersionViewModal(trashInspection.id)" *ngIf="trashInspection.status == 100">
+              <fa-icon icon="chart-bar" size="lg" [fixedWidth]="true"></fa-icon>
+
+            </button>
           </div>
         </td>
       </tr>
@@ -326,3 +332,5 @@
                                                  (onTrashInspectionCreated)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-create>
 <app-trash-inspection-pn-trash-inspection-delete #deleteTrashInspectionModal
                                                  (onTrashInspectionDeleted)="getAllTrashInspections()"></app-trash-inspection-pn-trash-inspection-delete>
+<app-trash-inspection-pn-trash-inspection-version-view #versionViewModal
+></app-trash-inspection-pn-trash-inspection-version-view>
