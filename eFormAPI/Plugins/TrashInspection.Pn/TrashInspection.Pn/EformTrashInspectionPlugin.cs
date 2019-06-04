@@ -1,7 +1,7 @@
 ﻿/*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2019 microting
+Copyright (c) 2007 - 2019 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Services;
@@ -32,6 +33,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormApi.BasePn.Infrastructure.Settings;
@@ -100,13 +102,20 @@ namespace TrashInspection.Pn
 
             // Seed database
             SeedDatabase(connectionString);
+
+            string temp = context.PluginConfigurationValues
+                .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:MaxParallelism")?.Value;
+            _maxParallelism = string.IsNullOrEmpty(temp) ? 1 : int.Parse(temp);
+
+            temp = context.PluginConfigurationValues
+                .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:NumberOfWorkers")?.Value;
+            _numberOfWorkers = string.IsNullOrEmpty(temp) ? 1 : int.Parse(temp);
         }
 
         public void Configure(IApplicationBuilder appBuilder)
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-//            TrashInspectionPnDbContext _dbContext = serviceProvider.GetService<TrashInspectionPnDbContext>();
             rebusService.Start(_connectionString, _maxParallelism, _numberOfWorkers);
 
         }
