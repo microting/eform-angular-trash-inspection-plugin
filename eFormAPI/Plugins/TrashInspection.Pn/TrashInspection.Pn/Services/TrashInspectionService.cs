@@ -39,6 +39,7 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using System.IO;
 using System.Xml.Linq;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Rebus.Bus;
 using TrashInspection.Pn.Messages;
 
@@ -70,10 +71,9 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var trashInspectionsModel = new TrashInspectionsModel();
                 
-                TrashInspectionPnSetting trashInspectionSettings =
-                    await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
+                PluginConfigurationValue trashInspectionSettings =
+                    await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
 
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
@@ -150,9 +150,12 @@ namespace TrashInspection.Pn.Services
                         trashInspectionModel.Segment = segment.Name;
                     }             
                 }
-                
-                trashInspectionsModel.Total = await _dbContext.TrashInspections.CountAsync();
-                trashInspectionsModel.TrashInspectionList = trashInspections;
+
+                TrashInspectionsModel trashInspectionsModel = new TrashInspectionsModel
+                {
+                    Total = await _dbContext.TrashInspections.CountAsync(), TrashInspectionList = trashInspections
+                };
+
 
                 return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);
             }
@@ -210,8 +213,8 @@ namespace TrashInspection.Pn.Services
 
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
-            TrashInspectionPnSetting trashInspectionSettings =
-                await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
+            PluginConfigurationValue trashInspectionSettings =
+                await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             _coreHelper.LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
             if (token == trashInspectionSettings.Value && weighingNumber != null)
             {
@@ -445,7 +448,8 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> DeleteTrashInspection(string weighingNumber, string token)
         {
-            TrashInspectionPnSetting trashInspectionSettings = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x => x.Name == "token");
+            PluginConfigurationValue trashInspectionSettings =
+                await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             
             if (trashInspectionSettings == null)
             {
