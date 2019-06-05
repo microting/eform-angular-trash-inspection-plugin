@@ -39,6 +39,7 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using System.IO;
 using System.Xml.Linq;
+using eFormData;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Rebus.Bus;
 using TrashInspection.Pn.Messages;
@@ -168,7 +169,123 @@ namespace TrashInspection.Pn.Services
 
             }
         }
+        public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int trashInspectionId)
+        {
+            try
+            {
+                var trashInspectionVersionsModel = new TrashInspectionVersionsModel();
+                
+                var trashInspectionVersionsQuery = _dbContext.TrashInspectionVersions.AsQueryable();
 
+                List<TrashInspectionVersion> trashInspectionVersions =
+                    await trashInspectionVersionsQuery.Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
+
+                trashInspectionVersionsModel.Total = trashInspectionVersions.Count;
+                trashInspectionVersionsModel.TrashInspectionVersionList = trashInspectionVersions;
+                 if (trashInspectionVersions == null)
+                 {
+                     return new OperationDataResult<TrashInspectionVersionsModel>(false,
+                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
+                 }
+
+                 var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
+
+                 List<TrashInspectionCase> trashInspectionCases = await trashInspectionCaseQuery
+                     .Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
+
+                 var statusModels = new List<TrashInspectionCaseStatusModel>();
+                 foreach (var trashInspectionCase in trashInspectionCases)
+                 {
+                     TrashInspectionCaseStatusModel trashInspectionCaseStatusModel = new TrashInspectionCaseStatusModel();
+
+                     trashInspectionCaseStatusModel.SdkSiteId = trashInspectionCase.SdkSiteId;
+
+                     foreach (var trashInspectionCaseVersion in _dbContext.TrashInspectionCaseVersions.Where(x => x.TrashInspectionCaseId == trashInspectionCase.Id))
+                     {
+                         
+                         switch (trashInspectionCaseVersion.Status)
+                         {
+                             case 33:
+                             {
+                                 trashInspectionCaseStatusModel.CreatedLocally = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
+                             }
+                             case 66:
+                             {
+                                 trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
+                             }
+                             case 70:
+                             {
+                                 trashInspectionCaseStatusModel.ReadyAtMicroting = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
+                             }
+                             case 77:
+                             {
+                                 trashInspectionCaseStatusModel.ReceivedOnTablet = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
+                             }
+                             case 100:
+                             {
+                                 trashInspectionCaseStatusModel.Answered = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
+                             }
+                         }
+                     }
+                     statusModels.Add(trashInspectionCaseStatusModel);
+                 trashInspectionVersionsModel.TrashInspectionCaseStatusModels = statusModels;
+
+                 }
+                 
+                 if (trashInspectionCases == null)
+                 {
+                     return new OperationDataResult<TrashInspectionVersionsModel>(false,
+                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
+
+                 }
+                return new OperationDataResult<TrashInspectionVersionsModel>(true, trashInspectionVersionsModel);
+
+
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<TrashInspectionVersionsModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
+            }
+        }
+
+        public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> GetTrashInspectionCaseVersions(
+            int trashInspectionId)
+        {
+            try
+            {
+                var trashInspectionCaseVersionsModel = new TrashInspectionCaseVersionsModel();
+            
+                var trashInspectionCaseVersionsQuery = _dbContext.TrashInspectionCaseVersions.AsQueryable();
+
+                List<TrashInspectionCaseVersion> trashInspectionCaseVersions = await trashInspectionCaseVersionsQuery
+                    .Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
+
+                trashInspectionCaseVersionsModel.Total = trashInspectionCaseVersions.Count;
+                trashInspectionCaseVersionsModel.TrashInspectionCaseVersionList = trashInspectionCaseVersions;
+                if (trashInspectionCaseVersions == null)
+                {
+                    return new OperationDataResult<TrashInspectionCaseVersionsModel>(false,
+                        _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
+                }
+                
+                return new OperationDataResult<TrashInspectionCaseVersionsModel>(true, trashInspectionCaseVersionsModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<TrashInspectionCaseVersionsModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
+            }
+        }
         public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId)
         {
             try
@@ -211,6 +328,7 @@ namespace TrashInspection.Pn.Services
             }
         }
 
+        
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
             PluginConfigurationValue trashInspectionSettings =

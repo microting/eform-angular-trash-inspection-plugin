@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Newtonsoft.Json;
 using TrashInspection.Pn.Abstractions;
@@ -70,6 +71,15 @@ namespace TrashInspection.Pn.Controllers
             return await _trashInspectionService.GetSingleTrashInspection(id);
         }
 
+        [HttpGet]
+        [Authorize]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int id)
+        {
+            return await _trashInspectionService.GetTrashInspectionVersion(id);
+        }
+        
         [HttpPost]
         [AllowAnonymous]
         [DebuggingFilter]
@@ -77,6 +87,15 @@ namespace TrashInspection.Pn.Controllers
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
             return await _trashInspectionService.CreateTrashInspection(createModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/case-versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> GetTrashInspectionCaseVersions(int id)
+        {
+            return await _trashInspectionService.GetTrashInspectionCaseVersions(id);
         }
 
         [HttpPut]

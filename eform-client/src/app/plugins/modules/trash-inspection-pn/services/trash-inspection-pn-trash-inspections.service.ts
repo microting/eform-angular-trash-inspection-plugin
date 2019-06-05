@@ -11,11 +11,12 @@ import {
   TrashInspectionPnModel,
   TrashInspectionsPnRequestModel,
   TrashInspectionPnUpdateModel,
-  TrashInspectionsPnModel
+  TrashInspectionsPnModel, TrashInspectionVersionsPnModel
 } from '../models';
 
 export let TrashInspectionPnTrashInspectionMethods = {
   TrashInspections: 'api/trash-inspection-pn/inspections',
+  TrashInspectionVersions: 'api/trash-inspection-pn/versions'
 };
 
 @Injectable()
@@ -32,6 +33,9 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
     return this.get(TrashInspectionPnTrashInspectionMethods.TrashInspections + '/' + trashInspectionId);
   }
 
+  getTrashInspectionVersions(trashInspectionId: number): Observable<OperationDataResult<TrashInspectionVersionsPnModel>> {
+    return this.get(TrashInspectionPnTrashInspectionMethods.TrashInspectionVersions + '/' + trashInspectionId);
+  }
   updateTrashInspection(model: TrashInspectionPnUpdateModel): Observable<OperationResult> {
     return this.put(TrashInspectionPnTrashInspectionMethods.TrashInspections, model);
   }

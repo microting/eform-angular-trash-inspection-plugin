@@ -18,7 +18,7 @@ export class TrashInspectionsPageComponent implements OnInit {
   @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
   @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
   @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
-
+  @ViewChild('versionViewModal') versionViewModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
@@ -73,6 +73,9 @@ export class TrashInspectionsPageComponent implements OnInit {
     this.deleteTrashInspectionModal.show(trashInspection);
   }
 
+  showVersionViewModal(trashInspectionId: number) {
+    this.versionViewModal.show(trashInspectionId);
+  }
   downloadPDF(trashInspection: any) {
     window.open('/api/trash-inspection-pn/inspection-results/' +
       trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=pdf', '_blank');
