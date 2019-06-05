@@ -58,47 +58,51 @@ namespace TrashInspection.Pn.Handlers
             TrashInspectionCase trashInspectionCase = message.TrashInspectionCase;
 
             mainElement.Repeated = 1;
-                mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
-                mainElement.StartDate = DateTime.Now.ToUniversalTime();
-                mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
-                mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
-                mainElement.EnableQuickSync = true;
-                mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
-                CDataValue cDataValue = new CDataValue();
-                cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
-                cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
-                cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
-                cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
-                cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
-                
-                if (createModel.MustBeInspected)
-                {
-                    cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
-                }
+            mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
+            mainElement.StartDate = DateTime.Now.ToUniversalTime();
+            mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
+            mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
+            mainElement.EnableQuickSync = true;
+            mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
+            
+            CDataValue cDataValue = new CDataValue();
+            cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
+            cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
+            cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
+            cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
+            cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
-                if (createModel.ExtendedInspection)
-                {
-                    cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
-                }
-                
-                mainElement.ElementList[0].Description = cDataValue;
-                mainElement.ElementList[0].Label = mainElement.Label;
-                DataElement dataElement = (DataElement)mainElement.ElementList[0];
-                dataElement.DataItemList[0].Label = mainElement.Label;
-                dataElement.DataItemList[0].Description = cDataValue;
-                
-                if (createModel.MustBeInspected || createModel.ExtendedInspection)
-                {
-                    dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
-                }
-                
-                LogEvent("CreateTrashInspection: Trying to create SDK case");
-                string sdkCaseId = _core.CaseCreate(mainElement, "", SDKSiteId);
-                LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
+            mainElement.PushMessageBody = cDataValue.ToString();
+            mainElement.PushMessageTitle = mainElement.Label;
 
-                trashInspectionCase.SdkCaseId = sdkCaseId;
-                trashInspectionCase.Status = 66;
-                trashInspectionCase.Update(_dbContext);
+            if (createModel.MustBeInspected)
+            {
+                cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
+            }
+
+            if (createModel.ExtendedInspection)
+            {
+                cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
+            }
+            
+            mainElement.ElementList[0].Description = cDataValue;
+            mainElement.ElementList[0].Label = mainElement.Label;
+            DataElement dataElement = (DataElement)mainElement.ElementList[0];
+            dataElement.DataItemList[0].Label = mainElement.Label;
+            dataElement.DataItemList[0].Description = cDataValue;
+            
+            if (createModel.MustBeInspected || createModel.ExtendedInspection)
+            {
+                dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
+            }
+            
+            LogEvent("CreateTrashInspection: Trying to create SDK case");
+            string sdkCaseId = _core.CaseCreate(mainElement, "", SDKSiteId);
+            LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
+
+            trashInspectionCase.SdkCaseId = sdkCaseId;
+            trashInspectionCase.Status = 66;
+            trashInspectionCase.Update(_dbContext);
         }
         
         private void LogEvent(string appendText)
