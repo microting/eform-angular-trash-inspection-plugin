@@ -1,12 +1,10 @@
 import {TrashInspectionPnCaseStatusModel} from './trash-inspection-pn-case-status.model';
 
 export class TrashInspectionVersionsPnModel {
-  total: number;
   trashInspectionVersionList: Array<TrashInspectionVersionPnModel> = [];
   trashInspectionCaseStatusModels: Array<TrashInspectionPnCaseStatusModel> = [];
   token: string;
-  numOfElements: number;
-  pageNum: number;
+  trashInspectionId: number;
 }
 
 export class TrashInspectionVersionPnModel {

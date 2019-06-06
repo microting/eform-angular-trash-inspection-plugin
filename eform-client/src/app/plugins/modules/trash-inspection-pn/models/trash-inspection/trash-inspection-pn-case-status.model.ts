@@ -1,6 +1,7 @@
 
 export class TrashInspectionPnCaseStatusModel {
   sdkSiteId: number;
+  sdkSiteName: string;
   status: number;
   createdLocally: Date;
   sentToMicroting: Date;

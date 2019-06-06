@@ -5,6 +5,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
     public class TrashInspectionCaseStatusModel
     {
         public int SdkSiteId { get; set; }
+        public string SdkSiteName { get; set; }
         public int Status { get; set; }
         public DateTime? CreatedLocally { get; set; }
         public DateTime? SentToMicroting { get; set; }

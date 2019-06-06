@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>{{ 'Trash Inspection Versions' | translate }}</h3>
+        <h3>{{ 'Trash Inspection Versions' | translate }} - {{trashInspectionVersionsModel.trashInspectionId}}</h3>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
@@ -10,123 +10,97 @@
             <table class="table table-sm table-striped text-center z-depth-1">
               <thead>
               <tr>
-                <th scope="col" class="table-header-sortable" id="idTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     ID
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Id'">unfold_more</i>
                   </div>
                 </th>
-                <th scope="col" class="table-header-sortable" id="dateTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Date' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Date'">unfold_more</i>
-
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="timeTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Time' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Time'">unfold_more</i>
-
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="eakCodeTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'eakCode' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eakCode'">unfold_more</i>
-
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="installationTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Installation' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Installation'">unfold_more</i>
-
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="segmentTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Segment' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Segment'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="mustBeInspectedTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Must Be Inspected' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'MustBeInspected'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="producerTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Producer' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Producer'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="registrationNumberTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Registration Number' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'RegistrationNumber'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="transporterTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Transporter' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Transporter'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="trashFractionTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Trash Fraction' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'TrashFraction'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="weighingNumberTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Weighing Number' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'WeighingNumber'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="isApprovedTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Is approved' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'IsApproved'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="commentTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Comment' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Comment'">unfold_more</i>
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="statusTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Status' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Status'">unfold_more</i>
                   </div>
                 </th>
-                <th scope="col" class="table-header-sortable" id="versionTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Version' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Status'">unfold_more</i>
-                  </div>
-                </th>
-                <th scope="col" class="table-header-sortable" id="trashInspectionIdTableHeader">
-                  <div class="d-flex align-items-center justify-content-center">
-                    {{'Trash Inspection Id' | translate}}
-                    <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Status'">unfold_more</i>
                   </div>
                 </th>
               </tr>
@@ -181,32 +155,9 @@
                 </td>
                 <td>
                   <status-bar [status]="trashInspectionVersion.status"></status-bar>
-                  <!--{{trashInspection.status}}-->
-                  <!--<div class="progress-bar" role="progressbar" style="width: {{trashInspection.status-bar}}%"></div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 0" style="height: 2em">-->
-                  <!--<div class="progress-bar grey" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for server' | translate}}</div>-->
-                  <!--</div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 33" style="height: 2em">-->
-                  <!--<div class="progress-bar orange text" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Received by server' | translate}}</div>-->
-                  <!--</div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 66" style="height: 2em">-->
-                  <!--<div class="progress-bar yellow text-black-60" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Ready for device' | translate}}</div>-->
-                  <!--</div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 70" style="height: 2em">-->
-                  <!--<div class="progress-bar info-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Retrieved by device' | translate}}</div>-->
-                  <!--</div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 77" style="height: 2em">-->
-                  <!--<div class="progress-bar success-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'Completed' | translate}}</div>-->
-                  <!--</div>-->
-                  <!--<div class="progress" *ngIf="trashInspection.status == 110" style="height: 2em; padding-left: 2px;">-->
-                  <!--<div class="progress-bar danger-color" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%; padding-left: 5px; padding-right: 5px;">{{'System error: Contact Microting' | translate}}</div>-->
-                  <!--</div>-->
                 </td>
                 <td>
                   {{trashInspectionVersion.version}}
-                </td>
-                <td>
-                  {{trashInspectionVersion.trashInspectionId}}
                 </td>
               </tr>
               </tbody>
@@ -216,46 +167,46 @@
             <table class="table table-sm table-striped text-center z-depth-1">
               <thead>
               <tr>
-                <th scope="col" class="table-header-sortable" id="SiteIdTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    Sdk Site Id
+                    SDK Site Id/Name
                   </div>
                 </th>
-                <th scope="col" class="table-header-sortable" id="caseStatusTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Status' | translate}}
 
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="createdLocallyTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Created Locally' | translate}}
 
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="sentToMicrotingTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Sent To Microting' | translate}}
 
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="readyAtMicrotingTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Ready At Microting' | translate}}
 
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="receivedAtMicrotingTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Received On Tablet' | translate}}
                   </div>
                 </th>
 
-                <th scope="col" class="table-header-sortable" id="answeredTableHeader">
+                <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Answered' | translate}}
                   </div>
@@ -266,24 +217,26 @@
               <tr *ngFor="let trashInspectionCase of trashInspectionVersionsModel.trashInspectionCaseStatusModels">
                 <td>
                   {{trashInspectionCase.sdkSiteId}}
+                  /
+                  {{trashInspectionCase.sdkSiteName}}
                 </td>
                 <td>
-                  {{trashInspectionCase.status}}
+                  <status-bar [status]="trashInspectionCase.status"></status-bar>
                 </td>
                 <td>
-                 {{trashInspectionCase.createdLocally}}
+                  <date-formatter [date]="trashInspectionCase.createdLocally" [Format]="'datetime'"></date-formatter>
                 </td>
                 <td>
-                  {{trashInspectionCase.sentToMicroting}}
+                  <date-formatter [date]="trashInspectionCase.sentToMicroting" [Format]="'datetime'"></date-formatter>
                 </td>
                 <td>
-                  {{trashInspectionCase.readyAtMicroting}}
+                  <date-formatter [date]="trashInspectionCase.readyAtMicroting" [Format]="'datetime'"></date-formatter>
                 </td>
                 <td>
-                  {{trashInspectionCase.receivedOnTablet}}
+                  <date-formatter [date]="trashInspectionCase.receivedOnTablet" [Format]="'datetime'"></date-formatter>
                 </td>
                 <td>
-                  {{trashInspectionCase.answered}}
+                  <date-formatter [date]="trashInspectionCase.answered" [Format]="'datetime'"></date-formatter>
                 </td>
               </tr>
               </tbody>

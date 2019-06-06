@@ -173,22 +173,19 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var trashInspectionVersionsModel = new TrashInspectionVersionsModel();
-                
+                TrashInspectionVersionsModel trashInspectionVersionsModel = new TrashInspectionVersionsModel
+                {
+                    TrashInspectionId = trashInspectionId
+                };
+
                 var trashInspectionVersionsQuery = _dbContext.TrashInspectionVersions.AsQueryable();
 
                 List<TrashInspectionVersion> trashInspectionVersions =
                     await trashInspectionVersionsQuery.Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
-                trashInspectionVersionsModel.Total = trashInspectionVersions.Count;
                 trashInspectionVersionsModel.TrashInspectionVersionList = trashInspectionVersions;
-                 if (trashInspectionVersions == null)
-                 {
-                     return new OperationDataResult<TrashInspectionVersionsModel>(false,
-                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
-                 }
 
-                 var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
+                var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
 
                  List<TrashInspectionCase> trashInspectionCases = await trashInspectionCaseQuery
                      .Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
@@ -199,6 +196,18 @@ namespace TrashInspection.Pn.Services
                      TrashInspectionCaseStatusModel trashInspectionCaseStatusModel = new TrashInspectionCaseStatusModel();
 
                      trashInspectionCaseStatusModel.SdkSiteId = trashInspectionCase.SdkSiteId;
+                     try
+                     {
+                         trashInspectionCaseStatusModel.SdkSiteName =
+                             _coreHelper.GetCore().Advanced_SiteItemRead(trashInspectionCase.SdkSiteId).SiteName;
+                     }
+                     catch (Exception ex)
+                     {
+                         Trace.TraceError(ex.Message);
+                         
+                     }
+                     
+                     trashInspectionCaseStatusModel.Status = trashInspectionCase.Status;
 
                      foreach (var trashInspectionCaseVersion in _dbContext.TrashInspectionCaseVersions.Where(x => x.TrashInspectionCaseId == trashInspectionCase.Id))
                      {
@@ -236,14 +245,8 @@ namespace TrashInspection.Pn.Services
                  trashInspectionVersionsModel.TrashInspectionCaseStatusModels = statusModels;
 
                  }
-                 
-                 if (trashInspectionCases == null)
-                 {
-                     return new OperationDataResult<TrashInspectionVersionsModel>(false,
-                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
 
-                 }
-                return new OperationDataResult<TrashInspectionVersionsModel>(true, trashInspectionVersionsModel);
+                 return new OperationDataResult<TrashInspectionVersionsModel>(true, trashInspectionVersionsModel);
 
 
             }

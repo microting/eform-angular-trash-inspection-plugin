@@ -8,7 +8,7 @@ import {
   TrashInspectionsPnRequestModel,
   TrashInspectionVersionsPnModel
 } from '../../../models/trash-inspection';
-import {assertNumber} from '@angular/core/src/render3/assert';
+// import {assertNumber} from '@angular/core/src/render3/assert';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-version-view',
@@ -20,7 +20,7 @@ export class TrashInspectionVersionViewComponent implements OnInit {
   spinnerStatus = false;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionVersionsModel: TrashInspectionVersionsPnModel = new TrashInspectionVersionsPnModel();
-  selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
+  // selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
 
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
@@ -28,11 +28,13 @@ export class TrashInspectionVersionViewComponent implements OnInit {
   ngOnInit() {
   }
   show(trashInspectionId: number) {
+    this.spinnerStatus = true;
     this.frame.show();
+    this.trashInspectionVersionsModel = new TrashInspectionVersionsPnModel();
     this.getSelectedVersions(trashInspectionId);
   }
   getSelectedVersions(trashInspectionId: number) {
-    debugger;
+    // debugger;
     this.trashInspectionPnTrashInspectionsService.getTrashInspectionVersions(trashInspectionId).subscribe((data) => {
       if (data && data.success) {
         this.trashInspectionVersionsModel = data.model;
