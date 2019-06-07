@@ -28,4 +28,5 @@ export class TrashInspectionVersionPnModel {
   comment: string;
   version: number;
   trashInspectionId: number;
+  updatedAt: Date;
 }

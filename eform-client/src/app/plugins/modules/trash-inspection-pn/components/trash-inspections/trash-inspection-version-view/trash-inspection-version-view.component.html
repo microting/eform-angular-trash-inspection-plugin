@@ -17,6 +17,11 @@
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
+                    {{'Updated at' | translate}}
+                  </div>
+                </th>
+                <th scope="col" class="table-header">
+                  <div class="d-flex align-items-center justify-content-center">
                     {{'Date' | translate}}
                   </div>
                 </th>
@@ -109,6 +114,9 @@
               <tr *ngFor="let trashInspectionVersion of trashInspectionVersionsModel.trashInspectionVersionList">
                 <td>
                   {{trashInspectionVersion.id}}
+                </td>
+                <td>
+                  <date-formatter [date]="trashInspectionVersion.updatedAt" [Format]="'datetime'"></date-formatter>
                 </td>
                 <td>
                   <date-formatter [date]="trashInspectionVersion.date" [Format]="'date'"></date-formatter>
