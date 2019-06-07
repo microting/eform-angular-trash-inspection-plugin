@@ -99,9 +99,9 @@ namespace TrashInspection.Pn.Handlers
 
             var trashInspection = await _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
 
-            if (trashInspection.Status < 66)
+            if (trashInspection.Status < 33)
             {
-                trashInspection.Status = 66;
+                trashInspection.Status = 33;
                 trashInspection.Update(_dbContext);
             }
         }

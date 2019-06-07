@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
 using eFormData;
 using eFormShared;
+using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Handlers;
@@ -103,6 +105,29 @@ namespace TrashInspection.Pn.Handlers
             trashInspectionCase.SdkCaseId = sdkCaseId;
             trashInspectionCase.Status = 66;
             trashInspectionCase.Update(_dbContext);
+
+            var trashInspectionCases =
+                _dbContext.TrashInspectionCases.Where(x =>
+                    x.TrashInspectionId == trashInspectionCase.TrashInspectionId);
+            bool allDone = true;
+            foreach (TrashInspectionCase inspectionCase in trashInspectionCases)
+            {
+                if (inspectionCase.Status < 66)
+                {
+                    allDone = false;
+                }
+            }
+
+            if (allDone)
+            {
+                var trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
+                    x.Id == trashInspectionCase.TrashInspectionId);
+                if (trashInspection.Status < 66)
+                {
+                    trashInspection.Status = 66;
+                    trashInspection.Update(_dbContext);
+                }
+            }
         }
         
         private void LogEvent(string appendText)

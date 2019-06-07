@@ -472,7 +472,7 @@ namespace TrashInspection.Pn.Services
                             Producer = createModel.Producer,
                             Transporter = createModel.Transporter,
                             MustBeInspected = createModel.MustBeInspected,
-                            Status = 33
+                            Status = 0
                         };
                     
                     trashInspection.Create(_dbContext);
