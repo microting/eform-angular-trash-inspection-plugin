@@ -169,6 +169,7 @@ namespace TrashInspection.Pn.Services
 
             }
         }
+        
         public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int trashInspectionId)
         {
             try
@@ -214,11 +215,9 @@ namespace TrashInspection.Pn.Services
                          
                          switch (trashInspectionCaseVersion.Status)
                          {
-                             case 33:
-                             {
+                             case 0:
                                  trashInspectionCaseStatusModel.CreatedLocally = trashInspectionCaseVersion.UpdatedAt; 
                                  break;
-                             }
                              case 66:
                              {
                                  trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt; 
