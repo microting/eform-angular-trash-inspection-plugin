@@ -190,6 +190,8 @@ namespace TrashInspection.Pn.Services
                 {
                     TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
                     {
+                        Id = trashInspectionVersion.Id,
+                        UpdatedAt = (DateTime)trashInspectionVersion.UpdatedAt,
                         Version = trashInspectionVersion.Version,
                         WeighingNumber = trashInspectionVersion.WeighingNumber,
                         Date = trashInspectionVersion.Date,
