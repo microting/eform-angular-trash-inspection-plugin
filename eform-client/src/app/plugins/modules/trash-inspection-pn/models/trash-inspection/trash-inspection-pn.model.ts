@@ -27,4 +27,6 @@ export class TrashInspectionPnModel {
   status: number;
   isApproved: boolean;
   comment: string;
+  workflowState: string;
+  inspectionDone: boolean;
 }
