@@ -30,16 +30,16 @@ namespace TrashInspection.Pn.Messages
 {
     public class TrashInspectionCaseCreated
     {
-        public MainElement MainElement { get; protected set; }
+        public int TemplateId { get; protected set; }
         public TrashInspectionCase TrashInspectionCase { get; protected set; }
         public TrashInspectionModel TrashInspectionModel { get; protected set; }
         public Fraction Fraction  { get; protected set; }
         public Segment Segment  { get; protected set; }
 
-        public TrashInspectionCaseCreated(MainElement mainElement, TrashInspectionCase trashInspectionCase,
+        public TrashInspectionCaseCreated(int templateId, TrashInspectionCase trashInspectionCase,
             TrashInspectionModel trashInspectionModel, Segment segment, Fraction fraction)
         {
-            MainElement = mainElement;
+            TemplateId = templateId;
             TrashInspectionCase = trashInspectionCase;
             TrashInspectionModel = trashInspectionModel;
             Segment = segment;

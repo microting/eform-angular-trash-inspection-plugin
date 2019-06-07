@@ -92,7 +92,7 @@ namespace TrashInspection.Pn.Handlers
                 trashInspectionCase.Create(_dbContext);
                 LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
 
-                _bus.SendLocal(new TrashInspectionCaseCreated(mainElement, trashInspectionCase, createModel, segment,
+                _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase, createModel, segment,
                     fraction));
                 LogEvent("CreateTrashInspection: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }

@@ -52,7 +52,7 @@ namespace TrashInspection.Pn.Handlers
         public async Task Handle(TrashInspectionCaseCreated message)
         {
             CultureInfo cultureInfo = new CultureInfo("de-DE");
-            MainElement mainElement = message.MainElement;
+            MainElement mainElement = _core.TemplateRead(message.TemplateId);
             TrashInspectionModel createModel = message.TrashInspectionModel;
             int SDKSiteId = message.TrashInspectionCase.SdkSiteId;
             Segment segment = message.Segment;
