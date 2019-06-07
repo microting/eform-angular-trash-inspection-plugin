@@ -127,7 +127,7 @@ namespace TrashInspection.Pn.Services
                     IsApproved = x.IsApproved,
                     Comment = x.Comment,
                     Token = trashInspectionSettings.Value
-            }).ToListAsync();
+                }).ToListAsync();
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)
                 {
@@ -184,7 +184,62 @@ namespace TrashInspection.Pn.Services
                 List<TrashInspectionVersion> trashInspectionVersions =
                     await trashInspectionVersionsQuery.Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
-                trashInspectionVersionsModel.TrashInspectionVersionList = trashInspectionVersions;
+                trashInspectionVersionsModel.TrashInspectionVersionList = new List<TrashInspectionVersionModel>();
+                
+                foreach (TrashInspectionVersion trashInspectionVersion in trashInspectionVersions)
+                {
+                    TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
+                    {
+                        Version = trashInspectionVersion.Version,
+                        WeighingNumber = trashInspectionVersion.WeighingNumber,
+                        Date = trashInspectionVersion.Date,
+                        Time = trashInspectionVersion.Time,
+                        RegistrationNumber = trashInspectionVersion.RegistrationNumber,
+                        TrashFraction = trashInspectionVersion.TrashFraction,
+                        FractionId = trashInspectionVersion.FractionId,
+                        EakCode = trashInspectionVersion.EakCode,
+                        Producer = trashInspectionVersion.Producer,
+                        Transporter = trashInspectionVersion.Transporter,
+                        InstallationId = trashInspectionVersion.InstallationId,
+                        MustBeInspected = trashInspectionVersion.MustBeInspected,
+                        Status = trashInspectionVersion.Status,
+                        TrashInspectionId = trashInspectionVersion.TrashInspectionId,
+                        SegmentId = trashInspectionVersion.SegmentId,
+                        ExtendedInspection = trashInspectionVersion.ExtendedInspection,
+                        InspectionDone = trashInspectionVersion.InspectionDone,
+                        IsApproved = trashInspectionVersion.IsApproved,
+                        ApprovedValue = trashInspectionVersion.ApprovedValue,
+                        Comment = trashInspectionVersion.Comment,
+                        ProducerId = trashInspectionVersion.ProducerId,
+                        TransporterId = trashInspectionVersion.TransporterId,
+                        FirstWeight = trashInspectionVersion.FirstWeight,
+                        SecondWeight = trashInspectionVersion.SecondWeight
+                    };
+                    trashInspectionVersionsModel.TrashInspectionVersionList.Add(trashInspectionVersionModel);
+                }
+                
+                foreach (TrashInspectionVersionModel trashInspectionVersionModel in trashInspectionVersionsModel.TrashInspectionVersionList)
+                {
+                    Installation installation = await _dbContext.Installations
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.InstallationId);
+                    if (installation != null)
+                    {
+                        trashInspectionVersionModel.InstallationName = installation.Name;
+                    }
+                     
+                    Fraction fraction = await _dbContext.Fractions
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.FractionId);
+                    if (fraction != null)
+                    {
+                        trashInspectionVersionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
+                    }       
+                    Segment segment = await _dbContext.Segments
+                        .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.SegmentId);
+                    if (segment != null)
+                    {
+                        trashInspectionVersionModel.Segment = segment.Name;
+                    }             
+                }
 
                 var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
 

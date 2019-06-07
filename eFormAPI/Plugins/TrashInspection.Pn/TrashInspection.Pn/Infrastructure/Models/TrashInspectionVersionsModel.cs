@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
@@ -7,7 +6,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
     {
         public string Token { get; set; }
         
-        public List<TrashInspectionVersion> TrashInspectionVersionList { get; set; }
+        public List<TrashInspectionVersionModel> TrashInspectionVersionList { get; set; }
         
         public List<TrashInspectionCaseStatusModel> TrashInspectionCaseStatusModels { get; set; } 
         
