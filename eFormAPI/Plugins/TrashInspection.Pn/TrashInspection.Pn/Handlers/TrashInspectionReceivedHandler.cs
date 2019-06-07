@@ -67,8 +67,7 @@ namespace TrashInspection.Pn.Handlers
             
             if (createModel.ExtendedInspection)
             {
-                var result = await _dbContext.TrashInspectionPnSettings.SingleOrDefaultAsync(x =>
-                    x.Name == "ExtendedInspectioneFormId");
+                var result = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:ExtendedInspectioneFormId");
                 eFormId = int.Parse(result.Value);
             }
             
