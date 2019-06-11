@@ -4,6 +4,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
 {
     public class TrashInspectionVersionModel
     {
+        public int Id { get; set; }
+        
+        public DateTime UpdatedAt { get; set; }
+        
         public int Version { get; set; }
 
         public string WeighingNumber { get; set; }
