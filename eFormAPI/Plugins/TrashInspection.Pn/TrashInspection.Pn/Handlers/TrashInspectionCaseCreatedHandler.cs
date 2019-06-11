@@ -74,7 +74,7 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
-            mainElement.PushMessageBody = cDataValue.ToString();
+            mainElement.PushMessageBody = cDataValue.InderValue;
             mainElement.PushMessageTitle = mainElement.Label;
 
             if (createModel.MustBeInspected)
