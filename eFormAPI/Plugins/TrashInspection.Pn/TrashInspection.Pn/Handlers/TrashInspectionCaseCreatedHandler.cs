@@ -95,6 +95,7 @@ namespace TrashInspection.Pn.Handlers
             
             if (createModel.MustBeInspected || createModel.ExtendedInspection)
             {
+                mainElement.Color = Constants.CheckListColors.Red;
                 dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
             }
             
