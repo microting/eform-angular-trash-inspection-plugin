@@ -85,6 +85,7 @@ namespace TrashInspection.Pn.Handlers
             if (createModel.ExtendedInspection)
             {
                 cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
+                mainElement.Color = Constants.CheckListColors.Red;
             }
             
             mainElement.ElementList[0].Description = cDataValue;
@@ -95,7 +96,6 @@ namespace TrashInspection.Pn.Handlers
             
             if (createModel.MustBeInspected || createModel.ExtendedInspection)
             {
-                mainElement.Color = Constants.CheckListColors.Red;
                 dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
             }
             
