@@ -75,10 +75,10 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
             mainElement.PushMessageTitle = mainElement.Label;
-            mainElement.PushMessageBody = $"Vejenr: {createModel.WeighingNumber}\n\n";
-            mainElement.PushMessageBody += $"Dato: {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}\n\n";
-            mainElement.PushMessageBody += $"Område: {segment.Name}\n\n";
-            mainElement.PushMessageBody += $"Producent: {createModel.Producer}\n\n";
+            mainElement.PushMessageBody = $"Vejenr: {createModel.WeighingNumber}\n";
+            mainElement.PushMessageBody += $"Dato: {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}\n";
+            mainElement.PushMessageBody += $"Område: {segment.Name}\n";
+            mainElement.PushMessageBody += $"Producent: {createModel.Producer}\n";
             mainElement.PushMessageBody += $"Varenummer: {fraction.ItemNumber} {fraction.Name}";
 
             if (createModel.MustBeInspected)
