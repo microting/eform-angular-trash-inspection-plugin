@@ -66,7 +66,7 @@ namespace TrashInspection.Pn.Handlers
             mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
             mainElement.EnableQuickSync = true;
             mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
-            
+
             CDataValue cDataValue = new CDataValue();
             cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
             cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
@@ -74,8 +74,12 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
-            mainElement.PushMessageBody = cDataValue.InderValue;
             mainElement.PushMessageTitle = mainElement.Label;
+            mainElement.PushMessageBody = $"Vejenr: {createModel.WeighingNumber}\n\n";
+            mainElement.PushMessageBody += $"Dato: {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}\n\n";
+            mainElement.PushMessageBody += $"Område: {segment.Name}\n\n";
+            mainElement.PushMessageBody += $"Producent: {createModel.Producer}\n\n";
+            mainElement.PushMessageBody += $"Varenummer: {fraction.ItemNumber} {fraction.Name}";
 
             if (createModel.MustBeInspected)
             {
