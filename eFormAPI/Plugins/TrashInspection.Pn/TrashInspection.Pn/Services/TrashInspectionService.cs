@@ -528,6 +528,7 @@ namespace TrashInspection.Pn.Services
                             Producer = createModel.Producer,
                             Transporter = createModel.Transporter,
                             MustBeInspected = createModel.MustBeInspected,
+                            InspectionDone = false,
                             Status = 0
                         };
                     
