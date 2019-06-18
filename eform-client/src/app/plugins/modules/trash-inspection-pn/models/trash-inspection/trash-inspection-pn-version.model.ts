@@ -24,6 +24,7 @@ export class TrashInspectionVersionPnModel {
   token: string;
   relatedAreasIds: Array<number> = [];
   status: number;
+  extendedInspection: boolean;
   isApproved: boolean;
   comment: string;
   version: number;

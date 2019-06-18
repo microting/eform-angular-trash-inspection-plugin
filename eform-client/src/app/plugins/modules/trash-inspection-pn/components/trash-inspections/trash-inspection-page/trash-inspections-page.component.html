@@ -157,6 +157,18 @@
           </div>
         </th>
 
+        <th scope="col" class="table-header-sortable" id="isExtendedInspectionTableHeader"
+            (click)="sortTable('IsExtendedInspection')">
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Extended inspection' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'IsExtendedInspection'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'IsExtendedInspection' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'IsExtendedInspection' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
         <th scope="col" class="table-header-sortable" id="isApprovedTableHeader"
             (click)="sortTable('IsApproved')">
           <div class="d-flex align-items-center justify-content-center">
@@ -247,6 +259,10 @@
         </td>
         <td>
           {{trashInspection.weighingNumber}}
+        </td>
+        <td>
+          <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspection.extendedInspection"></fa-icon>
+
         </td>
         <td>
 

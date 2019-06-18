@@ -88,6 +88,12 @@
 
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
+                    {{'Extended inspection' | translate}}
+                  </div>
+                </th>
+
+                <th scope="col" class="table-header">
+                  <div class="d-flex align-items-center justify-content-center">
                     {{'Is approved' | translate}}
                   </div>
                 </th>
@@ -150,6 +156,11 @@
                 </td>
                 <td>
                   {{trashInspectionVersion.weighingNumber}}
+                </td>
+                <td>
+
+                  <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspectionVersion.extendedInspection"></fa-icon>
+
                 </td>
                 <td>
 

@@ -25,6 +25,7 @@ export class TrashInspectionPnModel {
   token: string;
   relatedAreasIds: Array<number> = [];
   status: number;
+  extendedInspection: boolean;
   isApproved: boolean;
   comment: string;
   workflowState: string;
