@@ -40,6 +40,7 @@ using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
+using KeyValuePair = System.Collections.Generic.KeyValuePair;
 
 namespace TrashInspection.Pn.Services
 {
@@ -109,13 +110,32 @@ namespace TrashInspection.Pn.Services
                 fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
                 fractionsModel.FractionList = fractions;
                 Core _core = _coreHelper.GetCore();
+                List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();
 
                 foreach (FractionModel fractionModel in fractions)
                 {
                     if (fractionModel.eFormId > 0)
                     {
-                        string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
-                        fractionModel.SelectedTemplateName = eFormName;
+                        if (eFormNames.Any(x => x.Key == fractionModel.eFormId))
+                        {
+                            fractionModel.SelectedTemplateName = eFormNames.First(x => x.Key == fractionModel.eFormId).Value;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
+                                fractionModel.SelectedTemplateName = eFormName;
+                                KeyValuePair<int, string> kvp =
+                                    new KeyValuePair<int, string>(fractionModel.eFormId, eFormName);
+                                eFormNames.Add(kvp);
+                            }
+                            catch
+                            {
+                                KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(fractionModel.eFormId, "");
+                                eFormNames.Add(kvp);
+                            }
+                        }
                     }                    
                 }
                 
@@ -155,8 +175,11 @@ namespace TrashInspection.Pn.Services
 
                 if (fraction.eFormId > 0)
                 {
-                    string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
-                    fraction.SelectedTemplateName = eFormName;
+                    try {
+                        string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
+                        fraction.SelectedTemplateName = eFormName;
+                        
+                    } catch {}
                 }
                 return new OperationDataResult<FractionModel>(true, fraction);
             }
@@ -246,13 +269,15 @@ namespace TrashInspection.Pn.Services
                 Name = createModel.Name,
                 Description = createModel.Description,
                 ItemNumber = createModel.ItemNumber,
-                LocationCode = createModel.LocationCode
+                LocationCode = createModel.LocationCode,
+                eFormId = createModel.eFormId
             };
             fraction.Create(_dbContext);
             
             return new OperationResult(true);
 
         }
+        
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
             Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
@@ -262,6 +287,7 @@ namespace TrashInspection.Pn.Services
                 fraction.Description = updateModel.Description;
                 fraction.ItemNumber = updateModel.ItemNumber;
                 fraction.LocationCode = updateModel.LocationCode;
+                fraction.eFormId = updateModel.eFormId;
 
                 fraction.Update(_dbContext);
             }
@@ -269,6 +295,7 @@ namespace TrashInspection.Pn.Services
             return new OperationResult(true);
 
         }
+        
         public async Task<OperationResult> DeleteFraction(int id)
         {
             Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
