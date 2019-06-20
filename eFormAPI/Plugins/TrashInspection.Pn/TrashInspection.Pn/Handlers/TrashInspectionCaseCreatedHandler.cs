@@ -84,10 +84,12 @@ namespace TrashInspection.Pn.Handlers
             if (createModel.MustBeInspected)
             {
                 cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
+                mainElement.PushMessageBody += $"\n\n*** SKAL INSPICERES ***";
             }
 
             if (createModel.ExtendedInspection)
             {
+                mainElement.PushMessageBody += $"\n\n*** LOVPLIGTIG KONTROL ***";
                 cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
                 mainElement.Color = Constants.CheckListColors.Red;
             }
