@@ -75,21 +75,18 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
             mainElement.PushMessageTitle = mainElement.Label;
-            mainElement.PushMessageBody = $"Vejenr: {createModel.WeighingNumber}\n";
-            mainElement.PushMessageBody += $"Dato: {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}\n";
-            mainElement.PushMessageBody += $"Område: {segment.Name}\n";
-            mainElement.PushMessageBody += $"Producent: {createModel.Producer}\n";
-            mainElement.PushMessageBody += $"Varenummer: {fraction.ItemNumber} {fraction.Name}";
+            mainElement.PushMessageBody = $"Varenummer: {fraction.ItemNumber} {fraction.Name}\n";
+            mainElement.PushMessageBody += $"Producent: {createModel.Producer.Substring(0,17)}...";
 
             if (createModel.MustBeInspected)
             {
                 cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
-                mainElement.PushMessageBody += $"\n\n*** SKAL INSPICERES ***";
+                mainElement.PushMessageBody += "\n*** SKAL INSPICERES ***";
             }
 
             if (createModel.ExtendedInspection)
             {
-                mainElement.PushMessageBody += $"\n\n*** LOVPLIGTIG KONTROL ***";
+                mainElement.PushMessageBody += "\n*** LOVPLIGTIG KONTROL ***";
                 cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
                 mainElement.Color = Constants.CheckListColors.Red;
             }
