@@ -45,6 +45,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     const fraction = fractionsPage.getFirstRowObject();
     expect(fraction.name).equal(name);
     expect(fraction.description).equal(description);
+    expect(fraction.eForm).equal('Number 1');
   });
 
 });
