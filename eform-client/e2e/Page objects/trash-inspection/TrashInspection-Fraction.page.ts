@@ -67,7 +67,10 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element('#editFractionDescription');
   }
   public get fractionUpdateSelecterBox() {
-    return browser.element('#fractionUpdateSelector');
+    return browser.element(`//*[contains(@id, 'fractionUpdateSelector')]//input`);
+  }
+  public get fractionUpdateOption() {
+    return browser.element(`//*[contains(@class, 'ng-option-label')]`);
   }
   public get fractionUpdateSaveBtn() {
     return browser.element('#fractionUpdateSaveBtn');
@@ -118,6 +121,11 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionUpdateNameBox.addValue(newName);
     this.fractionUpdateDescriptionBox.clearElement();
     this.fractionUpdateDescriptionBox.addValue(newDescription);
+    browser.pause(3000);
+    this.fractionUpdateSelecterBox.addValue('Number 2');
+    browser.pause(3000);
+    this.fractionUpdateOption.click();
+    browser.pause(1000);
     this.fractionUpdateSaveBtn.click();
     browser.pause(8000);
   }
