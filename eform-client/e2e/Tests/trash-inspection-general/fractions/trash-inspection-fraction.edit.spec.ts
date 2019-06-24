@@ -10,8 +10,8 @@ describe('Trash Inspection Plugin - Fraction', function () {
     loginPage.open('/auth');
     loginPage.login();
   });
-  it('should check if activated', function () {
-    myEformsPage.Navbar.advancedDropdown();
+  it('should create eForm nr. 2', function () {
+    myEformsPage.createNewEform('Number 2');
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
     browser.pause(8000);
     const plugin = pluginsPage.getFirstPluginRowObj();
@@ -37,6 +37,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     const fraction = fractionsPage.getFirstRowObject();
     expect(fraction.name).equal(newName);
     expect(fraction.description).equal(newDescription);
+    expect(fraction.eForm).equal('Number 2');
   });
 
 });
