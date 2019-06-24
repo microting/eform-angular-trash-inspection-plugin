@@ -78,10 +78,10 @@ namespace TrashInspection.Pn.Handlers
             mainElement.PushMessageBody = $"Varenummer: {fraction.ItemNumber} {fraction.Name}\n";
             mainElement.PushMessageBody += $"Producent: {createModel.Producer.Substring(0,17)}...";
 
-            if (createModel.MustBeInspected)
+            if (createModel.MustBeInspected && !createModel.ExtendedInspection)
             {
-                cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
                 mainElement.PushMessageBody += "\n*** SKAL INSPICERES ***";
+                cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
             }
 
             if (createModel.ExtendedInspection)
