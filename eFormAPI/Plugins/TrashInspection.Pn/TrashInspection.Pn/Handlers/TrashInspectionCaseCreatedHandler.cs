@@ -75,20 +75,30 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
 
             mainElement.PushMessageTitle = mainElement.Label;
-            mainElement.PushMessageBody = $"Varenummer: {fraction.ItemNumber} {fraction.Name}\n";
-            mainElement.PushMessageBody += $"Producent: {createModel.Producer.Substring(0,17)}...";
+            mainElement.PushMessageBody = "";
 
             if (createModel.MustBeInspected && !createModel.ExtendedInspection)
             {
-                mainElement.PushMessageBody += "\n*** SKAL INSPICERES ***";
+                mainElement.PushMessageBody += "*** SKAL INSPICERES ***\n";
                 cDataValue.InderValue += "<br><br><b>*** SKAL INSPICERES ***</b>";
             }
 
             if (createModel.ExtendedInspection)
             {
-                mainElement.PushMessageBody += "\n*** LOVPLIGTIG KONTROL ***";
+                mainElement.PushMessageBody += "*** LOVPLIGTIG KONTROL ***\n";
                 cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
                 mainElement.Color = Constants.CheckListColors.Red;
+            }
+            
+            mainElement.PushMessageBody += $"Vare: {fraction.Name}\n";
+            
+            if (createModel.Producer.Length > 17)
+            {
+                mainElement.PushMessageBody += $"Producent: {createModel.Producer.Substring(0,17)}...";
+            }
+            else
+            {
+                mainElement.PushMessageBody += $"Producent: {createModel.Producer}";    
             }
             
             mainElement.ElementList[0].Description = cDataValue;
