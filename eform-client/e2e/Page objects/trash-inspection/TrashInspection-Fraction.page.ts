@@ -95,13 +95,14 @@ export class TrashInspectionFractionPage extends Page {
   }
   goToFractionsPage() {
     this.trashInspectionDropDown();
-    browser.pause(1000);
+    browser.pause(2000);
     this.fractionBtn.click();
     browser.pause(8000);
   }
   createFraction(name: string, description: string) {
     this.fractionCreateBtn();
-    browser.pause(8000);
+    // browser.pause(8000);
+    browser.waitForVisible('#createFractionName', 20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
     browser.pause(3000);
@@ -112,7 +113,8 @@ export class TrashInspectionFractionPage extends Page {
     this.createSaveBtn.click();
     browser.pause(6000);
     browser.refresh();
-    browser.pause(14000);
+    // browser.pause(14000);
+    browser.waitForVisible('#fractionCreateBtn', 20000);
   }
   editFraction(newName: string, newDescription: string) {
     this.fractionEditBtn.click();
@@ -132,7 +134,8 @@ export class TrashInspectionFractionPage extends Page {
   deleteFraction() {
   const fractionForDelete = this.getFirstRowObject();
   fractionForDelete.deleteBtn.click();
-  browser.pause(4000);
+  // browser.pause(4000);
+  browser.waitForVisible('#fractionDeleteDeleteBtn', 10000);
   this.fractionDeleteDeleteBtn.click();
   browser.pause(8000);
   browser.refresh();

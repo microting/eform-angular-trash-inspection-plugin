@@ -13,7 +13,8 @@ describe('Trash Inspection Plugin - Fraction', function () {
   it('should check if activated', function () {
     myEformsPage.Navbar.advancedDropdown();
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
-    browser.pause(8000);
+    // browser.pause(8000);
+    browser.waitForVisible('#plugin-id', 10000);
     const plugin = pluginsPage.getFirstPluginRowObj();
     expect(plugin.id).equal(1);
     expect(plugin.name).equal('Microting Trash Inspection Plugin');
@@ -23,13 +24,19 @@ describe('Trash Inspection Plugin - Fraction', function () {
   it('should check if menupoint is there', function () {
     expect(fractionsPage.trashInspectionDropdownName.getText()).equal('Affaldsinspektion');
     fractionsPage.trashInspectionDropDown();
-    browser.pause(4000);
+    // browser.pause(4000);
+    browser.pause(2000);
+    browser.waitForVisible('#trash-inspection-pn-fractions', 10000);
     expect(fractionsPage.fractionBtn.getText()).equal('Fraktioner');
     browser.pause(4000);
     fractionsPage.trashInspectionDropDown();
     browser.refresh();
-  });
-  it('should delete Fraction', function () {
+  }); it('should get btn text', function () {
+    // browser.waitForVisible('#plugin-id', 10000);
+    browser.pause(10000);
+    fractionsPage.goToFractionsPage();
+    fractionsPage.getBtnTxt('Ny Fraktion');
+  });  it('should delete Fraction', function () {
     fractionsPage.goToFractionsPage();
     fractionsPage.deleteFraction();
     browser.pause(8000);
