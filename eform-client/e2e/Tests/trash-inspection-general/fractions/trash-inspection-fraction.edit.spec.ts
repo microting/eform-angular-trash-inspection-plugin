@@ -14,6 +14,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     myEformsPage.createNewEform('Number 2');
   });
   it('should check if activated', function () {
+    browser.pause(4000);
     myEformsPage.Navbar.advancedDropdown();
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
     // browser.pause(8000);
