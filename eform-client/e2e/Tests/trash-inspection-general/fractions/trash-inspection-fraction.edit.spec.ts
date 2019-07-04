@@ -17,7 +17,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     myEformsPage.Navbar.advancedDropdown();
     myEformsPage.Navbar.clickonSubMenuItem('Plugins');
     // browser.pause(8000);
-    browser.waitForVisible('#plugin-id', 10000);
+    browser.waitForVisible('#plugin-id', 20000);
     const plugin = pluginsPage.getFirstPluginRowObj();
     expect(plugin.id).equal(1);
     expect(plugin.name).equal('Microting Trash Inspection Plugin');
