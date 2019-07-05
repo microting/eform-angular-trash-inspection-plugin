@@ -32,7 +32,7 @@ describe('Application settings page - site header section', function () {
         pluginPage.selectValue('PluginDropDown', 'PluginDropDown', 'Aktiveret');
         // browser.pause(8000);
         pluginPage.saveBtn.click();
-        browser.pause(40000);
+        browser.pause(120000);
         browser.refresh();
 
         const plugin = pluginsPage.getFirstPluginRowObj();
