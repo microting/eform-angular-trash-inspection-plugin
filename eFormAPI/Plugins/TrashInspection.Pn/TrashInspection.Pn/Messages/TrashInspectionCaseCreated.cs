@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using eFormData;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Infrastructure.Models;
 

@@ -27,7 +27,7 @@ using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using System;
 using System.Linq;
-using eFormShared;
+using Microting.eForm.Infrastructure.Constants;
 
 namespace TrashInspection.Pn.Infrastructure.Data.Seed
 {

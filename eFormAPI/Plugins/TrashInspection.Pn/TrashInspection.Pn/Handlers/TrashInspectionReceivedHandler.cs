@@ -30,12 +30,9 @@ using System.Threading.Tasks;
 using Rebus.Handlers;
 using TrashInspection.Pn.Messages;
 using eFormCore;
-using eFormData;
-using eFormShared;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Rebus.Bus;
 using TrashInspection.Pn.Infrastructure.Models;
 

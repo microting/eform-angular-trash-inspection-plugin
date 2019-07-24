@@ -28,8 +28,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
-using eFormShared;
 using Microsoft.EntityFrameworkCore;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
@@ -40,7 +40,6 @@ using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
-using KeyValuePair = System.Collections.Generic.KeyValuePair;
 
 namespace TrashInspection.Pn.Services
 {
@@ -93,7 +92,7 @@ namespace TrashInspection.Pn.Services
 
                 fractionsQuery
                     = fractionsQuery
-                        .Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed)
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
                 
@@ -107,7 +106,7 @@ namespace TrashInspection.Pn.Services
                     ItemNumber = x.ItemNumber
                 }).ToListAsync();
 
-                fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
+                fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 fractionsModel.FractionList = fractions;
                 Core _core = _coreHelper.GetCore();
                 List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();

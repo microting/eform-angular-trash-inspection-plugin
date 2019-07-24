@@ -29,6 +29,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
 using Microsoft.EntityFrameworkCore;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
@@ -129,7 +130,7 @@ namespace TrashInspection.Pn.Services
               
                  segmentQuery
                      = segmentQuery
-                     .Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed)
+                     .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                      .Skip(pnRequestModel.Offset)
                      .Take(pnRequestModel.PageSize);
                 
@@ -144,7 +145,7 @@ namespace TrashInspection.Pn.Services
                     SdkFolderId = x.SdkFolderId
                 }).ToListAsync();
 
-                segmentsModel.Total = await _dbContext.Segments.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
+                segmentsModel.Total = await _dbContext.Segments.CountAsync(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 segmentsModel.SegmentList = segmentModels;
                 Core _core = _coreHelper.GetCore();
 

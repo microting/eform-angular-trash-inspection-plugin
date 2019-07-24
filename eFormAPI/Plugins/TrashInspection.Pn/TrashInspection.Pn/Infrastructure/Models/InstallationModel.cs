@@ -25,7 +25,7 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using eFormShared;
+using Microting.eForm.Dto;
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
