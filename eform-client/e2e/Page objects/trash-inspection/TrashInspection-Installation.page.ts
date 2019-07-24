@@ -81,11 +81,14 @@ export class TrashInspectionInstallationPage extends Page {
   }
   createInstallation_DoesntAddSite(name: string) {
     this.installationCreateBtn.click();
-    browser.pause(10000);
+    // browser.pause(10000);
+    browser.waitForVisible('#createInstallationName', 10000);
     this.installationCreateNameBox.addValue(name);
     browser.pause(1000);
     this.installationCreateSaveBtn.click();
-    browser.pause(16000);
+    browser.pause(2000);
+    browser.refresh();
+browser.waitForVisible('#createInstallationBtn', 10000);
   }
   createInstallation_AddSite_Cancels(name: string) {
     this.installationCreateBtn.click();
@@ -128,14 +131,18 @@ export class TrashInspectionInstallationPage extends Page {
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
     browser.pause(8000);
-  }editInstallation_OnlyEditsName(name: string) {
+  }
+  editInstallation_OnlyEditsName(name: string) {
     this.installationEditBtn.click();
-    browser.pause(10000);
+    // browser.pause(10000);
+    browser.waitForVisible('#updateInstallationName', 10000);
     this.installationUpdateNameBox.clearElement();
     this.installationUpdateNameBox.addValue(name);
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
-    browser.pause(16000);
+    browser.pause(2000);
+    browser.refresh();
+    browser.waitForVisible('#createInstallationBtn', 10000);
   }
   editInstallation_AddSite_Cancels(name: string) {
     this.installationEditBtn.click();
@@ -158,7 +165,8 @@ export class TrashInspectionInstallationPage extends Page {
 
   deleteInstallation_Deletes() {
     this.installationDeleteBtn.click();
-    browser.pause(8000);
+    // browser.pause(8000);
+    browser.waitForVisible('#installationDeleteDeleteBtn', 10000);
     this.installationDeleteDeleteBtn.click();
   }
   deleteInstallation_Cancels() {
