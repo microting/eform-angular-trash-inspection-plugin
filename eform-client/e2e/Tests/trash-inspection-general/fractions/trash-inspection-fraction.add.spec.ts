@@ -52,5 +52,21 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(fraction.description).equal(description);
     expect(fraction.eForm).equal('Number 1');
   });
-
+  it('should clean up', function () {
+    browser.refresh();
+    const fraction = fractionsPage.getFirstRowObject();
+    fraction.deleteBtn.click();
+    browser.waitForVisible('#fractionDeleteDeleteBtn', 20000);
+    fractionsPage.fractionDeleteDeleteBtn.click();
+    browser.refresh();
+    expect(fraction.id === null);
+  });
+  it('should not create fraction', function () {
+    browser.pause(8000);
+    const name = Guid.create().toString();
+    const description = Guid.create().toString();
+    fractionsPage.cancelCreateFraction(name, description);
+    const fraction = fractionsPage.getFirstRowObject();
+    expect(fractionsPage.rowNum).equal(0);
+  });
 });

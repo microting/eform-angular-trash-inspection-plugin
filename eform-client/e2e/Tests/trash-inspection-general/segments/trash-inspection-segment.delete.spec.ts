@@ -41,5 +41,18 @@ describe('Trash Inspection Plugin - Segment', function () {
     segmentPage.deleteSegment();
     segmentPage.deleteSegment();
     segmentPage.deleteSegment();
+    expect(segmentPage.rowNum).equal(0);
+  });
+  it('should not delete segment', function () {
+    const name = Guid.create().toString();
+    const description = Guid.create().toString();
+    const sdkFolderId = Math.floor((Math.random() * 10) + 1);
+    segmentPage.goToSegmentsPage();
+    segmentPage.createSegment(name, description, sdkFolderId);
+    const segment = segmentPage.getRowObject(1);
+    expect(segment.name).equal(name);
+    expect(segment.description).equal(description);
+    expect(segment.sdkFolderId).equal(`${sdkFolderId}`);
+    segmentPage.deleteSegmentCancel();
   });
 });

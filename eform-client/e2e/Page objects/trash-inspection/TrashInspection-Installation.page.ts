@@ -35,7 +35,7 @@ export class TrashInspectionInstallationPage extends Page {
     return browser.element('#installationCreateSaveBtn');
   }
   public get installationCreateCancelBtn() {
-    return browser.element('#installationCreateSaveBtn');
+    return browser.element('#installationCreateCancelBtn');
   }
   public get installationUpdateNameBox() {
     return browser.element('#updateInstallationName');
@@ -110,6 +110,8 @@ browser.waitForVisible('#createInstallationBtn', 10000);
   createInstallation_cancels() {
     this.installationCreateBtn.click();
     browser.pause(8000);
+    this.installationCreateNameBox.addValue(name);
+    browser.pause(1000);
     this.installationCreateCancelBtn.click();
     browser.pause(8000);
   }
@@ -134,12 +136,24 @@ browser.waitForVisible('#createInstallationBtn', 10000);
   }
   editInstallation_OnlyEditsName(name: string) {
     this.installationEditBtn.click();
-    // browser.pause(10000);
-    browser.waitForVisible('#updateInstallationName', 10000);
+    browser.pause(10000);
+    // browser.waitForVisible('#updateInstallationName', 10000);
     this.installationUpdateNameBox.clearElement();
     this.installationUpdateNameBox.addValue(name);
     browser.pause(1000);
     this.installationUpdateSaveBtn.click();
+    browser.pause(2000);
+    browser.refresh();
+    browser.waitForVisible('#createInstallationBtn', 10000);
+  }
+  editInstallation_OnlyEditsName_Cancels(name: string) {
+    this.installationEditBtn.click();
+    browser.pause(10000);
+    // browser.waitForVisible('#updateInstallationName', 10000);
+    this.installationUpdateNameBox.clearElement();
+    this.installationUpdateNameBox.addValue(name);
+    browser.pause(1000);
+    this.installationUpdateCancelBtn.click();
     browser.pause(2000);
     browser.refresh();
     browser.waitForVisible('#createInstallationBtn', 10000);
@@ -171,7 +185,8 @@ browser.waitForVisible('#createInstallationBtn', 10000);
   }
   deleteInstallation_Cancels() {
     this.installationDeleteBtn.click();
-    browser.pause(8000);
+    // browser.pause(8000);
+    browser.waitForVisible('#installationDeleteDeleteBtn', 10000);
     this.installationDeleteCancelBtn.click();
   }
   getFirstRowObject(): InstallationPageRowObject {

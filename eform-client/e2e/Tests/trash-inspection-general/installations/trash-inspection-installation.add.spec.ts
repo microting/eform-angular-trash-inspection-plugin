@@ -16,4 +16,12 @@ describe('Trash Inspection Plugin - Installation', function () {
     expect(installation.name).equal(name);
     installationPage.deleteInstallation_Deletes();
   });
+  it('should not create installation', function () {
+    const name = Guid.create().toString();
+    // installationPage.goToInstallationsPage();
+    browser.pause(8000);
+    installationPage.createInstallation_DoesntAddSite_Cancels(name);
+    const installation = installationPage.getFirstRowObject();
+    expect(installationPage.rowNum).equal(0);
+  });
 });

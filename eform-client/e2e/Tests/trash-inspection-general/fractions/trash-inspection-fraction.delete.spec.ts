@@ -31,17 +31,39 @@ describe('Trash Inspection Plugin - Fraction', function () {
     browser.pause(4000);
     fractionsPage.trashInspectionDropDown();
     browser.refresh();
-  }); it('should get btn text', function () {
+  });
+  it('should get btn text', function () {
     // browser.waitForVisible('#plugin-id', 10000);
     browser.pause(10000);
     fractionsPage.goToFractionsPage();
     fractionsPage.getBtnTxt('Ny Fraktion');
-  });  it('should delete Fraction', function () {
+  });
+  it('should create fraction', function () {
+    const name = Guid.create().toString();
+    const description = Guid.create().toString();
+    fractionsPage.createFraction(name, description);
+    const fraction = fractionsPage.getFirstRowObject();
+    expect(fraction.name).equal(name);
+    expect(fraction.description).equal(description);
+    expect(fraction.eForm).equal('Number 1');
+  });
+  it('should not delete fraction', function () {
+    fractionsPage.goToFractionsPage();
+    const fraction = fractionsPage.getFirstRowObject();
+    const oldName = fraction.name;
+    const oldDescription = fraction.description;
+    fractionsPage.cancelDeleteFraction();
+    browser.pause(8000);
+    const fractionAfterCancelDelete = fractionsPage.getFirstRowObject();
+    expect(fractionAfterCancelDelete.name).equal(oldName);
+    expect(fractionAfterCancelDelete.description).equal(oldDescription);
+  });
+  it('should delete Fraction', function () {
     fractionsPage.goToFractionsPage();
     fractionsPage.deleteFraction();
     browser.pause(8000);
     const fraction = fractionsPage.getFirstRowObject();
-    expect(fraction.id === null);
+    expect(fractionsPage.rowNum).equal(0);
   });
 
 });

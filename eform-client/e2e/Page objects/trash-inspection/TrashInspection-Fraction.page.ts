@@ -57,6 +57,9 @@ export class TrashInspectionFractionPage extends Page {
   public get createSaveBtn() {
     return browser.element('#fractionCreateSaveBtn');
   }
+  public get fractionCreateCancelBtn() {
+    return browser.element('#fractionCreateCancelBtn');
+  }
   public get fractionEditBtn() {
     return browser.element('#updateFractionBtn');
   }
@@ -106,11 +109,28 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
     browser.pause(3000);
-    this.fractionCreateSelectorBox.addValue('Number');
+    this.fractionCreateSelectorBox.addValue('Number 1');
     browser.pause(3000);
     this.fractionCreateOption.click();
     browser.pause(1000);
     this.createSaveBtn.click();
+    browser.pause(6000);
+    browser.refresh();
+    // browser.pause(14000);
+    browser.waitForVisible('#fractionCreateBtn', 20000);
+  }
+  cancelCreateFraction(name: string, description: string) {
+    this.fractionCreateBtn();
+    // browser.pause(8000);
+    browser.waitForVisible('#createFractionName', 20000);
+    this.fractionCreateNameBox.addValue(name);
+    this.fractionCreateDescriptionBox.addValue(description);
+    browser.pause(3000);
+    this.fractionCreateSelectorBox.addValue('Number 1');
+    browser.pause(3000);
+    this.fractionCreateOption.click();
+    browser.pause(1000);
+    this.fractionCreateCancelBtn.click();
     browser.pause(6000);
     browser.refresh();
     // browser.pause(14000);
@@ -131,6 +151,21 @@ export class TrashInspectionFractionPage extends Page {
     this.fractionUpdateSaveBtn.click();
     browser.pause(8000);
   }
+  cancelEditFraction(newName: string, newDescription: string) {
+    this.fractionEditBtn.click();
+    browser.pause(8000);
+    this.fractionUpdateNameBox.clearElement();
+    this.fractionUpdateNameBox.addValue(newName);
+    this.fractionUpdateDescriptionBox.clearElement();
+    this.fractionUpdateDescriptionBox.addValue(newDescription);
+    browser.pause(3000);
+    this.fractionUpdateSelecterBox.addValue('Number 2');
+    browser.pause(3000);
+    this.fractionUpdateOption.click();
+    browser.pause(1000);
+    this.fractionUpdateCancelBtn.click();
+    browser.pause(8000);
+  }
   deleteFraction() {
   const fractionForDelete = this.getFirstRowObject();
   fractionForDelete.deleteBtn.click();
@@ -139,6 +174,15 @@ export class TrashInspectionFractionPage extends Page {
   this.fractionDeleteDeleteBtn.click();
   browser.pause(8000);
   browser.refresh();
+  }
+  cancelDeleteFraction() {
+    const fractionForDelete = this.getFirstRowObject();
+    fractionForDelete.deleteBtn.click();
+    // browser.pause(4000);
+    browser.waitForVisible('#fractionDeleteDeleteBtn', 10000);
+    this.fractionDelteCancelBtn.click();
+    browser.pause(8000);
+    browser.refresh();
   }
   getFirstRowObject(): FractionsRowObject {
     return new FractionsRowObject(1);
