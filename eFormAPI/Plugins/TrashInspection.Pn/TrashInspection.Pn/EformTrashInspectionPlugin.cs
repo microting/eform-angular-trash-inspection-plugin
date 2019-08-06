@@ -1,7 +1,7 @@
 ﻿/*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2019 microting
+Copyright (c) 2007 - 2019 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Castle.Windsor;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Services;
 using Microsoft.AspNetCore.Builder;
@@ -33,15 +33,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormApi.BasePn.Infrastructure.Settings;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
-using Rebus.Bus;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Data.Seed;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using TrashInspection.Pn.Infrastructure.Models;
-using TrashInspection.Pn.Installers;
 
 namespace TrashInspection.Pn
 {
@@ -51,6 +51,8 @@ namespace TrashInspection.Pn
         public string PluginId => "eform-angular-trashinspection-plugin";
         public string PluginPath => PluginAssembly().Location;
         private string _connectionString;
+        private int _maxParallelism = 1;
+        private int _numberOfWorkers = 1;
 
         public Assembly PluginAssembly()
         {
@@ -100,13 +102,21 @@ namespace TrashInspection.Pn
 
             // Seed database
             SeedDatabase(connectionString);
+
+            string temp = context.PluginConfigurationValues
+                .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:MaxParallelism")?.Value;
+            _maxParallelism = string.IsNullOrEmpty(temp) ? 1 : int.Parse(temp);
+
+            temp = context.PluginConfigurationValues
+                .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:NumberOfWorkers")?.Value;
+            _numberOfWorkers = string.IsNullOrEmpty(temp) ? 1 : int.Parse(temp);
         }
 
         public void Configure(IApplicationBuilder appBuilder)
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-            rebusService.Start(_connectionString);
+            rebusService.Start(_connectionString, _maxParallelism, _numberOfWorkers);
 
         }
 

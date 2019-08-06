@@ -1,14 +1,13 @@
-import {Time} from '@angular/common';
+import {TrashInspectionPnCaseStatusModel} from './trash-inspection-pn-case-status.model';
 
-export class TrashInspectionsPnModel {
-  total: number;
-  trashInspectionList: Array<TrashInspectionPnModel> = [];
+export class TrashInspectionVersionsPnModel {
+  trashInspectionVersionList: Array<TrashInspectionVersionPnModel> = [];
+  trashInspectionCaseStatusModels: Array<TrashInspectionPnCaseStatusModel> = [];
   token: string;
-  numOfElements: number;
-  pageNum: number;
+  trashInspectionId: number;
 }
 
-export class TrashInspectionPnModel {
+export class TrashInspectionVersionPnModel {
   id: number;
   name: string;
   weighingNumber: string;
@@ -28,6 +27,7 @@ export class TrashInspectionPnModel {
   extendedInspection: boolean;
   isApproved: boolean;
   comment: string;
-  workflowState: string;
-  inspectionDone: boolean;
+  version: number;
+  trashInspectionId: number;
+  updatedAt: Date;
 }

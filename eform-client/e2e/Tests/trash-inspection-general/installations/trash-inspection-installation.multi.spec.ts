@@ -11,16 +11,27 @@ describe('Trash Inspection Plugin - Installation', function () {
   it('Should create multiple installations without site.', function () {
     installationPage.goToInstallationsPage();
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
+    browser.pause(2000);
     expect(installationPage.page2Object.getText()).equal('2');
     expect(installationPage.rowNum).equal(10);
     installationPage.deleteInstallation_Deletes();

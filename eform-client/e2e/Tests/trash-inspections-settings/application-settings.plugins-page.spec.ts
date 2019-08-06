@@ -13,7 +13,8 @@ describe('Application settings page - site header section', function () {
        loginPage.login();
        myEformsPage.Navbar.advancedDropdown();
        myEformsPage.Navbar.clickonSubMenuItem('Plugins');
-       browser.pause(8000);
+       // browser.pause(8000);
+       browser.waitForVisible('#plugin-id', 20000);
 
       const plugin = pluginsPage.getFirstPluginRowObj();
       expect(plugin.id).equal(1);
@@ -26,11 +27,12 @@ describe('Application settings page - site header section', function () {
 
     it('should activate the plugin', function () {
         pluginPage.pluginSettingsBtn.click();
-        browser.pause(8000);
+        // browser.pause(8000);
+        browser.waitForVisible('#PluginDropDown', 20000);
         pluginPage.selectValue('PluginDropDown', 'PluginDropDown', 'Aktiveret');
         // browser.pause(8000);
         pluginPage.saveBtn.click();
-        browser.pause(40000);
+        browser.pause(120000);
         browser.refresh();
 
         const plugin = pluginsPage.getFirstPluginRowObj();
@@ -38,6 +40,7 @@ describe('Application settings page - site header section', function () {
         expect(plugin.name).equal('Microting Trash Inspection Plugin');
         expect(plugin.version).equal('1.0.0.0');
         expect(plugin.status).equal('Aktiveret');
+        expect(browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).isExisting()).equal(true);
         // click on plugin settings
         // enter connectionstring for customers plugin
         // select activate

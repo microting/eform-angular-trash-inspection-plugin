@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 
 namespace TrashInspection.Pn.Test
@@ -85,6 +86,8 @@ namespace TrashInspection.Pn.Test
             modelNames.Add("Fractions");
             modelNames.Add("SegmentVersions");
             modelNames.Add("Segments");
+            modelNames.Add("PluginConfigurationValues");
+            modelNames.Add("PluginConfigurationValueVersions");
 
 
 

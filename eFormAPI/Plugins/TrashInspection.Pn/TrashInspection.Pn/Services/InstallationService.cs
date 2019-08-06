@@ -1,18 +1,41 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 Microting A/S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using eFormShared;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using OpenStack.NetCoreSwiftClient.Extensions;
 
 namespace TrashInspection.Pn.Services
@@ -20,16 +43,13 @@ namespace TrashInspection.Pn.Services
     public class InstallationService : IInstallationService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<InstallationService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public InstallationService(ILogger<InstallationService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public InstallationService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -87,7 +107,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<InstallationsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallations"));
 
@@ -127,7 +147,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<InstallationModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallation"));
             }
@@ -135,24 +155,23 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> CreateInstallation(InstallationModel createModel)
         {
-            createModel.Save(_dbContext);
+            Installation installation = new Installation
+            {
+                Name = createModel.Name
+            };
+            installation.Create(_dbContext);
+            
             foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
             {
-                InstallationSite installationSite = _dbContext.InstallationSites.FirstOrDefault(x => x.Id == deployedCheckbox.Id);
-                if(installationSite == null)
+                if (deployedCheckbox.IsChecked == true)
                 {
-                    if (deployedCheckbox.IsChecked == true)
+                    InstallationSite installationSite = new InstallationSite
                     {
-                        InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                        installationSiteModel.SdkSiteId = deployedCheckbox.Id;
-                        installationSiteModel.InstallationId = createModel.Id;
-
-                        installationSiteModel.Save(_dbContext);
-
-                    }
+                        InstallationId = installation.Id,
+                        SDKSiteId = deployedCheckbox.Id
+                    };
+                    installation.Create(_dbContext);
                 }
-                
-
             }
             return new OperationResult(true);
 
@@ -160,34 +179,36 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> UpdateInstallation(InstallationModel updateModel)
         {
-            updateModel.Update(_dbContext);
+            Installation installation =
+                await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
+            if (installation != null)
+            {
+                installation.Name = updateModel.Name;
+                installation.Update(_dbContext);
+            }
 
             List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == updateModel.Id).ToList();
             List<InstallationSite> toBeRemovedInstallationSites = installationSites;
 
             foreach (DeployCheckbox deployedCheckbox in updateModel.DeployCheckboxes)
             {
-                if (installationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id) == null)
+                InstallationSite installationSite =
+                    installationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id);
+                if (installationSite == null)
                 {
-                    InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                    installationSiteModel.SdkSiteId = deployedCheckbox.Id;
-                    installationSiteModel.InstallationId = updateModel.Id;
-
-                    installationSiteModel.Save(_dbContext);
+                    installationSite = new InstallationSite
+                    {
+                        InstallationId = installation.Id,
+                        SDKSiteId = deployedCheckbox.Id
+                    };
+                    installationSite.Create(_dbContext);
                 }
                 else
                 {
-                    // Site already there, so pop from list of sites to be removed
-                    InstallationSite installationSite =
-                        toBeRemovedInstallationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id);
                     if (installationSite.WorkflowState == Constants.WorkflowStates.Removed)
                     {
-                        InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                        installationSiteModel.Id = installationSite.Id;
-                        installationSiteModel.SdkSiteId = deployedCheckbox.Id;
-                        installationSiteModel.InstallationId = updateModel.Id;
-                        installationSiteModel.WorkflowState = Constants.WorkflowStates.Created;
-                        installationSiteModel.Update(_dbContext);
+                        installationSite.WorkflowState = Constants.WorkflowStates.Created;
+                        installationSite.Update(_dbContext);
 
                     } 
                     toBeRemovedInstallationSites.Remove(installationSite);
@@ -196,17 +217,15 @@ namespace TrashInspection.Pn.Services
 
             foreach (InstallationSite installationSite in toBeRemovedInstallationSites)
             {
-                InstallationSiteModel installationSiteModel = new InstallationSiteModel();
-                installationSiteModel.Id = installationSite.Id;
-                installationSiteModel.Delete(_dbContext);
+                installationSite.Delete(_dbContext);
             }
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> DeleteInstallation(int id)
         {
-            InstallationModel installation = new InstallationModel();
-            installation.Id = id;
+            Installation installation =
+                await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == id);
             installation.Delete(_dbContext);
             return new OperationResult(true);
 

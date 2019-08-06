@@ -1,16 +1,39 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 Microting A/S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using eFormShared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Newtonsoft.Json.Linq;
 using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
@@ -22,16 +45,13 @@ namespace TrashInspection.Pn.Services
     public class ProducerService : IProducerService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<ProducerService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public ProducerService(ILogger<ProducerService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public ProducerService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -97,7 +117,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<ProducersModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducers"));
             }
@@ -109,6 +129,7 @@ namespace TrashInspection.Pn.Services
             {
                 var producer = await _dbContext.Producers.Select(x => new ProducerModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,
@@ -117,8 +138,7 @@ namespace TrashInspection.Pn.Services
                     ZipCode = x.ZipCode,
                     Phone = x.Phone,
                     ContactPerson = x.ContactPerson
-                }).FirstOrDefaultAsync(x => x.Id == id);
-
+                }).FirstOrDefaultAsync(y => y.Id == id);
 
                 if (producer == null)
                 {
@@ -131,7 +151,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<ProducerModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducer"));
             }
@@ -150,54 +170,50 @@ namespace TrashInspection.Pn.Services
                     foreach (JToken fractionObj in fractionObjects)
                     {
                         bool producerNameExists = int.TryParse(headers[0]["headerValue"].ToString(), out int nameColumn);
-                        if (producerNameExists)
+                        if (!producerNameExists) continue;
+                        Producer existingProducer = FindProducer(nameColumn, headers, fractionObj);
+                        if (existingProducer == null)
                         {
-                            Producer existingProducer = FindProducer(producerNameExists,
-                                nameColumn, headers, fractionObj);
-                            if (existingProducer == null)
-                            {
-                                ProducerModel producerModel =
-                                    ProducersHelper.ComposeValues(new ProducerModel(), headers, fractionObj);
+                            ProducerModel producerModel =
+                                ProducersHelper.ComposeValues(new ProducerModel(), headers, fractionObj);
 
-                                ProducerModel newProducer = new ProducerModel
-                                {
+                            Producer newProducer = new Producer
+                            {
                                     
-                                    Name = producerModel.Name,
-                                    Description = producerModel.Description,
-                                    ForeignId = producerModel.ForeignId,
-                                    Address = producerModel.Address,
-                                    City = producerModel.City,
-                                    ZipCode = producerModel.ZipCode,
-                                    Phone = producerModel.Phone,
-                                    ContactPerson = producerModel.ContactPerson
+                                Name = producerModel.Name,
+                                Description = producerModel.Description,
+                                ForeignId = producerModel.ForeignId,
+                                Address = producerModel.Address,
+                                City = producerModel.City,
+                                ZipCode = producerModel.ZipCode,
+                                Phone = producerModel.Phone,
+                                ContactPerson = producerModel.ContactPerson
                                     
-                                };
-                               await newProducer.Save(_dbContext);
+                            };
+                            newProducer.Create(_dbContext);
   
-                            }
-                            else
-                            {
-                                if (existingProducer.WorkflowState == Constants.WorkflowStates.Removed)
-                                {
-                                    ProducerModel producer = new ProducerModel
-                                    {
-                                        Id = existingProducer.Id,
-                                        Description = existingProducer.Description,
-                                        Name = existingProducer.Name,
-                                        ForeignId = existingProducer.ForeignId,
-                                        Address = existingProducer.Address,
-                                        City = existingProducer.City,
-                                        ZipCode = existingProducer.ZipCode,
-                                        Phone = existingProducer.Phone,
-                                        ContactPerson = existingProducer.Phone
-
-                                    };
-                                    producer.WorkflowState = Constants.WorkflowStates.Created;
-                                    await producer.Update(_dbContext);
-                                }
-                            }
                         }
-                        
+                        else
+                        {
+                            ProducerModel producerModel =
+                                ProducersHelper.ComposeValues(new ProducerModel(), headers, fractionObj);
+                            existingProducer.Name = producerModel.Name;
+                            existingProducer.Description = producerModel.Description;
+                            existingProducer.ForeignId = producerModel.ForeignId;
+                            existingProducer.Address = producerModel.Address;
+                            existingProducer.City = producerModel.City;
+                            existingProducer.ZipCode = producerModel.ZipCode;
+                            existingProducer.Phone = producerModel.Phone;
+                            existingProducer.ContactPerson = producerModel.ContactPerson;
+                                
+                            if (existingProducer.WorkflowState == Constants.WorkflowStates.Removed)
+                            {
+                                existingProducer.WorkflowState = Constants.WorkflowStates.Created;
+                            }
+                            
+                            existingProducer.Update(_dbContext);
+                        }
+
                     }
                 }
                 return new OperationResult(true,
@@ -206,43 +222,59 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingProducer"));
             }
         }
         public async Task<OperationResult> CreateProducer(ProducerModel producerModel)
         {
-           await producerModel.Save(_dbContext);
+            Producer producer = new Producer
+            {
+                Name = producerModel.Name,
+                Description = producerModel.Description,
+                ForeignId = producerModel.ForeignId,
+                Address = producerModel.Address,
+                City = producerModel.City,
+                ZipCode = producerModel.ZipCode,
+                Phone = producerModel.Phone,
+                ContactPerson = producerModel.ContactPerson
+            };
+           producer.Create(_dbContext);
            
            return new OperationResult(true);
         }
 
         public async Task<OperationResult> UpdateProducer(ProducerModel producerModel)
         {
-            await producerModel.Update(_dbContext);
+            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == producerModel.Id);
+            if (producer != null)
+            {
+                producer.Name = producerModel.Name;
+                producer.Description = producerModel.Description;
+                producer.Address = producerModel.Address;
+                producer.ForeignId = producerModel.ForeignId;
+                producer.City = producerModel.City;
+                producer.ZipCode = producerModel.ZipCode;
+                producer.Phone = producerModel.Phone;
+                producer.ContactPerson = producerModel.ContactPerson;
+            }
+            producer.Update(_dbContext);
             
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> DeleteProducer(int Id)
+        public async Task<OperationResult> DeleteProducer(int id)
         {
-            ProducerModel producerModel = new ProducerModel();
-            producerModel.Id = Id;
-            await producerModel.Delete(_dbContext);
+            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == id);
+            producer.Delete(_dbContext);
             return new OperationResult(true);
         }
 
-        private Producer FindProducer(bool producerNameExists, int producerNameColumn, JToken headers,
-            JToken producerObj)
+        private Producer FindProducer(int producerNameColumn, JToken headers, JToken producerObj)
         {
-            Producer producer = null;
-
-            if (producerNameExists)
-            {
-                string producerName = producerObj[producerNameColumn].ToString();
-                producer = _dbContext.Producers.SingleOrDefault(x => x.Name == producerName);
-            }
+            string producerName = producerObj[producerNameColumn].ToString();
+            Producer producer = _dbContext.Producers.SingleOrDefault(x => x.Name == producerName);
 
             return producer;
         }

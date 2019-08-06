@@ -1,16 +1,39 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 Microting A/S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using eFormShared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Newtonsoft.Json.Linq;
 using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
@@ -22,16 +45,13 @@ namespace TrashInspection.Pn.Services
     public class TransporterService : ITransporterService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<TransporterService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public TransporterService(ILogger<TransporterService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public TransporterService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -97,7 +117,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<TransportersModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
             }
@@ -107,8 +127,9 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var transporter = await _dbContext.Producers.Select(x => new TransporterModel()
+                var transporter = await _dbContext.Transporters.Select(x => new TransporterModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     ForeignId = x.ForeignId,
@@ -117,8 +138,8 @@ namespace TrashInspection.Pn.Services
                     ZipCode = x.ZipCode,
                     Phone = x.Phone,
                     ContactPerson = x.ContactPerson
-                }).FirstOrDefaultAsync(x => x.Id == id);
-
+                    
+                }).FirstOrDefaultAsync(y => y.Id == id);
 
                 if (transporter == null)
                 {
@@ -131,7 +152,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<TransporterModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporter"));
             }
@@ -152,14 +173,13 @@ namespace TrashInspection.Pn.Services
                         bool transporterNameExists = int.TryParse(headers[0]["headerValue"].ToString(), out int nameColumn);
                         if (transporterNameExists)
                         {
-                            Transporter existingTransporter = FindTransporter(transporterNameExists,
-                                nameColumn, headers, fractionObj);
+                            Transporter existingTransporter = FindTransporter(nameColumn, headers, fractionObj);
                             if (existingTransporter == null)
                             {
                                 TransporterModel transporterModel =
                                     TransportersHelper.ComposeValues(new TransporterModel(), headers, fractionObj);
 
-                                TransporterModel newTransporter = new TransporterModel
+                                Transporter newTransporter = new Transporter
                                 {
                                     
                                     Name = transporterModel.Name,
@@ -172,29 +192,29 @@ namespace TrashInspection.Pn.Services
                                     ContactPerson = transporterModel.ContactPerson
                                     
                                 };
-                               await newTransporter.Save(_dbContext);
+                               newTransporter.Create(_dbContext);
   
                             }
                             else
                             {
+                                TransporterModel transporterModel =
+                                    TransportersHelper.ComposeValues(new TransporterModel(), headers, fractionObj);
+
+                                existingTransporter.Name = transporterModel.Name;
+                                existingTransporter.Description = transporterModel.Description;
+                                existingTransporter.ForeignId = transporterModel.ForeignId;
+                                existingTransporter.Address = transporterModel.Address;
+                                existingTransporter.City = transporterModel.City;
+                                existingTransporter.ZipCode = transporterModel.ZipCode;
+                                existingTransporter.Phone = transporterModel.Phone;
+                                existingTransporter.ContactPerson = transporterModel.ContactPerson;
+                                
                                 if (existingTransporter.WorkflowState == Constants.WorkflowStates.Removed)
                                 {
-                                    TransporterModel transporter = new TransporterModel
-                                    {
-                                        Id = existingTransporter.Id,
-                                        Description = existingTransporter.Description,
-                                        Name = existingTransporter.Name,
-                                        ForeignId = existingTransporter.ForeignId,
-                                        Address = existingTransporter.Address,
-                                        City = existingTransporter.City,
-                                        ZipCode = existingTransporter.ZipCode,
-                                        Phone = existingTransporter.Phone,
-                                        ContactPerson = existingTransporter.Phone
-
-                                    };
-                                    transporter.WorkflowState = Constants.WorkflowStates.Created;
-                                    await transporter.Update(_dbContext);
+                                    existingTransporter.WorkflowState = Constants.WorkflowStates.Created;
                                 }
+                                
+                                existingTransporter.Update(_dbContext);
                             }
                         }
                         
@@ -206,43 +226,65 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingTransporter"));
             }
         }
         public async Task<OperationResult> CreateTransporter(TransporterModel transporterModel)
         {
-           await transporterModel.Save(_dbContext);
+            Transporter transporter = new Transporter
+            {
+                Name = transporterModel.Name,
+                Description = transporterModel.Description,
+                ForeignId = transporterModel.ForeignId,
+                City = transporterModel.City,
+                Address = transporterModel.Address,
+                Phone = transporterModel.Phone,
+                ZipCode = transporterModel.ZipCode,
+                ContactPerson = transporterModel.ContactPerson,
+            };
+           
+            transporter.Create(_dbContext);
            
            return new OperationResult(true);
         }
 
         public async Task<OperationResult> UpdateTransporter(TransporterModel transporterModel)
         {
-            await transporterModel.Update(_dbContext);
+            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == transporterModel.Id);
             
-            return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> DeleteTransporter(int Id)
-        {
-            TransporterModel transporterModel = new TransporterModel();
-            transporterModel.Id = Id;
-            await transporterModel.Delete(_dbContext);
-            return new OperationResult(true);
-        }
-
-        private Transporter FindTransporter(bool transporterNameExists, int transporterNameColumn, JToken headers,
-            JToken transporterObj)
-        {
-            Transporter transporter = null;
-
-            if (transporterNameExists)
+            if (transporter != null)
             {
-                string transporterName = transporterObj[transporterNameColumn].ToString();
-                transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
+                transporter.Name = transporterModel.Name;
+                transporter.Description = transporterModel.Description;
+                transporter.ForeignId = transporterModel.ForeignId;
+                transporter.City = transporterModel.City;
+                transporter.Address = transporterModel.Address;
+                transporter.Phone = transporterModel.Phone;
+                transporter.ZipCode = transporterModel.ZipCode;
+                transporter.ContactPerson = transporterModel.ContactPerson;
+                
+                transporter.Update(_dbContext);
+                return new OperationResult(true);
             }
+            return new OperationResult(false);        }
+
+        public async Task<OperationResult> DeleteTransporter(int id)
+        {
+            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
+            if (transporter != null)
+            {
+                transporter.Delete(_dbContext);
+                return new OperationResult(true);
+            }
+            return new OperationResult(false);
+        }
+
+        private Transporter FindTransporter(int transporterNameColumn, JToken headers, JToken transporterObj)
+        {
+            string transporterName = transporterObj[transporterNameColumn].ToString();
+            Transporter transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
 
             return transporter;
         }

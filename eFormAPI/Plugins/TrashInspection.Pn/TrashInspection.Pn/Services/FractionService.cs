@@ -1,19 +1,40 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 Microting A/S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using eFormCore;
-using eFormData;
-using eFormShared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Newtonsoft.Json.Linq;
 using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
@@ -25,16 +46,13 @@ namespace TrashInspection.Pn.Services
     public class FractionService : IFractionService
     {
         private readonly IEFormCoreService _coreHelper;
-        private readonly ILogger<InstallationService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
 
-        public FractionService(ILogger<InstallationService> logger,
-            TrashInspectionPnDbContext dbContext,
+        public FractionService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
-            _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
@@ -74,7 +92,7 @@ namespace TrashInspection.Pn.Services
 
                 fractionsQuery
                     = fractionsQuery
-                        .Where(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed)
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
                 
@@ -88,16 +106,35 @@ namespace TrashInspection.Pn.Services
                     ItemNumber = x.ItemNumber
                 }).ToListAsync();
 
-                fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != eFormShared.Constants.WorkflowStates.Removed);
+                fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 fractionsModel.FractionList = fractions;
                 Core _core = _coreHelper.GetCore();
+                List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();
 
                 foreach (FractionModel fractionModel in fractions)
                 {
                     if (fractionModel.eFormId > 0)
                     {
-                        string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
-                        fractionModel.SelectedTemplateName = eFormName;
+                        if (eFormNames.Any(x => x.Key == fractionModel.eFormId))
+                        {
+                            fractionModel.SelectedTemplateName = eFormNames.First(x => x.Key == fractionModel.eFormId).Value;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
+                                fractionModel.SelectedTemplateName = eFormName;
+                                KeyValuePair<int, string> kvp =
+                                    new KeyValuePair<int, string>(fractionModel.eFormId, eFormName);
+                                eFormNames.Add(kvp);
+                            }
+                            catch
+                            {
+                                KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(fractionModel.eFormId, "");
+                                eFormNames.Add(kvp);
+                            }
+                        }
                     }                    
                 }
                 
@@ -106,7 +143,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<FractionsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFractions"));
 
@@ -137,15 +174,18 @@ namespace TrashInspection.Pn.Services
 
                 if (fraction.eFormId > 0)
                 {
-                    string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
-                    fraction.SelectedTemplateName = eFormName;
+                    try {
+                        string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
+                        fraction.SelectedTemplateName = eFormName;
+                        
+                    } catch {}
                 }
                 return new OperationDataResult<FractionModel>(true, fraction);
             }
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationDataResult<FractionModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFraction"));
             }
@@ -176,7 +216,7 @@ namespace TrashInspection.Pn.Services
                                 FractionModel fractionModel =
                                     FractionsHelper.ComposeValues(new FractionModel(), headers, fractionObj);
 
-                                FractionModel newFraction = new FractionModel
+                                Fraction newFraction = new Fraction
                                 {
                                     ItemNumber = fractionModel.ItemNumber,
                                     Name = fractionModel.Name,
@@ -185,24 +225,24 @@ namespace TrashInspection.Pn.Services
                                     eFormId = fractionModel.eFormId
 
                                 };
-                               await newFraction.Save(_dbContext);
+                               newFraction.Create(_dbContext);
   
                             }
                             else
                             {
                                 if (existingFraction.WorkflowState == Constants.WorkflowStates.Removed)
-                                {
-                                    FractionModel fraction = new FractionModel
+                                {                                    
+                                    Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == existingFraction.Id);
+                                    if (fraction != null)
                                     {
-                                        Id = existingFraction.Id,
-                                        Description = existingFraction.Description,
-                                        Name = existingFraction.Name,
-                                        LocationCode = existingFraction.LocationCode,
-                                        eFormId = existingFraction.eFormId,
+                                        fraction.Name = existingFraction.Name;
+                                        fraction.Description = existingFraction.Description;
+                                        fraction.ItemNumber = existingFraction.ItemNumber;
+                                        fraction.LocationCode = existingFraction.LocationCode;
+                                        fraction.WorkflowState = Constants.WorkflowStates.Created;
 
-                                    };
-                                    fraction.WorkflowState = Constants.WorkflowStates.Created;
-                                    await fraction.Update(_dbContext);
+                                        fraction.Update(_dbContext);
+                                    }
                                 }
                             }
                         }
@@ -215,7 +255,7 @@ namespace TrashInspection.Pn.Services
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
-                _logger.LogError(e.Message);
+                _coreHelper.LogException(e.Message);
                 return new OperationResult(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingFraction"));
             }
@@ -223,23 +263,46 @@ namespace TrashInspection.Pn.Services
         
         public async Task<OperationResult> CreateFraction(FractionModel createModel)
         {
-            await createModel.Save(_dbContext);
+            Fraction fraction = new Fraction
+            {
+                Name = createModel.Name,
+                Description = createModel.Description,
+                ItemNumber = createModel.ItemNumber,
+                LocationCode = createModel.LocationCode,
+                eFormId = createModel.eFormId
+            };
+            fraction.Create(_dbContext);
             
             return new OperationResult(true);
 
         }
+        
         public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
         {
-            await updateModel.Update(_dbContext);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
+            if (fraction != null)
+            {
+                fraction.Name = updateModel.Name;
+                fraction.Description = updateModel.Description;
+                fraction.ItemNumber = updateModel.ItemNumber;
+                fraction.LocationCode = updateModel.LocationCode;
+                fraction.eFormId = updateModel.eFormId;
+
+                fraction.Update(_dbContext);
+            }
             
             return new OperationResult(true);
 
         }
+        
         public async Task<OperationResult> DeleteFraction(int id)
         {
-            FractionModel deleteModel = new FractionModel();
-            deleteModel.Id = id;
-            await deleteModel.Delete(_dbContext);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (fraction != null)
+            {
+                fraction.Delete(_dbContext);
+            }
             return new OperationResult(true);
         }
 

@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2019 microting
+Copyright (c) 2007 - 2019 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
-using eFormShared;
+using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Rebus.Handlers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
@@ -60,30 +59,16 @@ namespace TrashInspection.Pn.Handlers
                 bool result = _core.CaseDelete(trashInspectionCase.SdkCaseId);
                 if (result)
                 {
-                    trashInspectionCase.WorkflowState = Constants.WorkflowStates.Removed;
-                    trashInspectionCase.Version += 1;
-                    trashInspectionCase.UpdatedAt = DateTime.Now;
-                    await _dbContext.SaveChangesAsync();
-                    
-                    TrashInspectionCaseVersion trashInspectionCaseVersion = new TrashInspectionCaseVersion();
-                    trashInspectionCaseVersion.TrashInspectionCaseId = trashInspectionCase.Id;
-                    trashInspectionCaseVersion.SegmentId = trashInspectionCase.SegmentId;
-                    trashInspectionCaseVersion.TrashInspectionId = trashInspectionCase.TrashInspectionId;
-                    trashInspectionCaseVersion.SdkCaseId = trashInspectionCase.SdkCaseId;
-                    trashInspectionCaseVersion.SdkSiteId = trashInspectionCase.SdkSiteId;
-                    trashInspectionCaseVersion.CreatedAt = trashInspectionCase.CreatedAt;
-                    trashInspectionCaseVersion.UpdatedAt = trashInspectionCase.UpdatedAt;
-                    trashInspectionCaseVersion.Version = trashInspectionCase.Version;
-
-                    _dbContext.TrashInspectionCaseVersions.Add(trashInspectionCaseVersion);
-                    
-                    await _dbContext.SaveChangesAsync();
+                    trashInspectionCase.Delete(_dbContext);
                 }
                 
             }
-            
-            createModel.InspectionDone = true;
-            createModel.Update(_dbContext);
+
+            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = await 
+                _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
+
+            trashInspection.InspectionDone = true;
+            trashInspection.Update(_dbContext);
 
         }
     }
