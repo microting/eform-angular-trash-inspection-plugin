@@ -58,5 +58,12 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _fractionService.ImportFraction(fractionImportModel);
         }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/year/{year}")]
+        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(int year)
+        {
+            return await _fractionService.GetFractionsStatsByYear(year);
+        }
     }
 }

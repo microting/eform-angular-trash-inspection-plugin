@@ -49,7 +49,8 @@ import {
   TransporterCreateComponent,
   TransporterDeleteComponent,
   TransporterEditComponent,
-  TransporterImportComponent
+  TransporterImportComponent,
+  ReportPreviewTableComponent
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
@@ -95,7 +96,8 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     TransporterCreateComponent,
     TransporterDeleteComponent,
     TransporterEditComponent,
-    TransporterImportComponent
+    TransporterImportComponent,
+    ReportPreviewTableComponent
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,

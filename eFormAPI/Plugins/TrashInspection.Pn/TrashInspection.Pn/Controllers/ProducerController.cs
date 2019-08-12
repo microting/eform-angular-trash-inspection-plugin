@@ -57,5 +57,12 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _producerService.ImportProducer(producerImportModel);
         }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/producers/year/{year}")]
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        {
+            return await _producerService.GetProducersStatsByYear(year);
+        }
     }
 }

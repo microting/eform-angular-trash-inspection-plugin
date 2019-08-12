@@ -325,5 +325,36 @@ namespace TrashInspection.Pn.Services
 
             return fraction;
         }
+        
+        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(int year)
+        {
+            try
+            {
+                StatsByYearModel fractionsStatsByYear = new StatsByYearModel();
+
+                IQueryable<Fraction> fractionQuery = _dbContext.Fractions.AsQueryable();
+
+                fractionQuery
+                    = fractionQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                List<StatByYearModel> producersStatByYear = await fractionQuery.Select(x => new StatByYearModel()
+                {
+                    Name = x.Name
+                }).ToListAsync();
+
+                fractionsStatsByYear.Total =
+                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                fractionsStatsByYear.statsByYearList = producersStatByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYear);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatsByYearModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+            }
+        }
     }
 }
