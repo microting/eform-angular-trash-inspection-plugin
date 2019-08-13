@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -12,5 +13,6 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> ImportTransporter(TransporterImportModel transporterImportModel);
         Task<OperationDataResult<TransportersModel>> GetAllTransporters(TransporterRequestModel pnRequestModel);
         Task<OperationDataResult<TransporterModel>> GetSingleTransporter(int id);
+        Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year);
     }
 }

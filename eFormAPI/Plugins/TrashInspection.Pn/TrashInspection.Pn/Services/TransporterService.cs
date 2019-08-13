@@ -109,7 +109,7 @@ namespace TrashInspection.Pn.Services
                 }).ToListAsync();
 
                 transportersModel.Total =
-                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                    _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 transportersModel.TransporterList = transporters;
                 
                 return new OperationDataResult<TransportersModel>(true, transportersModel);
@@ -287,6 +287,82 @@ namespace TrashInspection.Pn.Services
             Transporter transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
 
             return transporter;
+        }
+
+        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year)
+        {
+            try
+            {
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery.Where(x => x.Date.Year == year);
+                
+                StatsByYearModel transportersStatsByYearModel = new StatsByYearModel();
+
+                IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
+
+                transporterQuery
+                    = transporterQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel()
+                {
+                    Name = x.Name,
+                    Weighings = trashInspectionsQuery.Count(t => t.TransporterId == x.Id),
+                    ControlPercentage = 0,
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    ConditionalApprovedPercentage = 0
+
+                }).ToListAsync();
+
+                foreach (StatByYearModel statByYearModel in transportersStatByYear)
+                {
+                    
+                    if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
+                    {
+                        statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ControlPercentage = 0;
+                    }
+                    
+                    if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ApprovedPercentage =
+                            Math.Round((statByYearModel.ApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ApprovedPercentage = 0;
+                    }
+
+                    if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.NotApprovedPercentage =
+                            Math.Round((statByYearModel.NotApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.NotApprovedPercentage = 0;
+                    }
+                }
+                
+                
+                transportersStatsByYearModel.Total =
+                    _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                transportersStatsByYearModel.statsByYearList = transportersStatByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, transportersStatsByYearModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatsByYearModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+            }
         }
     }
 }

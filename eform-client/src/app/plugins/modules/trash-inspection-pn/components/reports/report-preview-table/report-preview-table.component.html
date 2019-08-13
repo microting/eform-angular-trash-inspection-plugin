@@ -1,0 +1,372 @@
+<subheader-pn [title]="'Reports' | translate">
+</subheader-pn>
+<!--<div class="col-md-2">-->
+<!--  <ng-select-->
+<!--    [items]="fractions"-->
+<!--    bindLabel="name"-->
+<!--    (change)="onSelectedChanged($event)"-->
+<!--    [placeholder]="('Select Fraction' | translate)"-->
+<!--  >-->
+<!--  </ng-select>-->
+<!--</div>-->
+<div class="col-md-2">
+  <ng-select
+    class=""
+    [items]="years"
+    (change)="onSelectedChanged($event)"
+    [placeholder]="thisYear"
+  >
+  </ng-select>
+  <button
+    id="importFractionBtn"
+    class="btn btn-success"
+    mdbTooltip="{{ 'Import Fraction' | translate}}"
+    routerLink="/plugins/trash-inspection-pn/importfraction">{{ 'Import Fraction' | translate}}</button>
+</div>
+<div class="container-fluid">
+  <div class="row p-1 mt-4 table-responsive no-gutters">
+
+    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Transporters' | translate" [heandingSizeRem]="1">
+    </subheader-pn>
+
+    <table class="table table-sm table-striped text-center z-depth-1">
+      <thead>
+      <tr>
+        <th scope="col" class="table-header-sortable" id="nameTableHeaderTransporters"
+            >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Transporter' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="descriptionTableHeaderTransporters"
+           >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderTransporters"
+            >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load controlled' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load controlled'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="addressTableHeaderTransporters"
+           >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Controlled percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="cityTableHeaderTransporters"
+            >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderTransporters"
+            >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Conditional approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="phoneTableHeaderTransporters"
+            >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Not approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
+      </tr>
+      </thead>
+      <tbody id="tableBodyTransporters">
+      <tr *ngFor="let transporter of transporterYearModel.statsByYearList">
+        <td id="NameTransporter">
+          {{transporter.name}}
+        </td>
+        <td id="AmountOfLoadTransporters">
+          {{transporter.weighings}}
+        </td>
+        <td id="AmountOfLoadControlledTransporters">
+          {{transporter.amountOfWeighingsControlled}}
+        </td>
+        <td id="ControlledPercentageTransporters">
+          {{transporter.controlPercentage}}%
+        </td>
+        <td id="ApprovedPercentageTransporters">
+          {{transporter.approvedPercentage}}%
+        </td>
+        <td id="ConditionalApprovedTransporters">
+          {{transporter.conditionalApprovedPercentage}}%
+        </td>
+        <td id="NotApprovedTransporters">
+          {{transporter.notApprovedPercentage}}%
+        </td>
+        <td>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <subheader-pn [title]="'Trash/Deponi - ' +  thisYear + ' - Compliance - Producers' | translate" [heandingSizeRem]="1">
+    </subheader-pn>
+
+    <table class="table table-sm table-striped text-center z-depth-1">
+      <thead>
+      <tr>
+        <th scope="col" class="table-header-sortable" id="nameTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Producer' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="descriptionTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load controlled' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load controlled'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="addressTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Controlled percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="cityTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Conditional approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="phoneTableHeaderProducers"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Not approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+
+      </tr>
+      </thead>
+      <tbody id="tableBodyProducers">
+      <tr *ngFor="let producer of producerYearModel.statsByYearList">
+        <td id="NameProducer">
+          {{producer.name}}
+        </td>
+        <td id="AmountOfLoadProducers">
+          {{producer.weighings}}
+        </td>
+        <td id="AmountOfLoadControlledProducers">
+          {{producer.amountOfWeighingsControlled}}
+        </td>
+        <td id="ControlledPercentageProducers">
+          {{producer.controlPercentage}}%
+        </td>
+        <td id="ApprovedPercentageProducers">
+          {{producer.approvedPercentage}}%
+        </td>
+        <td id="ConditionalApprovedProducers">
+          {{producer.conditionalApprovedPercentage}}%
+        </td>
+        <td id="NotApprovedProducers">
+          {{producer.notApprovedPercentage}}%
+        <td>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Items' | translate" [heandingSizeRem]="1">
+    </subheader-pn>
+
+    <table class="table table-sm table-striped text-center z-depth-1">
+      <thead>
+      <tr>
+        <th scope="col" class="table-header-sortable" id="nameTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Item Name' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Name' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="descriptionTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Amount of load controlled' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load controlled'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="addressTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Controlled percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="cityTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Conditional approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+        <th scope="col" class="table-header-sortable" id="phoneTableHeaderFractions"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            {{'Not approved percentage' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+            <i class="material-icons"
+               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+          </div>
+        </th>
+      </tr>
+      </thead>
+      <tbody id="tableBodyFractions">
+      <tr *ngFor="let fraction of fractionYearModel.statsByYearList">
+        <td id="NameFractions">
+          {{fraction.name}}
+        </td>
+        <td id="AmountOfLoadFractions">
+          {{fraction.weighings}}
+        </td>
+        <td id="AmountOfLoadControlledFractions">
+          {{fraction.amountOfWeighingsControlled}}
+        </td>
+        <td id="ControlledPercentageFractions">
+          {{fraction.controlPercentage}}%
+        </td>
+        <td id="ApprovedPercentageFractions">
+          {{fraction.approvedPercentage}}%
+        </td>
+        <td id="ConditionalApprovedFractions">
+          {{fraction.conditionalApprovedPercentage}}%
+        </td>
+        <td id="NotApprovedFractions">
+          {{fraction.notApprovedPercentage}}%
+        <td>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

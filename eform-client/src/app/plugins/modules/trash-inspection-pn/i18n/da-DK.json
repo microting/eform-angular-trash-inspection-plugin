@@ -14,7 +14,7 @@
   "Update Installation": "Opdater Installation",
   "Delete Installation": "Slet Installation",
   "Related Installation": "Beslægtet Installation",
-  "Trash Inspection" : "Afflads Inspektion",
+  "Trash Inspection" : "Affalds Inspektion",
   "Trash Inspections": "Affalds Inspektioner",
   "New Trash Inspection": "Ny Affalds Inspektion",
   "Create Trash Inspection": "Opret Affalds Inspektion",
@@ -40,6 +40,19 @@
   "Zip code" : "Post Nr.",
   "Contact Person" : "Kontakt person",
   "New Segment" : "Nyt Område",
-  "Update Segment" : "Opdater Segment"
+  "Update Segment" : "Opdater Segment",
+  "Reports" : "Reporter",
+  "Transporter" : "Transportør",
+  "Amount of load" : "Antal læs",
+  "Amount of load controlled" : "Antal læs kontrolleret",
+  "Controlled percentage" : "Kontrol%",
+  "Approved percentage" : "Godkendt%",
+  "Conditional approved percentage" : "Betinget godkendt%",
+  "Not approved percentage" : "Ikke godkendt%",
+  "Producer" : "Producent",
+  "Item Name" : "Varenavn",
+  "Trash/Deponi - 2019 - Compliance - Transporters" : "Affald/Deponi - 2019 - Compliance - Transportører",
+  "Trash/Deponi - 2019 - Compliance - Producers" : "Affald/Deponi - 2019  Compliance - Producenter",
+  "Trash/Deponi - 2019 - Compliance - Items" : "Affald/Deponi - 2019  Compliance - Varer"
 }
 

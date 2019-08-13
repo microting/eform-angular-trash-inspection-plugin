@@ -12,5 +12,7 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> ImportFraction(FractionImportModel fractionImportModel);
         Task<OperationDataResult<FractionsModel>> GetAllFractions(FractionRequestModel requestModel);
         Task<OperationDataResult<FractionModel>> GetSingleFraction(int fractionId);
+        Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(int year);
+
     }
 }

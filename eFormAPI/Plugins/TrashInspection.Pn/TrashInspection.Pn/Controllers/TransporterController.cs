@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
@@ -55,6 +56,13 @@ namespace TrashInspection.Pn.Controllers
         public async Task<OperationResult> ImportTransporter([FromBody] TransporterImportModel transporterImportModel)
         {
             return await _transporterService.ImportTransporter(transporterImportModel);
+        }
+
+        [HttpGet]
+        [Route("api/trash-inspection-pn/transporters/year/{year}")]
+        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year)
+        {
+            return await _transporterService.GetTransportersStatsByYear(year);
         }
     }
 }

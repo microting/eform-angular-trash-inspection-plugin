@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -277,6 +278,86 @@ namespace TrashInspection.Pn.Services
             Producer producer = _dbContext.Producers.SingleOrDefault(x => x.Name == producerName);
 
             return producer;
+        }
+        
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        {
+            try
+            {
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery.Where(x => x.Date.Year == year);
+                
+                StatsByYearModel producersStatsByYearModel = new StatsByYearModel();
+
+                // - get all trashinspection where Date.year == year
+                // - get all producers
+                // - foreach producers
+                // 
+
+                IQueryable<Producer> producerQuery = _dbContext.Producers.AsQueryable();
+
+                producerQuery
+                    = producerQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                List<StatByYearModel> producersStatByYear = await producerQuery.Select(x => new StatByYearModel()
+                {
+                    Name = x.Name,
+                    Weighings = trashInspectionsQuery.Count(t => t.ProducerId == x.Id),
+                    ControlPercentage = 0,
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    ConditionalApprovedPercentage = 0
+
+                }).ToListAsync();
+
+                foreach (StatByYearModel statByYearModel in producersStatByYear)
+                {
+                    
+                    if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
+                    {
+                        statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ControlPercentage = 0;
+                    }
+                    
+                    if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ApprovedPercentage =
+                            Math.Round((statByYearModel.ApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ApprovedPercentage = 0;
+                    }
+
+                    if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.NotApprovedPercentage =
+                            Math.Round((statByYearModel.NotApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.NotApprovedPercentage = 0;
+                    }
+                }
+                
+                producersStatsByYearModel.Total =
+                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                producersStatsByYearModel.statsByYearList = producersStatByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, producersStatsByYearModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatsByYearModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingProducers"));
+            }
         }
     }
 }

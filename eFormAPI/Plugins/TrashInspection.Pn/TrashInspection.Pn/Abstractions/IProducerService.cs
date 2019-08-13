@@ -12,5 +12,6 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> ImportProducer(ProducerImportModel producersAsJson);
         Task<OperationDataResult<ProducersModel>> GetAllProducers(ProducerRequestModel pnRequestModel);
         Task<OperationDataResult<ProducerModel>> GetSingleProducer(int id);
+        Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year);
     }
 }
