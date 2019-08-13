@@ -330,30 +330,75 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                StatsByYearModel fractionsStatsByYear = new StatsByYearModel();
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery.Where(x => x.Date.Year == year);
+                
+                StatsByYearModel fractionsStatsByYearModel = new StatsByYearModel();
 
                 IQueryable<Fraction> fractionQuery = _dbContext.Fractions.AsQueryable();
 
                 fractionQuery
                     = fractionQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                List<StatByYearModel> producersStatByYear = await fractionQuery.Select(x => new StatByYearModel()
+                List<StatByYearModel> fractionsStatsByYear = await fractionQuery.Select(x => new StatByYearModel()
                 {
-                    Name = x.Name
+                    Name = x.Name,
+                    Weighings = trashInspectionsQuery.Count(t => t.FractionId == x.Id),
+                    ControlPercentage = 0,
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    ConditionalApprovedPercentage = 0
+
                 }).ToListAsync();
 
-                fractionsStatsByYear.Total =
-                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                fractionsStatsByYear.statsByYearList = producersStatByYear;
+                foreach (StatByYearModel statByYearModel in fractionsStatsByYear)
+                {
+                    
+                    if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
+                    {
+                        statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ControlPercentage = 0;
+                    }
+                    
+                    if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ApprovedPercentage =
+                            Math.Round((statByYearModel.ApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ApprovedPercentage = 0;
+                    }
+
+                    if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.NotApprovedPercentage =
+                            Math.Round((statByYearModel.NotApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.NotApprovedPercentage = 0;
+                    }
+                }
                 
-                return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYear);
+                
+                fractionsStatsByYearModel.Total =
+                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                fractionsStatsByYearModel.statsByYearList = fractionsStatsByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYearModel);
             }
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
                 _coreHelper.LogException(e.Message);
                 return new OperationDataResult<StatsByYearModel>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingFractions"));
             }
         }
     }

@@ -113,27 +113,27 @@
       </tr>
       </thead>
       <tbody id="tableBodyTransporters">
-      <tr *ngFor="let transporter of trashInspectionYearModel.statsByYearList">
+      <tr *ngFor="let transporter of transporterYearModel.statsByYearList">
         <td id="NameTransporter">
           {{transporter.name}}
         </td>
         <td id="AmountOfLoadTransporters">
-          {{12345}}
+          {{transporter.weighings}}
         </td>
         <td id="AmountOfLoadControlledTransporters">
-          {{12345}}
+          {{transporter.amountOfWeighingsControlled}}
         </td>
         <td id="ControlledPercentageTransporters">
-          {{12345}}
+          {{transporter.controlPercentage}}%
         </td>
         <td id="ApprovedPercentageTransporters">
-          {{12345}}
+          {{transporter.approvedPercentage}}%
         </td>
         <td id="ConditionalApprovedTransporters">
-          {{12345}}
+          {{transporter.conditionalApprovedPercentage}}%
         </td>
         <td id="NotApprovedTransporters">
-          {{12345}}
+          {{transporter.notApprovedPercentage}}%
         </td>
         <td>
         </td>
@@ -228,27 +228,27 @@
       </tr>
       </thead>
       <tbody id="tableBodyProducers">
-      <tr *ngFor="let producer of trashInspectionYearModel.statsByYearList">
+      <tr *ngFor="let producer of producerYearModel.statsByYearList">
         <td id="NameProducer">
           {{producer.name}}
         </td>
         <td id="AmountOfLoadProducers">
-          {{12345}}
+          {{producer.weighings}}
         </td>
         <td id="AmountOfLoadControlledProducers">
-          {{12345}}
+          {{producer.amountOfWeighingsControlled}}
         </td>
         <td id="ControlledPercentageProducers">
-          {{12345}}
+          {{producer.controlPercentage}}%
         </td>
         <td id="ApprovedPercentageProducers">
-          {{12345}}
+          {{producer.approvedPercentage}}%
         </td>
         <td id="ConditionalApprovedProducers">
-          {{12345}}
+          {{producer.conditionalApprovedPercentage}}%
         </td>
         <td id="NotApprovedProducers">
-          {{12345}}
+          {{producer.notApprovedPercentage}}%
         <td>
         </td>
       </tr>
@@ -341,27 +341,27 @@
       </tr>
       </thead>
       <tbody id="tableBodyFractions">
-      <tr *ngFor="let fraction of trashInspectionYearModel.statsByYearList">
+      <tr *ngFor="let fraction of fractionYearModel.statsByYearList">
         <td id="NameFractions">
           {{fraction.name}}
         </td>
         <td id="AmountOfLoadFractions">
-          {{12345}}
+          {{fraction.weighings}}
         </td>
         <td id="AmountOfLoadControlledFractions">
-          {{12345}}
+          {{fraction.amountOfWeighingsControlled}}
         </td>
         <td id="ControlledPercentageFractions">
-          {{12345}}
+          {{fraction.controlPercentage}}%
         </td>
         <td id="ApprovedPercentageFractions">
-          {{12345}}
+          {{fraction.approvedPercentage}}%
         </td>
         <td id="ConditionalApprovedFractions">
-          {{12345}}
+          {{fraction.conditionalApprovedPercentage}}%
         </td>
         <td id="NotApprovedFractions">
-          {{12345}}
+          {{fraction.notApprovedPercentage}}%
         <td>
         </td>
       </tr>

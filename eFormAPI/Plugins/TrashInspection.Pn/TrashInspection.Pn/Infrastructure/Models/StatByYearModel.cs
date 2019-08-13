@@ -6,11 +6,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
     public class StatByYearModel
     {
         public string Name { get; set; }
-        public int Weighings { get; set; }
-        public int AmountOfWeighingsControlled { get; set; }
-        public double ControlPercentage { get; set; }
-        public double ApprovedPercentage { get; set; }
-        public double ConditionalApprovedPercentage { get; set; }
-        public double NotApprovedPercentage { get; set; }
+        public decimal Weighings { get; set; }
+        public decimal AmountOfWeighingsControlled { get; set; }
+        public decimal ControlPercentage { get; set; }
+        public decimal ApprovedPercentage { get; set; }
+        public decimal ConditionalApprovedPercentage { get; set; }
+        public decimal NotApprovedPercentage { get; set; }
     }
 }

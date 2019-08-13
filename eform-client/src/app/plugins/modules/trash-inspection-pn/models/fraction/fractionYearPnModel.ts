@@ -1,9 +1,9 @@
-export class TrashInspectionYearModelPnModel {
+export class FractionYearPnModel {
   total: number;
-  statsByYearList: Array<TrashInspectionYearModel> = [];
+  statsByYearList: Array<FractionYearModel> = [];
 }
 
-export class TrashInspectionYearModel {
+export class FractionYearModel {
   name: string;
   weighings: number;
   amountOfWeighingsControlled: number;

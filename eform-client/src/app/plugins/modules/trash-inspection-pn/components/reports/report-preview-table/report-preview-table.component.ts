@@ -12,6 +12,9 @@ import {
   TrashInspectionYearModel,
   TrashInspectionYearModelPnModel
 } from '../../../models/trash-inspection/trash-inspectionYearModel-pn.model';
+import {ProducerYearPnModel} from '../../../models/producer/producerYearPnModel';
+import {TransporterYearPnModel} from '../../../models/transporter/transporterYearPnModel';
+import {FractionYearPnModel} from '../../../models/fraction/fractionYearPnModel';
 
 @Component({
   selector: 'app-report-preview-table',
@@ -25,7 +28,10 @@ export class ReportPreviewTableComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   spinnerStatus = false;
   fractionsModel: FractionsPnModel = new FractionsPnModel();
-  trashInspectionYearModel: TrashInspectionYearModelPnModel = new TrashInspectionYearModelPnModel()
+  trashInspectionYearModel: TrashInspectionYearModelPnModel = new TrashInspectionYearModelPnModel();
+  producerYearModel: ProducerYearPnModel = new ProducerYearPnModel();
+  transporterYearModel: TransporterYearPnModel = new TransporterYearPnModel();
+  fractionYearModel: FractionYearPnModel = new FractionYearPnModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
   transportersModel: TransportersPnModel = new TransportersPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
@@ -57,10 +63,7 @@ export class ReportPreviewTableComponent implements OnInit {
     this.getLocalPageSettingsProducers();
     this.getLocalPageSettingsFractions();
     this.getLocalPageSettingsTransporters();
-    this.getAllFractions();
     this.getAllYears();
-    this.getAllTransportersByYear();
-    this.getAllProducers();
   }
 
   getAllYears() {
@@ -86,7 +89,7 @@ export class ReportPreviewTableComponent implements OnInit {
     this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.getAllFractionsStatsByYear(this.thisYear).subscribe((data) => {
       if (data && data.success) {
-        this.trashInspectionYearModel = data.model;
+        this.fractionYearModel = data.model;
       } this.spinnerStatus = false;
       this.fractions = this.fractionsModel.fractionList;
     });
@@ -106,7 +109,7 @@ export class ReportPreviewTableComponent implements OnInit {
     this.spinnerStatus = true;
     this.trashInspectionPnTransporterService.getAllTransportersByYear(this.thisYear).subscribe((data) => {
       if (data && data.success) {
-        this.trashInspectionYearModel = data.model;
+        this.transporterYearModel = data.model;
       } this.spinnerStatus = false;
     });
   }
@@ -125,7 +128,7 @@ export class ReportPreviewTableComponent implements OnInit {
     this.spinnerStatus = true;
     this.trashInspectionPnProducerService.getAllProducersStatsByYear(this.thisYear).subscribe((data) => {
       if (data && data.success) {
-        this.trashInspectionYearModel = data.model;
+        this.producerYearModel = data.model;
       } this.spinnerStatus = false;
     });
   }
