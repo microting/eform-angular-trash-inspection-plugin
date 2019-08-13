@@ -7,7 +7,7 @@ import {
   InstallationsPageComponent,
   TrashInspectionSettingsComponent,
   FractionsPageComponent,
-  FractionsPnImportComponent, ProducerImportComponent, TransporterImportComponent
+  FractionsPnImportComponent, ProducerImportComponent, TransporterImportComponent, ReportPreviewTableComponent
 } from './components';
 import {SegmentsPageComponent} from './components/segments';
 import {ProducerPageComponent} from './components/producers';
@@ -67,6 +67,11 @@ export const routes: Routes = [
         path: 'importtransporters',
         canActivate: [AdminGuard],
         component: TransporterImportComponent
+      },
+      {
+        path: 'reports',
+        canActivate: [AdminGuard],
+        component: ReportPreviewTableComponent
       }
     ]
   }

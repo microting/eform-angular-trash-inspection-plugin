@@ -278,5 +278,40 @@ namespace TrashInspection.Pn.Services
 
             return producer;
         }
+        
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        {
+            try
+            {
+                StatsByYearModel producersStatsByYearModel = new StatsByYearModel();
+                
+                // - get all trashinspection where Date.year == year
+                // - 
+
+                IQueryable<Producer> producerQuery = _dbContext.Producers.AsQueryable();
+
+                producerQuery
+                    = producerQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                List<StatByYearModel> producersStatByYear = await producerQuery.Select(x => new StatByYearModel()
+                {
+                    Name = x.Name,
+                    Weighings = 0
+                }).ToListAsync();
+
+                producersStatsByYearModel.Total =
+                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                producersStatsByYearModel.statsByYearList = producersStatByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, producersStatsByYearModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatsByYearModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+            }
+        }
     }
 }

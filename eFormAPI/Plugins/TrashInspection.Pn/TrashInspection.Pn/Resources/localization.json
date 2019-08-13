@@ -166,5 +166,12 @@
 			"da": "Affaldsinspektion med {0} id eksisterer ikke",
 			"en-US": "Trash Inspection with {0} id does not exist"
 		}
+	},
+	{
+		"Key": "Reports",
+		"LocalizedValue": {
+			"da": "Reporter",
+			"en-US": "Reports"
+		}
 	}
 ]

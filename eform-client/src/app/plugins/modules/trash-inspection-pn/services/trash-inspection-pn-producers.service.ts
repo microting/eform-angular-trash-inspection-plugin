@@ -12,6 +12,7 @@ import { ProducerPnImportModel,
   ProducerPnRequestModel,
   ProducerPnUpdateModel,
   ProducersPnModel} from '../models/producer';
+import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
 
 export let TrashInspectionPnProducerMethods = {
   Producers: 'api/trash-inspection-pn/producers'
@@ -44,5 +45,9 @@ export class TrashInspectionPnProducersService extends BaseService {
   }
   importProducer(model: ProducerPnImportModel): Observable<OperationResult> {
     return this.post(TrashInspectionPnProducerMethods.Producers + '/import', model);
+  }
+
+  getAllProducersStatsByYear(year: number): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
+    return this.get(TrashInspectionPnProducerMethods.Producers + '/year/' + year);
   }
 }

@@ -7,11 +7,14 @@ import {Router} from '@angular/router';
 import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
 import {BaseService} from 'src/app/common/services/base.service';
 
-import { TransporterPnImportModel,
+import {
+  TransporterPnImportModel,
   TransporterPnModel,
   TransporterPnRequestModel,
   TransporterPnUpdateModel,
-  TransportersPnModel} from '../models/transporter';
+  TransportersPnModel,
+} from '../models/transporter';
+import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
 
 export let TrashInspectionPnTransporterMethods = {
   Transporter: 'api/trash-inspection-pn/transporters'
@@ -45,5 +48,8 @@ export class TrashInspectionPnTransporterService extends BaseService {
   }
   importTransporter(model: TransporterPnImportModel): Observable<OperationResult> {
     return this.post(TrashInspectionPnTransporterMethods.Transporter + '/import', model);
+  }
+  getAllTransportersByYear(year: number): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
+    return this.get(TrashInspectionPnTransporterMethods.Transporter + '/year/' + year);
   }
 }

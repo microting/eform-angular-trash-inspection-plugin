@@ -181,6 +181,13 @@ namespace TrashInspection.Pn
                         E2EId = "trash-inspection-pn-transporters",
                         Link = "/plugins/trash-inspection-pn/transporters",
                         Position = 5,
+                    },
+                    new MenuItemModel()
+                    {
+                        Name = localizationService.GetString("Reports"),
+                        E2EId = "trash-inspection-pn-reports",
+                        Link = "/plugins/trash-inspection-pn/reports",
+                        Position = 6,
                     }
                 }
             });

@@ -109,7 +109,7 @@ namespace TrashInspection.Pn.Services
                 }).ToListAsync();
 
                 transportersModel.Total =
-                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                    _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 transportersModel.TransporterList = transporters;
                 
                 return new OperationDataResult<TransportersModel>(true, transportersModel);
@@ -287,6 +287,37 @@ namespace TrashInspection.Pn.Services
             Transporter transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
 
             return transporter;
+        }
+
+        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year)
+        {
+            try
+            {
+                StatsByYearModel transportersStatsByYearModel = new StatsByYearModel();
+
+                IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
+
+                transporterQuery
+                    = transporterQuery
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel()
+                {
+                    Name = x.Name
+                }).ToListAsync();
+
+                transportersStatsByYearModel.Total =
+                    _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                transportersStatsByYearModel.statsByYearList = transportersStatByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, transportersStatsByYearModel);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatsByYearModel>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+            }
         }
     }
 }

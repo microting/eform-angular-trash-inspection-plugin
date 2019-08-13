@@ -14,17 +14,10 @@ namespace TrashInspection.Pn.Test
     {
 
         protected TrashInspectionPnDbContext DbContext;
-        protected string ConnectionString;
+        private string _connectionString;
 
 
-        private static string userName = "__USER_NAME__";
-        private static string password = "__PASSWORD__";
-        private static string databaseName = "__DBNAME__";
-        private static string databaseServerId = "__DB_SERVER_ID__";
-        private static string directoryId = "__DIRECTORY_ID__";
-        private static string applicationId = "__APPLICATION_ID__";
-
-        public void GetContext(string connectionStr)
+        private void GetContext(string connectionStr)
         {
             TrashInspectionPnContextFactory contextFactory = new TrashInspectionPnContextFactory();
             DbContext = contextFactory.CreateDbContext(new[] {connectionStr});
@@ -38,14 +31,14 @@ namespace TrashInspection.Pn.Test
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                ConnectionString = @"data source=(LocalDb)\SharedInstance;Initial catalog=trash-inspection-pn-tests;Integrated Security=true";
+                _connectionString = @"data source=(LocalDb)\SharedInstance;Initial catalog=trash-inspection-pn-tests;Integrated Security=true";
             }
             else
             {
-                ConnectionString = @"Server = localhost; port = 3306; Database = trash-inspection-pn-tests; user = root; Convert Zero Datetime = true;";
+                _connectionString = @"Server = localhost; port = 3306; Database = trash-inspection-pn-tests; user = root; Convert Zero Datetime = true;";
             }
 
-            GetContext(ConnectionString);
+            GetContext(_connectionString);
 
 
             DbContext.Database.SetCommandTimeout(300);
@@ -71,7 +64,7 @@ namespace TrashInspection.Pn.Test
             DbContext.Dispose();
         }
 
-        public void ClearDb()
+        private void ClearDb()
         {
             List<string> modelNames = new List<string>();
             modelNames.Add("TrashInspectionVersions");
@@ -96,14 +89,14 @@ namespace TrashInspection.Pn.Test
             {
                 try
                 {
-                    string sqlCmd = string.Empty;
+                    string sqlCmd;
                     if (DbContext.Database.IsMySql())
                     {
-                        sqlCmd = string.Format("SET FOREIGN_KEY_CHECKS = 0;TRUNCATE `{0}`.`{1}`", "trash-inspection-pn-tests", modelName);
+                        sqlCmd = $"SET FOREIGN_KEY_CHECKS = 0;TRUNCATE `trash-inspection-pn-tests`.`{modelName}`";
                     }
                     else
                     {
-                        sqlCmd = string.Format("DELETE FROM [{0}]", modelName);
+                        sqlCmd = $"DELETE FROM [{modelName}]";
                     }
                     DbContext.Database.ExecuteSqlCommand(sqlCmd);
                 }
@@ -115,7 +108,7 @@ namespace TrashInspection.Pn.Test
         }
         private string path;
 
-        public void ClearFile()
+        private void ClearFile()
         {
             path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             path = System.IO.Path.GetDirectoryName(path).Replace(@"file:\", "");
@@ -135,6 +128,7 @@ namespace TrashInspection.Pn.Test
 
 
         }
-        public virtual void DoSetup() { }
+
+        protected virtual void DoSetup() { }
     }
 }
