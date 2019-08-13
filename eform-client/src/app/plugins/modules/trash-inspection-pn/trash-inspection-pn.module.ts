@@ -49,9 +49,11 @@ import {
   TransporterCreateComponent,
   TransporterDeleteComponent,
   TransporterEditComponent,
-  TransporterImportComponent
+  TransporterImportComponent,
+
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
   imports: [
@@ -63,7 +65,8 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     FormsModule,
     NgSelectModule,
     EformSharedModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    GoogleChartsModule
   ],
   declarations: [
     InstallationsPageComponent,
@@ -95,7 +98,8 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     TransporterCreateComponent,
     TransporterDeleteComponent,
     TransporterEditComponent,
-    TransporterImportComponent
+    TransporterImportComponent,
+
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,
