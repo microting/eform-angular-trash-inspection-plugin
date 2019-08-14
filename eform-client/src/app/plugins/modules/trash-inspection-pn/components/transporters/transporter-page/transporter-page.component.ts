@@ -19,6 +19,7 @@ export class TransporterPageComponent implements OnInit {
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
   columnNames = ['Loads', 'Approved', 'Partial', 'Not approved'];
   columnNames2 = ['Loads', 'Approved', 'Partial', 'Not approved', 'kontrol%', 'GnsKontrol%'];
+  columnNames3 = ['Loads', 'compliance %'];
   data = [
     ['Jan', 8.8, 1.0, 0.2],
     ['Feb', 5.0, 4.5, 0.5],
@@ -47,6 +48,20 @@ export class TransporterPageComponent implements OnInit {
     ['Nov', 4.8, 5.2, 0, 10, 2],
     ['Dec', 5.5, 4.5, 0, 10, 2]
   ];
+  data3 = [
+    ['Jan', 8.8],
+    ['Feb', 5.0],
+    ['Mar', 6.5],
+    ['Apr', 0.2],
+    ['Maj', 2.2],
+    ['Jun', 3.5],
+    ['Jul', 4.4],
+    ['Aug', 5.0],
+    ['Sep', 10],
+    ['Okt', 6.2],
+    ['Nov', 4.8],
+    ['Dec', 5.5]
+  ];
   options = {
     width: 800,
     height: 700,
@@ -55,8 +70,7 @@ export class TransporterPageComponent implements OnInit {
       subtitle: 'Læs: godkendt, delvist godkendt, ikke godkendt'
     },
     vAxis: {
-     title: '%',
-    format: 'percent'
+     title: '%'
     },
     hAxis: {
      title: 'Months'
@@ -71,8 +85,7 @@ export class TransporterPageComponent implements OnInit {
       subtitle: 'Læs: godkendt, delvist godkendt, ikke godkendt'
     },
     vAxis: {
-      title: '%',
-      format: 'percent'
+      title: '%'
     },
     hAxis: {
       title: 'Months'
@@ -84,6 +97,7 @@ export class TransporterPageComponent implements OnInit {
     },
     legend: {position: 'bottom'}
   };
+
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
 
