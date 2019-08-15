@@ -50,7 +50,7 @@ import {
   TransporterDeleteComponent,
   TransporterEditComponent,
   TransporterImportComponent,
-  ReportPreviewTableComponent
+  ReportPreviewTableComponent, ReportGraphViewComponent
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {GoogleChartsModule} from 'angular-google-charts';
@@ -99,7 +99,8 @@ import {GoogleChartsModule} from 'angular-google-charts';
     TransporterDeleteComponent,
     TransporterEditComponent,
     TransporterImportComponent,
-    ReportPreviewTableComponent
+    ReportPreviewTableComponent,
+    ReportGraphViewComponent
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,

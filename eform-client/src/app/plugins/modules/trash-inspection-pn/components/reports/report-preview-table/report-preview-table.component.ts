@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {TemplateListModel, TemplateRequestModel} from '../../../../../../common/models/eforms';
 import {EFormService} from '../../../../../../common/services/eform';
@@ -22,6 +22,7 @@ import {FractionYearPnModel} from '../../../models/fraction/fractionYearPnModel'
   styleUrls: ['./report-preview-table.component.scss']
 })
 export class ReportPreviewTableComponent implements OnInit {
+  @ViewChild('reportGraphViewModal') reportGraphViewModal;
   typeahead = new EventEmitter<string>();
   templatesModel: TemplateListModel = new TemplateListModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
@@ -135,6 +136,10 @@ export class ReportPreviewTableComponent implements OnInit {
 
   onSelectedChanged(e: any) {
     this.thisYear = e.value;
+  }
+
+  showGraphModal() {
+    this.reportGraphViewModal.show();
   }
 
 }

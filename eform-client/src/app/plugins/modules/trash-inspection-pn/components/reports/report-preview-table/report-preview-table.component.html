@@ -114,7 +114,7 @@
       </thead>
       <tbody id="tableBodyTransporters">
       <tr *ngFor="let transporter of transporterYearModel.statsByYearList">
-        <td id="NameTransporter">
+        <td id="NameTransporter" (click)="showGraphModal()" style="color:dodgerblue" >
           {{transporter.name}}
         </td>
         <td id="AmountOfLoadTransporters">
@@ -369,4 +369,6 @@
     </table>
   </div>
 </div>
+
+<app-report-graph-view #reportGraphViewModal></app-report-graph-view>
 
