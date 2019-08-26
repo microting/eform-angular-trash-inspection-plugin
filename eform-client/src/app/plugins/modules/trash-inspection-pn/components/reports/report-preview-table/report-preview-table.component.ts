@@ -4,7 +4,12 @@ import {TemplateListModel, TemplateRequestModel} from '../../../../../../common/
 import {EFormService} from '../../../../../../common/services/eform';
 import {PageSettingsModel} from '../../../../../../common/models/settings';
 import {SharedPnService} from '../../../../shared/services';
-import {TransporterPnRequestModel, TransportersPnModel} from '../../../models/transporter';
+import {
+  TransporterPnModel,
+  TransporterPnRequestModel,
+  TransportersPnModel,
+  TransporterYearPnRequestModel
+} from '../../../models/transporter';
 import {TrashInspectionPnFractionsService, TrashInspectionPnProducersService, TrashInspectionPnTransporterService} from '../../../services';
 import {FractionPnModel, FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
 import {ProducerPnRequestModel, ProducersPnModel} from '../../../models/producer';
@@ -13,7 +18,7 @@ import {
   TrashInspectionYearModelPnModel
 } from '../../../models/trash-inspection/trash-inspectionYearModel-pn.model';
 import {ProducerYearPnModel} from '../../../models/producer/producerYearPnModel';
-import {TransporterYearPnModel} from '../../../models/transporter/transporterYearPnModel';
+import {TransporterYearModel, TransporterYearPnModel} from '../../../models/transporter/transporterYearPnModel';
 import {FractionYearPnModel} from '../../../models/fraction/fractionYearPnModel';
 
 @Component({
@@ -34,6 +39,7 @@ export class ReportPreviewTableComponent implements OnInit {
   transporterYearModel: TransporterYearPnModel = new TransporterYearPnModel();
   fractionYearModel: FractionYearPnModel = new FractionYearPnModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
+  transporterYearRequestModel: TransporterYearPnRequestModel = new TransporterYearPnRequestModel();
   transportersModel: TransportersPnModel = new TransportersPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
   producersModel: ProducersPnModel = new ProducersPnModel();
@@ -61,11 +67,10 @@ export class ReportPreviewTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLocalPageSettingsProducers();
-    this.getLocalPageSettingsFractions();
-    this.getLocalPageSettingsTransporters();
     this.getAllYears();
   }
+
+
 
   getAllYears() {
     if (this.thisYear >= 2019) {
@@ -78,8 +83,15 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getLocalPageSettingsFractions() {
     this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Fractions').settings;
+      ('trashInspectionsPnSettings', 'FractionsByYear').settings;
     this.getAllInitialDataFractions();
+  }
+
+  updateLocalPageSettingsFractions() {
+    this.sharedPnService.updateLocalPageSettings
+    ('trashInspectionsPnSettings', this.localPageSettings, 'FractionsByYear');
+    this.getAllInitialDataFractions();
+
   }
 
   getAllInitialDataFractions() {
@@ -98,8 +110,14 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getLocalPageSettingsTransporters() {
     this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Transporters').settings;
+    ('trashInspectionsPnSettings', 'TransportersByYear').settings;
     this.getAllInitialDataTransporters();
+  }
+
+  updateLocalPageSettingsTransporters() {
+    this.sharedPnService.updateLocalPageSettings
+    ('trashInspectionsPnSettings', this.localPageSettings, 'TransportersByYear');
+    this.getAllInitialDataFractions();
   }
   getAllInitialDataTransporters() {
     this.getAllTransportersByYear();
@@ -108,7 +126,7 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getAllTransportersByYear() {
     this.spinnerStatus = true;
-    this.trashInspectionPnTransporterService.getAllTransportersByYear(this.thisYear).subscribe((data) => {
+    this.trashInspectionPnTransporterService.getAllTransportersByYear(this.transporterYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.transporterYearModel = data.model;
       } this.spinnerStatus = false;
@@ -117,8 +135,13 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getLocalPageSettingsProducers() {
     this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Producers').settings;
+    ('trashInspectionsPnSettings', 'ProducersByYear').settings;
     this.getAllInitialDataProducers();
+  }
+  updateLocalPageSettingsProducers() {
+    this.sharedPnService.updateLocalPageSettings
+    ('trashInspectionsPnSettings', this.localPageSettings, 'ProducersByYear');
+    this.getAllInitialDataFractions();
   }
 
   getAllInitialDataProducers() {
@@ -134,12 +157,44 @@ export class ReportPreviewTableComponent implements OnInit {
     });
   }
 
-  onSelectedChanged(e: any) {
-    this.thisYear = e.value;
+  onSelectedChanged(e: number) {
+    this.thisYear = e;
+    this.transporterYearRequestModel.year = e;
+    this.getLocalPageSettingsProducers();
+    this.getLocalPageSettingsTransporters();
+    this.getLocalPageSettingsFractions();
   }
 
-  showGraphModal() {
-    this.reportGraphViewModal.show();
+  showGraphModal(transporter: TransporterYearModel, year: number) {
+    year = this.thisYear;
+    this.reportGraphViewModal.show(transporter, year);
+  }
+  sortTableFracitons(sort: string) {
+    if (this.localPageSettings.sort === sort) {
+      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
+    } else {
+      this.localPageSettings.isSortDsc = false;
+      this.localPageSettings.sort = sort;
+    }
+    this.updateLocalPageSettingsFractions();
+  }
+  sortTableTransporters(sort: string) {
+    if (this.localPageSettings.sort === sort) {
+      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
+    } else {
+      this.localPageSettings.isSortDsc = false;
+      this.localPageSettings.sort = sort;
+    }
+    this.updateLocalPageSettingsTransporters();
+  }
+  sortTableProducers(sort: string) {
+    if (this.localPageSettings.sort === sort) {
+      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
+    } else {
+      this.localPageSettings.isSortDsc = false;
+      this.localPageSettings.sort = sort;
+    }
+    this.updateLocalPageSettingsProducers();
   }
 
 }

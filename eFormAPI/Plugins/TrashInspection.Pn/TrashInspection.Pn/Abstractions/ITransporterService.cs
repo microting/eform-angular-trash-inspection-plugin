@@ -13,6 +13,7 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> ImportTransporter(TransporterImportModel transporterImportModel);
         Task<OperationDataResult<TransportersModel>> GetAllTransporters(TransporterRequestModel pnRequestModel);
         Task<OperationDataResult<TransporterModel>> GetSingleTransporter(int id);
-        Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year);
+        Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel);
+        Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int transporterId, int year);
     }
 }

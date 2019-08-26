@@ -57,6 +57,33 @@ export const TrashInspectionPnLocalSettings = [
         isSortDsc: false
       })
     }
+  ),
+  new ApplicationPageModel({
+      name: 'ProducersByYear',
+      settings: new PageSettingsModel({
+        pageSize: 10,
+        sort: 'Name',
+        isSortDsc: false
+      })
+    }
+  ),
+  new ApplicationPageModel({
+      name: 'TransportersByYear',
+      settings: new PageSettingsModel({
+        pageSize: 10,
+        sort: 'Transporter',
+        isSortDsc: false
+      })
+    }
+  ),
+  new ApplicationPageModel({
+      name: 'FractionsByYear',
+      settings: new PageSettingsModel({
+        pageSize: 10,
+        sort: 'Name',
+        isSortDsc: false
+      })
+    }
   )
 ];
 

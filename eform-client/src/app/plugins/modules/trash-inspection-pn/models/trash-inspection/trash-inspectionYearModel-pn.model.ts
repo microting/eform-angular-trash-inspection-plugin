@@ -4,6 +4,7 @@ export class TrashInspectionYearModelPnModel {
 }
 
 export class TrashInspectionYearModel {
+  id: number;
   name: string;
   weighings: number;
   amountOfWeighingsControlled: number;

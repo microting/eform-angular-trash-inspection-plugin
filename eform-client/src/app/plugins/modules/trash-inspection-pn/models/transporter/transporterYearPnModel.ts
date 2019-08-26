@@ -4,6 +4,7 @@ export class TransporterYearPnModel {
 }
 
 export class TransporterYearModel {
+  id: number;
   name: string;
   weighings: number;
   amountOfWeighingsControlled: number;

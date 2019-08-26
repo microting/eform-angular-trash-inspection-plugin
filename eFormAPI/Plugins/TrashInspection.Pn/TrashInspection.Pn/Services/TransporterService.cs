@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.MicroKernel.ModelBuilder.Descriptors;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
@@ -289,23 +290,49 @@ namespace TrashInspection.Pn.Services
             return transporter;
         }
 
-        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel)
         {
             try
             {
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
 
-                trashInspectionsQuery.Where(x => x.Date.Year == year);
+                trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
                 
                 StatsByYearModel transportersStatsByYearModel = new StatsByYearModel();
 
                 IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
 
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    transporterQuery = transporterQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
+                if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transporterQuery = transporterQuery
+                            .CustomOrderByDescending(pnRequestModel.Sort);
+                    }
+                    else
+                    {
+                        transporterQuery = transporterQuery
+                            .CustomOrderBy(pnRequestModel.Sort);
+                    }
+                }
+                else
+                {
+                    transporterQuery = _dbContext.Transporters
+                        .OrderBy(x => x.Id);
+                }
+                
                 transporterQuery
                     = transporterQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Weighings = trashInspectionsQuery.Count(t => t.TransporterId == x.Id),
                     ControlPercentage = 0,
@@ -362,6 +389,78 @@ namespace TrashInspection.Pn.Services
                 _coreHelper.LogException(e.Message);
                 return new OperationDataResult<StatsByYearModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+            }
+        }
+        
+        public async Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int transporterId, int year)
+        {
+            try
+            {
+                StatByMonth statByMonth = new StatByMonth();
+                
+                Dictionary<string, List<double>> monthsGraph = new Dictionary<string, List<double>>();
+                List<string> months = new List<string>()
+                {
+                    "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
+                };
+                
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.TransporterId == transporterId);
+
+                double wheigingsPrYear = trashInspectionsQuery.Count();
+                double wheigingsPrYearControlled = trashInspectionsQuery.Count(x => x.Status == 100);
+                double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
+                
+                int i = 1;
+                foreach (string month in months)
+                {
+                    trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
+                    
+                    List<double> intList = new List<double>();
+                    intList.Add(trashInspectionsQuery.Count()); // total number of weighings
+                    intList.Add(trashInspectionsQuery.Count(x => x.Status == 100)); // number of controlled wheigings
+                    intList.Add(0); // Control percentage
+                    if (intList[1] > 0 && intList[0] > 0)
+                    {
+                        intList[2] = Math.Round((intList[1] / intList[0]) * 100, 1);
+                    }
+                    intList.Add(avgControlPercentagePrYear); // Avarage controller pr year
+
+                    monthsGraph.Add(month, intList);
+                    
+                    i += 1;
+                }
+                
+                statByMonth.StatByMonthListData1 = new List<List<object>>();
+
+                foreach (KeyValuePair<string,List<double>> keyValuePair in monthsGraph)
+                {
+                    List<object> theList = new List<object>()
+                    {
+                        keyValuePair.Key
+                    };
+
+                    foreach (double d in keyValuePair.Value)
+                    {
+                        theList.Add(d);
+                    }
+                    statByMonth.StatByMonthListData1.Add(theList);
+                }
+
+//                statByMonth.StatByMonthList = monthsGraph;
+                
+                
+                return new OperationDataResult<StatByMonth>(true,
+                        statByMonth);
+                
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatByMonth>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporterByMonth"));
             }
         }
     }
