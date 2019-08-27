@@ -14,6 +14,7 @@ import {FractionPnModel,
         FractionPnImportModel} from '../models/fraction';
 import {TrashInspectionPnTransporterMethods} from './trash-inspection-pn-transporter.service';
 import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
+import {FractionPnYearRequestModel} from '../models/fraction/fraction-pn-year-request.model';
 
 export let TrashInspectionPnFractionMethods = {
   Fractions: 'api/trash-inspection-pn/fractions',
@@ -50,7 +51,7 @@ export class TrashInspectionPnFractionsService extends BaseService {
     return this.post(TrashInspectionPnFractionMethods.Fractions + '/import', model);
   }
 
-  getAllFractionsStatsByYear(year: number): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
-    return this.get(TrashInspectionPnFractionMethods.Fractions + '/year/' + year);
+  getAllFractionsStatsByYear(model: FractionPnYearRequestModel): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
+    return this.get(TrashInspectionPnFractionMethods.Fractions + '/year/' + model.year, model);
   }
 }

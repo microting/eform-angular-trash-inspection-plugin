@@ -61,9 +61,9 @@ namespace TrashInspection.Pn.Controllers
         
         [HttpGet]
         [Route("api/trash-inspection-pn/fractions/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel requestModel)
         {
-            return await _fractionService.GetFractionsStatsByYear(year);
+            return await _fractionService.GetFractionsStatsByYear(requestModel);
         }
     }
 }

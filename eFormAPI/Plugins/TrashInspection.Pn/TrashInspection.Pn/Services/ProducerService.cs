@@ -280,23 +280,46 @@ namespace TrashInspection.Pn.Services
             return producer;
         }
         
-        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel pnRequestModel)
         {
             try
             {
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
 
-                trashInspectionsQuery.Where(x => x.Date.Year == year);
+                trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
                 
                 StatsByYearModel producersStatsByYearModel = new StatsByYearModel();
 
-                // - get all trashinspection where Date.year == year
-                // - get all producers
-                // - foreach producers
-                // 
-
                 IQueryable<Producer> producerQuery = _dbContext.Producers.AsQueryable();
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    producerQuery = producerQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
 
+                if (pnRequestModel.Sort == "Name")
+                {
+                    
+                    if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                    {
+                        if (pnRequestModel.IsSortDsc)
+                        {
+                            producerQuery = producerQuery
+                                .CustomOrderByDescending(pnRequestModel.Sort);
+                        }
+                        else
+                        {
+                            producerQuery = producerQuery
+                                .CustomOrderBy(pnRequestModel.Sort);
+                        }
+                    }
+                    else
+                    {
+                        producerQuery = _dbContext.Producers
+                            .OrderBy(x => x.Id);
+                    }
+                }
                 producerQuery
                     = producerQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
@@ -344,7 +367,83 @@ namespace TrashInspection.Pn.Services
                         statByYearModel.NotApprovedPercentage = 0;
                     }
                 }
-                
+                if (pnRequestModel.Sort == "Weighings")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear = 
+                            producersStatByYear.OrderByDescending(x => x.Weighings).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.Weighings).ToList();
+                        
+                    }
+                }
+                if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear = 
+                            producersStatByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                }
+
+                if (pnRequestModel.Sort == "ControlPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ControlPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ControlPercentage).ToList();
+                    }
+                }
+                if (pnRequestModel.Sort == "ApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "ConditionalApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ConditionalApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ConditionalApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "NotApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.NotApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
+ 
+                    }
+                }
                 producersStatsByYearModel.Total =
                     _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 producersStatsByYearModel.statsByYearList = producersStatByYear;

@@ -56,6 +56,6 @@ export class TrashInspectionPnTransporterService extends BaseService {
     return this.post(TrashInspectionPnTransporterMethods.Transporter + '/import', model);
   }
   getAllTransportersByYear(model: TransporterYearPnRequestModel): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
-    return this.get(TrashInspectionPnTransporterMethods.Transporter + '/year/' + model.year);
+    return this.get(TrashInspectionPnTransporterMethods.Transporter + '/year/' + model.year, model);
   }
 }

@@ -7,11 +7,13 @@ import {Router} from '@angular/router';
 import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
 import {BaseService} from 'src/app/common/services/base.service';
 
-import { ProducerPnImportModel,
+import {
+  ProducerPnImportModel,
   ProducerPnModel,
   ProducerPnRequestModel,
-  ProducerPnUpdateModel,
-  ProducersPnModel} from '../models/producer';
+  ProducerPnUpdateModel, ProducerPnYearRequestModel,
+  ProducersPnModel
+} from '../models/producer';
 import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
 
 export let TrashInspectionPnProducerMethods = {
@@ -47,7 +49,7 @@ export class TrashInspectionPnProducersService extends BaseService {
     return this.post(TrashInspectionPnProducerMethods.Producers + '/import', model);
   }
 
-  getAllProducersStatsByYear(year: number): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
-    return this.get(TrashInspectionPnProducerMethods.Producers + '/year/' + year);
+  getAllProducersStatsByYear(model: ProducerPnYearRequestModel): Observable<OperationDataResult<TrashInspectionYearModelPnModel>> {
+    return this.get(TrashInspectionPnProducerMethods.Producers + '/year/' + model.year, model);
   }
 }

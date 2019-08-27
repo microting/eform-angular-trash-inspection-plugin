@@ -1,4 +1,4 @@
-export class TransporterYearPnRequestModel {
+export class FractionPnYearRequestModel {
   pageSize: number;
   nameFilter: string;
   sort: string;
@@ -8,7 +8,7 @@ export class TransporterYearPnRequestModel {
   year: number;
 
   constructor() {
-    this.sort = 'Name';
+    this.sort = 'Id';
     this.isSortDsc = true;
     this.pageSize = 10;
     this.pageIndex = 1;

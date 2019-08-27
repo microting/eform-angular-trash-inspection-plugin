@@ -12,7 +12,7 @@ import {
 } from '../../../models/transporter';
 import {TrashInspectionPnFractionsService, TrashInspectionPnProducersService, TrashInspectionPnTransporterService} from '../../../services';
 import {FractionPnModel, FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
-import {ProducerPnRequestModel, ProducersPnModel} from '../../../models/producer';
+import {ProducerPnRequestModel, ProducerPnYearRequestModel, ProducersPnModel} from '../../../models/producer';
 import {
   TrashInspectionYearModel,
   TrashInspectionYearModelPnModel
@@ -20,6 +20,7 @@ import {
 import {ProducerYearPnModel} from '../../../models/producer/producerYearPnModel';
 import {TransporterYearModel, TransporterYearPnModel} from '../../../models/transporter/transporterYearPnModel';
 import {FractionYearPnModel} from '../../../models/fraction/fractionYearPnModel';
+import {FractionPnYearRequestModel} from '../../../models/fraction/fraction-pn-year-request.model';
 
 @Component({
   selector: 'app-report-preview-table',
@@ -42,12 +43,15 @@ export class ReportPreviewTableComponent implements OnInit {
   transporterYearRequestModel: TransporterYearPnRequestModel = new TransporterYearPnRequestModel();
   transportersModel: TransportersPnModel = new TransportersPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
+  fractionsYearRequestModel: FractionPnYearRequestModel = new  FractionPnYearRequestModel();
   producersModel: ProducersPnModel = new ProducersPnModel();
   producersRequestModel: ProducerPnRequestModel = new ProducerPnRequestModel();
+  producersYearRequestModel: ProducerPnYearRequestModel = new ProducerPnYearRequestModel();
   thisYear = new Date().getFullYear();
   years: number[] = [];
   fractions = [];
-
+  viewNames = ['Fractions', 'Producers', 'Transporters'];
+  selectedView: string;
   constructor(private eFormService: EFormService, private cd: ChangeDetectorRef, private sharedPnService: SharedPnService,
               private trashInspectionPnTransporterService: TrashInspectionPnTransporterService,
               private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
@@ -71,6 +75,17 @@ export class ReportPreviewTableComponent implements OnInit {
   }
 
 
+  getSelectedView(viewName: string) {
+  if (viewName === 'Fractions') {
+    this.getLocalPageSettingsFractions();
+  }
+  if (viewName === 'Producers') {
+    this.getLocalPageSettingsProducers();
+  }
+  if (viewName === 'Transporters') {
+    this.getLocalPageSettingsTransporters();
+  }
+  }
 
   getAllYears() {
     if (this.thisYear >= 2019) {
@@ -90,7 +105,7 @@ export class ReportPreviewTableComponent implements OnInit {
   updateLocalPageSettingsFractions() {
     this.sharedPnService.updateLocalPageSettings
     ('trashInspectionsPnSettings', this.localPageSettings, 'FractionsByYear');
-    this.getAllInitialDataFractions();
+    this.getAllFractions();
 
   }
 
@@ -100,7 +115,9 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getAllFractions() {
     this.spinnerStatus = true;
-    this.trashInspectionPnFractionsService.getAllFractionsStatsByYear(this.thisYear).subscribe((data) => {
+    this.fractionsYearRequestModel.sort = this.localPageSettings.sort;
+    this.fractionsYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
+    this.trashInspectionPnFractionsService.getAllFractionsStatsByYear(this.fractionsYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.fractionYearModel = data.model;
       } this.spinnerStatus = false;
@@ -117,7 +134,7 @@ export class ReportPreviewTableComponent implements OnInit {
   updateLocalPageSettingsTransporters() {
     this.sharedPnService.updateLocalPageSettings
     ('trashInspectionsPnSettings', this.localPageSettings, 'TransportersByYear');
-    this.getAllInitialDataFractions();
+    this.getAllTransportersByYear();
   }
   getAllInitialDataTransporters() {
     this.getAllTransportersByYear();
@@ -126,6 +143,8 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getAllTransportersByYear() {
     this.spinnerStatus = true;
+    this.transporterYearRequestModel.sort = this.localPageSettings.sort;
+    this.transporterYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.trashInspectionPnTransporterService.getAllTransportersByYear(this.transporterYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.transporterYearModel = data.model;
@@ -141,7 +160,7 @@ export class ReportPreviewTableComponent implements OnInit {
   updateLocalPageSettingsProducers() {
     this.sharedPnService.updateLocalPageSettings
     ('trashInspectionsPnSettings', this.localPageSettings, 'ProducersByYear');
-    this.getAllInitialDataFractions();
+    this.getAllProducers();
   }
 
   getAllInitialDataProducers() {
@@ -150,7 +169,9 @@ export class ReportPreviewTableComponent implements OnInit {
 
   getAllProducers() {
     this.spinnerStatus = true;
-    this.trashInspectionPnProducerService.getAllProducersStatsByYear(this.thisYear).subscribe((data) => {
+    this.producersYearRequestModel.sort = this.localPageSettings.sort;
+    this.producersYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
+    this.trashInspectionPnProducerService.getAllProducersStatsByYear(this.producersYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.producerYearModel = data.model;
       } this.spinnerStatus = false;
@@ -159,17 +180,16 @@ export class ReportPreviewTableComponent implements OnInit {
 
   onSelectedChanged(e: number) {
     this.thisYear = e;
-    this.transporterYearRequestModel.year = e;
-    this.getLocalPageSettingsProducers();
-    this.getLocalPageSettingsTransporters();
-    this.getLocalPageSettingsFractions();
+    this.transporterYearRequestModel.year = this.thisYear;
+    this.producersYearRequestModel.year = this.thisYear;
+    this.fractionsYearRequestModel.year = this.thisYear;
   }
 
   showGraphModal(transporter: TransporterYearModel, year: number) {
     year = this.thisYear;
     this.reportGraphViewModal.show(transporter, year);
   }
-  sortTableFracitons(sort: string) {
+  sortTableFractions(sort: string) {
     if (this.localPageSettings.sort === sort) {
       this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
     } else {
@@ -196,5 +216,8 @@ export class ReportPreviewTableComponent implements OnInit {
     }
     this.updateLocalPageSettingsProducers();
   }
-
+  onSelectedViewChanged(e: string) {
+    this.selectedView = e;
+    this.getSelectedView(this.selectedView);
+  }
 }

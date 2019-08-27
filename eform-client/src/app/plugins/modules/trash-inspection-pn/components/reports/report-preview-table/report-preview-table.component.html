@@ -12,106 +12,112 @@
 <div class="col-md-2">
   <ng-select
     class=""
+    id="yearSelector"
     [items]="years"
     [placeholder]="'Select Year'"
-    (change)="onSelectedChanged($event)"
-  >
+    (change)="onSelectedChanged($event)">
+  </ng-select>
+</div>
+<div class="col-md-2">
+  <ng-select
+  class=""
+  [items]="viewNames"
+  [placeholder]="'Select View'"
+  (change)="onSelectedViewChanged($event)">
   </ng-select>
 </div>
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
-
-    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Transporters' | translate" [heandingSizeRem]="1">
+    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Transporters' | translate" [heandingSizeRem]="1"
+                  *ngIf="this.selectedView === 'Transporters'">
     </subheader-pn>
-
-    <table class="table table-sm table-striped text-center z-depth-1">
+    <table class="table table-sm table-striped text-center z-depth-1" *ngIf="this.selectedView === 'Transporters'">
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="nameTableHeaderTransporters"
-            (click)="sortTableTransporters('Transporter')">
+            (click)="sortTableTransporters('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Transporter' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Transporter'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Transporter' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Name' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Transporter' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Name' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="descriptionTableHeaderTransporters"
-           (click)="sortTableTransporters('AmountOfLoad')">
+            (click)="sortTableTransporters('Weighings')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfLoad'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Weighings'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderTransporters"
-            >
+            (click)="sortTableTransporters('AmountOfWeighingsControlled')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load controlled' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfLoadControlled'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfWeighingsControlled'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="addressTableHeaderTransporters"
-           >
+            (click)="sortTableTransporters('ControlPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Controlled percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ControlPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="cityTableHeaderTransporters"
-            >
+            (click)="sortTableTransporters('ApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderTransporters"
-            >
+            (click)="sortTableTransporters('ConditionalApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Conditional approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ConditionalApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="phoneTableHeaderTransporters"
-            >
+            (click)="sortTableTransporters('NotApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Not approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'NotApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && !transporterYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && transporterYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
-
       </tr>
       </thead>
       <tbody id="tableBodyTransporters">
       <tr *ngFor="let transporter of transporterYearModel.statsByYearList">
         <td id="NameTransporter" style="color: dodgerblue">
           <a [routerLink]="" (click)="showGraphModal(transporter, thisYear)" style="color: dodgerblue; text-decoration: underline">
-          {{transporter.name}}
+            {{transporter.name}}
           </a>
         </td>
         <td id="AmountOfLoadTransporters">
@@ -137,91 +143,89 @@
       </tr>
       </tbody>
     </table>
-
-    <subheader-pn [title]="'Trash/Deponi - ' +  thisYear + ' - Compliance - Producers' | translate" [heandingSizeRem]="1">
+    <subheader-pn [title]="'Trash/Deponi - ' +  thisYear + ' - Compliance - Producers' | translate" [heandingSizeRem]="1"
+                  *ngIf="this.selectedView === 'Producers'">
     </subheader-pn>
-
-    <table class="table table-sm table-striped text-center z-depth-1">
+    <table class="table table-sm table-striped text-center z-depth-1" *ngIf="this.selectedView === 'Producers'">
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="nameTableHeaderProducers"
-        >
+        (click)="sortTableProducers('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Producer' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Name' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Name' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="descriptionTableHeaderProducers"
-        >
+            (click)="sortTableProducers('Weighings')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Weighings'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderProducers"
-        >
-          <div class="d-flex align-items-center justify-content-center">
+            (click)="sortTableProducers('AmountOfWeighingsControlled')">
+        <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load controlled' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load controlled'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfWeighingsControlled'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="addressTableHeaderProducers"
-        >
+            (click)="sortTableProducers('ControlPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Controlled percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ControlPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="cityTableHeaderProducers"
-        >
+            (click)="sortTableProducers('ApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderProducers"
-        >
+            (click)="sortTableProducers('ConditionalApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Conditional approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ConditionalApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="phoneTableHeaderProducers"
-        >
+            (click)="sortTableProducers('NotApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Not approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'NotApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && !producersYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && producersYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
-
       </tr>
       </thead>
       <tbody id="tableBodyProducers">
@@ -251,88 +255,86 @@
       </tr>
       </tbody>
     </table>
-
-    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Items' | translate" [heandingSizeRem]="1">
+    <subheader-pn [title]="'Trash/Deponi - ' + thisYear + ' - Compliance - Items' | translate" [heandingSizeRem]="1" *ngIf="this.selectedView === 'Fractions'">
     </subheader-pn>
-
-    <table class="table table-sm table-striped text-center z-depth-1">
+    <table class="table table-sm table-striped text-center z-depth-1" *ngIf="this.selectedView === 'Fractions'">
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="nameTableHeaderFractions"
-        >
+        (click)="sortTableFractions('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Item Name' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Name' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Name' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="descriptionTableHeaderFractions"
-        >
-          <div class="d-flex align-items-center justify-content-center">
+            (click)="sortTableFractions('Weighings')">
+        <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Weighings'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Weighings' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderFractions"
-        >
+            (click)="sortTableFractions('AmountOfWeighingsControlled')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load controlled' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Amount of load controlled'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfWeighingsControlled'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Amount of load controlled' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'AmountOfWeighingsControlled' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="addressTableHeaderFractions"
-        >
+            (click)="sortTableFractions('ControlPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Controlled percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Controlled percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ControlPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Controlled percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ControlPercentage' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="cityTableHeaderFractions"
-        >
+            (click)="sortTableFractions('ApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ApprovedPercentage' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="zipCodeTableHeaderFractions"
-        >
+            (click)="sortTableFractions('ConditionalApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Conditional approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Conditional approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ConditionalApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Conditional approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ConditionalApprovedPercentage' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="phoneTableHeaderFractions"
-        >
+            (click)="sortTableFractions('NotApprovedPercentage')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Not approved percentage' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Not approved percentage'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'NotApprovedPercentage'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && !transporterRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && !fractionsYearRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Not approved percentage' && transporterRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'NotApprovedPercentage' && fractionsYearRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
       </tr>

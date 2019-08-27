@@ -294,7 +294,8 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery
+                    = _dbContext.TrashInspections.AsQueryable();
 
                 trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
                 
@@ -308,25 +309,30 @@ namespace TrashInspection.Pn.Services
                         x.Name.Contains(pnRequestModel.NameFilter) ||
                         x.Description.Contains(pnRequestModel.NameFilter));
                 }
-                if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+
+                if (pnRequestModel.Sort == "Name")
                 {
-                    if (pnRequestModel.IsSortDsc)
+                    
+                    if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                     {
-                        transporterQuery = transporterQuery
-                            .CustomOrderByDescending(pnRequestModel.Sort);
+                        if (pnRequestModel.IsSortDsc)
+                        {
+                            transporterQuery = transporterQuery
+                                .CustomOrderByDescending(pnRequestModel.Sort);
+                        }
+                        else
+                        {
+                            transporterQuery = transporterQuery
+                                .CustomOrderBy(pnRequestModel.Sort);
+                        }
                     }
                     else
                     {
-                        transporterQuery = transporterQuery
-                            .CustomOrderBy(pnRequestModel.Sort);
+                        transporterQuery = _dbContext.Transporters
+                            .OrderBy(x => x.Id);
                     }
                 }
-                else
-                {
-                    transporterQuery = _dbContext.Transporters
-                        .OrderBy(x => x.Id);
-                }
-                
+
                 transporterQuery
                     = transporterQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
@@ -375,7 +381,83 @@ namespace TrashInspection.Pn.Services
                         statByYearModel.NotApprovedPercentage = 0;
                     }
                 }
-                
+                if (pnRequestModel.Sort == "Weighings")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear = 
+                            transportersStatByYear.OrderByDescending(x => x.Weighings).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.Weighings).ToList();
+                        
+                    }
+                }
+                if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear = 
+                            transportersStatByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                }
+
+                if (pnRequestModel.Sort == "ControlPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear =
+                            transportersStatByYear.OrderByDescending(x => x.ControlPercentage).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ControlPercentage).ToList();
+                    }
+                }
+                if (pnRequestModel.Sort == "ApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear =
+                            transportersStatByYear.OrderByDescending(x => x.ApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "ConditionalApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear =
+                            transportersStatByYear.OrderByDescending(x => x.ConditionalApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ConditionalApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "NotApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        transportersStatByYear =
+                            transportersStatByYear.OrderByDescending(x => x.NotApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
+ 
+                    }
+                }
                 
                 transportersStatsByYearModel.Total =
                     _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
