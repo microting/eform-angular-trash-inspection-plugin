@@ -18,6 +18,7 @@ export class TransporterPageComponent implements OnInit {
   transportersModel: TransportersPnModel = new TransportersPnModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
 
+
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
 

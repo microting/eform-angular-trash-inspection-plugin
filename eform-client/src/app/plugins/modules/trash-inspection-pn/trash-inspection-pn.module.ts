@@ -50,9 +50,11 @@ import {
   TransporterDeleteComponent,
   TransporterEditComponent,
   TransporterImportComponent,
-  ReportPreviewTableComponent
+  ReportPreviewTableComponent, ReportGraphViewComponent
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {GoogleChartsModule} from 'angular-google-charts';
+import {FusionChartsModule} from 'angular-fusioncharts';
 
 @NgModule({
   imports: [
@@ -64,7 +66,9 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     FormsModule,
     NgSelectModule,
     EformSharedModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    GoogleChartsModule,
+    FusionChartsModule
   ],
   declarations: [
     InstallationsPageComponent,
@@ -97,7 +101,8 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     TransporterDeleteComponent,
     TransporterEditComponent,
     TransporterImportComponent,
-    ReportPreviewTableComponent
+    ReportPreviewTableComponent,
+    ReportGraphViewComponent
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,

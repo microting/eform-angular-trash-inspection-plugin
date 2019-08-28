@@ -326,34 +326,186 @@ namespace TrashInspection.Pn.Services
             return fraction;
         }
         
-        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel pnRequestModel)
         {
             try
             {
-                StatsByYearModel fractionsStatsByYear = new StatsByYearModel();
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
+                
+                StatsByYearModel fractionsStatsByYearModel = new StatsByYearModel();
 
                 IQueryable<Fraction> fractionQuery = _dbContext.Fractions.AsQueryable();
 
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    fractionQuery = fractionQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
+
+                if (pnRequestModel.Sort == "Name")
+                {
+                    
+                    if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                    {
+                        if (pnRequestModel.IsSortDsc)
+                        {
+                            fractionQuery = fractionQuery
+                                .CustomOrderByDescending(pnRequestModel.Sort);
+                        }
+                        else
+                        {
+                            fractionQuery = fractionQuery
+                                .CustomOrderBy(pnRequestModel.Sort);
+                        }
+                    }
+                    else
+                    {
+                        fractionQuery = _dbContext.Fractions
+                            .OrderBy(x => x.Id);
+                    }
+                }
+                
                 fractionQuery
                     = fractionQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                List<StatByYearModel> producersStatByYear = await fractionQuery.Select(x => new StatByYearModel()
+                List<StatByYearModel> fractionsStatsByYear = await fractionQuery.Select(x => new StatByYearModel()
                 {
-                    Name = x.Name
+                    Name = x.Name,
+                    Weighings = trashInspectionsQuery.Count(t => t.FractionId == x.Id),
+                    ControlPercentage = 0,
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    ConditionalApprovedPercentage = 0
+
                 }).ToListAsync();
 
-                fractionsStatsByYear.Total =
-                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                fractionsStatsByYear.statsByYearList = producersStatByYear;
+                foreach (StatByYearModel statByYearModel in fractionsStatsByYear)
+                {
+                    
+                    if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
+                    {
+                        statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ControlPercentage = 0;
+                    }
+                    
+                    if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ApprovedPercentage =
+                            Math.Round((statByYearModel.ApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ApprovedPercentage = 0;
+                    }
+
+                    if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.NotApprovedPercentage =
+                            Math.Round((statByYearModel.NotApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.NotApprovedPercentage = 0;
+                    }
+                }
                 
-                return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYear);
+                  if (pnRequestModel.Sort == "Weighings")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear = 
+                            fractionsStatsByYear.OrderByDescending(x => x.Weighings).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.Weighings).ToList();
+                        
+                    }
+                }
+                if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear = 
+                            fractionsStatsByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                }
+
+                if (pnRequestModel.Sort == "ControlPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear =
+                            fractionsStatsByYear.OrderByDescending(x => x.ControlPercentage).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.ControlPercentage).ToList();
+                    }
+                }
+                if (pnRequestModel.Sort == "ApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear =
+                            fractionsStatsByYear.OrderByDescending(x => x.ApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.ApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "ConditionalApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear =
+                            fractionsStatsByYear.OrderByDescending(x => x.ConditionalApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.ConditionalApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "NotApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        fractionsStatsByYear =
+                            fractionsStatsByYear.OrderByDescending(x => x.NotApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
+ 
+                    }
+                }
+                
+                fractionsStatsByYearModel.Total =
+                    _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
+                fractionsStatsByYearModel.statsByYearList = fractionsStatsByYear;
+                
+                return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYearModel);
             }
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
                 _coreHelper.LogException(e.Message);
                 return new OperationDataResult<StatsByYearModel>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingFractions"));
             }
         }
     }

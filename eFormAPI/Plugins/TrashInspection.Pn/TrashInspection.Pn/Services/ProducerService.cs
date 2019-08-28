@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -279,26 +280,170 @@ namespace TrashInspection.Pn.Services
             return producer;
         }
         
-        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel pnRequestModel)
         {
             try
             {
-                StatsByYearModel producersStatsByYearModel = new StatsByYearModel();
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
                 
-                // - get all trashinspection where Date.year == year
-                // - 
+                StatsByYearModel producersStatsByYearModel = new StatsByYearModel();
 
                 IQueryable<Producer> producerQuery = _dbContext.Producers.AsQueryable();
+                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                {
+                    producerQuery = producerQuery.Where(x =>
+                        x.Name.Contains(pnRequestModel.NameFilter) ||
+                        x.Description.Contains(pnRequestModel.NameFilter));
+                }
 
+                if (pnRequestModel.Sort == "Name")
+                {
+                    
+                    if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                    {
+                        if (pnRequestModel.IsSortDsc)
+                        {
+                            producerQuery = producerQuery
+                                .CustomOrderByDescending(pnRequestModel.Sort);
+                        }
+                        else
+                        {
+                            producerQuery = producerQuery
+                                .CustomOrderBy(pnRequestModel.Sort);
+                        }
+                    }
+                    else
+                    {
+                        producerQuery = _dbContext.Producers
+                            .OrderBy(x => x.Id);
+                    }
+                }
                 producerQuery
                     = producerQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 List<StatByYearModel> producersStatByYear = await producerQuery.Select(x => new StatByYearModel()
                 {
                     Name = x.Name,
-                    Weighings = 0
+                    Weighings = trashInspectionsQuery.Count(t => t.ProducerId == x.Id),
+                    ControlPercentage = 0,
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    ConditionalApprovedPercentage = 0
+
                 }).ToListAsync();
 
+                foreach (StatByYearModel statByYearModel in producersStatByYear)
+                {
+                    
+                    if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
+                    {
+                        statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ControlPercentage = 0;
+                    }
+                    
+                    if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ApprovedPercentage =
+                            Math.Round((statByYearModel.ApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ApprovedPercentage = 0;
+                    }
+
+                    if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.NotApprovedPercentage =
+                            Math.Round((statByYearModel.NotApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.NotApprovedPercentage = 0;
+                    }
+                }
+                if (pnRequestModel.Sort == "Weighings")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear = 
+                            producersStatByYear.OrderByDescending(x => x.Weighings).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.Weighings).ToList();
+                        
+                    }
+                }
+                if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear = 
+                            producersStatByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.AmountOfWeighingsControlled).ToList();
+                    }
+                }
+
+                if (pnRequestModel.Sort == "ControlPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ControlPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ControlPercentage).ToList();
+                    }
+                }
+                if (pnRequestModel.Sort == "ApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "ConditionalApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.ConditionalApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.ConditionalApprovedPercentage).ToList();
+
+                    }
+                }
+                if (pnRequestModel.Sort == "NotApprovedPercentage")
+                {
+                    if (pnRequestModel.IsSortDsc)
+                    {
+                        producersStatByYear =
+                            producersStatByYear.OrderByDescending(x => x.NotApprovedPercentage).ToList();
+                    }
+                    else
+                    {
+                        producersStatByYear = producersStatByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
+ 
+                    }
+                }
                 producersStatsByYearModel.Total =
                     _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 producersStatsByYearModel.statsByYearList = producersStatByYear;
@@ -310,7 +455,7 @@ namespace TrashInspection.Pn.Services
                 Trace.TraceError(e.Message);
                 _coreHelper.LogException(e.Message);
                 return new OperationDataResult<StatsByYearModel>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingProducers"));
             }
         }
     }

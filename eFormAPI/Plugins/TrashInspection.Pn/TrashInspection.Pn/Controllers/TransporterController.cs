@@ -29,6 +29,13 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _transporterService.GetSingleTransporter(id);
         }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/transporters/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int id, int year)
+        {
+            return await _transporterService.GetSingleTransporterByMonth(id, year);
+        }
 
         [HttpPost]
         [Route("api/trash-inspection-pn/transporters")]
@@ -60,9 +67,9 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpGet]
         [Route("api/trash-inspection-pn/transporters/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel requestModel)
         {
-            return await _transporterService.GetTransportersStatsByYear(year);
+            return await _transporterService.GetTransportersStatsByYear(requestModel);
         }
     }
 }

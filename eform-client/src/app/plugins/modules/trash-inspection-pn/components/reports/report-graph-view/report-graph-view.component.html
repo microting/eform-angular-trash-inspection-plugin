@@ -1,0 +1,47 @@
+<div mdbModal class="modal fade" #frame="mdbModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-md-12 col-xs-12">
+              <google-chart #chart
+                            type="ColumnChart"
+                            [data]="data1"
+                            [columnNames]="columnNames"
+                            [options]="options"
+              ></google-chart>
+            <fusioncharts
+              width="600"
+              height="400"
+            type="column2d"
+            dataFormat="json"
+            [dataSource]="data1"></fusioncharts>
+            </div>
+          </div>
+<!--          <div class="row mb-2">-->
+<!--            <div class="col-md-12 col-xs-12" >-->
+<!--              <google-chart #chart2-->
+<!--                            type="ComboChart"-->
+<!--                            [data]="data2"-->
+<!--                            [columnNames]="columnNames2"-->
+<!--                            [options]="options2"-->
+<!--              ></google-chart>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="row mb-2">-->
+<!--            <div class="col-md-12 col-xs-12">-->
+<!--              <google-chart #chart3-->
+<!--                            type="LineChart"-->
+<!--                            [data]="data3"-->
+<!--                            [columnNames]="columnNames3"-->
+<!--                            [options]="options"-->
+<!--              ></google-chart>-->
+<!--            </div>-->
+<!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

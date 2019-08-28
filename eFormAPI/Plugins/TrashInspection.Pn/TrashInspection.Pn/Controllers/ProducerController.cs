@@ -60,9 +60,9 @@ namespace TrashInspection.Pn.Controllers
         
         [HttpGet]
         [Route("api/trash-inspection-pn/producers/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(int year)
+        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel requestModel)
         {
-            return await _producerService.GetProducersStatsByYear(year);
+            return await _producerService.GetProducersStatsByYear(requestModel);
         }
     }
 }

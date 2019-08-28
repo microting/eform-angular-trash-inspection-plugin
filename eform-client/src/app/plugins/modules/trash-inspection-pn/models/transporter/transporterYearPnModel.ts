@@ -1,9 +1,9 @@
-export class TrashInspectionYearModelPnModel {
+export class TransporterYearPnModel {
   total: number;
-  statsByYearList: Array<TrashInspectionYearModel> = [];
+  statsByYearList: Array<TransporterYearModel> = [];
 }
 
-export class TrashInspectionYearModel {
+export class TransporterYearModel {
   id: number;
   name: string;
   weighings: number;
