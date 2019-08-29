@@ -9,22 +9,24 @@
 <!--  >-->
 <!--  </ng-select>-->
 <!--</div>-->
-<div class="col-md-2">
-  <ng-select
-    class=""
-    id="yearSelector"
-    [items]="years"
-    [placeholder]="'Select Year'"
-    (change)="onSelectedChanged($event)">
-  </ng-select>
-</div>
-<div class="col-md-2">
-  <ng-select
-  class=""
-  [items]="viewNames"
-  [placeholder]="'Select View'"
-  (change)="onSelectedViewChanged($event)">
-  </ng-select>
+<div class="row p-2">
+  <div class="col-md-2 ">
+    <ng-select
+      class=""
+      id="yearSelector"
+      [items]="years"
+      [placeholder]="'Select Year'"
+      (change)="onSelectedChanged($event)">
+    </ng-select>
+  </div>
+  <div class="col-md-2">
+    <ng-select
+      class=""
+      [items]="viewNames"
+      [placeholder]="'Select View'"
+      (change)="onSelectedViewChanged($event)">
+    </ng-select>
+  </div>
 </div>
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
@@ -150,7 +152,7 @@
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="nameTableHeaderProducers"
-        (click)="sortTableProducers('Name')">
+            (click)="sortTableProducers('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Producer' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
@@ -173,7 +175,7 @@
         </th>
         <th scope="col" class="table-header-sortable" id="ForeignIdTableHeaderProducers"
             (click)="sortTableProducers('AmountOfWeighingsControlled')">
-        <div class="d-flex align-items-center justify-content-center">
+          <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load controlled' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'AmountOfWeighingsControlled'">unfold_more</i>
             <i class="material-icons"
@@ -261,7 +263,7 @@
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="nameTableHeaderFractions"
-        (click)="sortTableFractions('Name')">
+            (click)="sortTableFractions('Name')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Item Name' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
@@ -273,7 +275,7 @@
         </th>
         <th scope="col" class="table-header-sortable" id="descriptionTableHeaderFractions"
             (click)="sortTableFractions('Weighings')">
-        <div class="d-flex align-items-center justify-content-center">
+          <div class="d-flex align-items-center justify-content-center">
             {{'Amount of load' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Weighings'">unfold_more</i>
             <i class="material-icons"
