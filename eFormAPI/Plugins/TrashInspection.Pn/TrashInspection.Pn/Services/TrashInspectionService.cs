@@ -376,6 +376,7 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
             }
         }
+        
         public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId)
         {
             try
@@ -418,6 +419,56 @@ namespace TrashInspection.Pn.Services
             }
         }
 
+        public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(string weighingNumber, string token)
+        {
+            PluginConfigurationValue trashInspectionSettings =
+                await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
+            _coreHelper.LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
+            if (token == trashInspectionSettings.Value && weighingNumber != null)
+            {
+                try
+                {
+                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                        {
+                            Id = x.Id,
+                            Date = x.Date,
+                            EakCode = x.Eak_Code,
+                            InstallationId = x.InstallationId,
+                            MustBeInspected = x.MustBeInspected,
+                            RegistrationNumber = x.RegistrationNumber,
+                            Time = x.Time,
+                            WeighingNumber = x.WeighingNumber,
+                            Status = x.Status,
+                            Version = x.Version,
+                            ExtendedInspection = x.ExtendedInspection,
+                            InspectionDone = x.InspectionDone,
+                            IsApproved = x.IsApproved,
+                            Comment = x.Comment
+                        })
+                        .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
+
+                    if (trashInspection == null)
+                    {
+                        return new OperationDataResult<TrashInspectionModel>(false,
+                            _trashInspectionLocalizationService.GetString($"WeighingNumber:{weighingNumber}DoesNotExist"));
+                    }
+
+                    return new OperationDataResult<TrashInspectionModel>(true, trashInspection);
+                }
+                catch(Exception e)
+                {
+                    Trace.TraceError(e.Message);
+                    _logger.LogError(e.Message);
+                    return new OperationDataResult<TrashInspectionModel>(false,
+                        _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
+            }
+        }
+        
         
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
