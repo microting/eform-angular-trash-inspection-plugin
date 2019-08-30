@@ -54,7 +54,6 @@ import {
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {GoogleChartsModule} from 'angular-google-charts';
-import {FusionChartsModule} from 'angular-fusioncharts';
 
 @NgModule({
   imports: [
@@ -67,8 +66,7 @@ import {FusionChartsModule} from 'angular-fusioncharts';
     NgSelectModule,
     EformSharedModule,
     FontAwesomeModule,
-    GoogleChartsModule,
-    FusionChartsModule
+    GoogleChartsModule
   ],
   declarations: [
     InstallationsPageComponent,
