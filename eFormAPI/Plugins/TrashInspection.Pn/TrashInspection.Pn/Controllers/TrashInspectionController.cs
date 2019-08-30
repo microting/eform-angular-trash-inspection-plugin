@@ -34,10 +34,16 @@ namespace TrashInspection.Pn.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}")]
-        public async Task<IActionResult> DownloadEFormPdf(string weighingNumber, string token, string fileType)
+        public async Task<IActionResult> InspectionResults(string weighingNumber, string token, string fileType)
         {
             try
             {
+                if (fileType == "result")
+                {
+                    var result =  await _trashInspectionService.GetSingleTrashInspection(weighingNumber, token);
+                    return new JsonResult(result.Model);
+                }
+                
                 if (string.IsNullOrEmpty(fileType))
                 {
                     fileType = "pdf";
