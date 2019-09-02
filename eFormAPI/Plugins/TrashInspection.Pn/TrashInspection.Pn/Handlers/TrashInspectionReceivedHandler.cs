@@ -55,6 +55,7 @@ namespace TrashInspection.Pn.Handlers
         public async Task Handle(TrashInspectionReceived message)
         {
 
+            LogEvent($"TrashInspectionReceivedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber {message.TrashInspectionModel.WeighingNumber}");
             TrashInspectionModel createModel = message.TrashInspectionModel;
             Fraction fraction = message.Fraction;
             Segment segment = message.Segment;
@@ -88,7 +89,7 @@ namespace TrashInspection.Pn.Handlers
                 trashInspectionCase.Create(_dbContext);
                 LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
 
-                _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase, createModel, segment,
+                await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase, createModel, segment,
                     fraction));
                 LogEvent("CreateTrashInspection: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }
