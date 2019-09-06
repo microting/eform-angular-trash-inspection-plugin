@@ -51,6 +51,7 @@ namespace TrashInspection.Pn
         public string PluginId => "eform-angular-trashinspection-plugin";
         public string PluginPath => PluginAssembly().Location;
         private string _connectionString;
+        private string _sdkConnectionString;
         private int _maxParallelism = 1;
         private int _numberOfWorkers = 1;
 
@@ -110,13 +111,16 @@ namespace TrashInspection.Pn
             temp = context.PluginConfigurationValues
                 .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:NumberOfWorkers")?.Value;
             _numberOfWorkers = string.IsNullOrEmpty(temp) ? 1 : int.Parse(temp);
+
+            _sdkConnectionString = context.PluginConfigurationValues
+                .SingleOrDefault(x => x.Name == "TrashInspectionBaseSettings:SdkConnectionString")?.Value;
         }
 
         public void Configure(IApplicationBuilder appBuilder)
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-            rebusService.Start(_connectionString, _maxParallelism, _numberOfWorkers);
+            rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
 
         }
 
