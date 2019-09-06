@@ -82,7 +82,6 @@ namespace TrashInspection.Pn.Services
                 if (option.SdkConnectionString == "...")
                 {
                     string connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
-
                     string dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
                     string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
                     string sdk = $"Database={dbPrefix}_SDK;";

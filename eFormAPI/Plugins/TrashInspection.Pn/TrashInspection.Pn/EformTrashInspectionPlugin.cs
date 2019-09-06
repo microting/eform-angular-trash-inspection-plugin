@@ -120,7 +120,8 @@ namespace TrashInspection.Pn
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-            if (!_sdkConnectionString.Contains("...") || !string.IsNullOrEmpty(_sdkConnectionString))
+            Console.WriteLine($"[DBG] EformTrashInspectionPlugin.Configure _sdkConnectionString is {_sdkConnectionString}");
+            if (!_sdkConnectionString.Contains("..."))
             {
                 rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
             }
