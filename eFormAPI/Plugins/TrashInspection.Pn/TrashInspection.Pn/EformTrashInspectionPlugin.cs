@@ -120,7 +120,10 @@ namespace TrashInspection.Pn
         {
             var serviceProvider = appBuilder.ApplicationServices;
             IRebusService rebusService = serviceProvider.GetService<IRebusService>();
-            rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
+            if (!_sdkConnectionString.Contains("...") || !string.IsNullOrEmpty(_sdkConnectionString))
+            {
+                rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
+            }
 
         }
 
