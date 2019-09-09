@@ -1,8 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TransporterYearModel, TransporterYearPnModel} from '../../../models/transporter/transporterYearPnModel';
+import {TransporterYearModel} from '../../../models/transporter/transporterYearPnModel';
 import {TrashInspectionPnTransporterService} from '../../../services';
-import {TransporterMonthPnModel} from '../../../models/transporter/transporterMonthPnModel';
-import {count} from 'rxjs/operators';
 
 @Component({
   selector: 'app-report-graph-view',
@@ -10,126 +8,231 @@ import {count} from 'rxjs/operators';
   styleUrls: ['./report-graph-view.component.scss']
 })
 export class ReportGraphViewComponent implements OnInit {
-@ViewChild('frame') frame;
+  @ViewChild('frame') frame;
+  series1 = [
+    {
+    name: 'Jan',
+    series: [
+      {
+        name: 'Godkendt',
+        value: 20
+      },
+      {
+        name: 'Betinget Godkendt',
+        value: 50
+      },
+      {
+        name: 'Ikke godkendt',
+        value: 30
+      }
+    ]
+  },
+    {
+      name: 'Feb',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Mar',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Apr',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Maj',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 10
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 6
+        }
+      ]
+    },
+    {
+      name: 'Jun',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 10
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 2
+        }
+      ]
+    },
+    {
+      name: 'Jul',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Aug',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Sep',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Okt',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Nov',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    },
+    {
+      name: 'Dec',
+      series: [
+        {
+          name: 'Godkendt',
+          value: 0
+        },
+        {
+          name: 'Betinget Godkendt',
+          value: 0
+        },
+        {
+          name: 'Ikke godkendt',
+          value: 0
+        }
+      ]
+    }
+    ];
   spinnerStatus = false;
   data1 = [];
   transporterName: string;
-  columnNames = ['month', 'Loads', 'Weighings Controlled', 'Control%', 'Average Control%'];
-
-  dataSource = {
-    chart: {
-      caption: 'Transportør',
-      subCaption: 'Læs, godkendt og ikke godkendt',
-      xAxisName: 'Måned',
-      yAxisName: '%',
-      yAxisMaxValue: 100,
-      numberSuffix: '%',
-      theme: 'fusion',
-      exportEnabled: 1
-    },
-    categories: [{
-      category: [{
-        label: 'Jan'
-      }, {
-        label: 'Feb'
-      }, {
-        label: 'Mar'
-      }, {
-        label: 'Apr'
-      }, {
-        label: 'Maj'
-      }, {
-        label: 'Jun'
-      }, {
-        label: 'Jul'
-      }, {
-        label: 'Aug'
-      }, {
-        label: 'Sep'
-      }, {
-        label: 'Okt'
-      }, {
-        label: 'Nov'
-      }, {
-        label: 'Dec'
-      }]
-    }],
-    dataset: [{
-      seriesName: 'Godkendt %',
-      data: [{
-        value: 100
-      }, {
-        value: 100
-      }, {
-        value: 90
-      }, {
-        value: 92
-      }, {
-        value: 40
-      }, {
-        value: 98
-      }, {
-        value: 85
-      }, {
-        value: 35
-      }, {
-        value: 92
-      }, {
-        value: 81
-      }, {
-        value: 0
-      }, {
-        value: 48
-      }]
-    },
-      {
-      seriesName: 'Ikke Godkendt %',
-      data: [{
-        value: 0
-      }, {
-        value: 0
-      }, {
-        value: 10
-      }, {
-        value: 8
-      }, {
-        value: 60
-      }, {
-        value: 2
-      }, {
-        value: 15
-      }, {
-        value: 65
-      }, {
-        value: 8
-      }, {
-        value: 19
-      }, {
-        value: 100
-      }, {
-        value: 52
-      }]
-    }]
+  view: any[] = [900, 450];
+  // options for the chart
+  showXAxis = true;
+  showYAxis = true;
+  showLegend = true;
+  showXAxisLabel = true;
+  xAxisLabel = 'Months';
+  showYAxisLabel = true;
+  yAxisLabel = '%';
+  yScaleMax = 100;
+  legendPosition = 'below';
+  legendTitle = '';
+  colorScheme = {
+    domain: ['#0004ff', '#FF7800', '#a9a9a9', '#FF7F50', '#90EE90', '#FFB600']
   };
-  options = {
-    width: 1500,
-    height: 700,
-    chart: {
-      title: 'Transporter' ,
-      subtitle: 'Læs: godkendt, delvist godkendt, ikke godkendt'
-    },
-    vAxis: {
-      format: 'none',
-      maxValue: 100,
-      gridLines: count()
-    },
-    seriesType: 'bars',
-    series: {
-      2: {type: 'line', axis: 'Control%'},
-      3: {type: 'line', axis: 'Average Control%'}
-    }
-  };
-
 
   constructor(private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) {}
 

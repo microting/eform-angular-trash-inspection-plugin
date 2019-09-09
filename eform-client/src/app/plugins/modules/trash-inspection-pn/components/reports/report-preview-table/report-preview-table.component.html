@@ -15,7 +15,7 @@
       class=""
       id="yearSelector"
       [items]="years"
-      [placeholder]="'Select Year'"
+      [placeholder]="'Select Year' | translate"
       (change)="onSelectedChanged($event)">
     </ng-select>
   </div>
@@ -23,7 +23,7 @@
     <ng-select
       class=""
       [items]="viewNames"
-      [placeholder]="'Select View'"
+      [placeholder]="'Select Table' | translate"
       (change)="onSelectedViewChanged($event)">
     </ng-select>
   </div>

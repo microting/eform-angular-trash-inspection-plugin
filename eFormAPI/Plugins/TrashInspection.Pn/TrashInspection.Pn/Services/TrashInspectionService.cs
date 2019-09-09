@@ -277,53 +277,22 @@ namespace TrashInspection.Pn.Services
                                  break;
                              case 66:
                              {
-                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
-                                 {
-                                     trashInspectionCaseStatusModel.RemovedFromServer = trashInspectionCaseVersion.UpdatedAt;
-                                 }
-                                 else
-                                 {
-                                     trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt;
-                                 }                                     
-                                  break;
+                                 trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt; 
+                                 break;
                              }
                              case 70:
                              {
-                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
-                                 {
-                                     trashInspectionCaseStatusModel.RemovedFromServer = trashInspectionCaseVersion.UpdatedAt;
-                                 }
-                                 else
-                                 {
-                                     trashInspectionCaseStatusModel.ReadyAtMicroting =
-                                         trashInspectionCaseVersion.UpdatedAt;
-                                 }
+                                 trashInspectionCaseStatusModel.ReadyAtMicroting = trashInspectionCaseVersion.UpdatedAt; 
                                  break;
                              }
                              case 77:
                              {
-                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
-                                 {
-                                     trashInspectionCaseStatusModel.RemovedFromServer = trashInspectionCaseVersion.UpdatedAt;
-                                 }
-                                 else
-                                 {
-                                     trashInspectionCaseStatusModel.ReceivedOnTablet =
-                                         trashInspectionCaseVersion.UpdatedAt;
-                                 }
+                                 trashInspectionCaseStatusModel.ReceivedOnTablet = trashInspectionCaseVersion.UpdatedAt; 
                                  break;
                              }
                              case 100:
                              {
-                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
-                                 {
-                                     trashInspectionCaseStatusModel.RemovedFromServer = trashInspectionCaseVersion.UpdatedAt;
-                                 }
-                                 else
-                                 {
-                                     trashInspectionCaseStatusModel.Answered = trashInspectionCaseVersion.UpdatedAt;
-                                 }
-
+                                 trashInspectionCaseStatusModel.Answered = trashInspectionCaseVersion.UpdatedAt; 
                                  break;
                              }
                          }

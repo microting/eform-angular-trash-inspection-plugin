@@ -342,9 +342,9 @@ namespace TrashInspection.Pn.Services
                     Name = x.Name,
                     Weighings = trashInspectionsQuery.Count(t => t.TransporterId == x.Id),
                     ControlPercentage = 0,
-                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
-                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
-                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && !t.IsApproved && t.Status == 100),
                     ConditionalApprovedPercentage = 0
 
                 }).ToListAsync();
@@ -479,63 +479,71 @@ namespace TrashInspection.Pn.Services
             try
             {
                 StatByMonth statByMonth = new StatByMonth();
-                
-                Dictionary<string, List<double>> monthsGraph = new Dictionary<string, List<double>>();
+                statByMonth.StatByMonthListData1 = new List<Period>();
                 List<string> months = new List<string>()
                 {
                     "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
                 };
-                
-                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+                List<string> outcomes = new List<string>()
+                {
+                    "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
+                };
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
+                    _dbContext.TrashInspections.AsQueryable();
 
                 trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.TransporterId == transporterId);
-
                 double wheigingsPrYear = trashInspectionsQuery.Count();
                 double wheigingsPrYearControlled = trashInspectionsQuery.Count(x => x.Status == 100);
                 double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
-                
                 int i = 1;
                 foreach (string month in months)
                 {
                     trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
-                    
-                    List<double> intList = new List<double>();
-                    intList.Add(trashInspectionsQuery.Count()); // total number of weighings
-                    intList.Add(trashInspectionsQuery.Count(x => x.Status == 100)); // number of controlled wheigings
-                    intList.Add(0); // Control percentage
-                    if (intList[1] > 0 && intList[0] > 0)
+                    double wheigingsPrMonth = trashInspectionsQuery.Count();
+                    double wheigingsPrMonthControlled = trashInspectionsQuery.Count(x => x.Status == 100);
+                    double wheighingsApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved && x.Status == 100);
+                    double wheighingsNotApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved == false && x.Status == 100);
+                    double approvedWheighingsPercentage = 0;
+                    double notApprovedWheighingPercentage = 0;
+                    if (wheigingsPrMonthControlled != 0)
                     {
-                        intList[2] = Math.Round((intList[1] / intList[0]) * 100, 1);
+                        approvedWheighingsPercentage = Math.Round(
+                            (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
+                        notApprovedWheighingPercentage =
+                            Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                     }
-                    intList.Add(avgControlPercentagePrYear); // Avarage controller pr year
-
-                    monthsGraph.Add(month, intList);
+                       
+                    Period period = new Period()
+                    {
+                        Name = month
+                    };
+                    period.Series = new List<SeriesObject>();
+                    SeriesObject seriesObject1 = new SeriesObject()
+                    {
+                        Name = outcomes[0],
+                        Value = approvedWheighingsPercentage
+                    };
+                    period.Series.Add(seriesObject1);
+                    SeriesObject seriesObject2 = new SeriesObject()
+                    {
+                        Name = outcomes[1],
+                        Value = 10
+                    };
+                    period.Series.Add(seriesObject2);
+                    SeriesObject seriesObject3 = new SeriesObject()
+                    {
+                        Name = outcomes[2],
+                        Value = notApprovedWheighingPercentage
+                    };
+                    period.Series.Add(seriesObject3);
+                    statByMonth.StatByMonthListData1.Add(period);
                     
                     i += 1;
                 }
                 
-                statByMonth.StatByMonthListData1 = new List<List<object>>();
-
-                foreach (KeyValuePair<string,List<double>> keyValuePair in monthsGraph)
-                {
-                    List<object> theList = new List<object>()
-                    {
-                        keyValuePair.Key
-                    };
-
-                    foreach (double d in keyValuePair.Value)
-                    {
-                        theList.Add(d);
-                    }
-                    statByMonth.StatByMonthListData1.Add(theList);
-                }
-
-//                statByMonth.StatByMonthList = monthsGraph;
-                
-                
+//                   
                 return new OperationDataResult<StatByMonth>(true,
                         statByMonth);
-                
             }
             catch (Exception e)
             {

@@ -8,6 +8,5 @@ export class TrashInspectionPnCaseStatusModel {
   readyAtMicroting: Date;
   receivedOnTablet: Date;
   answered: Date;
-  removedFromServer: Date;
 }
 
