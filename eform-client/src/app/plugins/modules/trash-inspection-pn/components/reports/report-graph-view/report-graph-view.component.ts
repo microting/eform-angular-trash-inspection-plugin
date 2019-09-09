@@ -11,212 +11,62 @@ export class ReportGraphViewComponent implements OnInit {
   @ViewChild('frame') frame;
   series1 = [
     {
-    name: 'Jan',
-    series: [
-      {
-        name: 'Godkendt',
-        value: 20
-      },
-      {
-        name: 'Betinget Godkendt',
-        value: 50
-      },
-      {
-        name: 'Ikke godkendt',
-        value: 30
-      }
-    ]
-  },
-    {
-      name: 'Feb',
+      name: 'Godkendt',
       series: [
         {
-          name: 'Godkendt',
-          value: 0
+          name: 'Jan',
+          value: 25
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
+          name: 'Feb',
+          value: 4
         },
         {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Mar',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
+          name: 'Mar',
+          value: 96
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Apr',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
-        },
-        {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Maj',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 10
-        },
-        {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
-          value: 6
-        }
-      ]
-    },
-    {
-      name: 'Jun',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 10
-        },
-        {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
+          name: 'Apr',
           value: 2
-        }
-      ]
-    },
-    {
-      name: 'Jul',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
+          name: 'Maj',
+          value: 38
         },
         {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Aug',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
+          name: 'Jun',
+          value: 10
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
+          name: 'Jul',
+          value: 26
         },
         {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Sep',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
+          name: 'Aug',
+          value: 44
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
+          name: 'Sep',
+          value: 47
         },
         {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Okt',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
+          name: 'Okt',
+          value: 70
         },
         {
-          name: 'Betinget Godkendt',
-          value: 0
+          name: 'Nov',
+          value: 60
         },
         {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Nov',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
-        },
-        {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
-          value: 0
-        }
-      ]
-    },
-    {
-      name: 'Dec',
-      series: [
-        {
-          name: 'Godkendt',
-          value: 0
-        },
-        {
-          name: 'Betinget Godkendt',
-          value: 0
-        },
-        {
-          name: 'Ikke godkendt',
-          value: 0
+          name: 'Dec',
+          value: 66
         }
       ]
     }
-    ];
+  ];
   spinnerStatus = false;
   data1 = [];
+  data2 = [];
   transporterName: string;
   view: any[] = [900, 450];
   // options for the chart
@@ -250,6 +100,7 @@ export class ReportGraphViewComponent implements OnInit {
     this.trashInspectionPnTransporterService.getSingleTransporterByMonth(id, year).subscribe((data) => {
       if (data && data.success) {
         this.data1 = data.model.statByMonthListData1;
+        this.data2 = data.model.statByMonthListData2;
         this.frame.show();
       }
       this.spinnerStatus = false;

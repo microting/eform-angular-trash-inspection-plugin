@@ -23,6 +23,21 @@
                   [barPadding]="5"
                   [groupPadding]="5">
                 </ngx-charts-bar-vertical-2d>
+                <ngx-charts-line-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="data2"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                [yScaleMax]="yScaleMax"
+                [legendTitle]="legendTitle"
+                [legendPosition]="legendPosition">
+                </ngx-charts-line-chart>
               </div>
             </div>
           </div>

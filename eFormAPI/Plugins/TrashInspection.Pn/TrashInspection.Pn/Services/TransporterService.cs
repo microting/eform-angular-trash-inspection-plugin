@@ -490,12 +490,17 @@ namespace TrashInspection.Pn.Services
                 };
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
                     _dbContext.TrashInspections.AsQueryable();
-
+                Period linePeriod = new Period()
+                {
+                    Name = "Compliance"
+                };
+                linePeriod.Series = new List<SeriesObject>();
                 trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.TransporterId == transporterId);
                 double wheigingsPrYear = trashInspectionsQuery.Count();
                 double wheigingsPrYearControlled = trashInspectionsQuery.Count(x => x.Status == 100);
                 double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
                 int i = 1;
+                int j = 0;
                 foreach (string month in months)
                 {
                     trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
@@ -517,6 +522,7 @@ namespace TrashInspection.Pn.Services
                     {
                         Name = month
                     };
+                    //Bar Chart Data
                     period.Series = new List<SeriesObject>();
                     SeriesObject seriesObject1 = new SeriesObject()
                     {
@@ -538,9 +544,19 @@ namespace TrashInspection.Pn.Services
                     period.Series.Add(seriesObject3);
                     statByMonth.StatByMonthListData1.Add(period);
                     
+                    //Line Chart Data
+                    SeriesObject lineSeriesObject1 = new SeriesObject()
+                    {
+                        Name = months[j],
+                        Value = approvedWheighingsPercentage
+                    };
+                    linePeriod.Series.Add(lineSeriesObject1);
                     i += 1;
+                    j += 1;
+
                 }
-                
+                statByMonth.StatByMonthListData2.Add(linePeriod);
+
 //                   
                 return new OperationDataResult<StatByMonth>(true,
                         statByMonth);
