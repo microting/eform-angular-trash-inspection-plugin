@@ -46,6 +46,7 @@ export class TrashInspectionCreateComponent implements OnInit {
   dateNow = new Date;
   timeNow = new Date;
   spinnerStatus = false;
+  token: string;
   settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   newTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
   installationRequestModel: InstallationPnRequestModel = new InstallationPnRequestModel();
@@ -129,23 +130,36 @@ export class TrashInspectionCreateComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.getSettings();
+    this.getToken();
   }
 
   show() {
     this.frame.show();
   }
-  getSettings() {
+
+  getToken() {
     this.spinnerStatus = true;
-    this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
+    this.trashInspectionPnSettingsService.getToken().subscribe((data) => {
       if (data && data.success) {
-        this.settingsModel = data.model;
-      } this.spinnerStatus = false;
+        this.token = data.model;
+      }
+      this.spinnerStatus = false;
     });
   }
+
+  // getSettings() {
+  //   this.spinnerStatus = true;
+  //   debugger;
+  //   this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
+  //     if (data && data.success) {
+  //       this.settingsModel = data.model;
+  //     } this.spinnerStatus = false;
+  //   });
+  // }
+
   createTrashInspection() {
     this.spinnerStatus = true;
-    this.newTrashInspectionModel.token = this.settingsModel.token;
+    this.newTrashInspectionModel.token = this.token;
     this.newTrashInspectionModel.date = this.dateNow;
     this.newTrashInspectionModel.time = this.timeNow;
     this.trashInspectionPnTrashInspectionsService.createTrashInspection(this.newTrashInspectionModel).subscribe((data) => {

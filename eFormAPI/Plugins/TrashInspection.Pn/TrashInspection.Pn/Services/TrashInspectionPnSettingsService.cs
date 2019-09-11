@@ -132,6 +132,23 @@ namespace TrashInspection.Pn.Services
             }
         }
 
+        public async Task<OperationDataResult<string>> GetToken()
+        {
+            try
+            {
+                var option = _options.Value;
+
+                return new OperationDataResult<string>(true, option.Token);
+            }
+            catch(Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<string>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorWhileObtainingTrashInspectionToken"));
+            }
+        }
+
         public int UserId
         {
             get
