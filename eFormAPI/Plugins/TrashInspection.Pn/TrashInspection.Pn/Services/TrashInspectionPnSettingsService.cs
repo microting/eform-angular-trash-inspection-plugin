@@ -132,19 +132,22 @@ namespace TrashInspection.Pn.Services
             }
         }
 
-        public async Task<OperationDataResult<string>> GetToken()
+        public async Task<OperationDataResult<TrashInspectionBaseToken>> GetToken()
         {
             try
             {
-                var option = _options.Value;
+                TrashInspectionBaseToken trashInspectionBaseToken = new TrashInspectionBaseToken()
+                {
+                    Token = _options.Value.Token
+                };
 
-                return new OperationDataResult<string>(true, option.Token);
+                return new OperationDataResult<TrashInspectionBaseToken>(true, trashInspectionBaseToken);
             }
             catch(Exception e)
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
-                return new OperationDataResult<string>(false,
+                return new OperationDataResult<TrashInspectionBaseToken>(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileObtainingTrashInspectionToken"));
             }
         }

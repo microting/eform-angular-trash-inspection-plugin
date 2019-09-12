@@ -36,7 +36,7 @@ namespace TrashInspection.Pn.Controllers
         [HttpGet]
         [Authorize(Roles = EformRole.Admin)]
         [Route("api/trash-inspection-pn/token")]
-        public async Task<OperationDataResult<string>> GetToken()
+        public async Task<OperationDataResult<TrashInspectionBaseToken>> GetToken()
         {
             return await _trashInspectionPnSettingsService.GetToken();
         }
