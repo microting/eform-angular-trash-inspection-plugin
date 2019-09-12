@@ -379,8 +379,8 @@ namespace TrashInspection.Pn.Services
                     ControlPercentage = 0,
                     AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.Status == 100),
                     ApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.IsApproved && t.Status == 100),
-                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && !t.IsApproved && t.Status == 100),
-                    ConditionalApprovedPercentage = 0
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.ApprovedValue == "3" && t.Status == 100),
+                    ConditionalApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.ApprovedValue == "2" && t.Status == 100)
 
                 }).ToListAsync();
 
@@ -406,6 +406,16 @@ namespace TrashInspection.Pn.Services
                         statByYearModel.ApprovedPercentage = 0;
                     }
 
+                    if (statByYearModel.ConditionalApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
+                    {
+                        statByYearModel.ConditionalApprovedPercentage = 
+                            Math.Round((statByYearModel.ConditionalApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
+                    }
+                    else
+                    {
+                        statByYearModel.ConditionalApprovedPercentage = 0;
+                    }
+
                     if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
                         statByYearModel.NotApprovedPercentage =
@@ -417,7 +427,7 @@ namespace TrashInspection.Pn.Services
                     }
                 }
                 
-                  if (pnRequestModel.Sort == "Weighings")
+                if (pnRequestModel.Sort == "Weighings")
                 {
                     if (pnRequestModel.IsSortDsc)
                     {
@@ -543,15 +553,19 @@ namespace TrashInspection.Pn.Services
                     double wheigingsPrMonth = trashInspectionsQuery.Count();
                     double wheigingsPrMonthControlled = trashInspectionsQuery.Count(x => x.Status == 100);
                     double wheighingsApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved && x.Status == 100);
-                    double wheighingsNotApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved == false && x.Status == 100);
+                    double wheighingsNotApprovedPrMonth = trashInspectionsQuery.Count(x => x.ApprovedValue == "3" && x.Status == 100);
+                    double wheighingsPartiallyApprovedPrMonth = trashInspectionsQuery.Count(x => x.ApprovedValue == "2" && x.Status == 100);
                     double approvedWheighingsPercentage = 0;
                     double notApprovedWheighingPercentage = 0;
+                    double partiallyApprovedWheighingPercentage = 0;
                     if (wheigingsPrMonthControlled != 0)
                     {
                         approvedWheighingsPercentage = Math.Round(
                             (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                         notApprovedWheighingPercentage =
                             Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
+                        partiallyApprovedWheighingPercentage = 
+                            Math.Round((wheighingsPartiallyApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                     }
                        
                     Period period = new Period()
@@ -569,7 +583,7 @@ namespace TrashInspection.Pn.Services
                     SeriesObject seriesObject2 = new SeriesObject()
                     {
                         Name = outcomes[1],
-                        Value = 10
+                        Value = partiallyApprovedWheighingPercentage
                     };
                     period.Series.Add(seriesObject2);
                     SeriesObject seriesObject3 = new SeriesObject()
