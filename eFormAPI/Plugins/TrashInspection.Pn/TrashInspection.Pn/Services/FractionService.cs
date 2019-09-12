@@ -373,12 +373,13 @@ namespace TrashInspection.Pn.Services
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 List<StatByYearModel> fractionsStatsByYear = await fractionQuery.Select(x => new StatByYearModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Weighings = trashInspectionsQuery.Count(t => t.FractionId == x.Id),
                     ControlPercentage = 0,
-                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.Status == 100),
-                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && t.IsApproved && t.Status == 100),
-                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.ProducerId == x.Id && !t.IsApproved && t.Status == 100),
+                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.Status == 100),
+                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && t.IsApproved && t.Status == 100),
+                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.FractionId == x.Id && !t.IsApproved && t.Status == 100),
                     ConditionalApprovedPercentage = 0
 
                 }).ToListAsync();
@@ -508,5 +509,102 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFractions"));
             }
         }
+
+        public async Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int fractionId, int year)
+        {
+             try
+            {
+                StatByMonth statByMonth = new StatByMonth();
+                statByMonth.StatByMonthListData1 = new List<Period>();
+                List<string> months = new List<string>()
+                {
+                    "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
+                };
+                List<string> outcomes = new List<string>()
+                {
+                    "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
+                };
+                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
+                    _dbContext.TrashInspections.AsQueryable();
+                Period linePeriod = new Period()
+                {
+                    Name = "Compliance"
+                };
+                linePeriod.Series = new List<SeriesObject>();
+                trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.FractionId == fractionId);
+                double wheigingsPrYear = trashInspectionsQuery.Count();
+                double wheigingsPrYearControlled = trashInspectionsQuery.Count(x => x.Status == 100);
+                double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
+                int i = 1;
+                int j = 0;
+                foreach (string month in months)
+                {
+                    trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
+                    double wheigingsPrMonth = trashInspectionsQuery.Count();
+                    double wheigingsPrMonthControlled = trashInspectionsQuery.Count(x => x.Status == 100);
+                    double wheighingsApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved && x.Status == 100);
+                    double wheighingsNotApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved == false && x.Status == 100);
+                    double approvedWheighingsPercentage = 0;
+                    double notApprovedWheighingPercentage = 0;
+                    if (wheigingsPrMonthControlled != 0)
+                    {
+                        approvedWheighingsPercentage = Math.Round(
+                            (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
+                        notApprovedWheighingPercentage =
+                            Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
+                    }
+                       
+                    Period period = new Period()
+                    {
+                        Name = month
+                    };
+                    //Bar Chart Data
+                    period.Series = new List<SeriesObject>();
+                    SeriesObject seriesObject1 = new SeriesObject()
+                    {
+                        Name = outcomes[0],
+                        Value = approvedWheighingsPercentage
+                    };
+                    period.Series.Add(seriesObject1);
+                    SeriesObject seriesObject2 = new SeriesObject()
+                    {
+                        Name = outcomes[1],
+                        Value = 10
+                    };
+                    period.Series.Add(seriesObject2);
+                    SeriesObject seriesObject3 = new SeriesObject()
+                    {
+                        Name = outcomes[2],
+                        Value = notApprovedWheighingPercentage
+                    };
+                    period.Series.Add(seriesObject3);
+                    statByMonth.StatByMonthListData1.Add(period);
+                    
+                    //Line Chart Data
+                    SeriesObject lineSeriesObject1 = new SeriesObject()
+                    {
+                        Name = months[j],
+                        Value = approvedWheighingsPercentage
+                    };
+                    linePeriod.Series.Add(lineSeriesObject1);
+                    i += 1;
+                    j += 1;
+
+                }
+                statByMonth.StatByMonthListData2.Add(linePeriod);
+
+//                   
+                return new OperationDataResult<StatByMonth>(true,
+                        statByMonth);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _coreHelper.LogException(e.Message);
+                return new OperationDataResult<StatByMonth>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingStatsByMonth"));
+            }
+        }
+
     }
 }

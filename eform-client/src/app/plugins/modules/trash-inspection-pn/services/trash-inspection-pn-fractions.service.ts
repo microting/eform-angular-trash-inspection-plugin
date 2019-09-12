@@ -15,6 +15,8 @@ import {FractionPnModel,
 import {TrashInspectionPnTransporterMethods} from './trash-inspection-pn-transporter.service';
 import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
 import {FractionPnYearRequestModel} from '../models/fraction/fraction-pn-year-request.model';
+import {StatByMonthPnModel} from '../models/transporter/statByMonthPnModel';
+import {FractionMonthPnModel} from '../models/fraction/fraction-month-pn.model';
 
 export let TrashInspectionPnFractionMethods = {
   Fractions: 'api/trash-inspection-pn/fractions',
@@ -34,6 +36,10 @@ export class TrashInspectionPnFractionsService extends BaseService {
 
   getSingleFraction(fractionId: number): Observable<OperationDataResult<FractionPnModel>> {
     return this.get(TrashInspectionPnFractionMethods.Fractions + '/' + fractionId);
+  }
+
+  getSingleFractionByMonth(fractionId: number, year: number): Observable<OperationDataResult<StatByMonthPnModel>> {
+    return this.get(TrashInspectionPnFractionMethods.Fractions  + '/' + fractionId + '/' + year);
   }
 
   updateFraction(model: FractionPnUpdateModel): Observable<OperationResult> {

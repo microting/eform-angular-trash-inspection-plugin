@@ -31,6 +31,13 @@ namespace TrashInspection.Pn.Controllers
             return await _fractionService.GetSingleFraction(id);
         }
 
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int id, int year)
+        {
+            return await _fractionService.GetSingleFractionByMonth(id, year);
+        }
+        
         [HttpPost]
         [Route("api/trash-inspection-pn/fractions")]
         public async Task<OperationResult> CreateFraction([FromBody] FractionModel createModel)

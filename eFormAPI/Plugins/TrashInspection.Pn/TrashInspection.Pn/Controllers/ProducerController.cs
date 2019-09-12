@@ -30,6 +30,13 @@ namespace TrashInspection.Pn.Controllers
             return await _producerService.GetSingleProducer(id);
         }
 
+        [HttpGet]
+        [Route("api/trash-inspection-pn/producers/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleProducerByMonth(int id, int year)
+        {
+            return await _producerService.GetSingleProducerByMonth(id, year);
+        }
+        
         [HttpPost]
         [Route("api/trash-inspection-pn/producers")]
         public async Task<OperationResult> CreateProducer([FromBody] ProducerModel createModel)

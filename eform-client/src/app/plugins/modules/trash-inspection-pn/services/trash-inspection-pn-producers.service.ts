@@ -8,6 +8,7 @@ import {OperationDataResult, OperationResult} from 'src/app/common/models/operat
 import {BaseService} from 'src/app/common/services/base.service';
 
 import {
+  ProducerMonthPnModel,
   ProducerPnImportModel,
   ProducerPnModel,
   ProducerPnRequestModel,
@@ -15,6 +16,8 @@ import {
   ProducersPnModel
 } from '../models/producer';
 import {TrashInspectionYearModelPnModel} from '../models/trash-inspection/trash-inspectionYearModel-pn.model';
+import {StatByMonthPnModel} from '../models/transporter/statByMonthPnModel';
+import {TrashInspectionPnTransporterMethods} from './trash-inspection-pn-transporter.service';
 
 export let TrashInspectionPnProducerMethods = {
   Producers: 'api/trash-inspection-pn/producers'
@@ -32,6 +35,10 @@ export class TrashInspectionPnProducersService extends BaseService {
 
   getSingleProducer(producerId: number): Observable<OperationDataResult<ProducerPnModel>> {
     return this.get(TrashInspectionPnProducerMethods.Producers + '/' + producerId);
+  }
+
+  getSingleProducerByMonth(producerId: number, year: number): Observable<OperationDataResult<StatByMonthPnModel>> {
+    return this.get(TrashInspectionPnProducerMethods.Producers  + '/' + producerId + '/' + year);
   }
 
   updateProducer(model: ProducerPnUpdateModel): Observable<OperationResult> {

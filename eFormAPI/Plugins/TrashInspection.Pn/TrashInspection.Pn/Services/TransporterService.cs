@@ -566,7 +566,7 @@ namespace TrashInspection.Pn.Services
                 Trace.TraceError(e.Message);
                 _coreHelper.LogException(e.Message);
                 return new OperationDataResult<StatByMonth>(false,
-                    _trashInspectionLocalizationService.GetString("ErrorObtainingTransporterByMonth"));
+                    _trashInspectionLocalizationService.GetString("ErrorObtainingStatsByMonth"));
             }
         }
     }

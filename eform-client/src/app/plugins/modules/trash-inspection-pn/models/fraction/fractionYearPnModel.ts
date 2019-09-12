@@ -4,6 +4,7 @@ export class FractionYearPnModel {
 }
 
 export class FractionYearModel {
+  id: number;
   name: string;
   weighings: number;
   amountOfWeighingsControlled: number;

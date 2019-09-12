@@ -13,5 +13,6 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationDataResult<ProducersModel>> GetAllProducers(ProducerRequestModel pnRequestModel);
         Task<OperationDataResult<ProducerModel>> GetSingleProducer(int id);
         Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel requestModel);
+        Task<OperationDataResult<StatByMonth>> GetSingleProducerByMonth(int id, int year);
     }
 }

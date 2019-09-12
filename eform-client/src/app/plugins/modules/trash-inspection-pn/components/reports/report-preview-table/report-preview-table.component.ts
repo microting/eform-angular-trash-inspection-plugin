@@ -185,9 +185,9 @@ export class ReportPreviewTableComponent implements OnInit {
     this.fractionsYearRequestModel.year = this.thisYear;
   }
 
-  showGraphModal(transporter: TransporterYearModel, year: number) {
+  showGraphModal(model: any, year: number) {
     year = this.thisYear;
-    this.reportGraphViewModal.show(transporter, year);
+    this.reportGraphViewModal.show(model, year, this.selectedView);
   }
   sortTableFractions(sort: string) {
     if (this.localPageSettings.sort === sort) {

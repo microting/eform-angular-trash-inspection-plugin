@@ -4,6 +4,7 @@ export class ProducerYearPnModel {
 }
 
 export class ProducerYearModel {
+  id: number;
   name: string;
   weighings: number;
   amountOfWeighingsControlled: number;

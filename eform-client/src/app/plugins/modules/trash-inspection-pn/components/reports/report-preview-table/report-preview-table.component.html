@@ -233,7 +233,9 @@
       <tbody id="tableBodyProducers">
       <tr *ngFor="let producer of producerYearModel.statsByYearList">
         <td id="NameProducer">
+          <a [routerLink]="" (click)="showGraphModal(producer, thisYear)" style="color: dodgerblue; text-decoration: underline">
           {{producer.name}}
+          </a>
         </td>
         <td id="AmountOfLoadProducers">
           {{producer.weighings}}
@@ -344,7 +346,9 @@
       <tbody id="tableBodyFractions">
       <tr *ngFor="let fraction of fractionYearModel.statsByYearList">
         <td id="NameFractions">
+          <a [routerLink]="" (click)="showGraphModal(fraction, thisYear)" style="color: dodgerblue; text-decoration: underline">
           {{fraction.name}}
+          </a>
         </td>
         <td id="AmountOfLoadFractions">
           {{fraction.weighings}}
