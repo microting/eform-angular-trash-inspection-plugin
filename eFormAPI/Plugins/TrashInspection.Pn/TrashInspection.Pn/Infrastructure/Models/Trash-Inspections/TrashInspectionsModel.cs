@@ -36,6 +36,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
         
         public string Token { get; set; }
         
+        public bool DocxExportEnabled { get; set; }
+        
+        public bool PdfExportEnabled { get; set; }
+        
         public List<TrashInspectionModel> TrashInspectionList { get; set; }
     }
 }

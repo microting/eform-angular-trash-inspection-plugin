@@ -8,7 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {TrashInspectionBaseSettingsModel} from '../models/trash-inspection-base-settings.model';
 
 export let TrashInspectionSettingsMethods = {
-  TrashInspectionSettings: 'api/trash-inspection-pn/settings'
+  TrashInspectionSettings: 'api/trash-inspection-pn/settings',
+  TrashInspectionToken: 'api/trash-inspection-pn/token'
 
 };
 @Injectable()
@@ -23,5 +24,9 @@ export class TrashInspectionPnSettingsService extends BaseService {
   }
   updateSettings(model: TrashInspectionBaseSettingsModel): Observable<OperationResult> {
     return this.post(TrashInspectionSettingsMethods.TrashInspectionSettings, model);
+  }
+
+  getToken(): Observable<OperationDataResult<string>> {
+    return this.get(TrashInspectionSettingsMethods.TrashInspectionToken);
   }
 }

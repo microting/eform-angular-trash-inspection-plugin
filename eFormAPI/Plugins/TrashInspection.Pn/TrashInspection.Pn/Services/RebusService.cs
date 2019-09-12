@@ -39,6 +39,7 @@ namespace TrashInspection.Pn.Services
         private IBus _bus;
         private IWindsorContainer _container;
         private string _connectionString;
+        private string _sdkConnectionString;
         private readonly IEFormCoreService _coreHelper;
 
         public RebusService(IEFormCoreService coreHelper)
@@ -46,17 +47,19 @@ namespace TrashInspection.Pn.Services
             _coreHelper = coreHelper;
         }
 
-        public void Start(string connectionString, int maxParallelism, int numberOfWorkers)
+        public void Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers)
         {
-            _connectionString = connectionString;   
+            _connectionString = connectionString;
+            _sdkConnectionString = sdkConnectionString;
             _container = new WindsorContainer();
             _container.Install(
                 new RebusHandlerInstaller()
                 , new RebusInstaller(connectionString, maxParallelism, numberOfWorkers)
             );
             
-            Core _core = _coreHelper.GetCore();
-            _container.Register(Component.For<Core>().Instance(_core));
+            Core core = _coreHelper.GetCore();
+
+            _container.Register(Component.For<Core>().Instance(core));
             _container.Register(Component.For<TrashInspectionPnDbContext>().Instance(GetContext()));
             _bus = _container.Resolve<IBus>();
         }

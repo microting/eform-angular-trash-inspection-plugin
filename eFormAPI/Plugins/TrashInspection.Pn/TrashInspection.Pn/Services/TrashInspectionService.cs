@@ -605,7 +605,7 @@ namespace TrashInspection.Pn.Services
                         
                         UpdateProducerAndTransporter(trashInspection, createModel);
                         
-                        _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
+                        await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                     }
                     
                     return new OperationResult(true, createModel.Id.ToString());

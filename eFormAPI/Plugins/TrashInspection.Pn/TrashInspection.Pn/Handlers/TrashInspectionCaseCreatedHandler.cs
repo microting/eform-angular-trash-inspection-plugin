@@ -52,6 +52,7 @@ namespace TrashInspection.Pn.Handlers
         #pragma warning disable 1998
         public async Task Handle(TrashInspectionCaseCreated message)
         {
+            LogEvent($"TrashInspectionCaseCreatedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber / message.TrashInspectionCase.Id : {message.TrashInspectionModel.WeighingNumber} / {message.TrashInspectionCase.Id}");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             MainElement mainElement = _core.TemplateRead(message.TemplateId);
             TrashInspectionModel createModel = message.TrashInspectionModel;

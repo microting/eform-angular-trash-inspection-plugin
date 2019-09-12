@@ -8,5 +8,6 @@ namespace TrashInspection.Pn.Abstractions
     {
         Task<OperationDataResult<TrashInspectionBaseSettings>> GetSettings();
         Task<OperationResult> UpdateSettings(TrashInspectionBaseSettings trashInspectionSettingsModel);
+        Task<OperationDataResult<TrashInspectionBaseToken>> GetToken();
     }
 }

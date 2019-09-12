@@ -86,11 +86,6 @@ export class TrashInspectionsPageComponent implements OnInit {
       trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=docx', '_blank');
   }
 
-  downloadPptx(trashInspection: any) {
-    window.open('/api/trash-inspection-pn/inspection-results/' +
-      trashInspection.weighingNumber + '?token=' + trashInspection.token + '&fileType=pptx', '_blank');
-  }
-
 
 
   sortTable(sort: string) {

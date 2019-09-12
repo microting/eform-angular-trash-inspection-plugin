@@ -51,4 +51,9 @@ namespace TrashInspection.Pn.Infrastructure.Models
         
         public int ExtendedInspectioneFormId { get; set; }
     }
+
+    public class TrashInspectionBaseToken
+    {
+        public string Token { get; set; }
+    }
 }

@@ -32,5 +32,13 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _trashInspectionPnSettingsService.UpdateSettings(trashInspectionSettingsModel);
         }
+
+        [HttpGet]
+        [Authorize(Roles = EformRole.Admin)]
+        [Route("api/trash-inspection-pn/token")]
+        public async Task<OperationDataResult<TrashInspectionBaseToken>> GetToken()
+        {
+            return await _trashInspectionPnSettingsService.GetToken();
+        }
     }
 }
