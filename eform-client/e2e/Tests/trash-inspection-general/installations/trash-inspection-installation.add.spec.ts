@@ -11,7 +11,7 @@ describe('Trash Inspection Plugin - Installation', function () {
   it('Should create installation without site.', function () {
     const name = Guid.create().toString();
     installationPage.goToInstallationsPage();
-    browser.waitForVisible('#createInstallationBtn', 20000);
+    browser.waitForVisible('#createInstallationBtn', 30000);
     installationPage.createInstallation_DoesntAddSite(name);
     const installation = installationPage.getFirstRowObject();
     expect(installation.name).equal(name);
@@ -19,7 +19,8 @@ describe('Trash Inspection Plugin - Installation', function () {
   });
   it('should not create installation', function () {
     const name = Guid.create().toString();
-    browser.waitForVisible('#createInstallationBtn', 20000);
+    installationPage.goToInstallationsPage();
+    browser.waitForVisible('#createInstallationBtn', 30000);
     installationPage.createInstallation_DoesntAddSite_Cancels(name);
     const installation = installationPage.getFirstRowObject();
     expect(installationPage.rowNum).equal(0);
