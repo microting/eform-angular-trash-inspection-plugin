@@ -31,6 +31,7 @@ using Rebus.Handlers;
 using TrashInspection.Pn.Messages;
 using eFormCore;
 using Microsoft.EntityFrameworkCore;
+using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Bus;
@@ -74,7 +75,7 @@ namespace TrashInspection.Pn.Handlers
             {
                 return;
             }
-            List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id).ToList();
+            List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             foreach (InstallationSite installationSite in installationSites)
             {
