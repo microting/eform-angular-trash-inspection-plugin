@@ -19,7 +19,7 @@ describe('Trash Inspection Plugin - Installation', function () {
   });
   it('should not create installation', function () {
     const name = Guid.create().toString();
-    installationPage.goToInstallationsPage();
+    // installationPage.goToInstallationsPage();
     browser.waitForVisible('#createInstallationBtn', 30000);
     installationPage.createInstallation_DoesntAddSite_Cancels(name);
     const installation = installationPage.getFirstRowObject();
