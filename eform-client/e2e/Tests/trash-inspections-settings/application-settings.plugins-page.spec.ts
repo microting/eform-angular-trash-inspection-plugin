@@ -35,7 +35,7 @@ describe('Application settings page - site header section', function () {
         browser.pause(120000);
         browser.refresh();
 
-        browser.waitForVisible('#plugin-id', 40000);
+        browser.waitForVisible('#plugin-id', 80000);
         const plugin = pluginsPage.getFirstPluginRowObj();
         expect(plugin.id).equal(1);
         expect(plugin.name).equal('Microting Trash Inspection Plugin');
