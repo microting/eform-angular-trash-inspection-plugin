@@ -8,9 +8,9 @@ import pluginsPage from './application-settings.plugins.page';
 describe('Application settings page - site header section', function () {
     before(function () {
         loginPage.open('/auth');
+        loginPage.login();
     });
     it('should go to plugin settings page', function () {
-        loginPage.login();
         myEformsPage.Navbar.advancedDropdown();
         myEformsPage.Navbar.clickonSubMenuItem('Plugins');
         // browser.pause(8000);
@@ -34,7 +34,7 @@ describe('Application settings page - site header section', function () {
         pluginPage.selectValue('PluginDropDown', 'PluginDropDown', 'Aktiveret');
         // browser.pause(8000);
         pluginPage.saveBtn.click();
-        browser.pause(120000);
+        browser.pause(2000);
         browser.refresh();
 
         browser.waitForVisible('#plugin-id', 80000);
