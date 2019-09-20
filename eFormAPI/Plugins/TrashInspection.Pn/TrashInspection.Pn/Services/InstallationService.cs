@@ -170,7 +170,7 @@ namespace TrashInspection.Pn.Services
                         InstallationId = installation.Id,
                         SDKSiteId = deployedCheckbox.Id
                     };
-                    installation.Create(_dbContext);
+                    installationSite.Create(_dbContext);
                 }
             }
             return new OperationResult(true);
