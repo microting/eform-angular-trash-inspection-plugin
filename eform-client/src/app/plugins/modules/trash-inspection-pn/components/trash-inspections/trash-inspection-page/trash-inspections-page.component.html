@@ -50,14 +50,14 @@
         </th>
 
         <th scope="col" class="table-header-sortable" id="eakCodeTableHeader"
-            (click)="sortTable('eakCode')">
+            (click)="sortTable('Eak_Code')">
           <div class="d-flex align-items-center justify-content-center">
             {{'eakCode' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eakCode'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Eak_Code'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eakCode' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'Eak_Code' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eakCode' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'Eak_Code' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -65,11 +65,11 @@
             (click)="sortTable('InstallationId')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Installation' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Installation'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'InstallationId'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Installation' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'InstallationId' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Installation' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'InstallationId' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -77,11 +77,11 @@
             (click)="sortTable('SegmentId')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Segment' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Segment'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'SegmentId'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Segment' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'SegmentId' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Segment' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'SegmentId' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -158,14 +158,14 @@
         </th>
 
         <th scope="col" class="table-header-sortable" id="isExtendedInspectionTableHeader"
-            (click)="sortTable('IsExtendedInspection')">
+            (click)="sortTable('ExtendedInspection')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Extended inspection' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'IsExtendedInspection'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ExtendedInspection'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'IsExtendedInspection' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ExtendedInspection' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'IsExtendedInspection' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ExtendedInspection' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -194,7 +194,7 @@
         </th>
 
         <th scope="col" class="table-header-sortable" id="statusTableHeader"
-            (click)="sortTable('Name')">
+            (click)="sortTable('Status')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Status' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Status'">unfold_more</i>
@@ -206,14 +206,14 @@
         </th>
 
         <th scope="col" class="table-header-sortable" id="isRemovedTableHeader"
-            (click)="sortTable('IsRemoved')">
+            (click)="sortTable('WorkflowState')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Is removed' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'IsRemoved'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'WorkflowState'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'IsRemoved' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'WorkflowState' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'IsRemoved' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'WorkflowState' && trashInspectionsRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
