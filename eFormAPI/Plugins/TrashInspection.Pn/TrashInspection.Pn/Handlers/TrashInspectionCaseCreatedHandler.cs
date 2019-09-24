@@ -115,10 +115,10 @@ namespace TrashInspection.Pn.Handlers
             }
             
             LogEvent("CreateTrashInspection: Trying to create SDK case");
-            string sdkCaseId = _core.CaseCreate(mainElement, "", SDKSiteId);
+            int? sdkCaseId = _core.CaseCreate(mainElement, "", SDKSiteId);
             LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
 
-            trashInspectionCase.SdkCaseId = sdkCaseId;
+            trashInspectionCase.SdkCaseId = sdkCaseId.ToString();
             trashInspectionCase.Status = 66;
             trashInspectionCase.Update(_dbContext);
 

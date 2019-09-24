@@ -506,9 +506,9 @@ namespace TrashInspection.Pn.Services
                     {
                         if (trashInspectionCase.Status == 100)
                         {
-                            Case_Dto caseDto = core.CaseLookupMUId(trashInspectionCase.SdkCaseId);
-                            microtingUId = caseDto.MicrotingUId;
-                            microtingCheckUId = caseDto.CheckUId;
+                            Case_Dto caseDto = core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
+                            microtingUId = caseDto.MicrotingUId.ToString();
+                            microtingCheckUId = caseDto.CheckUId.ToString();
                             caseId = (int)caseDto.CaseId;
                             eFormId = caseDto.CheckListId;
                         }
