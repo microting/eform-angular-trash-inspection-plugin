@@ -267,9 +267,10 @@ namespace TrashInspection.Pn.Services
                      
                      trashInspectionCaseStatusModel.Status = trashInspectionCase.Status;
 
-                     foreach (var trashInspectionCaseVersion in _dbContext.TrashInspectionCaseVersions.Where(x => x.TrashInspectionCaseId == trashInspectionCase.Id))
+                     var lists = await _dbContext.TrashInspectionCaseVersions.Where(x =>
+                         x.TrashInspectionCaseId == trashInspectionCase.Id).ToListAsync();
+                     foreach (var trashInspectionCaseVersion in lists)
                      {
-                         
                          switch (trashInspectionCaseVersion.Status)
                          {
                              case 0:

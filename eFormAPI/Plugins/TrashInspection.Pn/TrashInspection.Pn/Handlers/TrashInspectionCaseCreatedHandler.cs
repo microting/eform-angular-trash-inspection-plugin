@@ -56,7 +56,7 @@ namespace TrashInspection.Pn.Handlers
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             MainElement mainElement = _core.TemplateRead(message.TemplateId);
             TrashInspectionModel createModel = message.TrashInspectionModel;
-            int SDKSiteId = message.TrashInspectionCase.SdkSiteId;
+            int sdkSiteId = message.TrashInspectionCase.SdkSiteId;
             Segment segment = message.Segment;
             Fraction fraction = message.Fraction;
             TrashInspectionCase trashInspectionCase = message.TrashInspectionCase;
@@ -115,7 +115,7 @@ namespace TrashInspection.Pn.Handlers
             }
             
             LogEvent("CreateTrashInspection: Trying to create SDK case");
-            int? sdkCaseId = _core.CaseCreate(mainElement, "", SDKSiteId);
+            int? sdkCaseId = _core.CaseCreate(mainElement, "", sdkSiteId);
             LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
 
             trashInspectionCase.SdkCaseId = sdkCaseId.ToString();
@@ -123,7 +123,7 @@ namespace TrashInspection.Pn.Handlers
             trashInspectionCase.Update(_dbContext);
 
             var trashInspectionCases =
-                _dbContext.TrashInspectionCases.Where(x =>
+                _dbContext.TrashInspectionCases.AsNoTracking().Where(x =>
                     x.TrashInspectionId == trashInspectionCase.TrashInspectionId);
             bool allDone = true;
             foreach (TrashInspectionCase inspectionCase in trashInspectionCases)
@@ -136,7 +136,7 @@ namespace TrashInspection.Pn.Handlers
 
             if (allDone)
             {
-                var trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
+                var trashInspection = await _dbContext.TrashInspections.AsNoTracking().SingleOrDefaultAsync(x =>
                     x.Id == trashInspectionCase.TrashInspectionId);
                 if (trashInspection.Status < 66)
                 {
