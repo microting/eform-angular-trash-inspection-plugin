@@ -43,10 +43,5 @@ su ubuntu -c \
 su ubuntu -c \
 "npm run build"
 echo "Recompiling angular done"
-rabbitmqctl add_user admin password 
-rabbitmqctl set_user_tags admin administrator
-rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
-wget http://localhost:15672/cli/rabbitmqadmin
-chmod +x rabbitmqadmin
 ./rabbitmqadmin declare queue name=eform-angular-trashinspection-plugin durable=true
 
