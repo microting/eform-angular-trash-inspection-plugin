@@ -28,10 +28,10 @@ describe('Application settings page - site header section', function () {
         browser.waitForVisible('#PluginDropDown', 40000);
         pluginPage.selectValue('PluginDropDown', 'PluginDropDown', 'Aktiveret');
         pluginPage.saveBtn.click();
-        browser.pause(2000);
+        browser.pause(50000); // We need to wait 50 seconds for the plugin to create db etc.
         browser.refresh();
 
-        browser.pause(20000);
+        browser.waitForVisible('#plugin-id', 40000);
         const plugin = pluginsPage.getFirstPluginRowObj();
         expect(plugin.id).equal(1);
         expect(plugin.name).equal('Microting Trash Inspection Plugin');
