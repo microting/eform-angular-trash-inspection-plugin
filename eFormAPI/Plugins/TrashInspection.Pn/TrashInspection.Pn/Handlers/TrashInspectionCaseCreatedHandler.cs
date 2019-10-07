@@ -34,6 +34,7 @@ using Microting.eForm.Infrastructure.Models;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Handlers;
+using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
@@ -44,10 +45,10 @@ namespace TrashInspection.Pn.Handlers
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
         
-        public TrashInspectionCaseCreatedHandler(Core core, TrashInspectionPnDbContext context)
+        public TrashInspectionCaseCreatedHandler(Core core, DbContextHelper dbContextHelper)
         {
             _core = core;
-            _dbContext = context;
+            _dbContext = dbContextHelper.GetDbContext();
         }
         #pragma warning disable 1998
         public async Task Handle(TrashInspectionCaseCreated message)

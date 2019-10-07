@@ -30,6 +30,7 @@ using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Rebus.Handlers;
+using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
@@ -40,10 +41,10 @@ namespace TrashInspection.Pn.Handlers
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
         
-        public TrashInspectionDeleteHandler(Core core, TrashInspectionPnDbContext context)
+        public TrashInspectionDeleteHandler(Core core, DbContextHelper dbContextHelper)
         {
             _core = core;
-            _dbContext = context;
+            _dbContext = dbContextHelper.GetDbContext();
         }
         
         #pragma warning disable 1998
