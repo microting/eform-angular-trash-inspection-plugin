@@ -30,4 +30,5 @@ export class TrashInspectionVersionPnModel {
   version: number;
   trashInspectionId: number;
   updatedAt: Date;
+  inspectionDone: boolean;
 }

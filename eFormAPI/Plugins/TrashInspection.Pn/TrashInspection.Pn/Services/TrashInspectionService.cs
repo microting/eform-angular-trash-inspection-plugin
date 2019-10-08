@@ -278,7 +278,14 @@ namespace TrashInspection.Pn.Services
                                  break;
                              case 66:
                              {
-                                 trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt; 
+                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
+                                 {
+                                     trashInspectionCaseStatusModel.Removed = trashInspectionCaseVersion.UpdatedAt;
+                                 }
+                                 else
+                                 {
+                                     trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt;
+                                 } 
                                  break;
                              }
                              case 70:

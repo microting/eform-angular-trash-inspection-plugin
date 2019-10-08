@@ -25,88 +25,79 @@
                     {{'Date' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Time' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'eakCode' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Installation' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Segment' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Must Be Inspected' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Producer' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Registration Number' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Transporter' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Trash Fraction' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Weighing Number' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Extended inspection' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Is approved' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Comment' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Status' | translate}}
+                  </div>
+                </th>
+                <th scope="col" class="table-header">
+                  <div class="d-flex align-items-center justify-content-center">
+                    {{'is removed' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
@@ -176,6 +167,9 @@
                   <status-bar [status]="trashInspectionVersion.status"></status-bar>
                 </td>
                 <td>
+                  <fa-icon icon="check" size="lg" [fixedWidth]="true" *ngIf="trashInspectionVersion.inspectionDone"></fa-icon>
+                </td>
+                <td>
                   {{trashInspectionVersion.version}}
                 </td>
               </tr>
@@ -194,21 +188,16 @@
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Status' | translate}}
-
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Created Locally' | translate}}
-
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Sent To Microting' | translate}}
-
                   </div>
                 </th>
 
@@ -224,10 +213,14 @@
                     {{'Received On Tablet' | translate}}
                   </div>
                 </th>
-
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
                     {{'Answered' | translate}}
+                  </div>
+                </th>
+                <th scope="col" class="table-header">
+                  <div class="d-flex align-items-center justify-content-center">
+                    {{'Removed' | translate}}
                   </div>
                 </th>
               </tr>
@@ -256,6 +249,9 @@
                 </td>
                 <td>
                   <date-formatter [date]="trashInspectionCase.answered" [Format]="'datetime'"></date-formatter>
+                </td>
+                <td>
+                  <date-formatter [date]="trashInspectionCase.removed" [Format]="'datetime'"></date-formatter>
                 </td>
               </tr>
               </tbody>
