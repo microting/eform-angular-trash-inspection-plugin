@@ -31,6 +31,7 @@ using Rebus.Bus;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Installers;
 using eFormCore;
+using TrashInspection.Pn.Infrastructure.Helpers;
 
 namespace TrashInspection.Pn.Services
 {
@@ -41,6 +42,7 @@ namespace TrashInspection.Pn.Services
         private string _connectionString;
         private string _sdkConnectionString;
         private readonly IEFormCoreService _coreHelper;
+        private DbContextHelper _dbContextHelper;
 
         public RebusService(IEFormCoreService coreHelper)
         {            
@@ -58,9 +60,10 @@ namespace TrashInspection.Pn.Services
             );
             
             Core core = _coreHelper.GetCore();
-
+            _dbContextHelper = new DbContextHelper(connectionString);
+            
             _container.Register(Component.For<Core>().Instance(core));
-            _container.Register(Component.For<TrashInspectionPnDbContext>().Instance(GetContext()));
+            _container.Register(Component.For<DbContextHelper>().Instance(_dbContextHelper));
             _bus = _container.Resolve<IBus>();
         }
 

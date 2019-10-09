@@ -35,6 +35,7 @@ using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Bus;
+using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Handlers
@@ -45,10 +46,10 @@ namespace TrashInspection.Pn.Handlers
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly IBus _bus;
         
-        public TrashInspectionReceivedHandler(Core core, TrashInspectionPnDbContext context, IBus bus)
+        public TrashInspectionReceivedHandler(Core core, DbContextHelper dbContextHelper, IBus bus)
         {
             _core = core;
-            _dbContext = context;
+            _dbContext = dbContextHelper.GetDbContext();
             _bus = bus;
         }
         

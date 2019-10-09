@@ -12,5 +12,6 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public DateTime? ReadyAtMicroting { get; set; }
         public DateTime? ReceivedOnTablet { get; set; }
         public DateTime? Answered { get; set; }
+        public DateTime? Removed { get; set; }
     }
 }
