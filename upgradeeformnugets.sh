@@ -7,7 +7,7 @@ if (( "$GIT_STATUS" > 0 )); then
 
 	dotnet add TrashInspection.Pn.csproj package Microting.eForm
 	dotnet add TrashInspection.Pn.csproj package Microting.eFormApi.BasePn
-	dotnet add TrashInspection.Pn.csproj package Microting.eFormOuterInnerResourceBase
+	dotnet add TrashInspection.Pn.csproj package Microting.eFormTrashInspectionBase
 
 	EFORM_VERSION=`dotnet list package | grep 'Microting.eForm ' | cut -c64-71`
 	EFORM_BASEPN_VERSION=`dotnet list package | grep 'Microting.eFormApi.BasePn' | cut -c64-71`
