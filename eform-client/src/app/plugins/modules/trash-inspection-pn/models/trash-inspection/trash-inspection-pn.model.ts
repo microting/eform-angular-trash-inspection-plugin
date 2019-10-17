@@ -3,12 +3,15 @@ import {Time} from '@angular/common';
 export class TrashInspectionsPnModel {
   total: number;
   trashInspectionList: Array<TrashInspectionPnModel> = [];
+  token: string;
+  numOfElements: number;
+  pageNum: number;
 }
 
 export class TrashInspectionPnModel {
   id: number;
   name: string;
-  weighingNumber: number;
+  weighingNumber: string;
   date: Date;
   time: Date;
   registrationNumber: string;
@@ -16,8 +19,15 @@ export class TrashInspectionPnModel {
   eakCode: number;
   producer: string;
   transporter: string;
-  installationId: number;
+  segment: string;
+  installationName: string;
   mustBeInspected: boolean;
+  token: string;
   relatedAreasIds: Array<number> = [];
   status: number;
+  extendedInspection: boolean;
+  isApproved: boolean;
+  comment: string;
+  workflowState: string;
+  inspectionDone: boolean;
 }

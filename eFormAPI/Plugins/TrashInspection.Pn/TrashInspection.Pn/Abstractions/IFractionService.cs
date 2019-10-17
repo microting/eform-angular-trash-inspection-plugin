@@ -9,7 +9,10 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> CreateFraction(FractionModel model);
         Task<OperationResult> DeleteFraction(int id);
         Task<OperationResult> UpdateFraction(FractionModel updateModel);
+        Task<OperationResult> ImportFraction(FractionImportModel fractionImportModel);
         Task<OperationDataResult<FractionsModel>> GetAllFractions(FractionRequestModel requestModel);
         Task<OperationDataResult<FractionModel>> GetSingleFraction(int fractionId);
+        Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel requestModel);
+        Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int id, int year);
     }
 }

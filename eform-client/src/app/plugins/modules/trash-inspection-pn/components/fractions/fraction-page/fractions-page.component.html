@@ -6,6 +6,11 @@
       mdbTooltip="{{ 'Create Fraction' | translate }}"
       (click)="showCreateFractionModal()">{{ 'New Fraction' | translate }}
     </button>
+    <button
+      id="importFractionBtn"
+      class="btn btn-success"
+      mdbTooltip="{{ 'Import Fraction' | translate}}"
+      routerLink="/plugins/trash-inspection-pn/importfraction">{{ 'Import Fraction' | translate}}</button>
   </div>
 </subheader-pn>
 
@@ -26,14 +31,14 @@
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="itemNumberTableHeader"
-            (click)="sortTable('Item number')">
+            (click)="sortTable('ItemNumber')">
           <div class="d-flex align-items-center justify-content-center">
             {{'Item number' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Item number'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ItemNumber'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Item number' && !fractionRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'ItemNumber' && !fractionRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Item number' && fractionRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'ItemNumber' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="nameTableHeader"
@@ -59,25 +64,25 @@
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="locationCodeTableHeader"
-            (click)="sortTable('Location code')">
+            (click)="sortTable('LocationCode')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Location code' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Location code'">unfold_more</i>
+            {{'LocationCode' | translate}}
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'LocationCode'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Location code' && !fractionRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'LocationCode' && !fractionRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Location code' && fractionRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'LocationCode' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
         <th scope="col" class="table-header-sortable" id="eFormTableHeader"
-            (click)="sortTable('eForm')">
+            (click)="sortTable('eFormId')">
           <div class="d-flex align-items-center justify-content-center">
             {{'eForm' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eForm'">unfold_more</i>
+            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eFormId'">unfold_more</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eForm' && !fractionRequestModel.isSortDsc">expand_less</i>
+               *ngIf="localPageSettings.sort == 'eFormId' && !fractionRequestModel.isSortDsc">expand_less</i>
             <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eForm' && fractionRequestModel.isSortDsc">expand_more</i>
+               *ngIf="localPageSettings.sort == 'eFormId' && fractionRequestModel.isSortDsc">expand_more</i>
           </div>
         </th>
 
@@ -112,17 +117,13 @@
               class="btn btn-accent text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Edit Fraction' | translate }}"
                     (click)="showEditFractionModal(fraction)">
-              <i class="material-icons">
-                edit
-              </i>
+              <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
             </button>
             <button id="deleteFractionBtn"
               class="btn btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Fraction' | translate }}"
                     (click)="showDeleteFractionModal(fraction)">
-              <i class="material-icons">
-                delete_forever
-              </i>
+              <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true"></fa-icon>
             </button>
           </div>
         </td>

@@ -9,7 +9,10 @@ import {
   TrashInspectionPnFractionsService,
   TrashInspectionPnInstallationsService,
   TrashInspectionPnTrashInspectionsService,
-  TrashInspectionPnSettingsService
+  TrashInspectionPnSettingsService,
+  TrashInspectionPnTransporterService,
+  TrashInspectionPnProducersService,
+  TrashInspectionPnSegmentsService
 } from './services';
 import {TrashInspectionPnLayoutComponent} from './layouts';
 import {TrashInspectionPnRouting} from './trash-inspection-pn.routing.module';
@@ -22,6 +25,7 @@ import {
   FractionDeleteComponent,
   FractionEditComponent,
   FractionsPageComponent,
+  FractionsPnImportComponent,
   InstallationCreateComponent,
   InstallationDeleteComponent,
   InstallationsPageComponent,
@@ -31,10 +35,27 @@ import {
   TrashInspectionsPageComponent,
   TrashInspectionEditComponent,
   TrashInspectionSettingsComponent,
+  TrashInspectionVersionViewComponent,
+  SegmentCreateComponent,
+  SegmentDeleteComponent,
+  SegmentEditComponent,
+  SegmentsPageComponent,
+  ProducerPageComponent,
+  ProducerCreateComponent,
+  ProducerDeleteComponent,
+  ProducerEditComponent,
+  ProducerImportComponent,
+  TransporterPageComponent,
+  TransporterCreateComponent,
+  TransporterDeleteComponent,
+  TransporterEditComponent,
+  TransporterImportComponent,
+  ReportPreviewTableComponent,
+  ReportGraphViewComponent
 } from './components';
-import {SegmentCreateComponent, SegmentDeleteComponent, SegmentEditComponent, SegmentsPageComponent} from './components/segments';
-import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from './services/trash-inspection-pn-segments.service';
-
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {GoogleChartsModule} from 'angular-google-charts';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -45,7 +66,10 @@ import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from 
     TranslateModule,
     FormsModule,
     NgSelectModule,
-    EformSharedModule
+    EformSharedModule,
+    FontAwesomeModule,
+    GoogleChartsModule,
+    NgxChartsModule
   ],
   declarations: [
     InstallationsPageComponent,
@@ -58,20 +82,36 @@ import {TrashInspectionPnSegmentMethods, TrashInspectionPnSegmentsService} from 
     TrashInspectionDeleteComponent,
     TrashInspectionPnLayoutComponent,
     TrashInspectionSettingsComponent,
+    TrashInspectionVersionViewComponent,
     FractionCreateComponent,
     FractionDeleteComponent,
     FractionEditComponent,
+    FractionsPnImportComponent,
     FractionsPageComponent,
     SegmentCreateComponent,
     SegmentDeleteComponent,
     SegmentEditComponent,
-    SegmentsPageComponent
+    SegmentsPageComponent,
+    ProducerPageComponent,
+    ProducerCreateComponent,
+    ProducerDeleteComponent,
+    ProducerEditComponent,
+    ProducerImportComponent,
+    TransporterPageComponent,
+    TransporterCreateComponent,
+    TransporterDeleteComponent,
+    TransporterEditComponent,
+    TransporterImportComponent,
+    ReportPreviewTableComponent,
+    ReportGraphViewComponent
   ],
   providers: [TrashInspectionPnFractionsService,
               TrashInspectionPnInstallationsService,
               TrashInspectionPnTrashInspectionsService,
               TrashInspectionPnSegmentsService,
-              TrashInspectionPnSettingsService
+              TrashInspectionPnSettingsService,
+              TrashInspectionPnTransporterService,
+              TrashInspectionPnProducersService
   ]
 })
 export class TrashInspectionPnModule { }

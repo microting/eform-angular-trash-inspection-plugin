@@ -3,7 +3,12 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
+using Newtonsoft.Json;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 
@@ -28,12 +33,22 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}", Name = "token")]
-        public async Task<IActionResult> DownloadEFormPdf(string weighingNumber, string token)
+        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}")]
+        public async Task<IActionResult> InspectionResults(string weighingNumber, string token, string fileType)
         {
             try
             {
-                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token);
+                if (fileType == "result")
+                {
+                    var result =  await _trashInspectionService.GetSingleTrashInspection(weighingNumber, token);
+                    return new JsonResult(result.Model);
+                }
+                
+                if (string.IsNullOrEmpty(fileType))
+                {
+                    fileType = "pdf";
+                }
+                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token, fileType);
                 
                 if (!System.IO.File.Exists(filePath))
                 {
@@ -62,12 +77,31 @@ namespace TrashInspection.Pn.Controllers
             return await _trashInspectionService.GetSingleTrashInspection(id);
         }
 
+        [HttpGet]
+        [Authorize]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int id)
+        {
+            return await _trashInspectionService.GetTrashInspectionVersion(id);
+        }
+        
         [HttpPost]
         [AllowAnonymous]
+        [DebuggingFilter]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
         {
             return await _trashInspectionService.CreateTrashInspection(createModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/case-versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> GetTrashInspectionCaseVersions(int id)
+        {
+            return await _trashInspectionService.GetTrashInspectionCaseVersions(id);
         }
 
         [HttpPut]
@@ -81,9 +115,9 @@ namespace TrashInspection.Pn.Controllers
         [HttpDelete]
         [Authorize]
         [Route("api/trash-inspection-pn/inspections/{id}")]
-        public async Task<OperationResult> DeleteTrashInspection(int trashInspectionId)
+        public async Task<OperationResult> DeleteTrashInspection(int id)
         {
-            return await _trashInspectionService.DeleteTrashInspection(trashInspectionId);
+            return await _trashInspectionService.DeleteTrashInspection(id);
         }
                 
         [HttpDelete]
@@ -93,6 +127,27 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _trashInspectionService.DeleteTrashInspection(weighingNumber, token);
 
+        }
+    }
+    
+    public class DebuggingFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.HttpContext.Request.Method != "POST")
+            {
+                return;
+            }
+            
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+
+            string text = new StreamReader(filterContext.HttpContext.Request.Body).ReadToEndAsync().Result;
+
+            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
+            
+            Console.WriteLine(text);
+
+            base.OnActionExecuting(filterContext);
         }
     }
 }

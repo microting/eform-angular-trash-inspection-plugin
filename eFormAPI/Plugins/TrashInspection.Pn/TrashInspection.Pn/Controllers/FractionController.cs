@@ -31,6 +31,13 @@ namespace TrashInspection.Pn.Controllers
             return await _fractionService.GetSingleFraction(id);
         }
 
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int id, int year)
+        {
+            return await _fractionService.GetSingleFractionByMonth(id, year);
+        }
+        
         [HttpPost]
         [Route("api/trash-inspection-pn/fractions")]
         public async Task<OperationResult> CreateFraction([FromBody] FractionModel createModel)
@@ -50,6 +57,20 @@ namespace TrashInspection.Pn.Controllers
         public async Task<OperationResult> DeleteFraction(int id)
         {
             return await _fractionService.DeleteFraction(id);
+        }
+
+        [HttpPost]
+        [Route("api/trash-inspection-pn/fractions/import")]
+        public async Task<OperationResult> ImportFraction([FromBody] FractionImportModel fractionImportModel)
+        {
+            return await _fractionService.ImportFraction(fractionImportModel);
+        }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/year/{year}")]
+        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel requestModel)
+        {
+            return await _fractionService.GetFractionsStatsByYear(requestModel);
         }
     }
 }

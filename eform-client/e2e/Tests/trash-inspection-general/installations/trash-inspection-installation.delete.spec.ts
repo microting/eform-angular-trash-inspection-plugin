@@ -10,9 +10,22 @@ describe('Trash Inspection Plugin - Installation', function () {
   });
   it('Should delete installation.', function () {
     installationPage.goToInstallationsPage();
+    browser.waitForVisible('#createInstallationBtn', 30000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
     installationPage.deleteInstallation_Deletes();
+    browser.pause(2000);
     const installation = installationPage.getFirstRowObject();
-    expect(installation.id === 0);
+    expect(installationPage.rowNum).equal(0);
+  });
+  it('should not delete', function () {
+    const name = Guid.create().toString();
+    installationPage.goToInstallationsPage();
+    browser.waitForVisible('#createInstallationBtn', 30000);
+    installationPage.createInstallation_DoesntAddSite(name);
+    installationPage.deleteInstallation_Cancels();
+    const installation = installationPage.getFirstRowObject();
+    expect(installation.name).equal(name);
+    browser.pause(2000);
+    installationPage.deleteInstallation_Deletes();
   });
 });

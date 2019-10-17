@@ -1,16 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) 2007 - 2019 Microting A/S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
+using Microting.eFormApi.BasePn.Infrastructure.Helpers.PluginDbOptions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 
 namespace TrashInspection.Pn.Services
 {
@@ -20,71 +46,118 @@ namespace TrashInspection.Pn.Services
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly IEFormCoreService _coreHelper;
+        private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
         private readonly string _connectionString;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public TrashInspectionPnSettingsService(ILogger<TrashInspectionPnSettingsService> logger,
             ITrashInspectionLocalizationService trashInspectionLocalizationService,
             TrashInspectionPnDbContext dbContext,
-            IEFormCoreService coreHelper)
+            IPluginDbOptions<TrashInspectionBaseSettings> options,
+            IEFormCoreService coreHelper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
+            _options = options;
+            _httpContextAccessor = httpContextAccessor;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public async Task<OperationDataResult<TrashInspectionPnSettingsModel>> GetSettings()
+        public async Task<OperationDataResult<TrashInspectionBaseSettings>> GetSettings()
         {
             try
             {
-                TrashInspectionPnSettingsModel result = new TrashInspectionPnSettingsModel();
-                List<TrashInspectionPnSetting> trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.ToList();
-                if (trashInspectionPnSetting.Count < 9)
+                var option = _options.Value;
+                if (option.Token == "...")
                 {
-                    TrashInspectionPnSettingsModel.SettingCreateDefaults(_dbContext);                    
-                    trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.AsNoTracking().ToList();
-                }
-                result.trashInspectionSettingsList = new List<TrashInspectionPnSettingModel>();
-                foreach (TrashInspectionPnSetting inspectionPnSetting in trashInspectionPnSetting)
-                {
-                    TrashInspectionPnSettingModel trashInspectionPnSettingModel = new TrashInspectionPnSettingModel();
-                    trashInspectionPnSettingModel.Id = inspectionPnSetting.Id;
-                    trashInspectionPnSettingModel.Name = inspectionPnSetting.Name;
-                    trashInspectionPnSettingModel.Value = inspectionPnSetting.Value;
-                    result.trashInspectionSettingsList.Add(trashInspectionPnSettingModel);
+                    string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    Random random = new Random();
+                    string result = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(32).ToArray());
+                    await _options.UpdateDb(settings => { settings.Token = result;}, _dbContext, UserId);
                 }
 
-                return new OperationDataResult<TrashInspectionPnSettingsModel>(true, result);
+                if (option.SdkConnectionString == "...")
+                {
+                    string connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+                    string dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
+                    string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
+                    string sdk = $"Database={dbPrefix}_SDK;";
+                    connectionString = connectionString.Replace(dbNameSection, sdk);
+                    await _options.UpdateDb(settings => { settings.SdkConnectionString = connectionString;}, _dbContext, UserId);
+
+                }
+
+                return new OperationDataResult<TrashInspectionBaseSettings>(true, option);
             }
             catch(Exception e)
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
-                return new OperationDataResult<TrashInspectionPnSettingsModel>(false,
+                return new OperationDataResult<TrashInspectionBaseSettings>(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileObtainingTrashInspectionSettings"));
             }
         }
 
-        public async Task<OperationResult> UpdateSettings(TrashInspectionPnSettingsModel trashInspectionSettingsModel)
+        public async Task<OperationResult> UpdateSettings(TrashInspectionBaseSettings trashInspectionSettingsModel)
         {
             try
             {
-//                TrashInspectionPnSetting trashInspectionPnSetting = _dbContext.TrashInspectionPnSettings.FirstOrDefault();
-//                if (trashInspectionPnSetting == null)
-//                {
-                foreach (TrashInspectionPnSettingModel trashInspectionPnSettingModel in trashInspectionSettingsModel.trashInspectionSettingsList)
+                await _options.UpdateDb(settings =>
                 {
-                    trashInspectionPnSettingModel.Update(_dbContext);
-                }
-//                }
+                    settings.Token = trashInspectionSettingsModel.Token;
+                    settings.LogLevel = trashInspectionSettingsModel.LogLevel;
+                    settings.LogLimit = trashInspectionSettingsModel.LogLimit;
+                    settings.MaxParallelism = trashInspectionSettingsModel.MaxParallelism;
+                    settings.CallBackUrl = trashInspectionSettingsModel.CallBackUrl;
+                    settings.NumberOfWorkers = trashInspectionSettingsModel.NumberOfWorkers;
+                    settings.SdkConnectionString = trashInspectionSettingsModel.SdkConnectionString;
+                    settings.CallbackCredentialPassword = trashInspectionSettingsModel.CallbackCredentialPassword;
+                    settings.CallBackCredentialDomain = trashInspectionSettingsModel.CallBackCredentialDomain;
+                    settings.ExtendedInspectioneFormId = trashInspectionSettingsModel.ExtendedInspectioneFormId;
+                    settings.CallbackCredentialAuthType = trashInspectionSettingsModel.CallbackCredentialAuthType;
+                    settings.CallbackCredentialUserName = trashInspectionSettingsModel.CallbackCredentialUserName;
+                }, _dbContext, UserId);
+
                 return new OperationResult(true,
-                    _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccesfully"));
+                    _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccessfully"));
             }
             catch(Exception e)
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
                 return new OperationResult(false, _trashInspectionLocalizationService.GetString("ErrorWhileUpdatingSettings"));
+            }
+        }
+
+        public async Task<OperationDataResult<TrashInspectionBaseToken>> GetToken()
+        {
+            try
+            {
+                TrashInspectionBaseToken trashInspectionBaseToken = new TrashInspectionBaseToken()
+                {
+                    Token = _options.Value.Token
+                };
+
+                return new OperationDataResult<TrashInspectionBaseToken>(true, trashInspectionBaseToken);
+            }
+            catch(Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationDataResult<TrashInspectionBaseToken>(false,
+                    _trashInspectionLocalizationService.GetString("ErrorWhileObtainingTrashInspectionToken"));
+            }
+        }
+
+        public int UserId
+        {
+            get
+            {
+                var value = _httpContextAccessor?.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+                return value == null ? 0 : int.Parse(value);
             }
         }
     }

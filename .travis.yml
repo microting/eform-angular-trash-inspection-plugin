@@ -6,16 +6,31 @@ dotnet: 2.2
 services:
   - mysql
 script:
+  - echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
+  - wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -
+  - sudo apt-get update
+  - sudo apt-get install rabbitmq-server
+  - sudo systemctl enable rabbitmq-server
+  - sudo systemctl start rabbitmq-server
+  - sudo rabbitmqctl add_user admin password 
+  - sudo rabbitmqctl set_user_tags admin administrator
+  - sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+  - sudo rabbitmq-plugins enable rabbitmq_management	
+  - wget http://localhost:15672/cli/rabbitmqadmin
+  - chmod +x rabbitmqadmin
+  - ./rabbitmqadmin declare queue name=eformsdk-input durable=true
+  - ./rabbitmqadmin declare queue name=eform-angular-trashinspection-plugin durable=true
   - dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
   - dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
   - dotnet test -v n eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
   - cd ../..
-  - git clone --depth=50 --branch=master https://github.com/microting/eform-angular-frontend.git microting/eform-angular-frontend
+  - git clone --depth=50 --branch=stable https://github.com/microting/eform-angular-frontend.git microting/eform-angular-frontend
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn microting/eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspections-settings microting/eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspection-general microting/eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/e2e/Page\ objects/trash-inspection microting/eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
+  - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-plugin-step2.conf.js
   - cd microting/eform-angular-frontend
   - dotnet restore -v q eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
   - dotnet build eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
@@ -24,7 +39,7 @@ script:
   - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
   - cd microting/eform-angular-frontend
   - cd eform-client && npm install
-  - /home/travis/build/microting/eform-angular-trashinspection-plugin/testinginstallpn.sh
+  - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
   - cat src/app/plugins/plugins.routing.ts
   - npm start &
   - sleep 40

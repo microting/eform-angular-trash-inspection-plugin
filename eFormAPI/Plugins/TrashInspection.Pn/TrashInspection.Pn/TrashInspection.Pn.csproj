@@ -25,14 +25,14 @@
 
   <ItemGroup>
     <PackageReference Include="McMaster.NETCore.Plugins" Version="0.2.1" />
-    <!--<PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.2" />-->
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
-    <PackageReference Include="Microting.eForm" Version="3.0.173" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.109" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.35" />
+    <PackageReference Include="Microting.eForm" Version="3.0.332" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.1.188" />
+    <PackageReference Include="Microting.eFormOuterInnerResourceBase" Version="1.1.74" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.112" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
+    <PackageReference Include="Rebus.RabbitMQ" Version="5.1.3" />
   </ItemGroup>
 
 </Project>

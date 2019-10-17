@@ -60,7 +60,7 @@ export class InstallationEditComponent implements OnInit {
   }
 
   updateInstallation() {
-    debugger;
+    // debugger;
     this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
       .subscribe((data) => {
@@ -95,7 +95,7 @@ export class InstallationEditComponent implements OnInit {
   }
 
   addToArray(e: any, deployId: number) {
-    debugger;
+    // debugger;
     const deployObject = new DeployCheckbox();
     deployObject.id = deployId;
     if (e.target.checked) {
