@@ -2,6 +2,7 @@
 
 GIT_STATUS=`git status | grep "nothing to commit, working tree clean" | wc -l`
 if (( "$GIT_STATUS" > 0 )); then
+	git checkout stable
 	git pull
 	cd eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn
 
