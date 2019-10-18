@@ -4,6 +4,8 @@ import {PageSettingsModel} from 'src/app/common/models/settings';
 import {SharedPnService} from 'src/app/plugins/modules/shared/services';
 import {FractionPnModel, FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
 import {TrashInspectionPnFractionsService} from '../../../services';
+import {PluginClaimsHelper} from '../../../../../../common/helpers';
+import {TrashInspectionPnClaims} from '../../../enums';
 
 @Component({
   selector: 'app-trash-inspection-pn-fractions-page',
@@ -18,6 +20,14 @@ export class FractionsPageComponent implements OnInit {
   fractionsModel: FractionsPnModel = new FractionsPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
   spinnerStatus = false;
+
+  get pluginClaimsHelper() {
+    return PluginClaimsHelper;
+  }
+
+  get trashInspectionPnClaims() {
+    return TrashInspectionPnClaims;
+  }
 
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }

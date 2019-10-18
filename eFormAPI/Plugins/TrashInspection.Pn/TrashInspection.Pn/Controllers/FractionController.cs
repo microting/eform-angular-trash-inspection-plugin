@@ -4,6 +4,7 @@ using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Const;
 
 namespace TrashInspection.Pn.Controllers
 {
@@ -40,6 +41,7 @@ namespace TrashInspection.Pn.Controllers
         
         [HttpPost]
         [Route("api/trash-inspection-pn/fractions")]
+        [Authorize(Policy = TrashInspectionClaims.CreateFractions)]
         public async Task<OperationResult> CreateFraction([FromBody] FractionModel createModel)
         {
             return await _fractionService.CreateFraction(createModel);
