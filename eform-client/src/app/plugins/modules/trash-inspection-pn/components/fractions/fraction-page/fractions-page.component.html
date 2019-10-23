@@ -1,6 +1,6 @@
 <subheader-pn [title]="'Fractions' | translate">
   <div class="p-3">
-    <button
+    <button *ngIf="pluginClaimsHelper.check(trashInspectionPnClaims.createFractions)"
       id="fractionCreateBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Fraction' | translate }}"

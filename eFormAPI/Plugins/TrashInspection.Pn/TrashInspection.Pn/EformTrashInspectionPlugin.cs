@@ -33,7 +33,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microting.eFormApi.BasePn;
-using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.Application;
 using Microting.eFormApi.BasePn.Infrastructure.Settings;
@@ -42,6 +41,8 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using TrashInspection.Pn.Infrastructure.Data.Seed;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using TrashInspection.Pn.Infrastructure.Models;
+using Microting.eFormApi.BasePn.Infrastructure.Helpers;
+using Microting.eFormTrashInspectionBase.Infrastructure.Const;
 
 namespace TrashInspection.Pn
 {
@@ -49,6 +50,7 @@ namespace TrashInspection.Pn
     {
         public string Name => "Microting Trash Inspection Plugin";
         public string PluginId => "eform-angular-trashinspection-plugin";
+        public string PluginBaseUrl => "trash-inspection-pn";
         public string PluginPath => PluginAssembly().Location;
         private string _connectionString;
         private string _sdkConnectionString;
@@ -139,6 +141,7 @@ namespace TrashInspection.Pn
                 Name = localizationService.GetString("TrashInspection"),
                 E2EId = "",
                 Link = "",
+                Guards = new List<string>() { TrashInspectionClaims.AccessTrashInspectionPlugin },
                 MenuItems = new List<MenuItemModel>()
                 {
                     new MenuItemModel()
@@ -161,13 +164,6 @@ namespace TrashInspection.Pn
                         E2EId = "trash-inspection-pn-fractions",
                         Link = "/plugins/trash-inspection-pn/fractions",
                         Position = 2,
-                    },
-                    new MenuItemModel()
-                    {
-                        Name = localizationService.GetString("Settings"),
-                        E2EId = "trash-inspection-pn-settings",
-                        Link = "/plugins/trash-inspection-pn/settings",
-                        Position = 3,
                     },
                     new MenuItemModel()
                     {
@@ -215,6 +211,14 @@ namespace TrashInspection.Pn
         {
             services.ConfigurePluginDbOptions<TrashInspectionBaseSettings>(
                 configuration.GetSection("TrashInspectionBaseSettings"));
-       }
+        }
+
+        public PluginPermissionsManager GetPermissionsManager(string connectionString)
+        {
+            var contextFactory = new TrashInspectionPnContextFactory();
+            var context = contextFactory.CreateDbContext(new[] { connectionString });
+
+            return new PluginPermissionsManager(context);
+        }
     }
 }
