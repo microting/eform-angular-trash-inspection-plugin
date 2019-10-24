@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AdminGuard, AuthGuard} from 'src/app/common/guards';
+import {AdminGuard, AuthGuard, PermissionGuard} from 'src/app/common/guards';
 import {TrashInspectionPnLayoutComponent} from './layouts';
 import {
   TrashInspectionsPageComponent,
@@ -12,11 +12,14 @@ import {
 import {SegmentsPageComponent} from './components/segments';
 import {ProducerPageComponent} from './components/producers';
 import {TransporterPageComponent} from './components/transporters';
+import {TrashInspectionPnClaims} from './enums';
 
 export const routes: Routes = [
   {
     path: '',
     component: TrashInspectionPnLayoutComponent,
+    canActivate: [PermissionGuard],
+    data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin},
     children: [
       {
         path: 'trash-inspections',
