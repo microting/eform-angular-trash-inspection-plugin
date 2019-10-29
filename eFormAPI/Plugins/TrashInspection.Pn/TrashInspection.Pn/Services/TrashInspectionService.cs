@@ -611,7 +611,7 @@ namespace TrashInspection.Pn.Services
                         createModel.InstallationId = installation.Id;
                         createModel.Id = trashInspection.Id;
                         
-                        UpdateProducerAndTransporter(trashInspection, createModel);
+                        await UpdateProducerAndTransporter(trashInspection, createModel);
                         
                         await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                     }
@@ -651,7 +651,7 @@ namespace TrashInspection.Pn.Services
                     InspectionDone = updateModel.InspectionDone
                 };
             
-            selectedTrashInspection.Update(_dbContext);
+            await selectedTrashInspection.Update(_dbContext);
             return new OperationResult(true);
         }
 
@@ -677,7 +677,7 @@ namespace TrashInspection.Pn.Services
                     InspectionDone = x.InspectionDone
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
-            _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+            await _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
             //trashInspection.Delete(_dbContext);
             return new OperationResult(true);
 
@@ -723,7 +723,7 @@ namespace TrashInspection.Pn.Services
 
                 if (trashInspection != null)
                 {
-                    _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+                    await _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
 
                     return new OperationResult(true);
                 }               
@@ -734,7 +734,7 @@ namespace TrashInspection.Pn.Services
             return new OperationResult(false);
         }
 
-        private void UpdateProducerAndTransporter(Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection, TrashInspectionModel createModel)
+        private async Task UpdateProducerAndTransporter(Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection, TrashInspectionModel createModel)
         {
             var producer = _dbContext.Producers.SingleOrDefault(x => x.Name == createModel.Producer);
 
@@ -751,7 +751,7 @@ namespace TrashInspection.Pn.Services
                     ForeignId = createModel.ProducerForeignId
                 };
                 
-                producer.Create(_dbContext);
+                await producer.Create(_dbContext);
             }
             else
             {
@@ -761,7 +761,7 @@ namespace TrashInspection.Pn.Services
                 producer.Phone = createModel.ProducerPhone;
                 producer.ZipCode = createModel.ProducerZip;
                 producer.ForeignId = createModel.ProducerForeignId;
-                producer.Update(_dbContext);
+                await producer.Update(_dbContext);
             }
 
             trashInspection.ProducerId = producer.Id;
@@ -781,7 +781,7 @@ namespace TrashInspection.Pn.Services
                     ForeignId = createModel.TransporterForeignId
                 };
                 
-                transporter.Create(_dbContext);
+                await transporter.Create(_dbContext);
             }
             else
             {
@@ -791,12 +791,12 @@ namespace TrashInspection.Pn.Services
                 transporter.Phone = createModel.TransporterPhone;
                 transporter.ContactPerson = createModel.TransporterContact;
                 transporter.ForeignId = createModel.TransporterForeignId;
-                transporter.Update(_dbContext);
+                await transporter.Update(_dbContext);
             }
 
             trashInspection.TransporterId = transporter.Id;
 
-            trashInspection.Update(_dbContext);
+            await trashInspection.Update(_dbContext);
         }
     }
 }
