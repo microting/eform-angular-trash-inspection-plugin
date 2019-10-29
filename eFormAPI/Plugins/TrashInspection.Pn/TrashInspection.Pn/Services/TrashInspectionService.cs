@@ -591,7 +591,7 @@ namespace TrashInspection.Pn.Services
                             Status = 0
                         };
                     
-                    trashInspection.Create(_dbContext);
+                    await trashInspection.Create(_dbContext);
                     
                     Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
                     Installation installation = 
@@ -605,7 +605,7 @@ namespace TrashInspection.Pn.Services
                         trashInspection.SegmentId = segment.Id;
                         trashInspection.FractionId = fraction.Id;
                         trashInspection.InstallationId = installation.Id;
-                        trashInspection.Update(_dbContext);
+                        await trashInspection.Update(_dbContext);
                         createModel.SegmentId = segment.Id;
                         createModel.FractionId = fraction.Id;
                         createModel.InstallationId = installation.Id;
@@ -617,12 +617,12 @@ namespace TrashInspection.Pn.Services
                     }
                     
                     return new OperationResult(true, createModel.Id.ToString());
-            }
-            else
-            {
+                }
+                else
+                {
                     
-                return new OperationResult(false);
-            }
+                    return new OperationResult(false);
+                }
                 
             }
                 
