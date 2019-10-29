@@ -65,7 +65,7 @@ namespace TrashInspection.Pn.Services
                 SdkFolderId = model.SdkFolderId
             };
             
-            segment.Create(_dbContext);
+            await segment.Create(_dbContext);
             
             return new OperationResult(true);
         }
@@ -76,7 +76,7 @@ namespace TrashInspection.Pn.Services
 
             if (segment != null)
             {
-                segment.Delete(_dbContext);
+                await segment.Delete(_dbContext);
             
                 return new OperationResult(true);
             }
@@ -93,7 +93,7 @@ namespace TrashInspection.Pn.Services
                 segment.Name = updateModel.Name;
                 segment.Description = updateModel.Description;
                 segment.SdkFolderId = updateModel.SdkFolderId;
-                segment.Update(_dbContext);
+                await segment.Update(_dbContext);
             
                 return new OperationResult(true);
             }

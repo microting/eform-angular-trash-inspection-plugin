@@ -193,7 +193,7 @@ namespace TrashInspection.Pn.Services
                                     ContactPerson = transporterModel.ContactPerson
                                     
                                 };
-                               newTransporter.Create(_dbContext);
+                                await newTransporter.Create(_dbContext);
   
                             }
                             else
@@ -215,7 +215,7 @@ namespace TrashInspection.Pn.Services
                                     existingTransporter.WorkflowState = Constants.WorkflowStates.Created;
                                 }
                                 
-                                existingTransporter.Update(_dbContext);
+                                await existingTransporter.Update(_dbContext);
                             }
                         }
                         
@@ -246,7 +246,7 @@ namespace TrashInspection.Pn.Services
                 ContactPerson = transporterModel.ContactPerson,
             };
            
-            transporter.Create(_dbContext);
+            await transporter.Create(_dbContext);
            
            return new OperationResult(true);
         }
@@ -266,7 +266,7 @@ namespace TrashInspection.Pn.Services
                 transporter.ZipCode = transporterModel.ZipCode;
                 transporter.ContactPerson = transporterModel.ContactPerson;
                 
-                transporter.Update(_dbContext);
+                await transporter.Update(_dbContext);
                 return new OperationResult(true);
             }
             return new OperationResult(false);        }
@@ -276,7 +276,7 @@ namespace TrashInspection.Pn.Services
             Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
             if (transporter != null)
             {
-                transporter.Delete(_dbContext);
+                await transporter.Delete(_dbContext);
                 return new OperationResult(true);
             }
             return new OperationResult(false);

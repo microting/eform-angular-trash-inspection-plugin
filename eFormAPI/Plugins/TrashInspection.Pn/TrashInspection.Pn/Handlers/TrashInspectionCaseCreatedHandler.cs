@@ -121,7 +121,7 @@ namespace TrashInspection.Pn.Handlers
 
             trashInspectionCase.SdkCaseId = sdkCaseId.ToString();
             trashInspectionCase.Status = 66;
-            trashInspectionCase.Update(_dbContext);
+            await trashInspectionCase.Update(_dbContext);
 
             var trashInspectionCases =
                 _dbContext.TrashInspectionCases.AsNoTracking().Where(x =>
@@ -142,7 +142,7 @@ namespace TrashInspection.Pn.Handlers
                 if (trashInspection.Status < 66)
                 {
                     trashInspection.Status = 66;
-                    trashInspection.Update(_dbContext);
+                    await trashInspection.Update(_dbContext);
                 }
             }
         }

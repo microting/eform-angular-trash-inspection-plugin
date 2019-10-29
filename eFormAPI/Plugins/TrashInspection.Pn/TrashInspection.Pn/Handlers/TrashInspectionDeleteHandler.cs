@@ -60,7 +60,7 @@ namespace TrashInspection.Pn.Handlers
                 bool result = _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
                 if (result)
                 {
-                    trashInspectionCase.Delete(_dbContext);
+                    await trashInspectionCase.Delete(_dbContext);
                 }
                 
             }
@@ -69,7 +69,7 @@ namespace TrashInspection.Pn.Handlers
                 _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
 
             trashInspection.InspectionDone = true;
-            trashInspection.Update(_dbContext);
+            await trashInspection.Update(_dbContext);
 
         }
     }

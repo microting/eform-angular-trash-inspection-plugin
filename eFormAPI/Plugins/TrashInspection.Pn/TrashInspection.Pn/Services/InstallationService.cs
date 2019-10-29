@@ -159,7 +159,7 @@ namespace TrashInspection.Pn.Services
             {
                 Name = createModel.Name
             };
-            installation.Create(_dbContext);
+            await installation.Create(_dbContext);
             
             foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
             {
@@ -170,7 +170,7 @@ namespace TrashInspection.Pn.Services
                         InstallationId = installation.Id,
                         SDKSiteId = deployedCheckbox.Id
                     };
-                    installationSite.Create(_dbContext);
+                    await installationSite.Create(_dbContext);
                 }
             }
             return new OperationResult(true);
@@ -184,7 +184,7 @@ namespace TrashInspection.Pn.Services
             if (installation != null)
             {
                 installation.Name = updateModel.Name;
-                installation.Update(_dbContext);
+                await installation.Update(_dbContext);
             }
 
             List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == updateModel.Id).ToList();
@@ -201,14 +201,14 @@ namespace TrashInspection.Pn.Services
                         InstallationId = installation.Id,
                         SDKSiteId = deployedCheckbox.Id
                     };
-                    installationSite.Create(_dbContext);
+                    await installationSite.Create(_dbContext);
                 }
                 else
                 {
                     if (installationSite.WorkflowState == Constants.WorkflowStates.Removed)
                     {
                         installationSite.WorkflowState = Constants.WorkflowStates.Created;
-                        installationSite.Update(_dbContext);
+                        await installationSite.Update(_dbContext);
 
                     } 
                     toBeRemovedInstallationSites.Remove(installationSite);
@@ -217,7 +217,7 @@ namespace TrashInspection.Pn.Services
 
             foreach (InstallationSite installationSite in toBeRemovedInstallationSites)
             {
-                installationSite.Delete(_dbContext);
+                await installationSite.Delete(_dbContext);
             }
             return new OperationResult(true);
         }
@@ -226,7 +226,7 @@ namespace TrashInspection.Pn.Services
         {
             Installation installation =
                 await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == id);
-            installation.Delete(_dbContext);
+            await installation.Delete(_dbContext);
             return new OperationResult(true);
 
         }

@@ -89,7 +89,7 @@ namespace TrashInspection.Pn.Handlers
                     SdkSiteId = installationSite.SDKSiteId,
                 };
 
-                trashInspectionCase.Create(_dbContext);
+                await trashInspectionCase.Create(_dbContext);
                 LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
                 Task sendLocal = _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase, createModel, segment,
                     fraction));
@@ -104,7 +104,7 @@ namespace TrashInspection.Pn.Handlers
             if (trashInspection.Status < 33)
             {
                 trashInspection.Status = 33;
-                trashInspection.Update(_dbContext);
+                await trashInspection.Update(_dbContext);
             }
         }
 
