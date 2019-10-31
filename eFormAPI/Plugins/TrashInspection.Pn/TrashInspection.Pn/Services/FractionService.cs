@@ -542,19 +542,19 @@ namespace TrashInspection.Pn.Services
                  };
                  linePeriod.Series = new List<SeriesObject>();
                  trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.FractionId == fractionId);
-                 double wheigingsPrYear = trashInspectionsQuery.Count();
-                 double wheigingsPrYearControlled = trashInspectionsQuery.Count(x => x.Status == 100);
+                 double wheigingsPrYear = await trashInspectionsQuery.CountAsync();
+                 double wheigingsPrYearControlled = await trashInspectionsQuery.CountAsync(x => x.Status == 100);
                  double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
                  int i = 1;
                  int j = 0;
                  foreach (string month in months)
                  {
                      trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
-                     double wheigingsPrMonth = trashInspectionsQuery.Count();
-                     double wheigingsPrMonthControlled = trashInspectionsQuery.Count(x => x.Status == 100);
-                     double wheighingsApprovedPrMonth = trashInspectionsQuery.Count(x => x.IsApproved && x.Status == 100);
-                     double wheighingsNotApprovedPrMonth = trashInspectionsQuery.Count(x => x.ApprovedValue == "3" && x.Status == 100);
-                     double wheighingsPartiallyApprovedPrMonth = trashInspectionsQuery.Count(x => x.ApprovedValue == "2" && x.Status == 100);
+                     double wheigingsPrMonth = await trashInspectionsQuery.CountAsync();
+                     double wheigingsPrMonthControlled = await trashInspectionsQuery.CountAsync(x => x.Status == 100);
+                     double wheighingsApprovedPrMonth = await trashInspectionsQuery.CountAsync(x => x.IsApproved && x.Status == 100);
+                     double wheighingsNotApprovedPrMonth = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "3" && x.Status == 100);
+                     double wheighingsPartiallyApprovedPrMonth = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "2" && x.Status == 100);
                      double approvedWheighingsPercentage = 0;
                      double notApprovedWheighingPercentage = 0;
                      double partiallyApprovedWheighingPercentage = 0;

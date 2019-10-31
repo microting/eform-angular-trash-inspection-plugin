@@ -47,7 +47,7 @@ namespace TrashInspection.Pn.Services
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly IEFormCoreService _coreHelper;
         private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
-        private readonly string _connectionString;
+//        private readonly string _connectionString;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
@@ -132,7 +132,7 @@ namespace TrashInspection.Pn.Services
             }
         }
 
-        public async Task<OperationDataResult<TrashInspectionBaseToken>> GetToken()
+        public OperationDataResult<TrashInspectionBaseToken> GetToken()
         {
             try
             {
