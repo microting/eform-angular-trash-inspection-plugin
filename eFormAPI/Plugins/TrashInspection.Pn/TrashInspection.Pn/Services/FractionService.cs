@@ -108,7 +108,7 @@ namespace TrashInspection.Pn.Services
 
                 fractionsModel.Total = await _dbContext.Fractions.CountAsync(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 fractionsModel.FractionList = fractions;
-                Core _core = _coreHelper.GetCore();
+                Core _core = await _coreHelper.GetCore();
                 List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();
 
                 foreach (FractionModel fractionModel in fractions)
@@ -123,7 +123,7 @@ namespace TrashInspection.Pn.Services
                         {
                             try
                             {
-                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Label;
+                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Result.Label;
                                 fractionModel.SelectedTemplateName = eFormName;
                                 KeyValuePair<int, string> kvp =
                                     new KeyValuePair<int, string>(fractionModel.eFormId, eFormName);
@@ -170,12 +170,12 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString($"FractionWithID:{id}DoesNotExist"));
                 }
 
-                Core _core = _coreHelper.GetCore();
+                Core _core = await _coreHelper.GetCore();
 
                 if (fraction.eFormId > 0)
                 {
                     try {
-                        string eFormName = _core.TemplateItemRead(fraction.eFormId).Label;
+                        string eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Label;
                         fraction.SelectedTemplateName = eFormName;
                         
                     } catch {}

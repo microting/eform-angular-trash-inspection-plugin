@@ -57,7 +57,7 @@ namespace TrashInspection.Pn.Handlers
 
             foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
             {
-                bool result = _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
+                bool result = await _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
                 if (result)
                 {
                     await trashInspectionCase.Delete(_dbContext);

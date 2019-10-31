@@ -1,10 +1,11 @@
+using System.Threading.Tasks;
 using Rebus.Bus;
 
 namespace TrashInspection.Pn.Abstractions
 {
     public interface IRebusService
     {
-        void Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers);
+        Task Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers);
         IBus GetBus();
 
     }

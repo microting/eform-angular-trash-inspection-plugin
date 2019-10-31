@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Microting.eFormApi.BasePn.Abstractions;
@@ -49,7 +50,7 @@ namespace TrashInspection.Pn.Services
             _coreHelper = coreHelper;
         }
 
-        public void Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers)
+        public async Task Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers)
         {
             _connectionString = connectionString;
             _sdkConnectionString = sdkConnectionString;
@@ -59,7 +60,7 @@ namespace TrashInspection.Pn.Services
                 , new RebusInstaller(connectionString, maxParallelism, numberOfWorkers)
             );
             
-            Core core = _coreHelper.GetCore();
+            Core core = await _coreHelper.GetCore();
             _dbContextHelper = new DbContextHelper(connectionString);
             
             _container.Register(Component.For<Core>().Instance(core));

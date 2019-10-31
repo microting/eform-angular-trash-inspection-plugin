@@ -147,7 +147,7 @@ namespace TrashInspection.Pn.Services
 
                 segmentsModel.Total = await _dbContext.Segments.CountAsync(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 segmentsModel.SegmentList = segmentModels;
-                Core _core = _coreHelper.GetCore();
+                Core _core = await _coreHelper.GetCore();
 
                 
                 return new OperationDataResult<SegmentsModel>(true, segmentsModel);

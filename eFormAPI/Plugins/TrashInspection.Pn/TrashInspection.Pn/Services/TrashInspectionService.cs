@@ -257,7 +257,7 @@ namespace TrashInspection.Pn.Services
                      try
                      {
                          trashInspectionCaseStatusModel.SdkSiteName =
-                             _coreHelper.GetCore().Advanced_SiteItemRead(trashInspectionCase.SdkSiteId).SiteName;
+                             _coreHelper.GetCore().Result.Advanced_SiteItemRead(trashInspectionCase.SdkSiteId).Result.SiteName;
                      }
                      catch (Exception ex)
                      {
@@ -456,7 +456,7 @@ namespace TrashInspection.Pn.Services
             {
                 try
                 {
-                    var core = _coreHelper.GetCore();
+                    var core = await _coreHelper.GetCore();
                     string microtingUId;
                     string microtingCheckUId;
                     int caseId = 0;
@@ -514,7 +514,7 @@ namespace TrashInspection.Pn.Services
                     {
                         if (trashInspectionCase.Status == 100)
                         {
-                            Case_Dto caseDto = core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
+                            Case_Dto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
                             microtingUId = caseDto.MicrotingUId.ToString();
                             microtingCheckUId = caseDto.CheckUId.ToString();
                             caseId = (int)caseDto.CaseId;
@@ -527,9 +527,9 @@ namespace TrashInspection.Pn.Services
 
 
                         _coreHelper.LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
-                        var filePath = core.CaseToPdf(caseId, eFormId.ToString(),
+                        var filePath = await core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
+                            $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();

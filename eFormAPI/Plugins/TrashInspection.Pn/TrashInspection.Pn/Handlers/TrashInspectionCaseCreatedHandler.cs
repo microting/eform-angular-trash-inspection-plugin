@@ -55,7 +55,7 @@ namespace TrashInspection.Pn.Handlers
         {
             LogEvent($"TrashInspectionCaseCreatedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber / message.TrashInspectionCase.Id : {message.TrashInspectionModel.WeighingNumber} / {message.TrashInspectionCase.Id}");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
-            MainElement mainElement = _core.TemplateRead(message.TemplateId);
+            MainElement mainElement = await _core.TemplateRead(message.TemplateId);
             TrashInspectionModel createModel = message.TrashInspectionModel;
             int sdkSiteId = message.TrashInspectionCase.SdkSiteId;
             Segment segment = message.Segment;
@@ -116,7 +116,7 @@ namespace TrashInspection.Pn.Handlers
             }
             
             LogEvent("CreateTrashInspection: Trying to create SDK case");
-            int? sdkCaseId = _core.CaseCreate(mainElement, "", sdkSiteId);
+            int? sdkCaseId = await _core.CaseCreate(mainElement, "", sdkSiteId);
             LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
 
             trashInspectionCase.SdkCaseId = sdkCaseId.ToString();
