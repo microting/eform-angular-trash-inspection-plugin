@@ -55,7 +55,7 @@ import {
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {GoogleChartsModule} from 'angular-google-charts';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {NgxChartsModule} from '@microting/ngx-charts';
 
 @NgModule({
   imports: [
