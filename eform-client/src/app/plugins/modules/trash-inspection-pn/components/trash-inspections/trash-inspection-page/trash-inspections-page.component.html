@@ -295,6 +295,7 @@
 
             <button class="btn btn-success btn-icon mb-2" *ngIf="trashInspection.status === 100"
                     [routerLink]="['/cases/edit/' + trashInspection.sdkCaseId + '/' + trashInspection.sdkeFormId]"
+                    [queryParams]="{'reverseRoute': '/plugins/trash-inspection-pn/trash-inspections'}"
                     mdbTooltip="{{ 'Edit Case' | translate }}">
               <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
 
