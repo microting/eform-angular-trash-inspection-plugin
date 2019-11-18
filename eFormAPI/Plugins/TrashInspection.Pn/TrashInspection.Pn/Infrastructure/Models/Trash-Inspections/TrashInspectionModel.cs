@@ -69,6 +69,10 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public bool ExtendedInspection { get; set; }
         
         public string Comment { get; set; }
+        
+        public string SdkCaseId { get; set; }
+        
+        public string SdkeFormId { get; set; }
 
         #endregion
         

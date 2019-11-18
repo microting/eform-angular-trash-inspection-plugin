@@ -30,4 +30,6 @@ export class TrashInspectionPnModel {
   comment: string;
   workflowState: string;
   inspectionDone: boolean;
+  sdkCaseId: string;
+  sdkeFormId: string;
 }

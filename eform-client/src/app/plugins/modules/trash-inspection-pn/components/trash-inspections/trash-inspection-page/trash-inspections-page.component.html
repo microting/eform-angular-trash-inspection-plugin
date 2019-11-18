@@ -292,15 +292,22 @@
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
               <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true" ></fa-icon>
             </button>
+
+            <button class="btn btn-success btn-icon mb-2" *ngIf="trashInspection.status === 100"
+                    [routerLink]="['/cases/edit/' + trashInspection.sdkCaseId + '/' + trashInspection.sdkeFormId]"
+                    mdbTooltip="{{ 'Edit Case' | translate }}">
+              <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
+
+            </button>
             <button class="btn btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PDF' | translate }}"
-                    (click)="downloadPDF(trashInspection)" *ngIf="trashInspection.status == 100">
+                    (click)="downloadPDF(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-pdf" size="lg" [fixedWidth]="true" ></fa-icon>
 
             </button>
             <button class="btn btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get DOCX' | translate }}"
-                    (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status == 100">
+                    (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-word" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>

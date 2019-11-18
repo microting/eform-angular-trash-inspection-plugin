@@ -38,6 +38,7 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using System.IO;
 using System.Xml.Linq;
+using eFormCore;
 using Microting.eForm.Dto;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
@@ -128,6 +129,9 @@ namespace TrashInspection.Pn.Services
                     Comment = x.Comment,
                     Token = trashInspectionSettings.Value
                 }).ToListAsync();
+                
+                Core _core = await _coreHelper.GetCore();
+                List<KeyValuePair<int, string>> eFormIds = new List<KeyValuePair<int, string>>(); // <FractionId, eFormId>
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)
                 {
@@ -149,7 +153,35 @@ namespace TrashInspection.Pn.Services
                     if (segment != null)
                     {
                         trashInspectionModel.Segment = segment.Name;
-                    }             
+                    }
+
+                    if (trashInspectionModel.Status == 100)
+                    {
+                        trashInspectionModel.SdkCaseId =
+                            _dbContext.TrashInspectionCases.SingleOrDefault(x =>
+                                x.TrashInspectionId == trashInspectionModel.Id)
+                                ?.SdkCaseId;
+                        if (eFormIds.Any(x => x.Key == trashInspectionModel.FractionId))
+                        {
+                            trashInspectionModel.SdkeFormId = eFormIds.First(x => x.Key == trashInspectionModel.FractionId).Value;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                string eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Label;
+                                trashInspectionModel.SdkeFormId = eFormName;
+                                KeyValuePair<int, string> kvp =
+                                    new KeyValuePair<int, string>(fraction.eFormId, eFormName);
+                                eFormIds.Add(kvp);
+                            }
+                            catch
+                            {
+                                KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(fraction.eFormId, "");
+                                eFormIds.Add(kvp);
+                            }
+                        }
+                    }
                 }
 
                 TrashInspectionsModel trashInspectionsModel = new TrashInspectionsModel
