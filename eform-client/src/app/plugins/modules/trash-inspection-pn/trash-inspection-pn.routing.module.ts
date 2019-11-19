@@ -23,13 +23,15 @@ export const routes: Routes = [
     children: [
       {
         path: 'trash-inspections',
-        canActivate: [AuthGuard],
-        component: TrashInspectionsPageComponent
+        canActivate: [PermissionGuard],
+        component: TrashInspectionsPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin}
       },
       {
         path: 'installations',
-        canActivate: [AdminGuard],
-        component: InstallationsPageComponent
+        canActivate: [PermissionGuard],
+        component: InstallationsPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessInstallation}
       },
       {
         path: 'settings',
@@ -38,43 +40,49 @@ export const routes: Routes = [
       },
       {
         path: 'fractions',
-        canActivate: [AdminGuard],
-        component: FractionsPageComponent
+        canActivate: [PermissionGuard],
+        component: FractionsPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessFraction}
       },
       {
         path: 'segments',
-        canActivate: [AdminGuard],
-        component: SegmentsPageComponent
+        canActivate: [PermissionGuard],
+        component: SegmentsPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessSegment}
       },
       {
         path: 'importfraction',
-        canActivate: [AdminGuard],
-        component: FractionsPnImportComponent
+        canActivate: [PermissionGuard],
+        component: FractionsPnImportComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin}
       },
       {
         path: 'producers',
-        canActivate: [AdminGuard],
-        component: ProducerPageComponent
+        canActivate: [PermissionGuard],
+        component: ProducerPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessProducer}
       },
       {
         path: 'importproducers',
-        canActivate: [AdminGuard],
+        canActivate: [PermissionGuard],
         component: ProducerImportComponent
       },
       {
         path: 'transporters',
-        canActivate: [AdminGuard],
-        component: TransporterPageComponent
+        canActivate: [PermissionGuard],
+        component: TransporterPageComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessTransporter}
       },
       {
         path: 'importtransporters',
-        canActivate: [AdminGuard],
+        canActivate: [PermissionGuard],
         component: TransporterImportComponent
       },
       {
         path: 'reports',
-        canActivate: [AdminGuard],
-        component: ReportPreviewTableComponent
+        canActivate: [PermissionGuard],
+        component: ReportPreviewTableComponent,
+        data: {requiredPermission: TrashInspectionPnClaims.accessReport}
       }
     ]
   }

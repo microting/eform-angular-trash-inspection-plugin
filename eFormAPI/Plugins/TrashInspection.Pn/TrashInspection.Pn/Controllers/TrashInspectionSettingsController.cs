@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
+using TrashInspection.Pn.Infrastructure.Const;
 
 namespace TrashInspection.Pn.Controllers
 {
@@ -34,7 +35,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = EformRole.Admin)]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/token")]
         public OperationDataResult<TrashInspectionBaseToken> GetToken()
         {

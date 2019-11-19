@@ -131,7 +131,7 @@ namespace TrashInspection.Pn.Services
                 }).ToListAsync();
                 
                 Core _core = await _coreHelper.GetCore();
-                List<KeyValuePair<int, string>> eFormIds = new List<KeyValuePair<int, string>>(); // <FractionId, eFormId>
+                List<KeyValuePair<int, int>> eFormIds = new List<KeyValuePair<int, int>>(); // <FractionId, eFormId>
 
                 foreach (TrashInspectionModel trashInspectionModel in trashInspections)
                 {
@@ -169,16 +169,16 @@ namespace TrashInspection.Pn.Services
                         {
                             try
                             {
-                                string eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Label;
+                                int eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Id;
                                 trashInspectionModel.SdkeFormId = eFormName;
-                                KeyValuePair<int, string> kvp =
-                                    new KeyValuePair<int, string>(fraction.eFormId, eFormName);
+                                KeyValuePair<int, int> kvp =
+                                    new KeyValuePair<int, int>(fraction.eFormId, eFormName);
                                 eFormIds.Add(kvp);
                             }
                             catch
                             {
-                                KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(fraction.eFormId, "");
-                                eFormIds.Add(kvp);
+//                                KeyValuePair<int, int> kvp = new KeyValuePair<int, int>(fraction.eFormId, "");
+//                                eFormIds.Add(kvp);
                             }
                         }
                     }

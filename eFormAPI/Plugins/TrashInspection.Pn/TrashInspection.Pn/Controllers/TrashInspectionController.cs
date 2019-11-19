@@ -10,6 +10,7 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Newtonsoft.Json;
 using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Infrastructure.Const;
 using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Controllers
@@ -24,7 +25,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationDataResult<TrashInspectionsModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel)
         {
@@ -70,7 +71,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/inspections/{id}")]
         public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int id)
         {
@@ -78,7 +79,6 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [AllowAnonymous]
         [Route("api/trash-inspection-pn/versions/{id}")]
         public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int id)
@@ -96,7 +96,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [AllowAnonymous]
         [Route("api/trash-inspection-pn/case-versions/{id}")]
         public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> GetTrashInspectionCaseVersions(int id)
@@ -105,7 +105,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> UpdateTrashInspection([FromBody] TrashInspectionModel updateModel)
         {
@@ -113,7 +113,7 @@ namespace TrashInspection.Pn.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/inspections/{id}")]
         public async Task<OperationResult> DeleteTrashInspection(int id)
         {

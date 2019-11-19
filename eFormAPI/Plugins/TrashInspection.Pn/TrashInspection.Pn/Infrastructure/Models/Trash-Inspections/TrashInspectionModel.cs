@@ -72,7 +72,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         
         public string SdkCaseId { get; set; }
         
-        public string SdkeFormId { get; set; }
+        public int SdkeFormId { get; set; }
 
         #endregion
         

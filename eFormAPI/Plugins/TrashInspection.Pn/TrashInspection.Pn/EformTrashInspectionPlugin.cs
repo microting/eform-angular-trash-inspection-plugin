@@ -42,7 +42,7 @@ using TrashInspection.Pn.Infrastructure.Data.Seed;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 using TrashInspection.Pn.Infrastructure.Models;
 using Microting.eFormApi.BasePn.Infrastructure.Helpers;
-using Microting.eFormTrashInspectionBase.Infrastructure.Const;
+using TrashInspection.Pn.Infrastructure.Const;
 
 namespace TrashInspection.Pn
 {
@@ -149,6 +149,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("TrashInspections"),
                         E2EId = "trash-inspection-pn-trash-inspection",
                         Link = "/plugins/trash-inspection-pn/trash-inspections",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessTrashInspections },
                         Position = 0,
                     },
                     new MenuItemModel()
@@ -156,6 +157,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Installations"),
                         E2EId = "trash-inspection-pn-installations",
                         Link = "/plugins/trash-inspection-pn/installations",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessInstallations },
                         Position = 1,
                     },
                     new MenuItemModel()
@@ -163,6 +165,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Fractions"),
                         E2EId = "trash-inspection-pn-fractions",
                         Link = "/plugins/trash-inspection-pn/fractions",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessFractions },
                         Position = 2,
                     },
                     new MenuItemModel()
@@ -170,6 +173,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Segments"),
                         E2EId = "trash-inspection-pn-segments",
                         Link = "/plugins/trash-inspection-pn/segments",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessSegments },
                         Position = 3,
                     },
                     new MenuItemModel()
@@ -177,6 +181,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Producers"),
                         E2EId = "trash-inspection-pn-producers",
                         Link = "/plugins/trash-inspection-pn/producers",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessProducers },
                         Position = 4,
                     },
                     new MenuItemModel()
@@ -184,6 +189,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Transporters"),
                         E2EId = "trash-inspection-pn-transporters",
                         Link = "/plugins/trash-inspection-pn/transporters",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessTransporters },
                         Position = 5,
                     },
                     new MenuItemModel()
@@ -191,6 +197,7 @@ namespace TrashInspection.Pn
                         Name = localizationService.GetString("Reports"),
                         E2EId = "trash-inspection-pn-reports",
                         Link = "/plugins/trash-inspection-pn/reports",
+                        Guards = new List<string>() { TrashInspectionClaims.AccessReports },
                         Position = 6,
                     }
                 }
