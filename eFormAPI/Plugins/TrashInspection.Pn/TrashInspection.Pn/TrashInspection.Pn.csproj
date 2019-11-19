@@ -31,7 +31,7 @@
     <PackageReference Include="Microting.eFormApi.BasePn" Version="1.2.10" />
     <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.131" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
-    <PackageReference Include="Rebus.RabbitMQ" Version="5.1.3" />
+    <PackageReference Include="Rebus.RabbitMQ" Version="5.2.0" />
   </ItemGroup>
 
 </Project>
