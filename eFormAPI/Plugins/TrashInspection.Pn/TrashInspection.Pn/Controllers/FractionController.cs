@@ -4,7 +4,7 @@ using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Const;
+using TrashInspection.Pn.Infrastructure.Const;
 
 namespace TrashInspection.Pn.Controllers
 {
