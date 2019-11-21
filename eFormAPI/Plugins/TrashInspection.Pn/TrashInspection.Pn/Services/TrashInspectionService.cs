@@ -157,10 +157,11 @@ namespace TrashInspection.Pn.Services
 
                     if (trashInspectionModel.Status == 100)
                     {
-                        trashInspectionModel.SdkCaseId =
+                        trashInspectionModel.SdkCaseId = int.Parse(
                             _dbContext.TrashInspectionCases.SingleOrDefault(x =>
                                 x.TrashInspectionId == trashInspectionModel.Id)
-                                ?.SdkCaseId;
+                                ?.SdkCaseId);
+                        trashInspectionModel.SdkCaseId = _core.CaseReadByCaseId(trashInspectionModel.SdkCaseId).Result.CheckListId;
                         if (eFormIds.Any(x => x.Key == trashInspectionModel.FractionId))
                         {
                             trashInspectionModel.SdkeFormId = eFormIds.First(x => x.Key == trashInspectionModel.FractionId).Value;
