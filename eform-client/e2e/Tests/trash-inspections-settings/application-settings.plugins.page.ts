@@ -21,8 +21,8 @@ class PluginRowObject {
             this.name = $$('#plugin-name')[rowNum - 1].getText();
             this.version = $$('#plugin-version')[rowNum - 1].getText();
             this.status = $$('#plugin-status')[rowNum - 1].getText();
-            browser.waitForVisible('#plugin-settings-btn', 40000);
-            this.settingsBtn = $$('#plugin-settings-btn')[rowNum - 1].getText();
+            browser.waitForVisible('#plugin-settings-link', 40000);
+            this.settingsBtn = $$('#plugin-settings-link')[rowNum - 1].getText();
         }
     }
 
