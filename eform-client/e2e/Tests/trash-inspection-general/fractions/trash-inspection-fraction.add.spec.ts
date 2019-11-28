@@ -24,7 +24,6 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(plugin.id).equal(1);
     expect(plugin.name).equal('Microting Trash Inspection Plugin');
     expect(plugin.version).equal('1.0.0.0');
-    expect(plugin.status).equal('Aktiveret');
   });
   it('should check if menupoint is there', function () {
     expect(fractionsPage.trashInspectionDropdownName.getText()).equal('Affaldsinspektion');
