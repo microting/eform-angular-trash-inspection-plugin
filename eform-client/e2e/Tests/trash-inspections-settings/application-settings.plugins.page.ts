@@ -20,7 +20,7 @@ class PluginRowObject {
             this.id = +$$('#plugin-id')[rowNum - 1].getText();
             this.name = $$('#plugin-name')[rowNum - 1].getText();
             this.version = $$('#plugin-version')[rowNum - 1].getText();
-            this.settingsBtn = $$('#plugin-settings-link')[rowNum - 1].getText();
+            this.settingsBtn = $$('#plugin-settings-link')[rowNum - 1];
         }
     }
 
