@@ -38,7 +38,7 @@ This is expection you to have eform-angular-frontend installed as default in /va
 
 ```
 cd /var/www/microting/
-curl -s -L https://raw.githubusercontent.com/microting/eform-angular-trashinspection-plugin/master/install.sh | sudo bash
+curl -s -L https://raw.githubusercontent.com/microting/eform-angular-trashinspection-plugin/stable/install.sh | sudo bash
 ```
 
 
