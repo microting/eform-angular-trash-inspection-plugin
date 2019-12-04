@@ -58,7 +58,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public async Task<OperationDataResult<TransportersModel>> GetAllTransporters(TransporterRequestModel pnRequestModel)
+        public async Task<OperationDataResult<TransportersModel>> Index(TransporterRequestModel pnRequestModel)
         {
             try
             {
@@ -124,7 +124,27 @@ namespace TrashInspection.Pn.Services
             }
         }
         
-        public async Task<OperationDataResult<TransporterModel>> GetSingleTransporter(int id)
+        
+        
+        public async Task<OperationResult> Create(TransporterModel transporterModel)
+        {
+            Transporter transporter = new Transporter
+            {
+                Name = transporterModel.Name,
+                Description = transporterModel.Description,
+                ForeignId = transporterModel.ForeignId,
+                City = transporterModel.City,
+                Address = transporterModel.Address,
+                Phone = transporterModel.Phone,
+                ZipCode = transporterModel.ZipCode,
+                ContactPerson = transporterModel.ContactPerson,
+            };
+           
+            await transporter.Create(_dbContext);
+           
+           return new OperationResult(true);
+        }
+        public async Task<OperationDataResult<TransporterModel>> Read(int id)
         {
             try
             {
@@ -157,6 +177,36 @@ namespace TrashInspection.Pn.Services
                 return new OperationDataResult<TransporterModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporter"));
             }
+        }
+        public async Task<OperationResult> Update(TransporterModel transporterModel)
+        {
+            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == transporterModel.Id);
+            
+            if (transporter != null)
+            {
+                transporter.Name = transporterModel.Name;
+                transporter.Description = transporterModel.Description;
+                transporter.ForeignId = transporterModel.ForeignId;
+                transporter.City = transporterModel.City;
+                transporter.Address = transporterModel.Address;
+                transporter.Phone = transporterModel.Phone;
+                transporter.ZipCode = transporterModel.ZipCode;
+                transporter.ContactPerson = transporterModel.ContactPerson;
+                
+                await transporter.Update(_dbContext);
+                return new OperationResult(true);
+            }
+            return new OperationResult(false);        }
+
+        public async Task<OperationResult> Delete(int id)
+        {
+            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
+            if (transporter != null)
+            {
+                await transporter.Delete(_dbContext);
+                return new OperationResult(true);
+            }
+            return new OperationResult(false);
         }
         public async Task<OperationResult> ImportTransporter(TransporterImportModel transporterAsJson)
         {
@@ -232,56 +282,6 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingTransporter"));
             }
         }
-        public async Task<OperationResult> CreateTransporter(TransporterModel transporterModel)
-        {
-            Transporter transporter = new Transporter
-            {
-                Name = transporterModel.Name,
-                Description = transporterModel.Description,
-                ForeignId = transporterModel.ForeignId,
-                City = transporterModel.City,
-                Address = transporterModel.Address,
-                Phone = transporterModel.Phone,
-                ZipCode = transporterModel.ZipCode,
-                ContactPerson = transporterModel.ContactPerson,
-            };
-           
-            await transporter.Create(_dbContext);
-           
-           return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> UpdateTransporter(TransporterModel transporterModel)
-        {
-            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == transporterModel.Id);
-            
-            if (transporter != null)
-            {
-                transporter.Name = transporterModel.Name;
-                transporter.Description = transporterModel.Description;
-                transporter.ForeignId = transporterModel.ForeignId;
-                transporter.City = transporterModel.City;
-                transporter.Address = transporterModel.Address;
-                transporter.Phone = transporterModel.Phone;
-                transporter.ZipCode = transporterModel.ZipCode;
-                transporter.ContactPerson = transporterModel.ContactPerson;
-                
-                await transporter.Update(_dbContext);
-                return new OperationResult(true);
-            }
-            return new OperationResult(false);        }
-
-        public async Task<OperationResult> DeleteTransporter(int id)
-        {
-            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
-            if (transporter != null)
-            {
-                await transporter.Delete(_dbContext);
-                return new OperationResult(true);
-            }
-            return new OperationResult(false);
-        }
-
         private Transporter FindTransporter(int transporterNameColumn, JToken headers, JToken transporterObj)
         {
             string transporterName = transporterObj[transporterNameColumn].ToString();

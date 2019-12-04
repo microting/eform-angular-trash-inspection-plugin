@@ -55,53 +55,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
         
-        public async Task<OperationResult> CreateSegment(SegmentModel model)
-        {
-
-            Segment segment = new Segment
-            {
-                Name = model.Name,
-                Description = model.Description,
-                SdkFolderId = model.SdkFolderId
-            };
-            
-            await segment.Create(_dbContext);
-            
-            return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> DeleteSegment(int id)
-        {
-            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == id);
-
-            if (segment != null)
-            {
-                await segment.Delete(_dbContext);
-            
-                return new OperationResult(true);
-            }
-            
-            return new OperationResult(false);
-        }
-
-        public async Task<OperationResult> UpdateSegment(SegmentModel updateModel)
-        {
-            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
-
-            if (segment != null)
-            {
-                segment.Name = updateModel.Name;
-                segment.Description = updateModel.Description;
-                segment.SdkFolderId = updateModel.SdkFolderId;
-                await segment.Update(_dbContext);
-            
-                return new OperationResult(true);
-            }
-            
-            return new OperationResult(false);
-        }
-
-        public async Task<OperationDataResult<SegmentsModel>> GetAllSegments(SegmentRequestModel pnRequestModel)
+        public async Task<OperationDataResult<SegmentsModel>> Index(SegmentRequestModel pnRequestModel)
         {
             try
             {
@@ -126,17 +80,13 @@ namespace TrashInspection.Pn.Services
                     segmentQuery = _dbContext.Segments
                         .OrderBy(x => x.Id);
                 }
-
-              
-                 segmentQuery
+                
+                segmentQuery
                      = segmentQuery
                      .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                      .Skip(pnRequestModel.Offset)
                      .Take(pnRequestModel.PageSize);
-                
-
-                
-
+                 
                 List<SegmentModel> segmentModels = await segmentQuery.Select(x => new SegmentModel()
                 {
                     Id = x.Id,
@@ -161,8 +111,21 @@ namespace TrashInspection.Pn.Services
 
             }
         }
+        public async Task<OperationResult> Create(SegmentModel model)
+        {
 
-        public async Task<OperationDataResult<SegmentModel>> GetSingleSegment(int id)
+            Segment segment = new Segment
+            {
+                Name = model.Name,
+                Description = model.Description,
+                SdkFolderId = model.SdkFolderId
+            };
+            
+            await segment.Create(_dbContext);
+            
+            return new OperationResult(true);
+        }
+        public async Task<OperationDataResult<SegmentModel>> Read(int id)
         {
             try
             {
@@ -190,7 +153,36 @@ namespace TrashInspection.Pn.Services
                 return new OperationDataResult<SegmentModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingSegment"));
             }
-
         }
+        public async Task<OperationResult> Update(SegmentModel updateModel)
+        {
+            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
+
+            if (segment != null)
+            {
+                segment.Name = updateModel.Name;
+                segment.Description = updateModel.Description;
+                segment.SdkFolderId = updateModel.SdkFolderId;
+                await segment.Update(_dbContext);
+            
+                return new OperationResult(true);
+            }
+            
+            return new OperationResult(false);
+        }
+        public async Task<OperationResult> Delete(int id)
+        {
+            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (segment != null)
+            {
+                await segment.Delete(_dbContext);
+            
+                return new OperationResult(true);
+            }
+            
+            return new OperationResult(false);
+        }
+
     }
 }

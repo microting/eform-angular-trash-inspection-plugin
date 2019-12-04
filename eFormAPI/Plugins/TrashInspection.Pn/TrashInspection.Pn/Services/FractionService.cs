@@ -58,7 +58,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public async Task<OperationDataResult<FractionsModel>> GetAllFractions(FractionRequestModel pnRequestModel)
+        public async Task<OperationDataResult<FractionsModel>> Index(FractionRequestModel pnRequestModel)
         {
             try
             {
@@ -149,7 +149,22 @@ namespace TrashInspection.Pn.Services
 
             }
         }
-        public async Task<OperationDataResult<FractionModel>> GetSingleFraction(int id)
+        public async Task<OperationResult> Create(FractionModel createModel)
+        {
+            Fraction fraction = new Fraction
+            {
+                Name = createModel.Name,
+                Description = createModel.Description,
+                ItemNumber = createModel.ItemNumber,
+                LocationCode = createModel.LocationCode,
+                eFormId = createModel.eFormId
+            };
+            await fraction.Create(_dbContext);
+            
+            return new OperationResult(true);
+
+        }
+        public async Task<OperationDataResult<FractionModel>> Read(int id)
         {
             try
             {
@@ -190,7 +205,55 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFraction"));
             }
         }
+        
+        public async Task<OperationResult> Update(FractionModel updateModel)
+        {
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
+            if (fraction != null)
+            {
+                fraction.Name = updateModel.Name;
+                fraction.Description = updateModel.Description;
+                fraction.ItemNumber = updateModel.ItemNumber;
+                fraction.LocationCode = updateModel.LocationCode;
+                fraction.eFormId = updateModel.eFormId;
 
+                await fraction.Update(_dbContext);
+            }
+            
+            return new OperationResult(true);
+
+        }
+        
+        public async Task<OperationResult> Delete(int id)
+        {
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (fraction != null)
+            {
+                await fraction.Delete(_dbContext);
+            }
+            return new OperationResult(true);
+        }
+
+        private Fraction FindFraction(bool numberExists, int numberColumn, bool fractionNameExists,
+            int fractionNameColumn, JToken headers, JToken fractionObj)
+        {
+            Fraction fraction = null;
+
+            if (numberExists)
+            {
+                string itemNo = fractionObj[numberColumn].ToString();
+                fraction = _dbContext.Fractions.SingleOrDefault(x => x.ItemNumber == itemNo);
+            }
+
+            if (fractionNameExists)
+            {
+                string fractionName = fractionObj[fractionNameColumn].ToString();
+                fraction = _dbContext.Fractions.SingleOrDefault(x => x.Name == fractionName);
+            }
+
+            return fraction;
+        }
         public async Task<OperationResult> ImportFraction(FractionImportModel fractionsAsJson)
         {
             try
@@ -260,72 +323,6 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingFraction"));
             }
         }
-        
-        public async Task<OperationResult> CreateFraction(FractionModel createModel)
-        {
-            Fraction fraction = new Fraction
-            {
-                Name = createModel.Name,
-                Description = createModel.Description,
-                ItemNumber = createModel.ItemNumber,
-                LocationCode = createModel.LocationCode,
-                eFormId = createModel.eFormId
-            };
-            await fraction.Create(_dbContext);
-            
-            return new OperationResult(true);
-
-        }
-        
-        public async Task<OperationResult> UpdateFraction(FractionModel updateModel)
-        {
-            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
-            if (fraction != null)
-            {
-                fraction.Name = updateModel.Name;
-                fraction.Description = updateModel.Description;
-                fraction.ItemNumber = updateModel.ItemNumber;
-                fraction.LocationCode = updateModel.LocationCode;
-                fraction.eFormId = updateModel.eFormId;
-
-                await fraction.Update(_dbContext);
-            }
-            
-            return new OperationResult(true);
-
-        }
-        
-        public async Task<OperationResult> DeleteFraction(int id)
-        {
-            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
-
-            if (fraction != null)
-            {
-                await fraction.Delete(_dbContext);
-            }
-            return new OperationResult(true);
-        }
-
-        private Fraction FindFraction(bool numberExists, int numberColumn, bool fractionNameExists,
-            int fractionNameColumn, JToken headers, JToken fractionObj)
-        {
-            Fraction fraction = null;
-
-            if (numberExists)
-            {
-                string itemNo = fractionObj[numberColumn].ToString();
-                fraction = _dbContext.Fractions.SingleOrDefault(x => x.ItemNumber == itemNo);
-            }
-
-            if (fractionNameExists)
-            {
-                string fractionName = fractionObj[fractionNameColumn].ToString();
-                fraction = _dbContext.Fractions.SingleOrDefault(x => x.Name == fractionName);
-            }
-
-            return fraction;
-        }
-        
         public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel pnRequestModel)
         {
             try

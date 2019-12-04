@@ -18,44 +18,37 @@ namespace TrashInspection.Pn.Controllers
         }
         [HttpGet]
         [Route("api/trash-inspection-pn/transporters")]
-        public async Task<OperationDataResult<TransportersModel>> GetAllTransporters(TransporterRequestModel requestModel)
+        public async Task<OperationDataResult<TransportersModel>> Index(TransporterRequestModel requestModel)
         {
-            return await _transporterService.GetAllTransporters(requestModel);
-        }
-
-        [HttpGet]
-        [Route("api/trash-inspection-pn/transporters/{id}")]
-        public async Task<OperationDataResult<TransporterModel>> GetSingleTransporter(int id)
-        {
-            return await _transporterService.GetSingleTransporter(id);
-        }
-        
-        [HttpGet]
-        [Route("api/trash-inspection-pn/transporters/{id}/{year}")]
-        public async Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int id, int year)
-        {
-            return await _transporterService.GetSingleTransporterByMonth(id, year);
+            return await _transporterService.Index(requestModel);
         }
 
         [HttpPost]
         [Route("api/trash-inspection-pn/transporters")]
-        public async Task<OperationResult> CreateTransporter([FromBody] TransporterModel createModel)
+        public async Task<OperationResult> Create([FromBody] TransporterModel createModel)
         {
-            return await _transporterService.CreateTransporter(createModel);
+            return await _transporterService.Create(createModel);
         }
-
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/transporters/{id}")]
+        public async Task<OperationDataResult<TransporterModel>> Read(int id)
+        {
+            return await _transporterService.Read(id);
+        }
+        
         [HttpPut]
         [Route("api/trash-inspection-pn/transporters")]
-        public async Task<OperationResult> UpdateTransporter([FromBody] TransporterModel updateModel)
+        public async Task<OperationResult> Update([FromBody] TransporterModel updateModel)
         {
-            return await _transporterService.UpdateTransporter(updateModel);
+            return await _transporterService.Update(updateModel);
         }
 
         [HttpDelete]
         [Route("api/trash-inspection-pn/transporters/{id}")]
-        public async Task<OperationResult> DeleteTransporter(int id)
+        public async Task<OperationResult> Delete(int id)
         {
-            return await _transporterService.DeleteTransporter(id);
+            return await _transporterService.Delete(id);
         }
 
         [HttpPost]
@@ -65,6 +58,13 @@ namespace TrashInspection.Pn.Controllers
             return await _transporterService.ImportTransporter(transporterImportModel);
         }
 
+        [HttpGet]
+        [Route("api/trash-inspection-pn/transporters/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int id, int year)
+        {
+            return await _transporterService.GetSingleTransporterByMonth(id, year);
+        }
+        
         [HttpGet]
         [Route("api/trash-inspection-pn/transporters/year/{year}")]
         public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel requestModel)

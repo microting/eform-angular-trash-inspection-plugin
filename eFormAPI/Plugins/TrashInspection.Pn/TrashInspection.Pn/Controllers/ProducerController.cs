@@ -18,44 +18,37 @@ namespace TrashInspection.Pn.Controllers
         
         [HttpGet]
         [Route("api/trash-inspection-pn/producers")]
-        public async Task<OperationDataResult<ProducersModel>> GetAllProducers(ProducerRequestModel requestModel)
+        public async Task<OperationDataResult<ProducersModel>> Index(ProducerRequestModel requestModel)
         {
-            return await _producerService.GetAllProducers(requestModel);
-        }
-
-        [HttpGet]
-        [Route("api/trash-inspection-pn/producers/{id}")]
-        public async Task<OperationDataResult<ProducerModel>> GetSingleProducer(int id)
-        {
-            return await _producerService.GetSingleProducer(id);
-        }
-
-        [HttpGet]
-        [Route("api/trash-inspection-pn/producers/{id}/{year}")]
-        public async Task<OperationDataResult<StatByMonth>> GetSingleProducerByMonth(int id, int year)
-        {
-            return await _producerService.GetSingleProducerByMonth(id, year);
+            return await _producerService.Index(requestModel);
         }
         
         [HttpPost]
         [Route("api/trash-inspection-pn/producers")]
-        public async Task<OperationResult> CreateProducer([FromBody] ProducerModel createModel)
+        public async Task<OperationResult> Create([FromBody] ProducerModel createModel)
         {
-            return await _producerService.CreateProducer(createModel);
+            return await _producerService.Create(createModel);
         }
 
+        [HttpGet]
+        [Route("api/trash-inspection-pn/producers/{id}")]
+        public async Task<OperationDataResult<ProducerModel>> Read(int id)
+        {
+            return await _producerService.Read(id);
+        }
+        
         [HttpPut]
         [Route("api/trash-inspection-pn/producers")]
-        public async Task<OperationResult> UpdateProducer([FromBody] ProducerModel updateModel)
+        public async Task<OperationResult> Update([FromBody] ProducerModel updateModel)
         {
-            return await _producerService.UpdateProducer(updateModel);
+            return await _producerService.Update(updateModel);
         }
 
         [HttpDelete]
         [Route("api/trash-inspection-pn/producers/{id}")]
-        public async Task<OperationResult> DeleteProducer(int id)
+        public async Task<OperationResult> Delete(int id)
         {
-            return await _producerService.DeleteProducer(id);
+            return await _producerService.Delete(id);
         }
 
         [HttpPost]
@@ -71,5 +64,13 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _producerService.GetProducersStatsByYear(requestModel);
         }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/producers/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleProducerByMonth(int id, int year)
+        {
+            return await _producerService.GetSingleProducerByMonth(id, year);
+        }
+
     }
 }

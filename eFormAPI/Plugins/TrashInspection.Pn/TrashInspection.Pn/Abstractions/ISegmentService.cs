@@ -6,10 +6,10 @@ namespace TrashInspection.Pn.Abstractions
 {
     public interface ISegmentService
     {
-        Task<OperationResult> CreateSegment(SegmentModel model);
-        Task<OperationResult> DeleteSegment(int id);
-        Task<OperationResult> UpdateSegment(SegmentModel updateModel);
-        Task<OperationDataResult<SegmentsModel>> GetAllSegments(SegmentRequestModel requestModel);
-        Task<OperationDataResult<SegmentModel>> GetSingleSegment(int fractionId);
+        Task<OperationDataResult<SegmentsModel>> Index(SegmentRequestModel requestModel);
+        Task<OperationResult> Create(SegmentModel model);
+        Task<OperationDataResult<SegmentModel>> Read(int fractionId);
+        Task<OperationResult> Update(SegmentModel updateModel);
+        Task<OperationResult> Delete(int id);
     }
 }

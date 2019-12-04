@@ -27,11 +27,72 @@ namespace TrashInspection.Pn.Controllers
         [HttpGet]
         [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/inspections")]
-        public async Task<OperationDataResult<TrashInspectionsModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel)
+        public async Task<OperationDataResult<TrashInspectionsModel>> Index(TrashInspectionRequestModel requestModel)
         {
-            return await _trashInspectionService.GetAllTrashInspections(requestModel);
+            return await _trashInspectionService.Index(requestModel);
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [DebuggingFilter]
+        [Route("api/trash-inspection-pn/inspections")]
+        public async Task<OperationResult> Create([FromBody] TrashInspectionModel createModel)
+        {
+            return await _trashInspectionService.Create(createModel);
         }
 
+        [HttpGet]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
+        [Route("api/trash-inspection-pn/inspections/{id}")]
+        public async Task<OperationDataResult<TrashInspectionModel>> Read(int id)
+        {
+            return await _trashInspectionService.Read(id);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionVersionsModel>> ReadVersion(int id)
+        {
+            return await _trashInspectionService.ReadVersion(id);
+        }
+        
+       
+
+        [HttpPost]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/case-versions/{id}")]
+        public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> IndexVersions(int id)
+        {
+            return await _trashInspectionService.IndexVersions(id);
+        }
+
+        [HttpPut]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
+        [Route("api/trash-inspection-pn/inspections")]
+        public async Task<OperationResult> Update([FromBody] TrashInspectionModel updateModel)
+        {
+            return await _trashInspectionService.Update(updateModel);
+        }
+
+        [HttpDelete]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
+        [Route("api/trash-inspection-pn/inspections/{id}")]
+        public async Task<OperationResult> Delete(int id)
+        {
+            return await _trashInspectionService.Delete(id);
+        }
+                
+        [HttpDelete]
+        [AllowAnonymous]
+        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}", Name = "token")]
+        public async Task<OperationResult> Delete(string weighingNumber, string token)
+        {
+            return await _trashInspectionService.Delete(weighingNumber, token);
+
+        }
+        
         [HttpGet]
         [AllowAnonymous]
         [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}")]
@@ -41,7 +102,7 @@ namespace TrashInspection.Pn.Controllers
             {
                 if (fileType == "result")
                 {
-                    var result =  await _trashInspectionService.GetSingleTrashInspection(weighingNumber, token);
+                    var result =  await _trashInspectionService.Read(weighingNumber, token);
                     return new JsonResult(result.Model);
                 }
                 
@@ -67,65 +128,6 @@ namespace TrashInspection.Pn.Controllers
                 return BadRequest();
                 
             }
-
-        }
-
-        [HttpGet]
-        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
-        [Route("api/trash-inspection-pn/inspections/{id}")]
-        public async Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int id)
-        {
-            return await _trashInspectionService.GetSingleTrashInspection(id);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("api/trash-inspection-pn/versions/{id}")]
-        public async Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int id)
-        {
-            return await _trashInspectionService.GetTrashInspectionVersion(id);
-        }
-        
-        [HttpPost]
-        [AllowAnonymous]
-        [DebuggingFilter]
-        [Route("api/trash-inspection-pn/inspections")]
-        public async Task<OperationResult> CreateTrashInspection([FromBody] TrashInspectionModel createModel)
-        {
-            return await _trashInspectionService.CreateTrashInspection(createModel);
-        }
-
-        [HttpPost]
-        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
-        [AllowAnonymous]
-        [Route("api/trash-inspection-pn/case-versions/{id}")]
-        public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> GetTrashInspectionCaseVersions(int id)
-        {
-            return await _trashInspectionService.GetTrashInspectionCaseVersions(id);
-        }
-
-        [HttpPut]
-        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
-        [Route("api/trash-inspection-pn/inspections")]
-        public async Task<OperationResult> UpdateTrashInspection([FromBody] TrashInspectionModel updateModel)
-        {
-            return await _trashInspectionService.UpdateTrashInspection(updateModel);
-        }
-
-        [HttpDelete]
-        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
-        [Route("api/trash-inspection-pn/inspections/{id}")]
-        public async Task<OperationResult> DeleteTrashInspection(int id)
-        {
-            return await _trashInspectionService.DeleteTrashInspection(id);
-        }
-                
-        [HttpDelete]
-        [AllowAnonymous]
-        [Route("api/trash-inspection-pn/inspection-results/{weighingNumber}", Name = "token")]
-        public async Task<OperationResult> DeleteTrashInspection(string weighingNumber, string token)
-        {
-            return await _trashInspectionService.DeleteTrashInspection(weighingNumber, token);
 
         }
     }
