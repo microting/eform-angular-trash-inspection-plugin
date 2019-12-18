@@ -58,7 +58,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public async Task<OperationDataResult<ProducersModel>> GetAllProducers(ProducerRequestModel pnRequestModel)
+        public async Task<OperationDataResult<ProducersModel>> Index(ProducerRequestModel pnRequestModel)
         {
             try
             {
@@ -124,7 +124,24 @@ namespace TrashInspection.Pn.Services
             }
         }
         
-        public async Task<OperationDataResult<ProducerModel>> GetSingleProducer(int id)
+        public async Task<OperationResult> Create(ProducerModel producerModel)
+        {
+            Producer producer = new Producer
+            {
+                Name = producerModel.Name,
+                Description = producerModel.Description,
+                ForeignId = producerModel.ForeignId,
+                Address = producerModel.Address,
+                City = producerModel.City,
+                ZipCode = producerModel.ZipCode,
+                Phone = producerModel.Phone,
+                ContactPerson = producerModel.ContactPerson
+            };
+            await producer.Create(_dbContext);
+           
+           return new OperationResult(true);
+        }
+        public async Task<OperationDataResult<ProducerModel>> Read(int id)
         {
             try
             {
@@ -156,6 +173,31 @@ namespace TrashInspection.Pn.Services
                 return new OperationDataResult<ProducerModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducer"));
             }
+        }
+        public async Task<OperationResult> Update(ProducerModel producerModel)
+        {
+            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == producerModel.Id);
+            if (producer != null)
+            {
+                producer.Name = producerModel.Name;
+                producer.Description = producerModel.Description;
+                producer.Address = producerModel.Address;
+                producer.ForeignId = producerModel.ForeignId;
+                producer.City = producerModel.City;
+                producer.ZipCode = producerModel.ZipCode;
+                producer.Phone = producerModel.Phone;
+                producer.ContactPerson = producerModel.ContactPerson;
+            }
+            await producer.Update(_dbContext);
+            
+            return new OperationResult(true);
+        }
+
+        public async Task<OperationResult> Delete(int id)
+        {
+            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == id);
+            await producer.Delete(_dbContext);
+            return new OperationResult(true);
         }
         public async Task<OperationResult> ImportProducer(ProducerImportModel producersAsJson)
         {
@@ -228,50 +270,6 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorWhileCreatingProducer"));
             }
         }
-        public async Task<OperationResult> CreateProducer(ProducerModel producerModel)
-        {
-            Producer producer = new Producer
-            {
-                Name = producerModel.Name,
-                Description = producerModel.Description,
-                ForeignId = producerModel.ForeignId,
-                Address = producerModel.Address,
-                City = producerModel.City,
-                ZipCode = producerModel.ZipCode,
-                Phone = producerModel.Phone,
-                ContactPerson = producerModel.ContactPerson
-            };
-            await producer.Create(_dbContext);
-           
-           return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> UpdateProducer(ProducerModel producerModel)
-        {
-            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == producerModel.Id);
-            if (producer != null)
-            {
-                producer.Name = producerModel.Name;
-                producer.Description = producerModel.Description;
-                producer.Address = producerModel.Address;
-                producer.ForeignId = producerModel.ForeignId;
-                producer.City = producerModel.City;
-                producer.ZipCode = producerModel.ZipCode;
-                producer.Phone = producerModel.Phone;
-                producer.ContactPerson = producerModel.ContactPerson;
-            }
-            await producer.Update(_dbContext);
-            
-            return new OperationResult(true);
-        }
-
-        public async Task<OperationResult> DeleteProducer(int id)
-        {
-            Producer producer = await _dbContext.Producers.SingleOrDefaultAsync(x => x.Id == id);
-            await producer.Delete(_dbContext);
-            return new OperationResult(true);
-        }
-
         private Producer FindProducer(int producerNameColumn, JToken headers, JToken producerObj)
         {
             string producerName = producerObj[producerNameColumn].ToString();

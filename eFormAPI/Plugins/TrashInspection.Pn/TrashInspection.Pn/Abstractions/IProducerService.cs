@@ -6,12 +6,12 @@ namespace TrashInspection.Pn.Abstractions
 {
     public interface IProducerService
     {
-        Task<OperationResult> CreateProducer(ProducerModel producerModel);
-        Task<OperationResult> UpdateProducer(ProducerModel producerModel);
-        Task<OperationResult> DeleteProducer(int Id);
+        Task<OperationDataResult<ProducersModel>> Index(ProducerRequestModel pnRequestModel);
+        Task<OperationResult> Create(ProducerModel producerModel);
+        Task<OperationDataResult<ProducerModel>> Read(int id);
+        Task<OperationResult> Update(ProducerModel producerModel);
+        Task<OperationResult> Delete(int Id);
         Task<OperationResult> ImportProducer(ProducerImportModel producersAsJson);
-        Task<OperationDataResult<ProducersModel>> GetAllProducers(ProducerRequestModel pnRequestModel);
-        Task<OperationDataResult<ProducerModel>> GetSingleProducer(int id);
         Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel requestModel);
         Task<OperationDataResult<StatByMonth>> GetSingleProducerByMonth(int id, int year);
     }

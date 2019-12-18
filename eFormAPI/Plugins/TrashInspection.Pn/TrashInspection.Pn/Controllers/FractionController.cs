@@ -20,45 +20,39 @@ namespace TrashInspection.Pn.Controllers
         
         [HttpGet]
         [Route("api/trash-inspection-pn/fractions")]
-        public async Task<OperationDataResult<FractionsModel>> GetAllFractions(FractionRequestModel requestModel)
+        public async Task<OperationDataResult<FractionsModel>> Index(FractionRequestModel requestModel)
         {
-            return await _fractionService.GetAllFractions(requestModel);
+            return await _fractionService.Index(requestModel);
         }
 
-        [HttpGet]
-        [Route("api/trash-inspection-pn/fractions/{id}")]
-        public async Task<OperationDataResult<FractionModel>> GetSingleFraction(int id)
-        {
-            return await _fractionService.GetSingleFraction(id);
-        }
-
-        [HttpGet]
-        [Route("api/trash-inspection-pn/fractions/{id}/{year}")]
-        public async Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int id, int year)
-        {
-            return await _fractionService.GetSingleFractionByMonth(id, year);
-        }
-        
         [HttpPost]
         [Route("api/trash-inspection-pn/fractions")]
         [Authorize(Policy = TrashInspectionClaims.CreateFractions)]
-        public async Task<OperationResult> CreateFraction([FromBody] FractionModel createModel)
+        public async Task<OperationResult> Create([FromBody] FractionModel createModel)
         {
-            return await _fractionService.CreateFraction(createModel);
+            return await _fractionService.Create(createModel);
+        }
+
+
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/{id}")]
+        public async Task<OperationDataResult<FractionModel>> Read(int id)
+        {
+            return await _fractionService.Read(id);
         }
 
         [HttpPut]
         [Route("api/trash-inspection-pn/fractions")]
-        public async Task<OperationResult> UpdateFraction([FromBody] FractionModel updateModel)
+        public async Task<OperationResult> Update([FromBody] FractionModel updateModel)
         {
-            return await _fractionService.UpdateFraction(updateModel);
+            return await _fractionService.Update(updateModel);
         }
 
         [HttpDelete]
         [Route("api/trash-inspection-pn/fractions/{id}")]
-        public async Task<OperationResult> DeleteFraction(int id)
+        public async Task<OperationResult> Delete(int id)
         {
-            return await _fractionService.DeleteFraction(id);
+            return await _fractionService.Delete(id);
         }
 
         [HttpPost]
@@ -73,6 +67,13 @@ namespace TrashInspection.Pn.Controllers
         public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel requestModel)
         {
             return await _fractionService.GetFractionsStatsByYear(requestModel);
+        }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/fractions/{id}/{year}")]
+        public async Task<OperationDataResult<StatByMonth>> GetSingleFractionByMonth(int id, int year)
+        {
+            return await _fractionService.GetSingleFractionByMonth(id, year);
         }
     }
 }

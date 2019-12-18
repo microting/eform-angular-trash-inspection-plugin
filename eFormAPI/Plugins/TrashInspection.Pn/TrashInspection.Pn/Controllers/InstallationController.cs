@@ -19,37 +19,38 @@ namespace TrashInspection.Pn.Controllers
 
         [HttpGet]
         [Route("api/trash-inspection-pn/installations")]
-        public async Task<OperationDataResult<InstallationsModel>> GetAllInstallations(InstallationRequestModel requestModel)
+        public async Task<OperationDataResult<InstallationsModel>> Index(InstallationRequestModel requestModel)
         {
-            return await _installationService.GetAllInstallations(requestModel);
-        }
-
-        [HttpGet]
-        [Route("api/trash-inspection-pn/installations/{id}")]
-        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int id)
-        {
-            return await _installationService.GetSingleInstallation(id);
+            return await _installationService.Index(requestModel);
         }
 
         [HttpPost]
         [Route("api/trash-inspection-pn/installations")]
-        public async Task<OperationResult> CreateInstallation([FromBody] InstallationModel createModel)
+        public async Task<OperationResult> Create([FromBody] InstallationModel createModel)
         {
-            return await _installationService.CreateInstallation(createModel);
+            return await _installationService.Create(createModel);
         }
+        
+        [HttpGet]
+        [Route("api/trash-inspection-pn/installations/{id}")]
+        public async Task<OperationDataResult<InstallationModel>> Read(int id)
+        {
+            return await _installationService.Read(id);
+        }
+
 
         [HttpPut]
         [Route("api/trash-inspection-pn/installations")]
-        public async Task<OperationResult> UpdateInstallation([FromBody] InstallationModel updateModel)
+        public async Task<OperationResult> Update([FromBody] InstallationModel updateModel)
         {
-            return await _installationService.UpdateInstallation(updateModel);
+            return await _installationService.Update(updateModel);
         }
 
         [HttpDelete]
         [Route("api/trash-inspection-pn/installations/{id}")]
-        public async Task<OperationResult> DeleteInstallation(int id)
+        public async Task<OperationResult> Delete(int id)
         {
-            return await _installationService.DeleteInstallation(id);
+            return await _installationService.Delete(id);
         }
     }
 }

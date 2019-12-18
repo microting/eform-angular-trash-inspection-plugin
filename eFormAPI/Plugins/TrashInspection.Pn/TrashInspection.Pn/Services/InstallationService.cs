@@ -55,7 +55,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
-        public async Task<OperationDataResult<InstallationsModel>> GetAllInstallations(InstallationRequestModel pnRequestModel)
+        public async Task<OperationDataResult<InstallationsModel>> Index(InstallationRequestModel pnRequestModel)
         {
             try
             {
@@ -113,8 +113,32 @@ namespace TrashInspection.Pn.Services
 
             }
         }
+        
+        public async Task<OperationResult> Create(InstallationModel createModel)
+        {
+            Installation installation = new Installation
+            {
+                Name = createModel.Name
+            };
+            await installation.Create(_dbContext);
+            
+            foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
+            {
+                if (deployedCheckbox.IsChecked == true)
+                {
+                    InstallationSite installationSite = new InstallationSite
+                    {
+                        InstallationId = installation.Id,
+                        SDKSiteId = deployedCheckbox.Id
+                    };
+                    await installationSite.Create(_dbContext);
+                }
+            }
+            return new OperationResult(true);
 
-        public async Task<OperationDataResult<InstallationModel>> GetSingleInstallation(int id)
+        }
+
+        public async Task<OperationDataResult<InstallationModel>> Read(int id)
         {
             try
             {
@@ -152,32 +176,8 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallation"));
             }
         }
-
-        public async Task<OperationResult> CreateInstallation(InstallationModel createModel)
-        {
-            Installation installation = new Installation
-            {
-                Name = createModel.Name
-            };
-            await installation.Create(_dbContext);
-            
-            foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
-            {
-                if (deployedCheckbox.IsChecked == true)
-                {
-                    InstallationSite installationSite = new InstallationSite
-                    {
-                        InstallationId = installation.Id,
-                        SDKSiteId = deployedCheckbox.Id
-                    };
-                    await installationSite.Create(_dbContext);
-                }
-            }
-            return new OperationResult(true);
-
-        }
-
-        public async Task<OperationResult> UpdateInstallation(InstallationModel updateModel)
+        
+        public async Task<OperationResult> Update(InstallationModel updateModel)
         {
             Installation installation =
                 await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
@@ -222,7 +222,7 @@ namespace TrashInspection.Pn.Services
             return new OperationResult(true);
         }
 
-        public async Task<OperationResult> DeleteInstallation(int id)
+        public async Task<OperationResult> Delete(int id)
         {
             Installation installation =
                 await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == id);

@@ -7,16 +7,15 @@ namespace TrashInspection.Pn.Abstractions
 {
     public interface ITrashInspectionService
     {
-        Task<OperationResult> CreateTrashInspection(TrashInspectionModel model);
-        Task<OperationResult> DeleteTrashInspection(int trashInspectionId);
-        Task<OperationResult> DeleteTrashInspection(string weighingNumber, string token);
-        Task<OperationResult> UpdateTrashInspection(TrashInspectionModel updateModel);
-        Task<OperationDataResult<TrashInspectionsModel>> GetAllTrashInspections(TrashInspectionRequestModel requestModel);
+        Task<OperationDataResult<TrashInspectionsModel>> Index(TrashInspectionRequestModel requestModel);
+        Task<OperationResult> Create(TrashInspectionModel model);
+        Task<OperationDataResult<TrashInspectionModel>> Read(int trashInspectionId);
+        Task<OperationDataResult<TrashInspectionModel>> Read(string weighingNumber, string token);
+        Task<OperationResult> Update(TrashInspectionModel updateModel);
+        Task<OperationResult> Delete(int trashInspectionId);
+        Task<OperationResult> Delete(string weighingNumber, string token);
+        Task<OperationDataResult<TrashInspectionCaseVersionsModel>> IndexVersions(int trashInspectionId);
+        Task<OperationDataResult<TrashInspectionVersionsModel>> ReadVersion(int trashInspectionId);
         Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType);
-        Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(int trashInspectionId);
-        Task<OperationDataResult<TrashInspectionModel>> GetSingleTrashInspection(string weighingNumber, string token);
-        Task<OperationDataResult<TrashInspectionVersionsModel>> GetTrashInspectionVersion(int trashInspectionId);
-        Task<OperationDataResult<TrashInspectionCaseVersionsModel>>
-            GetTrashInspectionCaseVersions(int trashInspectionId);
     }
 }

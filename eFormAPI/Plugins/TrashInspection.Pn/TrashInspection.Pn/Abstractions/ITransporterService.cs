@@ -7,12 +7,12 @@ namespace TrashInspection.Pn.Abstractions
 {
     public interface ITransporterService
     {
-        Task<OperationResult> CreateTransporter(TransporterModel transporterModel);
-        Task<OperationResult> UpdateTransporter(TransporterModel transporterModel);
-        Task<OperationResult> DeleteTransporter(int Id);
+        Task<OperationDataResult<TransportersModel>> Index(TransporterRequestModel pnRequestModel);
+        Task<OperationResult> Create(TransporterModel transporterModel);
+        Task<OperationDataResult<TransporterModel>> Read(int id);
+        Task<OperationResult> Update(TransporterModel transporterModel);
+        Task<OperationResult> Delete(int Id);
         Task<OperationResult> ImportTransporter(TransporterImportModel transporterImportModel);
-        Task<OperationDataResult<TransportersModel>> GetAllTransporters(TransporterRequestModel pnRequestModel);
-        Task<OperationDataResult<TransporterModel>> GetSingleTransporter(int id);
         Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel);
         Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int transporterId, int year);
     }
