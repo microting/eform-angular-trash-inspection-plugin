@@ -76,6 +76,10 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
             cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
+            if (createModel.EakCode != null)
+            {
+                cDataValue.InderValue += $"<b>EAK Kode:</b> {createModel.EakCode}";
+            }
 
             mainElement.PushMessageTitle = mainElement.Label;
             mainElement.PushMessageBody = "";
