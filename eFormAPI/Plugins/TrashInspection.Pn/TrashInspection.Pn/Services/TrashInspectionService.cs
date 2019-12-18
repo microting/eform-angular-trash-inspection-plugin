@@ -726,7 +726,7 @@ namespace TrashInspection.Pn.Services
                     {
                         if (trashInspectionCase.Status == 100)
                         {
-                            Case_Dto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
+                            CaseDto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
                             microtingUId = caseDto.MicrotingUId.ToString();
                             microtingCheckUId = caseDto.CheckUId.ToString();
                             caseId = (int)caseDto.CaseId;

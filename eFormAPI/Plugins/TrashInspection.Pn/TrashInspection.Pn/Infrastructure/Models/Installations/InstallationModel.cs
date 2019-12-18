@@ -48,7 +48,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         
         public string Name { get; set; }
         
-        public List<SiteName_Dto> DeployedSites { get; set; }
+        public List<SiteNameDto> DeployedSites { get; set; }
         
         public List<DeployCheckbox> DeployCheckboxes { get; set; }        
     }
