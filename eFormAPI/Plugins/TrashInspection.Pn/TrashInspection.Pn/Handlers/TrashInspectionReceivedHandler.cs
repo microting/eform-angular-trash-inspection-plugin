@@ -78,7 +78,7 @@ namespace TrashInspection.Pn.Handlers
             }
             List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
             CultureInfo cultureInfo = new CultureInfo("de-DE");
-            List<Task> tasks = new List<Task>();
+//            List<Task> tasks = new List<Task>();
             foreach (InstallationSite installationSite in installationSites)
             {
                 TrashInspectionCase trashInspectionCase = new TrashInspectionCase
@@ -91,13 +91,13 @@ namespace TrashInspection.Pn.Handlers
 
                 await trashInspectionCase.Create(_dbContext);
                 LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
-                Task sendLocal = _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase, createModel, segment,
+                await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment,
                     fraction));
-                tasks.Add(sendLocal);
+//                tasks.Add(sendLocal);
                 LogEvent("CreateTrashInspection: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }
 
-            await Task.WhenAll(tasks);
+//            await Task.WhenAll(tasks);
 
             var trashInspection = await _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
 
