@@ -79,7 +79,7 @@ namespace TrashInspection.Pn.Handlers
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
             if (createModel.EakCode != null)
             {
-                cDataValue.InderValue += $"<b>EAK Kode:</b> {createModel.EakCode}";
+                cDataValue.InderValue += $"<br><b>EAK Kode:</b> {createModel.EakCode}";
             }
 
             mainElement.PushMessageTitle = mainElement.Label;
