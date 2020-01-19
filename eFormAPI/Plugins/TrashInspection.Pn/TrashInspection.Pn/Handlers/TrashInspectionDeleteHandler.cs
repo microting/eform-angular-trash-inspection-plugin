@@ -71,6 +71,11 @@ namespace TrashInspection.Pn.Handlers
             trashInspection.InspectionDone = true;
             await trashInspection.Update(_dbContext);
 
+            if (message.ShouldDelete)
+            {
+                await trashInspection.Delete(_dbContext);
+            }
+
         }
     }
 }

@@ -606,7 +606,7 @@ namespace TrashInspection.Pn.Services
                     InspectionDone = x.InspectionDone
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
-            await _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+            await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, true));
             //trashInspection.Delete(_dbContext);
             return new OperationResult(true);
 
@@ -652,7 +652,7 @@ namespace TrashInspection.Pn.Services
 
                 if (trashInspection != null)
                 {
-                    await _bus.SendLocal(new TrashInspectionDeleted(trashInspection));
+                    await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, false));
 
                     return new OperationResult(true);
                 }               

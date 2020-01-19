@@ -30,9 +30,12 @@ namespace TrashInspection.Pn.Messages
     {
         public TrashInspectionModel TrashInspectionModel { get; protected set; }
         
-        public TrashInspectionDeleted(TrashInspectionModel trashInspectionModel)
+        public bool ShouldDelete { get; set; }
+        
+        public TrashInspectionDeleted(TrashInspectionModel trashInspectionModel, bool shouldDelete)
         {
             TrashInspectionModel = trashInspectionModel;
+            ShouldDelete = shouldDelete;
         }
     }
 }
