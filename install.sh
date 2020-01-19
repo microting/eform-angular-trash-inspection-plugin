@@ -41,7 +41,7 @@ cd /var/www/microting/eform-angular-frontend/eform-client
 su ubuntu -c \
 "/var/www/microting/eform-angular-trashinspection-plugin/testinginstallpn.sh"
 su ubuntu -c \
-"npm run build"
+"GENERATE_SOURCEMAP=false npm run build"
 echo "Recompiling angular done"
 ./rabbitmqadmin declare queue name=eform-angular-trashinspection-plugin durable=true
 
