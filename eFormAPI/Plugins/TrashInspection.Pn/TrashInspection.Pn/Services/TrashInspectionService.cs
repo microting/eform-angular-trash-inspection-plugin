@@ -157,11 +157,16 @@ namespace TrashInspection.Pn.Services
 
                     if (trashInspectionModel.Status == 100)
                     {
-                        trashInspectionModel.SdkCaseId = int.Parse(
-                            _dbContext.TrashInspectionCases.SingleOrDefault(x =>
-                                x.TrashInspectionId == trashInspectionModel.Id)
-                                ?.SdkCaseId);
-                        trashInspectionModel.SdkCaseId = (int)_core.CaseLookupMUId(trashInspectionModel.SdkCaseId).Result.CaseId;
+                        var result = await _dbContext.TrashInspectionCases.Where(x =>
+                            x.TrashInspectionId == trashInspectionModel.Id && x.Status == 100).ToListAsync();
+                        if (result.Any())
+                        {
+                            trashInspectionModel.SdkCaseId = int.Parse(result.First().SdkCaseId);
+
+                            trashInspectionModel.SdkCaseId =
+                                (int) _core.CaseLookupMUId(trashInspectionModel.SdkCaseId).Result.CaseId;
+                        }
+                        
                         if (eFormIds.Any(x => x.Key == trashInspectionModel.FractionId))
                         {
                             trashInspectionModel.SdkeFormId = eFormIds.First(x => x.Key == trashInspectionModel.FractionId).Value;
@@ -726,7 +731,7 @@ namespace TrashInspection.Pn.Services
                     {
                         if (trashInspectionCase.Status == 100)
                         {
-                            Case_Dto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
+                            CaseDto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
                             microtingUId = caseDto.MicrotingUId.ToString();
                             microtingCheckUId = caseDto.CheckUId.ToString();
                             caseId = (int)caseDto.CaseId;
