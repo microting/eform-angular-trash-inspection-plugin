@@ -13,10 +13,10 @@ script:
   - sudo apt-get install rabbitmq-server
   - sudo systemctl enable rabbitmq-server
   - sudo systemctl start rabbitmq-server
-  - sudo rabbitmqctl add_user admin password 
+  - sudo rabbitmqctl add_user admin password
   - sudo rabbitmqctl set_user_tags admin administrator
   - sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
-  - sudo rabbitmq-plugins enable rabbitmq_management	
+  - sudo rabbitmq-plugins enable rabbitmq_management
   - wget http://localhost:15672/cli/rabbitmqadmin
   - chmod +x rabbitmqadmin
   - ./rabbitmqadmin declare queue name=eformsdk-input durable=true
@@ -39,7 +39,7 @@ script:
   - mkdir -p microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
   - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
   - cd microting/eform-angular-frontend
-  - cd eform-client && npm install
+  - cd eform-client && yarn install
   - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
   - cat src/app/plugins/plugins.routing.ts
   - npm start &
