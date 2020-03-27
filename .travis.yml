@@ -3,6 +3,8 @@ language: csharp
 solution: TrashInspection.Pn.sln
 mono: none
 dotnet: 2.2
+addons:
+  chrome: stable
 services:
   - mysql
 install:
