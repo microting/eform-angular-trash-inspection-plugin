@@ -10,19 +10,29 @@ export class TrashInspectionFractionPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public get newEformBtn() {
-    return browser.element('#newEFormBtn');
+    $('#newEFormBtn').waitForDisplayed(20000);
+    $('#newEFormBtn').waitForClickable({timeout: 20000});
+    return $('#newEFormBtn');
   }
   public get xmlTextArea() {
-    return browser.element('#eFormXml');
+    $('#eFormXml').waitForDisplayed(20000);
+    $('#eFormXml').waitForClickable({timeout: 20000});
+    return $('#eFormXml');
   }
   public get createEformBtn() {
-    return browser.element('#createEformBtn');
+    $('#createEformBtn').waitForDisplayed(20000);
+    $('#createEformBtn').waitForClickable({timeout: 20000});
+    return $('#createEformBtn');
   }
   public get createEformTagSelector() {
-    return browser.element('#createEFormMultiSelector');
+    $('#createEFormMultiSelector').waitForDisplayed(20000);
+    $('#createEFormMultiSelector').waitForClickable({timeout: 20000});
+    return $('#createEFormMultiSelector');
   }
   public get createEformNewTagInput() {
-    return browser.element('#addTagInput');
+    $('#addTagInput').waitForDisplayed(20000);
+    $('#addTagInput').waitForClickable({timeout: 20000});
+    return $('#addTagInput');
   }
   public trashInspectionDropDown() {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
@@ -43,10 +53,14 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
   }
   public get fractionCreateNameBox() {
-    return browser.element('#createFractionName');
+    $('#createFractionName').waitForDisplayed(20000);
+    $('#createFractionName').waitForClickable({timeout: 20000});
+    return $('#createFractionName');
   }
   public get fractionCreateDescriptionBox() {
-    return browser.element('#createFractionDescription');
+    $('#createFractionDescription').waitForDisplayed(20000);
+    $('#createFractionDescription').waitForClickable({timeout: 20000});
+    return $('#createFractionDescription');
   }
   public get fractionCreateSelectorBox() {
     return browser.element(`//*[contains(@id, 'createFractionSelector')]//input`);
@@ -55,19 +69,29 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element(`//*[contains(@class, 'ng-option-label')]`);
   }
   public get createSaveBtn() {
-    return browser.element('#fractionCreateSaveBtn');
+    $('#fractionCreateSaveBtn').waitForDisplayed(20000);
+    $('#fractionCreateSaveBtn').waitForClickable({timeout: 20000});
+    return $('#fractionCreateSaveBtn');
   }
   public get fractionCreateCancelBtn() {
-    return browser.element('#fractionCreateCancelBtn');
+    $('#fractionCreateCancelBtn').waitForDisplayed(20000);
+    $('#fractionCreateCancelBtn').waitForClickable({timeout: 20000});
+    return $('#fractionCreateCancelBtn');
   }
   public get fractionEditBtn() {
-    return browser.element('#updateFractionBtn');
+    $('#updateFractionBtn').waitForDisplayed(20000);
+    $('#updateFractionBtn').waitForClickable({timeout: 20000});
+    return $('#updateFractionBtn');
   }
   public get fractionUpdateNameBox() {
-    return browser.element('#updateFractionName');
+    $('#updateFractionName').waitForDisplayed(20000);
+    $('#updateFractionName').waitForClickable({timeout: 20000});
+    return $('#updateFractionName');
   }
   public get fractionUpdateDescriptionBox() {
-    return browser.element('#editFractionDescription');
+    $('#editFractionDescription').waitForDisplayed(20000);
+    $('#editFractionDescription').waitForClickable({timeout: 20000});
+    return $('#editFractionDescription');
   }
   public get fractionUpdateSelecterBox() {
     return browser.element(`//*[contains(@id, 'fractionUpdateSelector')]//input`);
@@ -76,25 +100,39 @@ export class TrashInspectionFractionPage extends Page {
     return browser.element(`//*[contains(@class, 'ng-option-label')]`);
   }
   public get fractionUpdateSaveBtn() {
-    return browser.element('#fractionUpdateSaveBtn');
+    $('#fractionUpdateSaveBtn').waitForDisplayed(20000);
+    $('#fractionUpdateSaveBtn').waitForClickable({timeout: 20000});
+    return $('#fractionUpdateSaveBtn');
   }
   public get fractionUpdateCancelBtn() {
-    return browser.element('#fractionUpdateCancelBtn');
+    $('#fractionUpdateCancelBtn').waitForDisplayed(20000);
+    $('#fractionUpdateCancelBtn').waitForClickable({timeout: 20000});
+    return $('#fractionUpdateCancelBtn');
   }
   public get fractionDeleteBtn() {
-    return browser.element('#deleteFractionBtn');
+    $('#deleteFractionBtn').waitForDisplayed(20000);
+    $('#deleteFractionBtn').waitForClickable({timeout: 20000});
+    return $('#deleteFractionBtn');
   }
   public get fractionDeleteId() {
-    return browser.element('#selectedFractionId');
+    $('#selectedFractionId').waitForDisplayed(20000);
+    $('#selectedFractionId').waitForClickable({timeout: 20000});
+    return $('#selectedFractionId');
   }
   public get fractionDeleteName() {
-    return browser.element('#selectedFractionName');
+    $('#selectedFractionName').waitForDisplayed(20000);
+    $('#selectedFractionName').waitForClickable({timeout: 20000});
+    return $('#selectedFractionName');
   }
   public get fractionDeleteDeleteBtn() {
-    return browser.element('#fractionDeleteDeleteBtn');
+    $('#fractionDeleteDeleteBtn').waitForDisplayed(20000);
+    $('#fractionDeleteDeleteBtn').waitForClickable({timeout: 20000});
+    return $('#fractionDeleteDeleteBtn');
   }
   public get fractionDelteCancelBtn() {
-    return browser.element('#fractionDeleteCancelBtn');
+    $('#fractionDeleteCancelBtn').waitForDisplayed(20000);
+    $('#fractionDeleteCancelBtn').waitForClickable({timeout: 20000});
+    return $('#fractionDeleteCancelBtn');
   }
   goToFractionsPage() {
     this.trashInspectionDropDown();
@@ -105,7 +143,7 @@ export class TrashInspectionFractionPage extends Page {
   createFraction(name: string, description: string) {
     this.fractionCreateBtn();
     // browser.pause(8000);
-    browser.waitForVisible('#createFractionName', 20000);
+    $('#createFractionName').waitForDisplayed(20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
     browser.pause(3000);
@@ -117,12 +155,12 @@ export class TrashInspectionFractionPage extends Page {
     browser.pause(6000);
     browser.refresh();
     // browser.pause(14000);
-    browser.waitForVisible('#fractionCreateBtn', 20000);
+    $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   cancelCreateFraction(name: string, description: string) {
     this.fractionCreateBtn();
     // browser.pause(8000);
-    browser.waitForVisible('#createFractionName', 20000);
+    $('#createFractionName').waitForDisplayed(20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
     browser.pause(3000);
@@ -134,7 +172,7 @@ export class TrashInspectionFractionPage extends Page {
     browser.pause(6000);
     browser.refresh();
     // browser.pause(14000);
-    browser.waitForVisible('#fractionCreateBtn', 20000);
+    $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   editFraction(newName: string, newDescription: string) {
     this.fractionEditBtn.click();
@@ -167,19 +205,19 @@ export class TrashInspectionFractionPage extends Page {
     browser.pause(8000);
   }
   deleteFraction() {
-  const fractionForDelete = this.getFirstRowObject();
-  fractionForDelete.deleteBtn.click();
-  // browser.pause(4000);
-  browser.waitForVisible('#fractionDeleteDeleteBtn', 10000);
-  this.fractionDeleteDeleteBtn.click();
-  browser.pause(8000);
-  browser.refresh();
+    const fractionForDelete = this.getFirstRowObject();
+    fractionForDelete.deleteBtn.click();
+    // browser.pause(4000);
+    $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
+    this.fractionDeleteDeleteBtn.click();
+    browser.pause(8000);
+    browser.refresh();
   }
   cancelDeleteFraction() {
     const fractionForDelete = this.getFirstRowObject();
     fractionForDelete.deleteBtn.click();
     // browser.pause(4000);
-    browser.waitForVisible('#fractionDeleteDeleteBtn', 10000);
+    $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
     this.fractionDelteCancelBtn.click();
     browser.pause(8000);
     browser.refresh();
@@ -226,20 +264,20 @@ export default fractionsPage;
 
 export class FractionsRowObject {
   constructor(rowNum) {
-     if ($$('#fractionId')[rowNum - 1]) {
-       this.id = +$$('#fractionId')[rowNum - 1];
-       try {
-         this.name = $$('#fractionName')[rowNum - 1].getText();
-       } catch (e) {}
-       try {
+    if ($$('#fractionId')[rowNum - 1]) {
+      this.id = +$$('#fractionId')[rowNum - 1];
+      try {
+        this.name = $$('#fractionName')[rowNum - 1].getText();
+      } catch (e) {}
+      try {
         this.description = $$('#fractionDescription')[rowNum - 1].getText();
-       } catch (e) {}
-       try {
+      } catch (e) {}
+      try {
         this.eForm = $$('#fractionSelectedeForm')[rowNum - 1].getText();
-       } catch (e) {}
+      } catch (e) {}
       this.editBtn = $$('#updateFractionBtn')[rowNum - 1];
       this.deleteBtn = $$('#deleteFractionBtn')[rowNum - 1];
-     }
+    }
   }
   id;
   name;

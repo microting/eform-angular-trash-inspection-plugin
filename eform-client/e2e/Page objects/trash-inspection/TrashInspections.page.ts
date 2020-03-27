@@ -11,13 +11,15 @@ export class TrashInspectionsPage extends Page {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionBtn() {
-    return browser.element('#trash-inspection-pn-trash-inspection');
+    $('#trash-inspection-pn-trash-inspection').waitForDisplayed(20000);
+    $('#trash-inspection-pn-trash-inspection').waitForClickable({timeout: 20000});
+    return $('#trash-inspection-pn-trash-inspection');
   }
   goToTrashInspectionPage() {
-  this.trashInspectionDropDown();
-  browser.pause(1000);
-  this.trashInspectionBtn.click();
-  browser.pause(8000);
+    this.trashInspectionDropDown();
+    browser.pause(1000);
+    this.trashInspectionBtn.click();
+    browser.pause(8000);
   }
 }
 

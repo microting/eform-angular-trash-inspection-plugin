@@ -10,7 +10,7 @@ describe('Trash Inspection Plugin - Installation', function () {
   });
   it('Should delete installation.', function () {
     installationPage.goToInstallationsPage();
-    browser.waitForVisible('#createInstallationBtn', 30000);
+    $('#createInstallationBtn').waitForDisplayed(30000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
     installationPage.deleteInstallation_Deletes();
     browser.pause(2000);
@@ -20,7 +20,7 @@ describe('Trash Inspection Plugin - Installation', function () {
   it('should not delete', function () {
     const name = Guid.create().toString();
     installationPage.goToInstallationsPage();
-    browser.waitForVisible('#createInstallationBtn', 30000);
+    $('#createInstallationBtn').waitForDisplayed(30000);
     installationPage.createInstallation_DoesntAddSite(name);
     installationPage.deleteInstallation_Cancels();
     const installation = installationPage.getFirstRowObject();

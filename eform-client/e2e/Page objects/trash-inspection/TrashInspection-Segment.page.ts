@@ -11,61 +11,99 @@ export class TrashInspectionSegemtnsPage extends Page {
     browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get segmentnBtn() {
-    return browser.element('#trash-inspection-pn-segments');
+    $('#trash-inspection-pn-segments').waitForDisplayed(20000);
+    $('#trash-inspection-pn-segments').waitForClickable({timeout: 20000});
+    return $('#trash-inspection-pn-segments');
   }
   public get createSegmentBtn() {
-    return browser.element('#createSegmentBtn');
+    $('#createSegmentBtn').waitForDisplayed(20000);
+    $('#createSegmentBtn').waitForClickable({timeout: 20000});
+    return $('#createSegmentBtn');
   }
   public get segmentCreateNameBox() {
-    return browser.element('#createSegmentName');
+    $('#createSegmentName').waitForDisplayed(20000);
+    $('#createSegmentName').waitForClickable({timeout: 20000});
+    return $('#createSegmentName');
   }
   public get segmentCreateDescriptionBox() {
-    return browser.element('#createSegmentDescription');
+    $('#createSegmentDescription').waitForDisplayed(20000);
+    $('#createSegmentDescription').waitForClickable({timeout: 20000});
+    return $('#createSegmentDescription');
   }
   public get segmentCreateSDKFolderId() {
-    return browser.element('#createSegmentSdkFolderId');
+    $('#createSegmentSdkFolderId').waitForDisplayed(20000);
+    $('#createSegmentSdkFolderId').waitForClickable({timeout: 20000});
+    return $('#createSegmentSdkFolderId');
   }
   public get segmentCreateSaveBtn() {
-    return browser.element('#segmentCreateSaveBtn');
+    $('#segmentCreateSaveBtn').waitForDisplayed(20000);
+    $('#segmentCreateSaveBtn').waitForClickable({timeout: 20000});
+    return $('#segmentCreateSaveBtn');
   }
   public get segmentCreateCancelBtn() {
-    return browser.element('#segmentCreateCancelBtn');
+    $('#segmentCreateCancelBtn').waitForDisplayed(20000);
+    $('#segmentCreateCancelBtn').waitForClickable({timeout: 20000});
+    return $('#segmentCreateCancelBtn');
   }
   public get editSegmentBtn() {
-    return browser.element('#editSegmentBtn');
+    $('#editSegmentBtn').waitForDisplayed(20000);
+    $('#editSegmentBtn').waitForClickable({timeout: 20000});
+    return $('#editSegmentBtn');
   }
   public get segmentUpdateNameBox() {
-    return browser.element('#updateSegmentName');
+    $('#updateSegmentName').waitForDisplayed(20000);
+    $('#updateSegmentName').waitForClickable({timeout: 20000});
+    return $('#updateSegmentName');
   }
   public get segmentUpdateDesciptionBox() {
-    return browser.element('#updateSegmentDescription');
+    $('#updateSegmentDescription').waitForDisplayed(20000);
+    $('#updateSegmentDescription').waitForClickable({timeout: 20000});
+    return $('#updateSegmentDescription');
   }
   public get segmentUpdateSDKFolderId() {
-    return browser.element('#updateSegmentSdkFolderId');
+    $('#updateSegmentSdkFolderId').waitForDisplayed(20000);
+    $('#updateSegmentSdkFolderId').waitForClickable({timeout: 20000});
+    return $('#updateSegmentSdkFolderId');
   }
   public get segmentUpdateSaveBtn() {
-    return browser.element('#segmentUpdateSaveBtn');
+    $('#segmentUpdateSaveBtn').waitForDisplayed(20000);
+    $('#segmentUpdateSaveBtn').waitForClickable({timeout: 20000});
+    return $('#segmentUpdateSaveBtn');
   }
   public get segmentUpdateCancelBtn() {
-    return browser.element('#segmentUpdateCancelBtn');
+    $('#segmentUpdateCancelBtn').waitForDisplayed(20000);
+    $('#segmentUpdateCancelBtn').waitForClickable({timeout: 20000});
+    return $('#segmentUpdateCancelBtn');
   }
   public get deleteSegmentBtn() {
-    return browser.element('#deleteSegmentBtn');
+    $('#deleteSegmentBtn').waitForDisplayed(20000);
+    $('#deleteSegmentBtn').waitForClickable({timeout: 20000});
+    return $('#deleteSegmentBtn');
   }
   public get segmentDeleteId() {
-    return browser.element('#selectedSegmentId');
+    $('#selectedSegmentId').waitForDisplayed(20000);
+    $('#selectedSegmentId').waitForClickable({timeout: 20000});
+    return $('#selectedSegmentId');
   }
   public get segmentDelteCreatedDate() {
-    return browser.element('#selectedSegmentCreatedDate');
+    $('#selectedSegmentCreatedDate').waitForDisplayed(20000);
+    $('#selectedSegmentCreatedDate').waitForClickable({timeout: 20000});
+    return $('#selectedSegmentCreatedDate');
   }
   public get segmentDeleteName() {
-    return browser.element('#selectedSegmentName');
+    $('#selectedSegmentName').waitForDisplayed(20000);
+    $('#selectedSegmentName').waitForClickable({timeout: 20000});
+    return $('#selectedSegmentName');
   }
   public get segmentDeleteDeleteBtn() {
-    return browser.element('#segmentDeleteDeleteBtn');
+    $('#segmentDeleteDeleteBtn').waitForDisplayed(20000);
+    $('#segmentDeleteDeleteBtn').waitForClickable({timeout: 20000});
+    return $('#segmentDeleteDeleteBtn');
   }
   public get segmentDeleteCancelBtn() {
-    return browser.element('#segmentDeleteCancelBtn');
+    $('#segmentDeleteCancelBtn').waitForDisplayed(20000);
+    $('#segmentDeleteCancelBtn').waitForClickable({timeout: 20000});
+    return $('#segmentDeleteCancelBtn');
   }
   goToSegmentsPage() {
     this.trashInspectionDropDown();

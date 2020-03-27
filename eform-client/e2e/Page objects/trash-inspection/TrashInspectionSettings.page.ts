@@ -11,7 +11,9 @@ export class TrashInspectionSettingsPage extends Page {
     browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionSettingsBtn() {
-    return browser.element('#trash-inspection-pn-settings');
+    $('#trash-inspection-pn-settings').waitForDisplayed(20000);
+    $('#trash-inspection-pn-settings').waitForClickable({timeout: 20000});
+    return $('#trash-inspection-pn-settings');
   }
   goToTrashInspectionSettignsPage() {
     this.trashInspectionDropDown();
