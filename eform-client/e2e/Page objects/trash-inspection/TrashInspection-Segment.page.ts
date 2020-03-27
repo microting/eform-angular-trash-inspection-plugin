@@ -146,16 +146,16 @@ export class TrashInspectionSegemtnsPage extends Page {
   editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
     this.editSegmentBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    this.segmentUpdateNameBox.clearElement();
+    this.segmentUpdateNameBox.clearValue();
     this.segmentUpdateNameBox.addValue(newName);
     $('#spinner-animation').waitForDisplayed(20000, true);
     if (newDescription != null) {
-      this.segmentUpdateDesciptionBox.clearElement();
+      this.segmentUpdateDesciptionBox.clearValue();
       this.segmentUpdateDesciptionBox.addValue(newDescription);
     }
     $('#spinner-animation').waitForDisplayed(20000, true);
     if (newSDKFolderId != null) {
-      this.segmentUpdateSDKFolderId.clearElement();
+      this.segmentUpdateSDKFolderId.clearValue();
       this.segmentUpdateSDKFolderId.addValue(newSDKFolderId);
     }
     $('#spinner-animation').waitForDisplayed(20000, true);

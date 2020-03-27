@@ -136,73 +136,73 @@ export class TrashInspectionFractionPage extends Page {
   }
   goToFractionsPage() {
     this.trashInspectionDropDown();
-    browser.pause(2000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createFraction(name: string, description: string) {
     this.fractionCreateBtn();
-    // browser.pause(8000);
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#createFractionName').waitForDisplayed(20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateSelectorBox.addValue('Number 1');
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateOption.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.createSaveBtn.click();
-    browser.pause(6000);
-    browser.refresh();
-    // browser.pause(14000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   cancelCreateFraction(name: string, description: string) {
     this.fractionCreateBtn();
-    // browser.pause(8000);
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#createFractionName').waitForDisplayed(20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateSelectorBox.addValue('Number 1');
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateOption.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateCancelBtn.click();
-    browser.pause(6000);
-    browser.refresh();
-    // browser.pause(14000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   editFraction(newName: string, newDescription: string) {
     this.fractionEditBtn.click();
-    browser.pause(8000);
-    this.fractionUpdateNameBox.clearElement();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    this.fractionUpdateNameBox.clearValue();
     this.fractionUpdateNameBox.addValue(newName);
-    this.fractionUpdateDescriptionBox.clearElement();
+    this.fractionUpdateDescriptionBox.clearValue();
     this.fractionUpdateDescriptionBox.addValue(newDescription);
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateSelecterBox.addValue('Number 2');
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateOption.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   cancelEditFraction(newName: string, newDescription: string) {
     this.fractionEditBtn.click();
-    browser.pause(8000);
-    this.fractionUpdateNameBox.clearElement();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    this.fractionUpdateNameBox.clearValue();
     this.fractionUpdateNameBox.addValue(newName);
-    this.fractionUpdateDescriptionBox.clearElement();
+    this.fractionUpdateDescriptionBox.clearValue();
     this.fractionUpdateDescriptionBox.addValue(newDescription);
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateSelecterBox.addValue('Number 2');
-    browser.pause(3000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateOption.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionUpdateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   deleteFraction() {
     const fractionForDelete = this.getFirstRowObject();
@@ -210,8 +210,8 @@ export class TrashInspectionFractionPage extends Page {
     // browser.pause(4000);
     $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
     this.fractionDeleteDeleteBtn.click();
-    browser.pause(8000);
-    browser.refresh();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
   }
   cancelDeleteFraction() {
     const fractionForDelete = this.getFirstRowObject();
@@ -219,15 +219,15 @@ export class TrashInspectionFractionPage extends Page {
     // browser.pause(4000);
     $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
     this.fractionDelteCancelBtn.click();
-    browser.pause(8000);
-    browser.refresh();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
   }
   getFirstRowObject(): FractionsRowObject {
     return new FractionsRowObject(1);
   }
   createNewEform(eFormLabel, newTagsList = [], tagAddedNum = 0) {
     this.newEformBtn.click();
-    browser.pause(5000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     // Create replaced xml and insert it in textarea
     const xml = XMLForEformFractions.XML.replace('TEST_LABEL', eFormLabel);
     browser.execute(function (xmlText) {
@@ -238,23 +238,23 @@ export class TrashInspectionFractionPage extends Page {
     const addedTags: string[] = newTagsList;
     if (newTagsList.length > 0) {
       this.createEformNewTagInput.setValue(newTagsList.join(','));
-      browser.pause(5000);
+      $('#spinner-animation').waitForDisplayed(20000, true);
     }
     // Add existing tags
     const selectedTags: string[] = [];
     if (tagAddedNum > 0) {
-      browser.pause(5000);
+      $('#spinner-animation').waitForDisplayed(20000, true);
       for (let i = 0; i < tagAddedNum; i++) {
         this.createEformTagSelector.click();
         const selectedTag = $('.ng-option:not(.ng-option-selected)');
         selectedTags.push(selectedTag.getText());
         console.log('selectedTags is ' + JSON.stringify(selectedTags));
         selectedTag.click();
-        browser.pause(5000);
+        $('#spinner-animation').waitForDisplayed(20000, true);
       }
     }
     this.createEformBtn.click();
-    browser.pause(14000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     return {added: addedTags, selected: selectedTags};
   }
 }

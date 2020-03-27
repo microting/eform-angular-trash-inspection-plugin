@@ -1,4 +1,5 @@
 import Page from '../Page';
+import loginPage from '../../Page objects/Login.page';
 
 export class TrashInspectionInstallationPage extends Page {
   constructor() {
@@ -170,7 +171,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationEditBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
     // $('#updateInstallationName').waitForDisplayed(10000);
-    this.installationUpdateNameBox.clearElement();
+    this.installationUpdateNameBox.clearValue();
     this.installationUpdateNameBox.addValue(name);
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateSaveBtn.click();
@@ -182,7 +183,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationEditBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
     // $('#updateInstallationName').waitForDisplayed(10000);
-    this.installationUpdateNameBox.clearElement();
+    this.installationUpdateNameBox.clearValue();
     this.installationUpdateNameBox.addValue(name);
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateCancelBtn.click();
