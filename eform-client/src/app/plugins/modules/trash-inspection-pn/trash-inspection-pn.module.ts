@@ -54,7 +54,6 @@ import {
   ReportGraphViewComponent
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {GoogleChartsModule} from 'angular-google-charts';
 import {NgxChartsModule} from '@microting/ngx-charts';
 
 @NgModule({
@@ -68,7 +67,6 @@ import {NgxChartsModule} from '@microting/ngx-charts';
     NgSelectModule,
     EformSharedModule,
     FontAwesomeModule,
-    GoogleChartsModule,
     NgxChartsModule
   ],
   declarations: [

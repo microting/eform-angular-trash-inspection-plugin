@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
 import {Papa} from 'ngx-papaparse';
 import {TrashInspectionPnFractionsService} from '../../../services';
-import {forEach} from '@angular/router/src/utils/collection';
 import {FractionPnImportModel} from '../../../models/fraction';
 import {FractionPnHeadersModel} from '../../../models/fraction/fraction-pn-headers.model';
 
