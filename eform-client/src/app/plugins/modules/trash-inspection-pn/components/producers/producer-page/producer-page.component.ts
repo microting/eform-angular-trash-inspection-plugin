@@ -11,9 +11,9 @@ import {TransporterPnModel} from '../../../models/transporter';
   styleUrls: ['./producer-page.component.scss']
 })
 export class ProducerPageComponent implements OnInit {
-  @ViewChild('createProducerModal') createProducerModal;
-  @ViewChild('editProducerModal') editProducerModal;
-  @ViewChild('deleteProducerModal') deleteProducerModal;
+  @ViewChild('createProducerModal', {static: false}) createProducerModal;
+  @ViewChild('editProducerModal', {static: false}) editProducerModal;
+  @ViewChild('deleteProducerModal', {static: false}) deleteProducerModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   spinnerStatus = false;
   producersModel: ProducersPnModel = new ProducersPnModel();

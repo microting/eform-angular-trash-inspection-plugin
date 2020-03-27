@@ -16,9 +16,9 @@ import {SharedPnService} from 'src/app/plugins/modules/shared/services';
   styleUrls: ['./installations-page.component.scss']
 })
 export class InstallationsPageComponent implements OnInit {
-  @ViewChild('createInspectionModal') createInspectionModal;
-  @ViewChild('editInstallationModal') editInstallationModal;
-  @ViewChild('deleteInstallationModal') deleteInstallationModal;
+  @ViewChild('createInspectionModal', {static: false}) createInspectionModal;
+  @ViewChild('editInstallationModal', {static: false}) editInstallationModal;
+  @ViewChild('deleteInstallationModal', {static: false}) deleteInstallationModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
   mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();

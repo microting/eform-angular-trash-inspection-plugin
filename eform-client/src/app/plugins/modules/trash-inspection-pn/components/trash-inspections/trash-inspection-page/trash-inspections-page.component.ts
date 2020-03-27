@@ -15,10 +15,10 @@ import {AuthService} from '../../../../../../common/services/auth';
   styleUrls: ['./trash-inspections-page.component.scss']
 })
 export class TrashInspectionsPageComponent implements OnInit {
-  @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
-  @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
-  @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
-  @ViewChild('versionViewModal') versionViewModal;
+  @ViewChild('createTrashInspectionModal', {static: false}) createTrashInspectionModal;
+  @ViewChild('editTrashInspectionModal', {static: false}) editTrashInspectionModal;
+  @ViewChild('deleteTrashInspectionModal', {static: false}) deleteTrashInspectionModal;
+  @ViewChild('versionViewModal', {static: false}) versionViewModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();

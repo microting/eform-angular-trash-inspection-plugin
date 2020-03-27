@@ -28,7 +28,7 @@ import {FractionPnYearRequestModel} from '../../../models/fraction/fraction-pn-y
   styleUrls: ['./report-preview-table.component.scss']
 })
 export class ReportPreviewTableComponent implements OnInit {
-  @ViewChild('reportGraphViewModal') reportGraphViewModal;
+  @ViewChild('reportGraphViewModal', {static: false}) reportGraphViewModal;
   typeahead = new EventEmitter<string>();
   templatesModel: TemplateListModel = new TemplateListModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
