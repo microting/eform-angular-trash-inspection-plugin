@@ -44,6 +44,7 @@ script:
   - mkdir -p microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
   - cp -av microting/eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
   - cd microting/eform-angular-frontend
+  - mkdir -p /home/travis/build/microting/eform-angular-frontend/eform-client/errorShots
   - cd eform-client && npm install
   - ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
   - cat src/app/plugins/plugins.routing.ts
