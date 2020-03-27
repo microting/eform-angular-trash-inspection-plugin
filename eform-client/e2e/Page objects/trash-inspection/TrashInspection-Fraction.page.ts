@@ -1,6 +1,6 @@
 import Page from '../Page';
 import XMLForEformFractions from '../../Constants/XMLForEformFractions';
-
+import loginPage from '../../Page objects/Login.page';
 
 export class TrashInspectionFractionPage extends Page {
   constructor() {
@@ -38,7 +38,7 @@ export class TrashInspectionFractionPage extends Page {
     $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionDropdownName() {
-    return $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).element('..');
+    return $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).$('..');
   }
   public get trashInspectionDropdownItemName() {
     return $(`//*[contains(text(), 'Fraktioner')]`);

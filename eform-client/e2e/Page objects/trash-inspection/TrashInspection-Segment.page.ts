@@ -174,7 +174,7 @@ export class TrashInspectionSegemtnsPage extends Page {
   deleteSegmentCancel() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
-    browser.waitForVisible('#segmentDeleteDeleteBtn');
+    $('#segmentDeleteDeleteBtn').waitForDisplayed(20000);
   }
   getFirstRowObject(): SegmentsRowObject {
     return new SegmentsRowObject(1);
