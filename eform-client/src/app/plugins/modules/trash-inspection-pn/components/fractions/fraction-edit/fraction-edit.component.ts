@@ -13,7 +13,7 @@ import {EFormService} from '../../../../../../common/services/eform';
   styleUrls: ['./fraction-edit.component.scss']
 })
 export class FractionEditComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedFractionModel: FractionPnModel = new FractionPnModel();

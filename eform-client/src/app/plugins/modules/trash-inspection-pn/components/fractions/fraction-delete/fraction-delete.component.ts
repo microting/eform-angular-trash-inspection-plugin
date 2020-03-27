@@ -10,7 +10,7 @@ import {FractionPnModel} from '../../../models/fraction';
   styleUrls: ['./fraction-delete.component.scss']
 })
 export class FractionDeleteComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onFractionDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedFractionModel: FractionPnModel = new FractionPnModel();

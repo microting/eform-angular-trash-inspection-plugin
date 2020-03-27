@@ -8,7 +8,7 @@ import {SegmentPnModel} from '../../../models/segment';
   styleUrls: ['./segment-edit.component.scss']
 })
 export class SegmentEditComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();

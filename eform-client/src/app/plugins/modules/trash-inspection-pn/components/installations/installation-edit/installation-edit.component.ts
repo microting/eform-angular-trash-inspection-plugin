@@ -17,7 +17,7 @@ import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eform
   styleUrls: ['./installation-edit.component.scss']
 })
 export class InstallationEditComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
 
   deployModel: DeployModel = new DeployModel();

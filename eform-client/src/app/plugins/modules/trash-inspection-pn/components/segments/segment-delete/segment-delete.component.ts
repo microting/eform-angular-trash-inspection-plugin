@@ -8,7 +8,7 @@ import {SegmentPnModel} from '../../../models/segment';
   styleUrls: ['./segment-delete.component.scss']
 })
 export class SegmentDeleteComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onSegmentDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();

@@ -13,7 +13,7 @@ import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspecti
   styleUrls: ['./segment-create.component.scss']
 })
 export class SegmentCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();

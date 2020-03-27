@@ -9,7 +9,7 @@ import {TrashInspectionPnProducersService} from '../../../services';
   styleUrls: ['./producer-delete.component.scss']
 })
 export class ProducerDeleteComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onProducerDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedProducerModel: ProducerPnModel = new ProducerPnModel();

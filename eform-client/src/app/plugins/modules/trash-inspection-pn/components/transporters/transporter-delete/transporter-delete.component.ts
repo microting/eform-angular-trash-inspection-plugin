@@ -9,7 +9,7 @@ import {ProducerPnModel} from '../../../models/producer';
   styleUrls: ['./transporter-delete.component.scss']
 })
 export class TransporterDeleteComponent implements OnInit {
-  @ViewChild('frame') frame;
+  @ViewChild('frame', {static: false}) frame;
   @Output() onTransporterDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedTransporter: TransporterPnModel = new TransporterPnModel();
