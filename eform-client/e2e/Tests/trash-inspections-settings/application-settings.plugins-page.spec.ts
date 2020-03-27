@@ -26,7 +26,7 @@ describe('Application settings page - site header section', function () {
     it('should activate the plugin', function () {
         pluginPage.pluginSettingsBtn.click();
         $('#pluginOKBtn').waitForDisplayed(40000);
-        $('#pluginOKBtn').waitForDisplayed({timeout: 50000});
+        $('#pluginOKBtn').waitForClickable({timeout: 50000});
         pluginPage.pluginOKBtn.click();
         browser.pause(50000); // We need to wait 50 seconds for the plugin to create db etc.
         browser.refresh();
