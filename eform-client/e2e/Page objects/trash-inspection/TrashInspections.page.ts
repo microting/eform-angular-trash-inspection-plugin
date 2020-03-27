@@ -8,7 +8,7 @@ export class TrashInspectionsPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionBtn() {
     $('#trash-inspection-pn-trash-inspection').waitForDisplayed(20000);
@@ -17,9 +17,9 @@ export class TrashInspectionsPage extends Page {
   }
   goToTrashInspectionPage() {
     this.trashInspectionDropDown();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.trashInspectionBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
 }
 

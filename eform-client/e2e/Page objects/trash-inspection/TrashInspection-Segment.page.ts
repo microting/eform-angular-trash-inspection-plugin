@@ -8,7 +8,7 @@ export class TrashInspectionSegemtnsPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get segmentnBtn() {
     $('#trash-inspection-pn-segments').waitForDisplayed(20000);
@@ -107,69 +107,69 @@ export class TrashInspectionSegemtnsPage extends Page {
   }
   goToSegmentsPage() {
     this.trashInspectionDropDown();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentnBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createSegment(name: string, description?: any, sdkFolderId?: any) {
     this.createSegmentBtn.click();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentCreateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (description != null) {
       this.segmentCreateDescriptionBox.addValue(description);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (sdkFolderId != null) {
       this.segmentCreateSDKFolderId.addValue(sdkFolderId);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentCreateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createSegment_cancel(name: string, description?: string, sdkFolderId?: any) {
     this.createSegmentBtn.click();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentCreateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (description != null) {
       this.segmentCreateDescriptionBox.addValue(description);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (sdkFolderId != null) {
       this.segmentCreateSDKFolderId.addValue(sdkFolderId);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentCreateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
     this.editSegmentBtn.click();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentUpdateNameBox.clearElement();
     this.segmentUpdateNameBox.addValue(newName);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (newDescription != null) {
       this.segmentUpdateDesciptionBox.clearElement();
       this.segmentUpdateDesciptionBox.addValue(newDescription);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     if (newSDKFolderId != null) {
       this.segmentUpdateSDKFolderId.clearElement();
       this.segmentUpdateSDKFolderId.addValue(newSDKFolderId);
     }
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentUpdateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   deleteSegment() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
-    browser.pause(4000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentDeleteDeleteBtn.click();
-    browser.pause(8000);
-    browser.refresh();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   deleteSegmentCancel() {
     const segmentForDelete = this.getFirstRowObject();

@@ -8,10 +8,10 @@ export class TrashInspectionInstallationPage extends Page {
     return $$('#tableBody > tr').length;
   }
   // public get paginationElement() {
-  //   return browser.element(`//*[contains`)
+  //   return $(`//*[contains`)
   // }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get installationBtn() {
     $('#trash-inspection-pn-installations').waitForDisplayed(20000);
@@ -94,130 +94,130 @@ export class TrashInspectionInstallationPage extends Page {
     return $('#installationDeleteCancelBtn');
   }
   public get page2Object() {
-    return browser.element(`//*[div]//*[contains(@class, 'd-flex justify-content-center')]//*[ul]//*[contains(@class, 'page-item')]//*[contains(text(), '2')]`);
+    return $(`//*[div]//*[contains(@class, 'd-flex justify-content-center')]//*[ul]//*[contains(@class, 'page-item')]//*[contains(text(), '2')]`);
   }
   goToInstallationsPage() {
     this.trashInspectionDropDown();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationBtn.click();
-    browser.pause(30000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createInstallation_AddSite(name: string) {
     this.installationCreateBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateNameBox.addValue(name);
     this.installationCreateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createInstallation_DoesntAddSite(name: string) {
     this.installationCreateBtn.click();
-    // browser.pause(10000);
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#createInstallationName').waitForDisplayed(10000);
     this.installationCreateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateSaveBtn.click();
-    browser.pause(2000);
-    browser.refresh();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   createInstallation_AddSite_Cancels(name: string) {
     this.installationCreateBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateNameBox.addValue(name);
     this.installationCreateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createInstallation_DoesntAddSite_Cancels(name: string) {
     this.installationCreateBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   createInstallation_cancels() {
     this.installationCreateBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
 
   editInstallation_AddSite(name: string) {
     this.installationEditBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateNameBox.addValue(name);
     this.installationUpdateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   editInstallation_RemovesSite(name: string) {
     this.installationEditBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateNameBox.addValue(name);
     this.installationUpdateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateSaveBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   editInstallation_OnlyEditsName(name: string) {
     this.installationEditBtn.click();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     // $('#updateInstallationName').waitForDisplayed(10000);
     this.installationUpdateNameBox.clearElement();
     this.installationUpdateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateSaveBtn.click();
-    browser.pause(2000);
-    browser.refresh();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   editInstallation_OnlyEditsName_Cancels(name: string) {
     this.installationEditBtn.click();
-    browser.pause(10000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     // $('#updateInstallationName').waitForDisplayed(10000);
     this.installationUpdateNameBox.clearElement();
     this.installationUpdateNameBox.addValue(name);
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateCancelBtn.click();
-    browser.pause(2000);
-    browser.refresh();
+    $('#spinner-animation').waitForDisplayed(20000, true);
+    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   editInstallation_AddSite_Cancels(name: string) {
     this.installationEditBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateNameBox.addValue(name);
     this.installationUpdateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   editInstallation_RemovesSite_Cancels(name: string) {
     this.installationEditBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateNameBox.addValue(name);
     this.installationUpdateSiteCheckbox.click();
-    browser.pause(1000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateCancelBtn.click();
-    browser.pause(8000);
+    $('#spinner-animation').waitForDisplayed(20000, true);
   }
 
   deleteInstallation_Deletes() {
     this.installationDeleteBtn.click();
-    // browser.pause(8000);
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#installationDeleteDeleteBtn').waitForDisplayed(10000);
     this.installationDeleteDeleteBtn.click();
   }
   deleteInstallation_Cancels() {
     this.installationDeleteBtn.click();
-    // browser.pause(8000);
+    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#installationDeleteDeleteBtn').waitForDisplayed(10000);
     this.installationDeleteCancelBtn.click();
   }

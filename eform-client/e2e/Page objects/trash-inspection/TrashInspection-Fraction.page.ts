@@ -35,22 +35,22 @@ export class TrashInspectionFractionPage extends Page {
     return $('#addTagInput');
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionDropdownName() {
-    return browser.element(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).element('..');
+    return $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).element('..');
   }
   public get trashInspectionDropdownItemName() {
-    return browser.element(`//*[contains(text(), 'Fraktioner')]`);
+    return $(`//*[contains(text(), 'Fraktioner')]`);
   }
   public get fractionBtn() {
-    return browser.element(`//*[contains(text(), 'Fraktioner')]`);
+    return $(`//*[contains(text(), 'Fraktioner')]`);
   }
   public  fractionCreateBtn() {
-    browser.element('#fractionCreateBtn').click();
+    $('#fractionCreateBtn').click();
   }
   public getBtnTxt(text: string) {
-    return browser.element(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
+    return $(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
   }
   public get fractionCreateNameBox() {
     $('#createFractionName').waitForDisplayed(20000);
@@ -63,10 +63,10 @@ export class TrashInspectionFractionPage extends Page {
     return $('#createFractionDescription');
   }
   public get fractionCreateSelectorBox() {
-    return browser.element(`//*[contains(@id, 'createFractionSelector')]//input`);
+    return $(`//*[contains(@id, 'createFractionSelector')]//input`);
   }
   public get fractionCreateOption() {
-    return browser.element(`//*[contains(@class, 'ng-option-label')]`);
+    return $(`//*[contains(@class, 'ng-option-label')]`);
   }
   public get createSaveBtn() {
     $('#fractionCreateSaveBtn').waitForDisplayed(20000);
@@ -94,10 +94,10 @@ export class TrashInspectionFractionPage extends Page {
     return $('#editFractionDescription');
   }
   public get fractionUpdateSelecterBox() {
-    return browser.element(`//*[contains(@id, 'fractionUpdateSelector')]//input`);
+    return $(`//*[contains(@id, 'fractionUpdateSelector')]//input`);
   }
   public get fractionUpdateOption() {
-    return browser.element(`//*[contains(@class, 'ng-option-label')]`);
+    return $(`//*[contains(@class, 'ng-option-label')]`);
   }
   public get fractionUpdateSaveBtn() {
     $('#fractionUpdateSaveBtn').waitForDisplayed(20000);

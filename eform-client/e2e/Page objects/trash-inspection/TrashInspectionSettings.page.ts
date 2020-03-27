@@ -8,7 +8,7 @@ export class TrashInspectionSettingsPage extends Page {
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
-    browser.element(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    $(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get trashInspectionSettingsBtn() {
     $('#trash-inspection-pn-settings').waitForDisplayed(20000);
