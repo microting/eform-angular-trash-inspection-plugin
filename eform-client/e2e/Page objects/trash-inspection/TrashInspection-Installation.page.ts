@@ -12,7 +12,10 @@ export class TrashInspectionInstallationPage extends Page {
   //   return $(`//*[contains`)
   // }
   public trashInspectionDropDown() {
-    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    const ele = $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`);
+    ele.waitForDisplayed(20000);
+    ele.waitForClickable({timeout: 20000});
+    ele.click();
   }
   public get installationBtn() {
     $('#trash-inspection-pn-installations').waitForDisplayed(20000);
