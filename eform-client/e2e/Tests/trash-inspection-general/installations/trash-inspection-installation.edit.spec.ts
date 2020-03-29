@@ -13,19 +13,16 @@ describe('Trash Inspection Plugin - Installation', function () {
     const name = Guid.create().toString();
     installationPage.goToInstallationsPage();
     installationPage.createInstallation_DoesntAddSite(name);
-    browser.pause(2000);
     installationPage.editInstallation_OnlyEditsName(newName);
     const installation = installationPage.getFirstRowObject();
     expect(installation.name).equal(newName);
     installationPage.deleteInstallation_Deletes();
   });
   it('should not edit installation', function () {
-    browser.pause(10000);
     const newName = Guid.create().toString();
     const name = Guid.create().toString();
     installationPage.goToInstallationsPage();
     installationPage.createInstallation_DoesntAddSite(name);
-    browser.pause(2000);
     installationPage.editInstallation_OnlyEditsName_Cancels(newName);
     const installation = installationPage.getFirstRowObject();
     expect(installation.name).equal(name);

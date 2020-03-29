@@ -123,7 +123,6 @@ export class TrashInspectionInstallationPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationCreateSaveBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   createInstallation_AddSite_Cancels(name: string) {
@@ -179,7 +178,6 @@ export class TrashInspectionInstallationPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateSaveBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   editInstallation_OnlyEditsName_Cancels(name: string) {
@@ -191,7 +189,6 @@ export class TrashInspectionInstallationPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.installationUpdateCancelBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
     $('#createInstallationBtn').waitForDisplayed(10000);
   }
   editInstallation_AddSite_Cancels(name: string) {

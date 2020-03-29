@@ -29,7 +29,6 @@ describe('Application settings page - site header section', function () {
         $('#pluginOKBtn').waitForClickable({timeout: 50000});
         pluginPage.pluginOKBtn.click();
         browser.pause(50000); // We need to wait 50 seconds for the plugin to create db etc.
-        browser.refresh();
 
         // Start - This block is here because of the new plugin permission loading, requires a re-login.
         loginPage.login();

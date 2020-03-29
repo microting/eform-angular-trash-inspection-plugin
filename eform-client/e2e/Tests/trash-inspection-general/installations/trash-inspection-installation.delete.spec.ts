@@ -13,7 +13,6 @@ describe('Trash Inspection Plugin - Installation', function () {
     $('#createInstallationBtn').waitForDisplayed(30000);
     installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
     installationPage.deleteInstallation_Deletes();
-    browser.pause(2000);
     const installation = installationPage.getFirstRowObject();
     expect(installationPage.rowNum).equal(0);
   });
@@ -25,7 +24,6 @@ describe('Trash Inspection Plugin - Installation', function () {
     installationPage.deleteInstallation_Cancels();
     const installation = installationPage.getFirstRowObject();
     expect(installation.name).equal(name);
-    browser.pause(2000);
     installationPage.deleteInstallation_Deletes();
   });
 });
