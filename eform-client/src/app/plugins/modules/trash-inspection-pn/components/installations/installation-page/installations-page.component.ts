@@ -47,7 +47,6 @@ export class InstallationsPageComponent implements OnInit {
 
   getAllInitialData() {
     this.getAllInstallations();
-    this.getTrashInspectionsForMapping();
   }
 
   getAllInstallations() {
@@ -59,6 +58,7 @@ export class InstallationsPageComponent implements OnInit {
       if (data && data.success) {
         this.installationsModel = data.model;
       } this.spinnerStatus = false;
+      this.getTrashInspectionsForMapping();
     });
   }
 

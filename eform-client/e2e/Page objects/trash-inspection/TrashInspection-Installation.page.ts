@@ -6,6 +6,7 @@ export class TrashInspectionInstallationPage extends Page {
     super();
   }
   public get rowNum(): number {
+    browser.pause(500);
     return $$('#tableBody > tr').length;
   }
   // public get paginationElement() {
@@ -33,8 +34,11 @@ export class TrashInspectionInstallationPage extends Page {
     return $('#updateInstallationBtn');
   }
   public get installationDeleteBtn() {
+    console.log('waiting for deleteInstallationBtn to be visible');
     $('#deleteInstallationBtn').waitForDisplayed(20000);
+    console.log('waiting for deleteInstallationBtn to be clickable');
     $('#deleteInstallationBtn').waitForClickable({timeout: 20000});
+    console.log('returning the element deleteInstallationBtn');
     return $('#deleteInstallationBtn');
   }
   public get installationCreateNameBox() {
@@ -98,7 +102,10 @@ export class TrashInspectionInstallationPage extends Page {
     return $('#installationDeleteCancelBtn');
   }
   public get page2Object() {
-    return $(`//*[div]//*[contains(@class, 'd-flex justify-content-center')]//*[ul]//*[contains(@class, 'page-item')]//*[contains(text(), '2')]`);
+    const ele = $(`//*[div]//*[contains(@class, 'd-flex justify-content-center')]//*[ul]//*[contains(@class, 'page-item')]//*[contains(text(), '2')]`);
+    //ele.waitForDisplayed(20000);
+    //ele.waitForClickable({timeout: 20000});
+    return ele;
   }
   goToInstallationsPage() {
     this.trashInspectionDropDown();
@@ -211,6 +218,7 @@ export class TrashInspectionInstallationPage extends Page {
   }
 
   deleteInstallation_Deletes() {
+    console.log('in here');
     this.installationDeleteBtn.click();
     // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#installationDeleteDeleteBtn').waitForDisplayed(10000);
