@@ -47,7 +47,7 @@ describe('Trash Inspection Plugin - Segment', function () {
     const name = Guid.create().toString();
     const description = Guid.create().toString();
     const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    segmentPage.goToSegmentsPage();
+    //segmentPage.goToSegmentsPage();
     segmentPage.createSegment(name, description, sdkFolderId);
     const segment = segmentPage.getRowObject(1);
     expect(segment.name).equal(name);

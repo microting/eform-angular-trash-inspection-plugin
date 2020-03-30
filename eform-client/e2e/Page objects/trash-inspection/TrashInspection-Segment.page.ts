@@ -5,6 +5,7 @@ export class TrashInspectionSegemtnsPage extends Page {
     super();
   }
   public get rowNum(): number {
+    browser.pause(500);
     return $$('#tableBody > tr').length;
   }
   public trashInspectionDropDown() {
@@ -175,9 +176,11 @@ export class TrashInspectionSegemtnsPage extends Page {
     $('#segmentDeleteDeleteBtn').waitForDisplayed(20000);
   }
   getFirstRowObject(): SegmentsRowObject {
+    browser.pause(500);
     return new SegmentsRowObject(1);
   }
   getRowObject(rowNum): SegmentsRowObject {
+    browser.pause(500);
     return new SegmentsRowObject(rowNum);
   }
 }
