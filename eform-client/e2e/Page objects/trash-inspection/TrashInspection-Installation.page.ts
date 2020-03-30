@@ -231,6 +231,7 @@ export class TrashInspectionInstallationPage extends Page {
     this.installationDeleteCancelBtn.click();
   }
   getFirstRowObject(): InstallationPageRowObject {
+    browser.pause(500);
     return new InstallationPageRowObject(1);
   }
   getInstallation(num): InstallationPageRowObject {
