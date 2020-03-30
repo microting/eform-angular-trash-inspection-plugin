@@ -168,8 +168,6 @@ export class TrashInspectionSegemtnsPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.segmentDeleteDeleteBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
-    $('#spinner-animation').waitForDisplayed(20000, true);
   }
   deleteSegmentCancel() {
     const segmentForDelete = this.getFirstRowObject();
