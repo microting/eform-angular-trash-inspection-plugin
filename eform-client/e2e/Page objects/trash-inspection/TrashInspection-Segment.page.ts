@@ -166,9 +166,9 @@ export class TrashInspectionSegemtnsPage extends Page {
   deleteSegment() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed(40000, true);
     this.segmentDeleteDeleteBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed(40000, true);
   }
   deleteSegmentCancel() {
     const segmentForDelete = this.getFirstRowObject();
