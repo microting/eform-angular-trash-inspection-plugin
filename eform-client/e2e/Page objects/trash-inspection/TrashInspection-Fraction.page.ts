@@ -7,6 +7,7 @@ export class TrashInspectionFractionPage extends Page {
     super();
   }
   public get rowNum(): number {
+    browser.pause(500);
     return $$('#tableBody > tr').length;
   }
   public get newEformBtn() {
@@ -44,7 +45,10 @@ export class TrashInspectionFractionPage extends Page {
     return $(`//*[contains(text(), 'Fraktioner')]`);
   }
   public get fractionBtn() {
-    return $(`//*[contains(text(), 'Fraktioner')]`);
+    const ele = $(`//*[contains(text(), 'Fraktioner')]`);
+    ele.waitForDisplayed(20000);
+    ele.waitForClickable({timeout: 20000});
+    return ele;
   }
   public  fractionCreateBtn() {
     $('#fractionCreateBtn').click();
@@ -142,7 +146,6 @@ export class TrashInspectionFractionPage extends Page {
   }
   createFraction(name: string, description: string) {
     this.fractionCreateBtn();
-    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#createFractionName').waitForDisplayed(20000);
     this.fractionCreateNameBox.addValue(name);
     this.fractionCreateDescriptionBox.addValue(description);
@@ -153,8 +156,6 @@ export class TrashInspectionFractionPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.createSaveBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
-    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   cancelCreateFraction(name: string, description: string) {
@@ -170,8 +171,6 @@ export class TrashInspectionFractionPage extends Page {
     $('#spinner-animation').waitForDisplayed(20000, true);
     this.fractionCreateCancelBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
-    // $('#spinner-animation').waitForDisplayed(20000, true);
     $('#fractionCreateBtn').waitForDisplayed(20000);
   }
   editFraction(newName: string, newDescription: string) {
@@ -211,7 +210,6 @@ export class TrashInspectionFractionPage extends Page {
     $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
     this.fractionDeleteDeleteBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
   }
   cancelDeleteFraction() {
     const fractionForDelete = this.getFirstRowObject();
@@ -220,9 +218,9 @@ export class TrashInspectionFractionPage extends Page {
     $('#fractionDeleteDeleteBtn').waitForDisplayed(10000);
     this.fractionDelteCancelBtn.click();
     $('#spinner-animation').waitForDisplayed(20000, true);
-    loginPage.open('/');
   }
   getFirstRowObject(): FractionsRowObject {
+    browser.pause(500);
     return new FractionsRowObject(1);
   }
   createNewEform(eFormLabel, newTagsList = [], tagAddedNum = 0) {
