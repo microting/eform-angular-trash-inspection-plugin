@@ -127,7 +127,8 @@ namespace TrashInspection.Pn.Services
                     FractionId = x.FractionId,
                     IsApproved = x.IsApproved,
                     Comment = x.Comment,
-                    Token = trashInspectionSettings.Value
+                    Token = trashInspectionSettings.Value,
+                    ResponseSendToCallBackUrl = x.ResponseSendToCallBackUrl
                 }).ToListAsync();
                 
                 Core _core = await _coreHelper.GetCore();
@@ -426,7 +427,7 @@ namespace TrashInspection.Pn.Services
                     TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
                     {
                         Id = trashInspectionVersion.Id,
-                        UpdatedAt = (DateTime)trashInspectionVersion.UpdatedAt,
+                        UpdatedAt = ((DateTime) trashInspectionVersion.UpdatedAt).ToLocalTime(),
                         Version = trashInspectionVersion.Version,
                         WeighingNumber = trashInspectionVersion.WeighingNumber,
                         Date = trashInspectionVersion.Date,
@@ -450,7 +451,10 @@ namespace TrashInspection.Pn.Services
                         ProducerId = trashInspectionVersion.ProducerId,
                         TransporterId = trashInspectionVersion.TransporterId,
                         FirstWeight = trashInspectionVersion.FirstWeight,
-                        SecondWeight = trashInspectionVersion.SecondWeight
+                        SecondWeight = trashInspectionVersion.SecondWeight,
+                        ErrorFromCallBack = trashInspectionVersion.ErrorFromCallBack,
+                        ResponseSendToCallBackUrl = trashInspectionVersion.ResponseSendToCallBackUrl,
+                        SuccessMessageFromCallBack = trashInspectionVersion.SuccessMessageFromCallBack
                     };
                     trashInspectionVersionsModel.TrashInspectionVersionList.Add(trashInspectionVersionModel);
                 }
@@ -509,33 +513,47 @@ namespace TrashInspection.Pn.Services
                          switch (trashInspectionCaseVersion.Status)
                          {
                              case 0:
-                                 trashInspectionCaseStatusModel.CreatedLocally = trashInspectionCaseVersion.UpdatedAt; 
+                                 trashInspectionCaseStatusModel.CreatedLocally =
+                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
                                  break;
                              case 66:
                              {
                                  if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
                                  {
-                                     trashInspectionCaseStatusModel.Removed = trashInspectionCaseVersion.UpdatedAt;
+                                     trashInspectionCaseStatusModel.Removed =
+                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
                                  }
                                  else
                                  {
-                                     trashInspectionCaseStatusModel.SentToMicroting = trashInspectionCaseVersion.UpdatedAt;
+                                     trashInspectionCaseStatusModel.SentToMicroting =
+                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
                                  } 
                                  break;
                              }
                              case 70:
                              {
-                                 trashInspectionCaseStatusModel.ReadyAtMicroting = trashInspectionCaseVersion.UpdatedAt; 
+                                 trashInspectionCaseStatusModel.ReadyAtMicroting =
+                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
                                  break;
                              }
                              case 77:
                              {
-                                 trashInspectionCaseStatusModel.ReceivedOnTablet = trashInspectionCaseVersion.UpdatedAt; 
+                                 trashInspectionCaseStatusModel.ReceivedOnTablet =
+                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
                                  break;
                              }
                              case 100:
                              {
-                                 trashInspectionCaseStatusModel.Answered = trashInspectionCaseVersion.UpdatedAt; 
+                                 if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
+                                 {
+                                     trashInspectionCaseStatusModel.Removed =
+                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                 }
+                                 else
+                                 {
+                                     trashInspectionCaseStatusModel.Answered =
+                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                 }
                                  break;
                              }
                          }

@@ -74,6 +74,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         
         public int SdkeFormId { get; set; }
 
+        public bool ResponseSendToCallBackUrl { get; set; }
+
         #endregion
         
         #region producer vars 
