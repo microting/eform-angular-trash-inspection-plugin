@@ -13,5 +13,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public DateTime? ReceivedOnTablet { get; set; }
         public DateTime? Answered { get; set; }
         public DateTime? Removed { get; set; }
+        public string ErrorFromCallBack { get; set; }
+        public bool ResponseSendToCallBackUrl { get; set; }
+        public string SuccessMessageFromCallBack { get; set; }
     }
 }
