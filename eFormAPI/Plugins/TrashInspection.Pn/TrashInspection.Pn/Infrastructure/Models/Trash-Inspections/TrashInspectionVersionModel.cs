@@ -59,5 +59,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int? FirstWeight { get; set; }
 
         public int? SecondWeight { get; set; }
+
+        public string ErrorFromCallBack { get; set; }
+
+        public bool ResponseSendToCallBackUrl { get; set; }
+
+        public string SuccessMessageFromCallBack { get; set; }
     }
 }

@@ -31,4 +31,7 @@ export class TrashInspectionVersionPnModel {
   trashInspectionId: number;
   updatedAt: Date;
   inspectionDone: boolean;
+  errorFromCallBack: string;
+  responseSendToCallBackUrl: boolean;
+  successMessageFromCallBack: string;
 }
