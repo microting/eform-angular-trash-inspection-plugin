@@ -26,7 +26,6 @@ install:
   - ./rabbitmqadmin declare queue name=eformsdk-input durable=true
   - ./rabbitmqadmin declare queue name=eform-angular-trashinspection-plugin durable=true
 script:
-  - dotnet restore eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
   - dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
   - dotnet test -v n eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
   - cd ../..
@@ -38,7 +37,6 @@ script:
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
   - cp -av microting/eform-angular-trashinspection-plugin/eform-client/wdio-plugin-step2.conf.js microting/eform-angular-frontend/eform-client/wdio-plugin-step2.conf.js
   - cd microting/eform-angular-frontend
-  - dotnet restore -v q eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
   - dotnet build eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
   - cd ../..
   - mkdir -p microting/eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
