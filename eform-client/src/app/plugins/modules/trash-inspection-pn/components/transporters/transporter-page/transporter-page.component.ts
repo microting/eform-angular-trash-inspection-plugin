@@ -10,9 +10,9 @@ import {TrashInspectionPnTransporterService} from '../../../services';
   styleUrls: ['./transporter-page.component.scss']
 })
 export class TransporterPageComponent implements OnInit {
-  @ViewChild('createTransporterModal', {static: false}) createTransporterModal;
-  @ViewChild('editTransporterModal', {static: false}) editTransporterModal;
-  @ViewChild('deleteTransporterModal', {static: false}) deleteTransporterModal;
+  @ViewChild('createTransporterModal') createTransporterModal;
+  @ViewChild('editTransporterModal') editTransporterModal;
+  @ViewChild('deleteTransporterModal') deleteTransporterModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   spinnerStatus = false;
   transportersModel: TransportersPnModel = new TransportersPnModel();

@@ -19,18 +19,18 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(fractionsPage.trashInspectionDropdownName.getText()).equal('Affaldsinspektion');
     fractionsPage.trashInspectionDropDown();
 
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     // browser.pause(2000);
     // browser.waitForVisible(`//*[contains(text(), 'Fraktioner')]`, 10000);
     expect(fractionsPage.fractionBtn.getText()).equal('Fraktioner');
 
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     fractionsPage.trashInspectionDropDown();
   });
   it('should get btn text', function () {
-    // $('#plugin-id').waitForDisplayed(10000);
+    // $('#plugin-id').waitForDisplayed({timeout: 10000});
     //browser.pause(10000);
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     fractionsPage.goToFractionsPage();
     fractionsPage.getBtnTxt('Ny Fraktion');
   });
@@ -47,7 +47,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
   it('should clean up', function () {
     const fraction = fractionsPage.getFirstRowObject();
     fraction.deleteBtn.click();
-    $('#fractionDeleteDeleteBtn').waitForDisplayed(20000);
+    $('#fractionDeleteDeleteBtn').waitForDisplayed({timeout: 20000});
     fractionsPage.fractionDeleteDeleteBtn.click();
     expect(fraction.id === null);
   });

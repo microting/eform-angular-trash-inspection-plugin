@@ -14,8 +14,8 @@
       <div class="container-fluid">
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.sdkConnectionString"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.sdkConnectionString"
                      type="text" name="sdkConnectionString" #sdkConnectionString="ngModel"
                      id="sdkConnectionString" class="form-control">
               <label for="sdkConnectionString">{{'SDK connection string' | translate}}</label>
@@ -23,8 +23,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.logLevel"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.logLevel"
                      type="text" name="logLevel" #loglevel="ngModel"
                      id="logLevel" class="form-control">
               <label for="logLevel">{{'Log Level' | translate}}</label>
@@ -32,8 +32,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.logLimit"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.logLimit"
                      type="text" name="logLimit" #loglimit="ngModel"
                      id="logLimit" class="form-control">
               <label for="logLimit">{{'Log Limit' | translate}}</label>
@@ -41,8 +41,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.maxParallelism"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.maxParallelism"
                      type="text" name="maxParallelism" #maxparallelism="ngModel"
                      id="maxParallelism" class="form-control">
               <label for="maxParallelism">{{'Max parallelism' | translate}}</label>
@@ -50,8 +50,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.numberOfWorkers"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.numberOfWorkers"
                      type="text" name="numberOfWorkers" #numberofworkers="ngModel"
                      id="numberOfWorkers" class="form-control">
               <label for="numberOfWorkers">{{'Number of workers' | translate}}</label>
@@ -59,8 +59,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.token"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.token"
                      type="text" name="token" #token="ngModel"
                      id="token" class="form-control">
               <label for="token">{{'Token' | translate}}</label>
@@ -68,8 +68,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.callBackUrl"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.callBackUrl"
                      type="text" name="callBackUrl" #callBackUrl="ngModel"
                      id="callBackUrl" class="form-control">
               <label for="callBackUrl">{{'Callback URL' | translate}}</label>
@@ -77,8 +77,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.callBackCredentialDomain"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.callBackCredentialDomain"
                      type="text" name="callBackCredentialDomain" #callBackCredentialDomain="ngModel"
                      id="callBackCredentialDomain" class="form-control">
               <label for="callBackCredentialDomain">{{'CallBack Credential Domain' | translate}}</label>
@@ -86,8 +86,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialUserName"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.callbackCredentialUserName"
                      type="text" name="callbackCredentialUserName" #callbackCredentialUserName="ngModel"
                      id="callbackCredentialUserName" class="form-control">
               <label for="callbackCredentialUserName">{{'Callback Credential UserName' | translate}}</label>
@@ -95,8 +95,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialPassword"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.callbackCredentialPassword"
                      type="text" name="callbackCredentialPassword" #callbackCredentialPassword="ngModel"
                      id="callbackCredentialPassword" class="form-control">
               <label for="callbackCredentialPassword">{{'Callback Credential Password' | translate}}</label>
@@ -104,8 +104,8 @@
           </div>
           <div class="col-md-12">
             <div class="md-form input-group">
-              <input mdbInputDirective
-                     [mdbValidate]="false" [(ngModel)]="settingsModel.callbackCredentialAuthType"
+              <input mdbInput
+                      [(ngModel)]="settingsModel.callbackCredentialAuthType"
                      type="text" name="callbackCredentialAuthType" #callbackCredentialAuthType="ngModel"
                      id="callbackCredentialAuthType" class="form-control">
               <label for="callbackCredentialAuthType">{{'Callback Credential AuthType' | translate}}</label>

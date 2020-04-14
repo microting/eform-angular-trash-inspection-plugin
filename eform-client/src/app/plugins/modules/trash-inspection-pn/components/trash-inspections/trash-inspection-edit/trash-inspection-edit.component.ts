@@ -14,7 +14,7 @@ import {
   styleUrls: ['./trash-inspection-edit.component.scss']
 })
 export class TrashInspectionEditComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Input() mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
   @Output() onTrashInspectionUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;

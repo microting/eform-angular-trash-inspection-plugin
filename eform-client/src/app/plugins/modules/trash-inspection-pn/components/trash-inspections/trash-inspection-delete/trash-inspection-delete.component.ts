@@ -8,7 +8,7 @@ import {TrashInspectionPnTrashInspectionsService} from '../../../services';
   styleUrls: ['./trash-inspection-delete.component.scss']
 })
 export class TrashInspectionDeleteComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onTrashInspectionDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();

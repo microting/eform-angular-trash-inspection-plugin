@@ -31,7 +31,7 @@ import DateTimeFormat = Intl.DateTimeFormat;
   styleUrls: ['./trash-inspection-create.component.scss']
 })
 export class TrashInspectionCreateComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onTrashInspectionCreated: EventEmitter<void> = new EventEmitter<void>();
   transportersModel: TransportersPnModel = new TransportersPnModel();
   producersModel: ProducersPnModel = new ProducersPnModel();

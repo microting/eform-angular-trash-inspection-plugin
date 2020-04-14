@@ -16,7 +16,7 @@ import {TemplateListModel, TemplateRequestModel} from 'src/app/common/models/efo
   styleUrls: ['./fraction-create.component.scss']
 })
 export class FractionCreateComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;

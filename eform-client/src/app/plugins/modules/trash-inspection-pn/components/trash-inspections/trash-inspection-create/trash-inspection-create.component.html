@@ -9,8 +9,8 @@
           <div class="row mt-2">
             <div class="col-md-12 col-xs-12">
               <div class="md-form">
-                <input mdbInputDirective
-                       [mdbValidate]="false"
+                <input mdbInput
+
                        [(ngModel)]="newTrashInspectionModel.eakCode"
                        type="text" id="createTrashInspectionEAKCode"
                        name="createTrashInspectionEAKCode" class="form-control">
@@ -74,8 +74,8 @@
           <div class="row mb-2">
             <div class="col-md-12 col-xs-12">
               <div class="md-form">
-                <input mdbInputDirective
-                         [mdbValidate]="false"
+                <input mdbInput
+
                          [(ngModel)]="newTrashInspectionModel.registrationNumber"
                          type="text" id="createTrashInspectionRegistrationNumber"
                          name="createTrashInspectionRegistrationNumber" class="form-control">
@@ -114,8 +114,8 @@
           <div class="row mb-2">
             <div class="col-md-12 col-xs-12">
               <div class="md-form">
-                <input mdbInputDirective
-                         [mdbValidate]="false"
+                <input mdbInput
+
                          [(ngModel)]="newTrashInspectionModel.weighingNumber"
                          type="text" id="createTrashInspectionWeighingNumber"
                          name="createTrashInspectionWeighingNumber" class="form-control">
@@ -126,7 +126,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!newTrashInspectionModel.eakCode
+        <button mdbBtn class="btn-success" [disabled]="!newTrashInspectionModel.eakCode
         && !newTrashInspectionModel.installationName
         && !newTrashInspectionModel.mustBeInspected
         && !newTrashInspectionModel.producer
@@ -136,7 +136,7 @@
         && !newTrashInspectionModel.weighingNumber" (click)="createTrashInspection()">
           {{ 'Create' | translate }}
         </button>
-        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button mdbBtn class="btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

@@ -13,7 +13,7 @@ describe('Application settings page - site header section', function () {
         loginPage.login();
         myEformsPage.Navbar.advancedDropdown();
         myEformsPage.Navbar.clickonSubMenuItem('Plugins');
-        $('#plugin-name').waitForDisplayed(50000);
+        $('#plugin-name').waitForDisplayed({timeout: 50000});
         $('#plugin-name').waitForClickable({timeout: 50000});
 
         const plugin = pluginsPage.getFirstPluginRowObj();
@@ -25,7 +25,7 @@ describe('Application settings page - site header section', function () {
 
     it('should activate the plugin', function () {
         pluginPage.pluginSettingsBtn.click();
-        $('#pluginOKBtn').waitForDisplayed(40000);
+        $('#pluginOKBtn').waitForDisplayed({timeout: 40000});
         $('#pluginOKBtn').waitForClickable({timeout: 50000});
         pluginPage.pluginOKBtn.click();
         browser.pause(50000); // We need to wait 50 seconds for the plugin to create db etc.
@@ -34,7 +34,7 @@ describe('Application settings page - site header section', function () {
         loginPage.login();
         myEformsPage.Navbar.advancedDropdown();
         myEformsPage.Navbar.clickonSubMenuItem('Plugins');
-        $('#plugin-name').waitForDisplayed(50000);
+        $('#plugin-name').waitForDisplayed({timeout: 50000});
         $('#plugin-name').waitForClickable({timeout: 50000});
         // End - This block is here because of the new plugin permission loading, requires a re-login.
 

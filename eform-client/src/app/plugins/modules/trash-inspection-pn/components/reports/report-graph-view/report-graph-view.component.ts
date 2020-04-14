@@ -10,7 +10,7 @@ import {FractionYearPnModel} from '../../../models/fraction/fractionYearPnModel'
   styleUrls: ['./report-graph-view.component.scss']
 })
 export class ReportGraphViewComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
 
   series1 = [
     {

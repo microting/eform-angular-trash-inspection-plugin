@@ -9,7 +9,7 @@ import {EFormService} from '../../../../../../common/services/eform';
   styleUrls: ['./producer-create.component.scss']
 })
 export class ProducerCreateComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;

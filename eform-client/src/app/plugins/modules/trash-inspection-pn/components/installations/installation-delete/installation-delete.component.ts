@@ -8,7 +8,7 @@ import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/tra
   styleUrls: ['./installation-delete.component.scss']
 })
 export class InstallationDeleteComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onInstallationDeleted: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();

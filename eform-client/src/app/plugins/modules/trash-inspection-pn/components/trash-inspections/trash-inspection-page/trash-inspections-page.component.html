@@ -287,32 +287,32 @@
         <td>
           <div class="d-flex flex-row justify-content-center">
 
-            <button class="btn btn-danger btn-icon mb-2 "
+            <button mdbBtn class="btn-danger btn-icon mb-2 "
                     mdbTooltip="{{ 'Delete Trash Inspection' | translate }}"
                     (click)="showDeleteTrashInspectionModal(trashInspection)">
               <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true" ></fa-icon>
             </button>
 
-            <button class="btn btn-success btn-icon mb-2" *ngIf="trashInspection.status === 100"
+            <button mdbBtn class="btn-success btn-icon mb-2" *ngIf="trashInspection.status === 100"
                     [routerLink]="['/cases/edit/' + trashInspection.sdkCaseId + '/' + trashInspection.sdkeFormId]"
                     [queryParams]="{'reverseRoute': '/plugins/trash-inspection-pn/trash-inspections'}"
                     mdbTooltip="{{ 'Edit Case' | translate }}">
               <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
-            <button class="btn btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get PDF' | translate }}"
                     (click)="downloadPDF(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-pdf" size="lg" [fixedWidth]="true" ></fa-icon>
 
             </button>
-            <button class="btn btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Get DOCX' | translate }}"
                     (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-word" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
-            <button class="btn btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
                     mdbTooltip="{{ 'Analytics' | translate }}"
                     (click)="showVersionViewModal(trashInspection.id)">
               <fa-icon icon="chart-bar" size="lg" [fixedWidth]="true"></fa-icon>

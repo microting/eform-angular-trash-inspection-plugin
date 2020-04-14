@@ -13,9 +13,9 @@ import {TrashInspectionPnClaims} from '../../../enums';
   styleUrls: ['./fractions-page.component.scss']
 })
 export class FractionsPageComponent implements OnInit {
-  @ViewChild('createFractionModal', {static: false}) createFractionModal;
-  @ViewChild('editFractionModal', {static: false}) editFractionModal;
-  @ViewChild('deleteFractionModal', {static: false}) deleteFractionModal;
+  @ViewChild('createFractionModal') createFractionModal;
+  @ViewChild('editFractionModal') editFractionModal;
+  @ViewChild('deleteFractionModal') deleteFractionModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   fractionsModel: FractionsPnModel = new FractionsPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();

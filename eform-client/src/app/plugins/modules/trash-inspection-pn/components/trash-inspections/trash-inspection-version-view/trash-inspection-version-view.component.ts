@@ -16,7 +16,7 @@ import {
   styleUrls: ['./trash-inspection-version-view.component.scss']
 })
 export class TrashInspectionVersionViewComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   spinnerStatus = false;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionVersionsModel: TrashInspectionVersionsPnModel = new TrashInspectionVersionsPnModel();

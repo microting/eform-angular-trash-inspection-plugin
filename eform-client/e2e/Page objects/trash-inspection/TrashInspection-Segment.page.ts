@@ -12,168 +12,168 @@ export class TrashInspectionSegemtnsPage extends Page {
     $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
   }
   public get segmentnBtn() {
-    $('#trash-inspection-pn-segments').waitForDisplayed(20000);
+    $('#trash-inspection-pn-segments').waitForDisplayed({timeout: 20000});
     $('#trash-inspection-pn-segments').waitForClickable({timeout: 20000});
     return $('#trash-inspection-pn-segments');
   }
   public get createSegmentBtn() {
-    $('#createSegmentBtn').waitForDisplayed(20000);
+    $('#createSegmentBtn').waitForDisplayed({timeout: 20000});
     $('#createSegmentBtn').waitForClickable({timeout: 20000});
     return $('#createSegmentBtn');
   }
   public get segmentCreateNameBox() {
-    $('#createSegmentName').waitForDisplayed(20000);
+    $('#createSegmentName').waitForDisplayed({timeout: 20000});
     $('#createSegmentName').waitForClickable({timeout: 20000});
     return $('#createSegmentName');
   }
   public get segmentCreateDescriptionBox() {
-    $('#createSegmentDescription').waitForDisplayed(20000);
+    $('#createSegmentDescription').waitForDisplayed({timeout: 20000});
     $('#createSegmentDescription').waitForClickable({timeout: 20000});
     return $('#createSegmentDescription');
   }
   public get segmentCreateSDKFolderId() {
-    $('#createSegmentSdkFolderId').waitForDisplayed(20000);
+    $('#createSegmentSdkFolderId').waitForDisplayed({timeout: 20000});
     $('#createSegmentSdkFolderId').waitForClickable({timeout: 20000});
     return $('#createSegmentSdkFolderId');
   }
   public get segmentCreateSaveBtn() {
-    $('#segmentCreateSaveBtn').waitForDisplayed(20000);
+    $('#segmentCreateSaveBtn').waitForDisplayed({timeout: 20000});
     $('#segmentCreateSaveBtn').waitForClickable({timeout: 20000});
     return $('#segmentCreateSaveBtn');
   }
   public get segmentCreateCancelBtn() {
-    $('#segmentCreateCancelBtn').waitForDisplayed(20000);
+    $('#segmentCreateCancelBtn').waitForDisplayed({timeout: 20000});
     $('#segmentCreateCancelBtn').waitForClickable({timeout: 20000});
     return $('#segmentCreateCancelBtn');
   }
   public get editSegmentBtn() {
-    $('#editSegmentBtn').waitForDisplayed(20000);
+    $('#editSegmentBtn').waitForDisplayed({timeout: 20000});
     $('#editSegmentBtn').waitForClickable({timeout: 20000});
     return $('#editSegmentBtn');
   }
   public get segmentUpdateNameBox() {
-    $('#updateSegmentName').waitForDisplayed(20000);
+    $('#updateSegmentName').waitForDisplayed({timeout: 20000});
     $('#updateSegmentName').waitForClickable({timeout: 20000});
     return $('#updateSegmentName');
   }
   public get segmentUpdateDesciptionBox() {
-    $('#updateSegmentDescription').waitForDisplayed(20000);
+    $('#updateSegmentDescription').waitForDisplayed({timeout: 20000});
     $('#updateSegmentDescription').waitForClickable({timeout: 20000});
     return $('#updateSegmentDescription');
   }
   public get segmentUpdateSDKFolderId() {
-    $('#updateSegmentSdkFolderId').waitForDisplayed(20000);
+    $('#updateSegmentSdkFolderId').waitForDisplayed({timeout: 20000});
     $('#updateSegmentSdkFolderId').waitForClickable({timeout: 20000});
     return $('#updateSegmentSdkFolderId');
   }
   public get segmentUpdateSaveBtn() {
-    $('#segmentUpdateSaveBtn').waitForDisplayed(20000);
+    $('#segmentUpdateSaveBtn').waitForDisplayed({timeout: 20000});
     $('#segmentUpdateSaveBtn').waitForClickable({timeout: 20000});
     return $('#segmentUpdateSaveBtn');
   }
   public get segmentUpdateCancelBtn() {
-    $('#segmentUpdateCancelBtn').waitForDisplayed(20000);
+    $('#segmentUpdateCancelBtn').waitForDisplayed({timeout: 20000});
     $('#segmentUpdateCancelBtn').waitForClickable({timeout: 20000});
     return $('#segmentUpdateCancelBtn');
   }
   public get deleteSegmentBtn() {
-    $('#deleteSegmentBtn').waitForDisplayed(20000);
+    $('#deleteSegmentBtn').waitForDisplayed({timeout: 20000});
     $('#deleteSegmentBtn').waitForClickable({timeout: 20000});
     return $('#deleteSegmentBtn');
   }
   public get segmentDeleteId() {
-    $('#selectedSegmentId').waitForDisplayed(20000);
+    $('#selectedSegmentId').waitForDisplayed({timeout: 20000});
     $('#selectedSegmentId').waitForClickable({timeout: 20000});
     return $('#selectedSegmentId');
   }
   public get segmentDelteCreatedDate() {
-    $('#selectedSegmentCreatedDate').waitForDisplayed(20000);
+    $('#selectedSegmentCreatedDate').waitForDisplayed({timeout: 20000});
     $('#selectedSegmentCreatedDate').waitForClickable({timeout: 20000});
     return $('#selectedSegmentCreatedDate');
   }
   public get segmentDeleteName() {
-    $('#selectedSegmentName').waitForDisplayed(20000);
+    $('#selectedSegmentName').waitForDisplayed({timeout: 20000});
     $('#selectedSegmentName').waitForClickable({timeout: 20000});
     return $('#selectedSegmentName');
   }
   public get segmentDeleteDeleteBtn() {
-    $('#segmentDeleteDeleteBtn').waitForDisplayed(20000);
+    $('#segmentDeleteDeleteBtn').waitForDisplayed({timeout: 20000});
     $('#segmentDeleteDeleteBtn').waitForClickable({timeout: 20000});
     return $('#segmentDeleteDeleteBtn');
   }
   public get segmentDeleteCancelBtn() {
-    $('#segmentDeleteCancelBtn').waitForDisplayed(20000);
+    $('#segmentDeleteCancelBtn').waitForDisplayed({timeout: 20000});
     $('#segmentDeleteCancelBtn').waitForClickable({timeout: 20000});
     return $('#segmentDeleteCancelBtn');
   }
   goToSegmentsPage() {
     this.trashInspectionDropDown();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentnBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
   }
   createSegment(name: string, description?: any, sdkFolderId?: any) {
     this.createSegmentBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentCreateNameBox.addValue(name);
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (description != null) {
       this.segmentCreateDescriptionBox.addValue(description);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (sdkFolderId != null) {
       this.segmentCreateSDKFolderId.addValue(sdkFolderId);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentCreateSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
   }
   createSegment_cancel(name: string, description?: string, sdkFolderId?: any) {
     this.createSegmentBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentCreateNameBox.addValue(name);
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (description != null) {
       this.segmentCreateDescriptionBox.addValue(description);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (sdkFolderId != null) {
       this.segmentCreateSDKFolderId.addValue(sdkFolderId);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentCreateCancelBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
   }
   editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
     this.editSegmentBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentUpdateNameBox.clearValue();
     this.segmentUpdateNameBox.addValue(newName);
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (newDescription != null) {
       this.segmentUpdateDesciptionBox.clearValue();
       this.segmentUpdateDesciptionBox.addValue(newDescription);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     if (newSDKFolderId != null) {
       this.segmentUpdateSDKFolderId.clearValue();
       this.segmentUpdateSDKFolderId.addValue(newSDKFolderId);
     }
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.segmentUpdateSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed(20000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
   }
   deleteSegment() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
-    $('#spinner-animation').waitForDisplayed(40000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 40000, reverse: true});
     this.segmentDeleteDeleteBtn.click();
-    $('#spinner-animation').waitForDisplayed(40000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 40000, reverse: true});
   }
   deleteSegmentCancel() {
     const segmentForDelete = this.getFirstRowObject();
     segmentForDelete.deleteBtn.click();
-    $('#segmentDeleteDeleteBtn').waitForDisplayed(20000);
+    $('#segmentDeleteDeleteBtn').waitForDisplayed({timeout: 20000});
   }
   getFirstRowObject(): SegmentsRowObject {
     browser.pause(500);

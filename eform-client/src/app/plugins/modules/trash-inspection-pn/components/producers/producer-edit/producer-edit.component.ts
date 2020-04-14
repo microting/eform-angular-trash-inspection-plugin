@@ -8,7 +8,7 @@ import {TrashInspectionPnProducersService} from '../../../services';
   styleUrls: ['./producer-edit.component.scss']
 })
 export class ProducerEditComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedProducer: ProducerPnModel = new ProducerPnModel();

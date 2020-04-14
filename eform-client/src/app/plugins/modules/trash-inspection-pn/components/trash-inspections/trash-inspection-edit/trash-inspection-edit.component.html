@@ -10,8 +10,8 @@
             <div class="row mb-2">
               <div class="col-md-12 col-xs-12">
                 <div class="md-form">
-                  <input mdbInputDirective
-                         [mdbValidate]="false"
+                  <input mdbInput
+
                          [(ngModel)]="selectedTrashInspectionModel.name"
                          type="text" id="updateTrashInspectionName"
                          name="createTrashInspectionName" class="form-control">
@@ -55,10 +55,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success" [disabled]="!selectedTrashInspectionModel.name" (click)="updateTrashInspection()">
+        <button mdbBtn class="btn-success" [disabled]="!selectedTrashInspectionModel.name" (click)="updateTrashInspection()">
           {{ 'Save' | translate }}
         </button>
-        <button class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button mdbBtn class="btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

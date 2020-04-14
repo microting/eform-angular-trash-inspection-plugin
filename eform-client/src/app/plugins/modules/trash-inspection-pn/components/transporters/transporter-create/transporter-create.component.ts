@@ -9,7 +9,7 @@ import {ProducerPnModel} from '../../../models/producer';
   styleUrls: ['./transporter-create.component.scss']
 })
 export class TransporterCreateComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onTransporterCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;

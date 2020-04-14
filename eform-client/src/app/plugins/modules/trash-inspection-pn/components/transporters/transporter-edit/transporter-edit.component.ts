@@ -9,7 +9,7 @@ import {TrashInspectionPnTransporterService} from '../../../services';
   styleUrls: ['./transporter-edit.component.scss']
 })
 export class TransporterEditComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Output() onTransporterUpdated: EventEmitter<void> = new EventEmitter<void>();
   spinnerStatus = false;
   selectedTransporter: TransporterPnModel = new TransporterPnModel();

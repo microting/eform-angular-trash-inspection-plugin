@@ -11,9 +11,9 @@ import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspecti
   styleUrls: ['./segments-page.component.scss']
 })
 export class SegmentsPageComponent implements OnInit {
-  @ViewChild('createSegmentModal', {static: false}) createSegmentModal;
-  @ViewChild('editSegmentModal', {static: false}) editSegmentModal;
-  @ViewChild('deleteSegmentModal', {static: false}) deleteSegmentModal;
+  @ViewChild('createSegmentModal') createSegmentModal;
+  @ViewChild('editSegmentModal') editSegmentModal;
+  @ViewChild('deleteSegmentModal') deleteSegmentModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
   segmentPnRequestModel: SegmentPnRequestModel = new SegmentPnRequestModel();

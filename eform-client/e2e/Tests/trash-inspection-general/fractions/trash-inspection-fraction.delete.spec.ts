@@ -13,16 +13,16 @@ describe('Trash Inspection Plugin - Fraction', function () {
   it('should check if menupoint is there', function () {
     expect(fractionsPage.trashInspectionDropdownName.getText()).equal('Affaldsinspektion');
     fractionsPage.trashInspectionDropDown();
-    // $('#spinner-animation').waitForDisplayed(50000, true);
-    $('#spinner-animation').waitForDisplayed(50000, true);
-    $('#trash-inspection-pn-fractions').waitForDisplayed(10000);
+    // $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
+    $('#trash-inspection-pn-fractions').waitForDisplayed({timeout: 10000});
     expect(fractionsPage.fractionBtn.getText()).equal('Fraktioner');
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     fractionsPage.trashInspectionDropDown();
   });
   it('should get btn text', function () {
-    // $('#plugin-id').waitForDisplayed(10000);
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    // $('#plugin-id').waitForDisplayed({timeout: 10000});
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     fractionsPage.goToFractionsPage();
     fractionsPage.getBtnTxt('Ny Fraktion');
   });
@@ -40,14 +40,14 @@ describe('Trash Inspection Plugin - Fraction', function () {
     const oldName = fraction.name;
     const oldDescription = fraction.description;
     fractionsPage.cancelDeleteFraction();
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     const fractionAfterCancelDelete = fractionsPage.getFirstRowObject();
     expect(fractionAfterCancelDelete.name).equal(oldName);
     expect(fractionAfterCancelDelete.description).equal(oldDescription);
   });
   it('should delete Fraction', function () {
     fractionsPage.deleteFraction();
-    $('#spinner-animation').waitForDisplayed(50000, true);
+    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
     const fraction = fractionsPage.getFirstRowObject();
     expect(fractionsPage.rowNum).equal(0);
   });

@@ -13,7 +13,7 @@ import {AuthService} from '../../../../../../common/services/auth';
   styleUrls: ['./installation-create.component.scss']
 })
 export class InstallationCreateComponent implements OnInit {
-  @ViewChild('frame', {static: false}) frame;
+  @ViewChild('frame') frame;
   @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   @Output() onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
