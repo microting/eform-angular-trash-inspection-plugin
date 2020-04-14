@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
-import {MDBBootstrapModule} from 'port/angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 
 import {
@@ -54,7 +53,8 @@ import {
   ReportGraphViewComponent
 } from './components';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {NgxChartsModule} from '@microting/ngx-charts';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {MDBBootstrapModule} from 'angular-bootstrap-md';
 
 @NgModule({
   imports: [
