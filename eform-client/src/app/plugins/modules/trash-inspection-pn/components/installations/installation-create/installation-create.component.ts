@@ -17,7 +17,6 @@ export class InstallationCreateComponent implements OnInit {
   @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   @Output() onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   newInstallationModel: InstallationPnCreateModel = new InstallationPnCreateModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
@@ -37,14 +36,13 @@ export class InstallationCreateComponent implements OnInit {
   }
 
   createInstallation() {
-    this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.createInstallation(this.newInstallationModel).subscribe((data) => {
       if (data && data.success) {
         this.onInstallationCreated.emit();
         // this.submitDeployment();
         this.newInstallationModel = new InstallationPnCreateModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 
@@ -52,11 +50,10 @@ export class InstallationCreateComponent implements OnInit {
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
-        this.spinnerStatus = true;
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
-        this.spinnerStatus = false;
+       
       });
     }
   }

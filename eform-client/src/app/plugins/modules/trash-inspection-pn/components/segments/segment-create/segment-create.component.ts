@@ -15,7 +15,6 @@ import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspecti
 export class SegmentCreateComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
@@ -34,14 +33,13 @@ export class SegmentCreateComponent implements OnInit {
   }
 
   createSegment() {
-    this.spinnerStatus = true;
     this.trashInspectionPnSegmentsService.createSegment(this.segmentPnModel).subscribe((data) => {
       debugger;
       if (data && data.success) {
         this.onSegmentCreated.emit();
         this.segmentPnModel = new SegmentPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 
@@ -49,11 +47,10 @@ export class SegmentCreateComponent implements OnInit {
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
-        this.spinnerStatus = true;
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
-        this.spinnerStatus = false;
+       
       });
     }
   }

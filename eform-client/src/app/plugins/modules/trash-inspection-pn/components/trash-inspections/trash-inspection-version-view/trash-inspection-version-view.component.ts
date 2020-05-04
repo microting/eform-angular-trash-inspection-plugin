@@ -17,7 +17,6 @@ import {
 })
 export class TrashInspectionVersionViewComponent implements OnInit {
   @ViewChild('frame') frame;
-  spinnerStatus = false;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionVersionsModel: TrashInspectionVersionsPnModel = new TrashInspectionVersionsPnModel();
   // selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
@@ -28,7 +27,6 @@ export class TrashInspectionVersionViewComponent implements OnInit {
   ngOnInit() {
   }
   show(trashInspectionId: number) {
-    this.spinnerStatus = true;
     this.frame.show();
     this.trashInspectionVersionsModel = new TrashInspectionVersionsPnModel();
     this.getSelectedVersions(trashInspectionId);
@@ -39,7 +37,7 @@ export class TrashInspectionVersionViewComponent implements OnInit {
       if (data && data.success) {
         this.trashInspectionVersionsModel = data.model;
       }
-      this.spinnerStatus = false;
+     
     });
   }
 

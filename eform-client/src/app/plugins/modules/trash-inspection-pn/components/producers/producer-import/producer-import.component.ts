@@ -19,7 +19,6 @@ export class ProducerImportComponent implements OnInit {
   producerImportModel: ProducerPnImportModel;
   producerHeadersModel: ProducerPnHeadersModel;
   fileName: string;
-  spinnerStatus = false;
   totalColumns: number;
   totalRows: number;
   myFile: any;
@@ -77,7 +76,6 @@ export class ProducerImportComponent implements OnInit {
   }
 
   importProducer() {
-    this.spinnerStatus = true;
     // this.customerImportModel.importList = this.tableData;
     // debugger;
     this.producerImportModel.headers = JSON.stringify(this.producerImportModel.headerList);
@@ -85,7 +83,7 @@ export class ProducerImportComponent implements OnInit {
       if (data && data.success) {
         this.producerImportModel = new FractionPnImportModel();
       }
-      this.spinnerStatus = false;
+     
     }));
   }
   onSelectedChanged(e: any, columnIndex: any) {

@@ -12,7 +12,6 @@ export class ProducerCreateComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   newProducerModel: ProducerPnModel = new ProducerPnModel();
   typeAhead = new EventEmitter<string>();
   constructor(private trashInspectionPnProducerService: TrashInspectionPnProducersService,
@@ -22,7 +21,6 @@ export class ProducerCreateComponent implements OnInit {
   }
 
   createProducer() {
-    this.spinnerStatus = true;
     this.trashInspectionPnProducerService.createProducer(this.newProducerModel).subscribe((data) => {
       // debugger;
       if (data && data.success) {
@@ -30,7 +28,7 @@ export class ProducerCreateComponent implements OnInit {
         // this.submitDeployment();
         this.newProducerModel = new ProducerPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

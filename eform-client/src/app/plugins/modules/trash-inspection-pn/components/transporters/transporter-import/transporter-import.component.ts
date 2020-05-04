@@ -19,7 +19,6 @@ export class TransporterImportComponent implements OnInit {
   transporterImportModel: TransporterPnImportModel;
   transporterHeadersModel: TransporterPnHeadersModel;
   fileName: string;
-  spinnerStatus = false;
   totalColumns: number;
   totalRows: number;
   myFile: any;
@@ -77,7 +76,6 @@ export class TransporterImportComponent implements OnInit {
   }
 
   importTransporter() {
-    this.spinnerStatus = true;
     // this.customerImportModel.importList = this.tableData;
     // debugger;
     this.transporterImportModel.headers = JSON.stringify(this.transporterImportModel.headerList);
@@ -85,7 +83,7 @@ export class TransporterImportComponent implements OnInit {
       if (data && data.success) {
         this.transporterImportModel = new FractionPnImportModel();
       }
-      this.spinnerStatus = false;
+     
     }));
   }
   onSelectedChanged(e: any, columnIndex: any) {

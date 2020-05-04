@@ -10,7 +10,6 @@ import {TrashInspectionPnTrashInspectionsService} from '../../../services';
 export class TrashInspectionDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onTrashInspectionDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
   constructor(private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService) { }
 
@@ -23,13 +22,12 @@ export class TrashInspectionDeleteComponent implements OnInit {
   }
 
   deleteTrashInspection() {
-    this.spinnerStatus = true;
     this.machineAreaPnMachinesService.deleteTrashInspection(this.selectedTrashInspectionModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onTrashInspectionDeleted.emit();
         this.selectedTrashInspectionModel = new TrashInspectionPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

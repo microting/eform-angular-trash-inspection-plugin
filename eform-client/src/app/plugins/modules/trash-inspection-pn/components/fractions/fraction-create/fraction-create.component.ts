@@ -19,7 +19,6 @@ export class FractionCreateComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   newFractionModel: FractionPnModel = new FractionPnModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
@@ -56,7 +55,6 @@ export class FractionCreateComponent implements OnInit {
 
   createInstallation() {
     // debugger;
-    this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.createFraction(this.newFractionModel).subscribe((data) => {
       // debugger;
       if (data && data.success) {
@@ -64,7 +62,7 @@ export class FractionCreateComponent implements OnInit {
         // this.submitDeployment();
         this.newFractionModel = new FractionPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 
@@ -72,11 +70,10 @@ export class FractionCreateComponent implements OnInit {
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
-        this.spinnerStatus = true;
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
-        this.spinnerStatus = false;
+
       });
     }
   }
@@ -99,7 +96,7 @@ export class FractionCreateComponent implements OnInit {
   //       this.frame.hide();
   //       this.onDeploymentFinished.emit();
   //     }
-  //     this.spinnerStatus = false;
+  //
   //   });
   // }
 }

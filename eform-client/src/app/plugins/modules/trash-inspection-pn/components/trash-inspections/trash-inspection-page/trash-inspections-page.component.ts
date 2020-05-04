@@ -23,7 +23,6 @@ export class TrashInspectionsPageComponent implements OnInit {
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
   // settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
-  spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
@@ -54,14 +53,13 @@ export class TrashInspectionsPageComponent implements OnInit {
   }
 
   getAllTrashInspections() {
-    this.spinnerStatus = true;
     this.trashInspectionsRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionsRequestModel.sort = this.localPageSettings.sort;
     this.trashInspectionsRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.trashInspectionPnTrashInspectionsService.getAllTrashInspections(this.trashInspectionsRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.trashInspectionsModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 

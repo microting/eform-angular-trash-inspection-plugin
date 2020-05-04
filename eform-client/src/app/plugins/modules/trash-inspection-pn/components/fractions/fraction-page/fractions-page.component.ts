@@ -19,7 +19,6 @@ export class FractionsPageComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   fractionsModel: FractionsPnModel = new FractionsPnModel();
   fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
-  spinnerStatus = false;
 
   get pluginClaimsHelper() {
     return PluginClaimsHelper;
@@ -53,14 +52,13 @@ export class FractionsPageComponent implements OnInit {
   }
 
   getAllFractions() {
-    this.spinnerStatus = true;
     this.fractionRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.fractionRequestModel.sort = this.localPageSettings.sort;
     this.fractionRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionPnFractionsService.getAllFractions(this.fractionRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.fractionsModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
   showEditFractionModal(fraction: FractionPnModel) {

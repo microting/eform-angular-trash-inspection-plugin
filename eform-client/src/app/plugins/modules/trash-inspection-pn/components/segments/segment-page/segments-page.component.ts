@@ -17,7 +17,6 @@ export class SegmentsPageComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
   segmentPnRequestModel: SegmentPnRequestModel = new SegmentPnRequestModel();
-  spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) { }
@@ -43,14 +42,13 @@ export class SegmentsPageComponent implements OnInit {
   }
 
   getAllSegments() {
-    this.spinnerStatus = true;
     this.segmentPnRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.segmentPnRequestModel.sort = this.localPageSettings.sort;
     this.segmentPnRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionPnSegmentsService.getAllSegments(this.segmentPnRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.segmentsPnModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
   showEditSegmentModal(segment: SegmentPnModel) {

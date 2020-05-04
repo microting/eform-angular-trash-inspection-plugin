@@ -13,7 +13,6 @@ import {TrashInspectionBaseSettingsModel} from '../../models/trash-inspection-ba
   styleUrls: ['./trash-inspection-settings.component.scss']
 })
 export class TrashInspectionSettingsComponent implements OnInit {
-  spinnerStatus = false;
   typeahead = new EventEmitter<string>();
   settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   templatesModel: TemplateListModel = new TemplateListModel();
@@ -45,20 +44,18 @@ export class TrashInspectionSettingsComponent implements OnInit {
 
   getSettings() {
     debugger;
-    this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
       if (data && data.success) {
         this.settingsModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
   updateSettings() {
-    this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.updateSettings(this.settingsModel)
       .subscribe((data) => {
         if (data && data.success) {
 
-        } this.spinnerStatus = false;
+        }
       });
   }
 

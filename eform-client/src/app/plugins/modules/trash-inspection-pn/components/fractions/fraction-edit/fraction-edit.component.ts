@@ -15,7 +15,6 @@ import {EFormService} from '../../../../../../common/services/eform';
 export class FractionEditComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedFractionModel: FractionPnModel = new FractionPnModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
   templatesModel: TemplateListModel = new TemplateListModel();
@@ -47,23 +46,21 @@ export class FractionEditComponent implements OnInit {
 
   getSelectedFraction(id: number) {
     // debugger;
-    this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.getSingleFraction(id).subscribe((data) => {
       if (data && data.success) {
         this.selectedFractionModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 
   updateFraction() {
-    this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.updateFraction(this.selectedFractionModel)
       .subscribe((data) => {
       if (data && data.success) {
         this.onFractionUpdated.emit();
         this.selectedFractionModel = new FractionPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

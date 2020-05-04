@@ -33,7 +33,6 @@ export class ReportPreviewTableComponent implements OnInit {
   templatesModel: TemplateListModel = new TemplateListModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  spinnerStatus = false;
   fractionsModel: FractionsPnModel = new FractionsPnModel();
   trashInspectionYearModel: TrashInspectionYearModelPnModel = new TrashInspectionYearModelPnModel();
   producerYearModel: ProducerYearPnModel = new ProducerYearPnModel();
@@ -114,13 +113,12 @@ export class ReportPreviewTableComponent implements OnInit {
   }
 
   getAllFractions() {
-    this.spinnerStatus = true;
     this.fractionsYearRequestModel.sort = this.localPageSettings.sort;
     this.fractionsYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.trashInspectionPnFractionsService.getAllFractionsStatsByYear(this.fractionsYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.fractionYearModel = data.model;
-      } this.spinnerStatus = false;
+      }
       this.fractions = this.fractionsModel.fractionList;
     });
   }
@@ -142,13 +140,12 @@ export class ReportPreviewTableComponent implements OnInit {
 
 
   getAllTransportersByYear() {
-    this.spinnerStatus = true;
     this.transporterYearRequestModel.sort = this.localPageSettings.sort;
     this.transporterYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.trashInspectionPnTransporterService.getAllTransportersByYear(this.transporterYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.transporterYearModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 
@@ -168,13 +165,12 @@ export class ReportPreviewTableComponent implements OnInit {
   }
 
   getAllProducers() {
-    this.spinnerStatus = true;
     this.producersYearRequestModel.sort = this.localPageSettings.sort;
     this.producersYearRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.trashInspectionPnProducerService.getAllProducersStatsByYear(this.producersYearRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.producerYearModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 

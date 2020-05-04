@@ -45,7 +45,6 @@ export class TrashInspectionCreateComponent implements OnInit {
   checked = false;
   dateNow = new Date;
   timeNow = new Date;
-  spinnerStatus = false;
   token: string;
   settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   newTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
@@ -138,12 +137,11 @@ export class TrashInspectionCreateComponent implements OnInit {
   }
 
   getToken() {
-    this.spinnerStatus = true;
     this.trashInspectionPnSettingsService.getToken().subscribe((data) => {
       if (data && data.success) {
         this.token = data.model;
       }
-      this.spinnerStatus = false;
+     
     });
   }
 
@@ -153,12 +151,11 @@ export class TrashInspectionCreateComponent implements OnInit {
   //   this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
   //     if (data && data.success) {
   //       this.settingsModel = data.model;
-  //     } this.spinnerStatus = false;
+  //     }
   //   });
   // }
 
   createTrashInspection() {
-    this.spinnerStatus = true;
     this.newTrashInspectionModel.token = this.token;
     this.newTrashInspectionModel.date = this.dateNow;
     this.newTrashInspectionModel.time = this.timeNow;
@@ -168,7 +165,7 @@ export class TrashInspectionCreateComponent implements OnInit {
         this.newTrashInspectionModel = new TrashInspectionPnModel();
         this.frame.hide();
       }
-      this.spinnerStatus = false;
+     
     });
   }
   addToArray(e: any, installationId: number) {

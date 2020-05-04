@@ -15,7 +15,6 @@ export class ProducerPageComponent implements OnInit {
   @ViewChild('editProducerModal') editProducerModal;
   @ViewChild('deleteProducerModal') deleteProducerModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  spinnerStatus = false;
   producersModel: ProducersPnModel = new ProducersPnModel();
   producersRequestModel: ProducerPnRequestModel = new ProducerPnRequestModel();
 
@@ -41,14 +40,13 @@ export class ProducerPageComponent implements OnInit {
   }
 
   getAllProducers() {
-    this.spinnerStatus = true;
     this.producersRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.producersRequestModel.sort = this.localPageSettings.sort;
     this.producersRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionPnProducerService.getAllProducers(this.producersRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.producersModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
   showCreateProducerModal() {

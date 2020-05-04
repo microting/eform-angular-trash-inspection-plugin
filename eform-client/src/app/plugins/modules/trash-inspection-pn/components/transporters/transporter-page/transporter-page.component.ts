@@ -14,7 +14,6 @@ export class TransporterPageComponent implements OnInit {
   @ViewChild('editTransporterModal') editTransporterModal;
   @ViewChild('deleteTransporterModal') deleteTransporterModal;
   localPageSettings: PageSettingsModel = new PageSettingsModel();
-  spinnerStatus = false;
   transportersModel: TransportersPnModel = new TransportersPnModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
 
@@ -41,14 +40,13 @@ export class TransporterPageComponent implements OnInit {
   }
 
   getAllTransporters() {
-    this.spinnerStatus = true;
     this.transporterRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.transporterRequestModel.sort = this.localPageSettings.sort;
     this.transporterRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionPnTransporterService.getAllTransporters(this.transporterRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.transportersModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
   showCreateTransporterModal() {

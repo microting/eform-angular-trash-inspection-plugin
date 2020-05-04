@@ -12,14 +12,12 @@ export class TransporterCreateComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onTransporterCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   newTransporterModel: TransporterPnModel = new TransporterPnModel();
   constructor(private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
 
   ngOnInit() {
   }
   createTransporter() {
-    this.spinnerStatus = true;
     this.trashInspectionPnTransporterService.createTransporter(this.newTransporterModel).subscribe((data) => {
       // debugger;
       if (data && data.success) {
@@ -27,7 +25,7 @@ export class TransporterCreateComponent implements OnInit {
         // this.submitDeployment();
         this.newTransporterModel = new TransporterPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

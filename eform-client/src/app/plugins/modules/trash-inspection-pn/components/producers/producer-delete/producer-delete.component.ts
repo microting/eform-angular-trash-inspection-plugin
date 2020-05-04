@@ -11,7 +11,6 @@ import {TrashInspectionPnProducersService} from '../../../services';
 export class ProducerDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onProducerDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedProducerModel: ProducerPnModel = new ProducerPnModel();
 
   constructor(private trashInspectionPnProducerService: TrashInspectionPnProducersService) { }
@@ -25,11 +24,10 @@ export class ProducerDeleteComponent implements OnInit {
   }
 
   deleteProducer() {
-    this.spinnerStatus = true;
     this.trashInspectionPnProducerService.deleteProducer(this.selectedProducerModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onProducerDeleted.emit();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });  }
 }

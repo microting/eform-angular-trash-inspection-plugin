@@ -10,7 +10,6 @@ import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/tra
 export class InstallationDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onInstallationDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
   constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService) { }
 
@@ -23,11 +22,10 @@ export class InstallationDeleteComponent implements OnInit {
   }
 
   deleteInstallation() {
-    this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.deleteInstallation(this.selectedInstallationModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onInstallationDeleted.emit();
-        this.spinnerStatus = false;
+       
         this.frame.hide();
       }
     });

@@ -17,7 +17,6 @@ export class FractionsPnImportComponent implements OnInit {
   fractionsImportModel: FractionPnImportModel;
   fractionHeaderModel: FractionPnHeadersModel;
   fileName: string;
-  spinnerStatus = false;
   totalColumns: number;
   totalRows: number;
   myFile: any;
@@ -85,14 +84,13 @@ export class FractionsPnImportComponent implements OnInit {
     return this.tableData;
   }
     importFraction() {
-    this.spinnerStatus = true;
     // this.customerImportModel.importList = this.tableData;
     // debugger;
     this.fractionsImportModel.headers = JSON.stringify(this.fractionsImportModel.headerList);
     return this.fractionsService.importFraction(this.fractionsImportModel).subscribe(((data) => {
       if (data && data.success) {
         this.fractionsImportModel = new FractionPnImportModel();
-      } this.spinnerStatus = false;
+      }
     }));
   }
   logThings(value) {

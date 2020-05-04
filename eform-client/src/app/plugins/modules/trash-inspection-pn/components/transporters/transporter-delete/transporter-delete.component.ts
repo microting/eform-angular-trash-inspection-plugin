@@ -11,7 +11,6 @@ import {ProducerPnModel} from '../../../models/producer';
 export class TransporterDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onTransporterDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedTransporter: TransporterPnModel = new TransporterPnModel();
   constructor(private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
 
@@ -23,11 +22,10 @@ export class TransporterDeleteComponent implements OnInit {
   }
 
   deleteTransporter() {
-    this.spinnerStatus = true;
     this.trashInspectionPnTransporterService.deleteTransporter(this.selectedTransporter.id).subscribe((data) => {
       if (data && data.success) {
         this.onTransporterDeleted.emit();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });  }
 }

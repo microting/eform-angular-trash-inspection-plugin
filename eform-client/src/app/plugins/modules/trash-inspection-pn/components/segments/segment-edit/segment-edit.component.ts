@@ -10,7 +10,6 @@ import {SegmentPnModel} from '../../../models/segment';
 export class SegmentEditComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   typeahead = new EventEmitter<string>();
   constructor(private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) {
@@ -25,23 +24,21 @@ export class SegmentEditComponent implements OnInit {
   }
 
   getSelectedFraction(id: number) {
-    this.spinnerStatus = true;
     this.trashInspectionPnSegmentsService.getSingleSegment(id).subscribe((data) => {
       if (data && data.success) {
         this.segmentPnModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 
   updateFraction() {
-    this.spinnerStatus = true;
     this.trashInspectionPnSegmentsService.updateSegment(this.segmentPnModel)
       .subscribe((data) => {
       if (data && data.success) {
         this.onSegmentUpdated.emit();
         this.segmentPnModel = new SegmentPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

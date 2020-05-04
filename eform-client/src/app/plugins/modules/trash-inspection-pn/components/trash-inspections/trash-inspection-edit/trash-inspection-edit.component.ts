@@ -17,7 +17,6 @@ export class TrashInspectionEditComponent implements OnInit {
   @ViewChild('frame') frame;
   @Input() mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
   @Output() onTrashInspectionUpdated: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
   constructor(private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService) { }
 
@@ -30,23 +29,21 @@ export class TrashInspectionEditComponent implements OnInit {
   }
 
   getSelectedTrashInspection(id: number) {
-    this.spinnerStatus = true;
     this.trashInspectionPnTrashInspectionsService.getSingleTrashInspection(id).subscribe((data) => {
       if (data && data.success) {
         this.selectedTrashInspectionModel = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 
   updateTrashInspection() {
-    this.spinnerStatus = true;
     this.trashInspectionPnTrashInspectionsService.updateTrashInspection(new TrashInspectionPnUpdateModel(this.selectedTrashInspectionModel))
       .subscribe((data) => {
       if (data && data.success) {
         this.onTrashInspectionUpdated.emit();
         this.selectedTrashInspectionModel = new TrashInspectionPnModel();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 

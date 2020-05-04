@@ -10,7 +10,6 @@ import {SegmentPnModel} from '../../../models/segment';
 export class SegmentDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onSegmentDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   constructor(private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) { }
 
@@ -23,12 +22,11 @@ export class SegmentDeleteComponent implements OnInit {
   }
 
   deleteSegment() {
-    this.spinnerStatus = true;
     this.trashInspectionPnSegmentsService.deleteSegment(this.segmentPnModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onSegmentDeleted.emit();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 }

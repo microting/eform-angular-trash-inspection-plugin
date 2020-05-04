@@ -12,7 +12,6 @@ import {FractionPnModel} from '../../../models/fraction';
 export class FractionDeleteComponent implements OnInit {
   @ViewChild('frame') frame;
   @Output() onFractionDeleted: EventEmitter<void> = new EventEmitter<void>();
-  spinnerStatus = false;
   selectedFractionModel: FractionPnModel = new FractionPnModel();
   constructor(private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }
 
@@ -25,12 +24,11 @@ export class FractionDeleteComponent implements OnInit {
   }
 
   deleteFraction() {
-    this.spinnerStatus = true;
     this.trashInspectionPnFractionsService.deleteFraction(this.selectedFractionModel.id).subscribe((data) => {
       if (data && data.success) {
         this.onFractionDeleted.emit();
         this.frame.hide();
-      } this.spinnerStatus = false;
+      }
     });
   }
 }

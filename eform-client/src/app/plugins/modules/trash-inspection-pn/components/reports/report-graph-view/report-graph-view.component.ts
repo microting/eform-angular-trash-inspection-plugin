@@ -182,7 +182,6 @@ export class ReportGraphViewComponent implements OnInit {
         ]
     },
   ];
-  spinnerStatus = false;
   data1 = [];
   data2 = [];
   transporterName: string;
@@ -242,36 +241,33 @@ export class ReportGraphViewComponent implements OnInit {
   }
 
   getSelectedTransporter(id: number, year: number) {
-    this.spinnerStatus = true;
     this.trashInspectionPnTransporterService.getSingleTransporterByMonth(id, year).subscribe((data) => {
       if (data && data.success) {
         this.data1 = data.model.statByMonthListData1;
         this.data2 = data.model.statByMonthListData2;
         this.frame.show();
       }
-      this.spinnerStatus = false;
+     
     });
   }
   getSelectedProducer(id: number, year: number) {
-    this.spinnerStatus = true;
     this.trashInspectionPnProducerService.getSingleProducerByMonth(id, year).subscribe((data) => {
       if (data && data.success) {
         this.data1 = data.model.statByMonthListData1;
         this.data2 = data.model.statByMonthListData2;
         this.frame.show();
       }
-      this.spinnerStatus = false;
+     
     });
   }
   getSelectedFraction(id: number, year: number) {
-    this.spinnerStatus = true;
     this.trashInspectionPnFractionService.getSingleFractionByMonth(id, year).subscribe((data) => {
       if (data && data.success) {
         this.data1 = data.model.statByMonthListData1;
         this.data2 = data.model.statByMonthListData2;
         this.frame.show();
       }
-      this.spinnerStatus = false;
+     
     });
   }
 

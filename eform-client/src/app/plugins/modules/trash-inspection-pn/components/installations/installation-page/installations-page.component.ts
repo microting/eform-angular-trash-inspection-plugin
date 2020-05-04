@@ -23,7 +23,6 @@ export class InstallationsPageComponent implements OnInit {
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
   mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   installationRequestModel: InstallationPnRequestModel = new InstallationPnRequestModel();
-  spinnerStatus = false;
 
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
@@ -50,24 +49,22 @@ export class InstallationsPageComponent implements OnInit {
   }
 
   getAllInstallations() {
-    this.spinnerStatus = true;
     this.installationRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.installationRequestModel.sort = this.localPageSettings.sort;
     this.installationRequestModel.pageSize = this.localPageSettings.pageSize;
     this.trashInspectionPnInstallationsService.getAllInstallations(this.installationRequestModel).subscribe((data) => {
       if (data && data.success) {
         this.installationsModel = data.model;
-      } this.spinnerStatus = false;
+      }
       this.getTrashInspectionsForMapping();
     });
   }
 
   getTrashInspectionsForMapping() {
-    this.spinnerStatus = true;
     this.trashInspectionPnTrashInspectionsService.getAllTrashInspections(new TrashInspectionsPnRequestModel()).subscribe((data) => {
       if (data && data.success) {
         this.mappingTrashInspections = data.model;
-      } this.spinnerStatus = false;
+      }
     });
   }
 

@@ -25,7 +25,6 @@ export class InstallationEditComponent implements OnInit {
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
   sitesDto: Array<SiteNameDto> = [];
   matchFound = false;
-  spinnerStatus = false;
   get userClaims() {
     return this.authService.userClaims;
   }
@@ -49,19 +48,17 @@ export class InstallationEditComponent implements OnInit {
 
   getSelectedInstallation(id: number) {
     // debugger;
-    this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
       if (data && data.success) {
         this.selectedInstallationModel = data.model;
         this.fillCheckboxes();
       }
-      this.spinnerStatus = false;
+     
     });
   }
 
   updateInstallation() {
     // debugger;
-    this.spinnerStatus = true;
     this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
       .subscribe((data) => {
         if (data && data.success) {
@@ -69,18 +66,17 @@ export class InstallationEditComponent implements OnInit {
           this.selectedInstallationModel = new InstallationPnModel();
           this.frame.hide();
         }
-        this.spinnerStatus = false;
+       
       });
   }
 
   loadAllSites() {
     if (this.userClaims.eFormsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
-        this.spinnerStatus = true;
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
-        this.spinnerStatus = false;
+       
       });
     }
   }
