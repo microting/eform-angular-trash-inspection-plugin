@@ -53,6 +53,23 @@
   "Trash/Deponi - 2019 - Compliance - Producers" : "Affald/Deponi - 2019  Compliance - Producenter",
   "Trash/Deponi - 2019 - Compliance - Items" : "Affald/Deponi - 2019  Compliance - Varer",
   "Select Year" : "Vælg År",
-  "Select Table" : "Vælg Tabel"
+  "Select Table" : "Vælg Tabel",
+  "Updated at": "Opdateret d.",
+  "Date": "Dato",
+  "Time": "Tid",
+  "Must be inspected": "Skal inspiceres",
+  "Registration number": "Reg nr.",
+  "Trash fraction": "Fraktion",
+  "Weighing number": "Veje nr.",
+  "Extended inspection": "Udvidet kontrol",
+  "Is approved": "Godkendt",
+  "Comment": "Kommentar",
+  "Is removed": "Fjernet",
+  "Actions": "Handlinger",
+  "Created locally": "Oprettet lokalt",
+  "Sent to Microting": "Sendt til Microting",
+  "Received on tablet": "Hentet af enhed",
+  "Answered": "Udfyldt",
+  "Removed": "Fjernet"
 }
 

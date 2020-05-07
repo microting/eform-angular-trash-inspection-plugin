@@ -1,5 +1,5 @@
 <div mdbModal class="modal fade" #frame="mdbModal">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-frame modal-top modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3>{{ 'Trash Inspection Versions' | translate }} - {{trashInspectionVersionsModel.trashInspectionId}}</h3>
@@ -47,7 +47,7 @@
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Must Be Inspected' | translate}}
+                    {{'Must be inspected' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
@@ -57,7 +57,7 @@
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Registration Number' | translate}}
+                    {{'Registration number' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
@@ -67,12 +67,12 @@
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Trash Fraction' | translate}}
+                    {{'Trash fraction' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Weighing Number' | translate}}
+                    {{'Weighing number' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
@@ -201,12 +201,12 @@
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Created Locally' | translate}}
+                    {{'Created locally' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Sent To Microting' | translate}}
+                    {{'Sent to Microting' | translate}}
                   </div>
                 </th>
 
@@ -219,7 +219,7 @@
 
                 <th scope="col" class="table-header">
                   <div class="d-flex align-items-center justify-content-center">
-                    {{'Received On Tablet' | translate}}
+                    {{'Received on tablet' | translate}}
                   </div>
                 </th>
                 <th scope="col" class="table-header">
@@ -267,6 +267,9 @@
             </table>
           </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button mdbBtn class="btn-accent text-black-50" (click)="frame.hide()">{{'Close' | translate}}</button>
       </div>
     </div>
   </div>

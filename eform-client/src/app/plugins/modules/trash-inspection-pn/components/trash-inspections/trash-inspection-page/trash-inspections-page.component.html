@@ -11,7 +11,7 @@
 
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
-    <table class="table table-sm table-striped text-center z-depth-1">
+    <table mdbTable striped="true" hover="true" small="true" class="z-depth-1 text-center">
       <thead>
       <tr>
         <th scope="col" class="table-header-sortable" id="idTableHeader"
@@ -88,7 +88,7 @@
         <th scope="col" class="table-header-sortable" id="mustBeInspectedTableHeader"
             (click)="sortTable('MustBeInspected')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Must Be Inspected' | translate}}
+            {{'Must be inspected' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'MustBeInspected'">unfold_more</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'MustBeInspected' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
@@ -112,7 +112,7 @@
         <th scope="col" class="table-header-sortable" id="registrationNumberTableHeader"
             (click)="sortTable('RegistrationNumber')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Registration Number' | translate}}
+            {{'Registration number' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'RegistrationNumber'">unfold_more</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'RegistrationNumber' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
@@ -136,7 +136,7 @@
         <th scope="col" class="table-header-sortable" id="trashFractionTableHeader"
             (click)="sortTable('TrashFraction')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Trash Fraction' | translate}}
+            {{'Trash fraction' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'TrashFraction'">unfold_more</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'TrashFraction' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
@@ -148,7 +148,7 @@
         <th scope="col" class="table-header-sortable" id="weighingNumberTableHeader"
             (click)="sortTable('WeighingNumber')">
           <div class="d-flex align-items-center justify-content-center">
-            {{'Weighing Number' | translate}}
+            {{'Weighing number' | translate}}
             <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'WeighingNumber'">unfold_more</i>
             <i class="material-icons"
                *ngIf="localPageSettings.sort == 'WeighingNumber' && !trashInspectionsRequestModel.isSortDsc">expand_less</i>
@@ -300,19 +300,19 @@
               <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
-            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success btn-icon mb-2"
                     mdbTooltip="{{ 'Get PDF' | translate }}"
                     (click)="downloadPDF(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-pdf" size="lg" [fixedWidth]="true" ></fa-icon>
 
             </button>
-            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success btn-icon mb-2"
                     mdbTooltip="{{ 'Get DOCX' | translate }}"
                     (click)="downloadDocx(trashInspection)" *ngIf="trashInspection.status === 100">
               <fa-icon icon="file-word" size="lg" [fixedWidth]="true"></fa-icon>
 
             </button>
-            <button mdbBtn class="btn-success text-black-50 btn-icon mb-2"
+            <button mdbBtn class="btn-success btn-icon mb-2"
                     mdbTooltip="{{ 'Analytics' | translate }}"
                     (click)="showVersionViewModal(trashInspection.id)">
               <fa-icon icon="chart-bar" size="lg" [fixedWidth]="true"></fa-icon>
