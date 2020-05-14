@@ -239,10 +239,10 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
             }
         }
-        
 
         public async Task<OperationResult> Create(TrashInspectionModel createModel)
         {
+            DateTime dateTime = DateTime.UtcNow;
             var pluginConfiguration = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             if (pluginConfiguration == null)
             {
@@ -252,6 +252,20 @@ namespace TrashInspection.Pn.Services
             {
                 if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
                 {
+                    // Handling the situation, where incoming timestamp is not in UTC.
+                    var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
+
+                    if (utcAdjustment.Value == "1")
+                    {
+                        if (createModel.Time.Hour > dateTime.Hour)
+                        {
+                            TimeSpan timeSpan = createModel.Time.Subtract(dateTime);
+                            double minutes = timeSpan.Hours * 60.0 + timeSpan.Minutes;
+                            double hours = minutes / 60.0;
+                            double fullHours = Math.Round(hours);
+                            createModel.Time = createModel.Time.AddHours(-fullHours);
+                        }
+                    }
                     if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
                     {
                         var result =

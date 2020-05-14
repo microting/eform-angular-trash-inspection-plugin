@@ -91,6 +91,11 @@ namespace TrashInspection.Pn.Infrastructure.Data.Seed.Data
                 Name = "TrashInspectionBaseSettings:ExtendedInspectioneFormId",
                 Value = "2"
             },
+            new PluginConfigurationValue()
+            {
+                Name = "TrashInspectionBaseSettings:UtcAdjustment",
+                Value = "0"
+            },
         };
     }
 }

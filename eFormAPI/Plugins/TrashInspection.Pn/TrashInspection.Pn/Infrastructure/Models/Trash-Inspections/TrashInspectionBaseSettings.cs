@@ -50,6 +50,8 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public string CallbackCredentialAuthType { get; set; }
         
         public int ExtendedInspectioneFormId { get; set; }
+
+        public bool UtcAdjustment { get; set; }
     }
 
     public class TrashInspectionBaseToken
