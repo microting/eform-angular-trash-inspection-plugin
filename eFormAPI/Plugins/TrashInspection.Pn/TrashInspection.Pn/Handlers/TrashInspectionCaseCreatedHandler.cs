@@ -66,7 +66,10 @@ namespace TrashInspection.Pn.Handlers
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
             mainElement.StartDate = DateTime.Now.ToUniversalTime();
-            mainElement.CheckListFolderName = segment.SdkFolderId.ToString();
+            using (var dbContext = _core.dbContextHelper.GetDbContext())
+            {
+                mainElement.CheckListFolderName = dbContext.folders.Single(x => x.Id == segment.SdkFolderId).MicrotingUid.ToString();
+            }
             mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
             mainElement.EnableQuickSync = true;
             mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
@@ -121,7 +124,7 @@ namespace TrashInspection.Pn.Handlers
             }
             
             LogEvent("CreateTrashInspection: Trying to create SDK case");
-            int? sdkCaseId = await _core.CaseCreate(mainElement, "", sdkSiteId);
+            int? sdkCaseId = await _core.CaseCreate(mainElement, "", sdkSiteId, segment.SdkFolderId);
             LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
 
             trashInspectionCase.SdkCaseId = sdkCaseId.ToString();
