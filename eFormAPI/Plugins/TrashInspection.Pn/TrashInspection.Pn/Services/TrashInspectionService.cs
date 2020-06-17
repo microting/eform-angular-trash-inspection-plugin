@@ -78,6 +78,34 @@ namespace TrashInspection.Pn.Services
                     await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
 
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+
+                if (!string.IsNullOrEmpty(pnRequestModel.NameFilter))
+                {
+                    int i;
+                    DateTime dateTime;
+                    if (int.TryParse(pnRequestModel.NameFilter, out i))
+                    {
+                        trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                            x.Id == i);
+                    }
+                    else
+                    {
+                        if (DateTime.TryParse(pnRequestModel.NameFilter, out dateTime))
+                        {
+                            trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                                x.Date.Year == dateTime.Year &&
+                                x.Date.Month == dateTime.Month &&
+                                x.Date.Day == dateTime.Day);
+                        }
+                        else
+                        {
+                            trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                                x.Comment.Contains(pnRequestModel.NameFilter) ||
+                                x.WeighingNumber.Contains(pnRequestModel.NameFilter));
+                        }
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                 {
                     if (pnRequestModel.IsSortDsc)
@@ -96,6 +124,8 @@ namespace TrashInspection.Pn.Services
                     trashInspectionsQuery = _dbContext.TrashInspections
                         .OrderBy(x => x.Id);
                 }
+
+                int total = await trashInspectionsQuery.CountAsync();
 
                 if (pnRequestModel.PageSize != null)
                 {
@@ -193,7 +223,7 @@ namespace TrashInspection.Pn.Services
 
                 TrashInspectionsModel trashInspectionsModel = new TrashInspectionsModel
                 {
-                    Total = await _dbContext.TrashInspections.CountAsync(), TrashInspectionList = trashInspections
+                    Total = total, TrashInspectionList = trashInspections
                 };
 
 

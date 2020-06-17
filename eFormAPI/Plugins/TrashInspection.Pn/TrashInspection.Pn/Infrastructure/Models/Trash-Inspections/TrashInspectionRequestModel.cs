@@ -35,5 +35,7 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public bool IsSortDsc { get; set; }
         
         public int? PageSize { get; set; }
+
+        public string NameFilter { get; set; }
     }
 }

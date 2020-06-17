@@ -10,6 +10,15 @@
 </subheader-pn>
 
 <div class="container-fluid">
+  <div class="row pl-1">
+    <div class="col-md-2">
+      <div class="md-form">
+        <input mdbInput type="text" (input)="onLabelInputChanged($event.target.value)"
+               class="form-control input-sm" id="labelInput">
+        <label for="labelInput">{{'Label' | translate}}</label>
+      </div>
+    </div>
+  </div>
   <div class="row p-1 mt-4 table-responsive no-gutters">
     <table mdbTable striped="true" hover="true" small="true" class="z-depth-1 text-center">
       <thead>

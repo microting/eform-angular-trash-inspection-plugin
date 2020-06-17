@@ -8,6 +8,8 @@ import {
 import {TrashInspectionPnSettingsService, TrashInspectionPnTrashInspectionsService} from '../../../services';
 import {SharedPnService} from '../../../../shared/services';
 import {AuthService} from '../../../../../../common/services/auth';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
@@ -19,6 +21,8 @@ export class TrashInspectionsPageComponent implements OnInit {
   @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
   @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
   @ViewChild('versionViewModal') versionViewModal;
+
+  searchSubject = new Subject();
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionsModel: TrashInspectionsPnModel = new TrashInspectionsPnModel();
   trashInspectionsRequestModel: TrashInspectionsPnRequestModel = new TrashInspectionsPnRequestModel();
@@ -27,7 +31,17 @@ export class TrashInspectionsPageComponent implements OnInit {
   constructor(private sharedPnService: SharedPnService,
               private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
               private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
-              private authService: AuthService) { }
+              private authService: AuthService
+  ) {
+    this.searchSubject.pipe(
+      debounceTime(500)
+    ). subscribe(val => {
+      this.trashInspectionsRequestModel.nameFilter = val.toString();
+      this.trashInspectionsRequestModel.offset = 0;
+      this.getAllTrashInspections();
+    });
+  }
+
   get currentRole(): string {
     return this.authService.currentRole;
   }
@@ -63,6 +77,9 @@ export class TrashInspectionsPageComponent implements OnInit {
     });
   }
 
+  onLabelInputChanged(label: string) {
+    this.searchSubject.next(label);
+  }
   showCreateTrashInspection() {
     this.createTrashInspectionModal.show();
   }
