@@ -136,6 +136,8 @@ namespace TrashInspection.Pn.Services
                         .Take((int)pnRequestModel.PageSize);
                 }
 
+                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+
                 List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel()
                 {
                     Id = x.Id,
@@ -146,7 +148,7 @@ namespace TrashInspection.Pn.Services
                     MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
                     RegistrationNumber = x.RegistrationNumber,
-                    Time = x.Time.ToLocalTime(),
+                    Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
                     Transporter = x.Transporter,
                     WeighingNumber = x.WeighingNumber,
                     Status = x.Status,
@@ -362,6 +364,8 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
+                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+
                 var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
                 {
                     Id = x.Id,
@@ -371,7 +375,7 @@ namespace TrashInspection.Pn.Services
                     MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
                     RegistrationNumber = x.RegistrationNumber,
-                    Time = x.Time,
+                    Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
                     Transporter = x.Transporter,
                     TrashFraction = x.TrashFraction,
                     WeighingNumber = x.WeighingNumber,
@@ -409,6 +413,8 @@ namespace TrashInspection.Pn.Services
             {
                 try
                 {
+                    TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+
                     var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
                         {
                             Id = x.Id,
@@ -417,7 +423,7 @@ namespace TrashInspection.Pn.Services
                             InstallationId = x.InstallationId,
                             MustBeInspected = x.MustBeInspected,
                             RegistrationNumber = x.RegistrationNumber,
-                            Time = x.Time,
+                            Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
                             WeighingNumber = x.WeighingNumber,
                             Status = x.Status,
                             Version = x.Version,
@@ -454,6 +460,8 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
+                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+
                 TrashInspectionVersionsModel trashInspectionVersionsModel = new TrashInspectionVersionsModel
                 {
                     TrashInspectionId = trashInspectionId
@@ -471,11 +479,11 @@ namespace TrashInspection.Pn.Services
                     TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
                     {
                         Id = trashInspectionVersion.Id,
-                        UpdatedAt = ((DateTime) trashInspectionVersion.UpdatedAt).ToLocalTime(),
+                        UpdatedAt = TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionVersion.UpdatedAt, timeZoneInfo),
                         Version = trashInspectionVersion.Version,
                         WeighingNumber = trashInspectionVersion.WeighingNumber,
                         Date = trashInspectionVersion.Date,
-                        Time = trashInspectionVersion.Time.ToLocalTime(),
+                        Time = TimeZoneInfo.ConvertTimeFromUtc(trashInspectionVersion.Time, timeZoneInfo),
                         RegistrationNumber = trashInspectionVersion.RegistrationNumber,
                         TrashFraction = trashInspectionVersion.TrashFraction,
                         FractionId = trashInspectionVersion.FractionId,
@@ -558,32 +566,32 @@ namespace TrashInspection.Pn.Services
                          {
                              case 0:
                                  trashInspectionCaseStatusModel.CreatedLocally =
-                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                     TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  break;
                              case 66:
                              {
                                  if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
                                  {
                                      trashInspectionCaseStatusModel.Removed =
-                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                         TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  }
                                  else
                                  {
                                      trashInspectionCaseStatusModel.SentToMicroting =
-                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                         TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  } 
                                  break;
                              }
                              case 70:
                              {
                                  trashInspectionCaseStatusModel.ReadyAtMicroting =
-                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                     TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  break;
                              }
                              case 77:
                              {
                                  trashInspectionCaseStatusModel.ReceivedOnTablet =
-                                     ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                     TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  break;
                              }
                              case 100:
@@ -591,12 +599,19 @@ namespace TrashInspection.Pn.Services
                                  if (trashInspectionCaseVersion.WorkflowState == Constants.WorkflowStates.Removed)
                                  {
                                      trashInspectionCaseStatusModel.Removed =
-                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                         TimeZoneInfo.ConvertTimeFromUtc(
+                                             (DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
                                  }
                                  else
                                  {
-                                     trashInspectionCaseStatusModel.Answered =
-                                         ((DateTime) trashInspectionCaseVersion.UpdatedAt).ToLocalTime();
+                                     Core core = await _coreHelper.GetCore();
+                                     using (var dbContext = core.dbContextHelper.GetDbContext())
+                                     {
+                                         var result = dbContext.cases.Single(x =>
+                                             x.MicrotingUid == int.Parse(trashInspectionCaseVersion.SdkCaseId));
+                                         trashInspectionCaseStatusModel.Answered =
+                                             TimeZoneInfo.ConvertTimeFromUtc((DateTime) result.DoneAt, timeZoneInfo);
+                                     }
                                  }
                                  break;
                              }
