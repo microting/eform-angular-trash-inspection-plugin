@@ -27,9 +27,9 @@
     <PackageReference Include="McMaster.NETCore.Plugins" Version="0.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microting.eForm" Version="3.3.12" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.2.77" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.195" />
+    <PackageReference Include="Microting.eForm" Version="3.3.14" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="1.2.78" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="1.1.196" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
     <PackageReference Include="Rebus.RabbitMQ" Version="5.2.0" />
   </ItemGroup>
