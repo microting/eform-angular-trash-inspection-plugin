@@ -71,12 +71,11 @@ export class InstallationEditComponent implements OnInit {
   }
 
   loadAllSites() {
-    if (this.userClaims.eFormsPairingRead) {
+    if (this.userClaims.eformsPairingRead) {
       this.sitesService.getAllSitesForPairing().subscribe(operation => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
-       
       });
     }
   }
