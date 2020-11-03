@@ -236,7 +236,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-installations",
                                 Link = "/plugins/trash-inspection-pn/installations",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 1,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Installations",
@@ -300,7 +300,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-fractions",
                                 Link = "/plugins/trash-inspection-pn/fractions",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 2,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Fractions",
@@ -364,7 +364,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-segments",
                                 Link = "/plugins/trash-inspection-pn/segments",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 3,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Segments",
@@ -428,7 +428,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-producers",
                                 Link = "/plugins/trash-inspection-pn/producers",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 4,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Producers",
@@ -492,7 +492,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-transporters",
                                 Link = "/plugins/trash-inspection-pn/transporters",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 5,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Transporters",
@@ -556,7 +556,7 @@ namespace TrashInspection.Pn
                                 E2EId = "trash-inspection-pn-reports",
                                 Link = "/plugins/trash-inspection-pn/reports",
                                 Type = MenuItemTypeEnum.Link,
-                                Position = 0,
+                                Position = 6,
                                 MenuTemplate = new PluginMenuTemplateModel()
                                 {
                                     Name = "Reports",
