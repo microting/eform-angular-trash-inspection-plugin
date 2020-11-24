@@ -25,8 +25,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microting.eForm" Version="4.0.36" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="2.0.43" />
+    <PackageReference Include="Microting.eForm" Version="4.0.37" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="2.0.44" />
     <PackageReference Include="Microting.eFormTrashInspectionBase" Version="2.0.32" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
     <PackageReference Include="Rebus.RabbitMQ" Version="7.2.0" />
