@@ -11,8 +11,8 @@ describe('Application settings page - site header section', function () {
     });
     it('should go to plugin settings page', function () {
         loginPage.login();
-        myEformsPage.Navbar.advancedDropdown();
-        myEformsPage.Navbar.clickonSubMenuItem('Plugins');
+        myEformsPage.Navbar.advancedDropdownClick();
+        myEformsPage.Navbar.clickOnSubMenuItem('Plugins');
         $('#plugin-name').waitForDisplayed({timeout: 50000});
         $('#plugin-name').waitForClickable({timeout: 50000});
 
@@ -32,8 +32,8 @@ describe('Application settings page - site header section', function () {
 
         // Start - This block is here because of the new plugin permission loading, requires a re-login.
         loginPage.login();
-        myEformsPage.Navbar.advancedDropdown();
-        myEformsPage.Navbar.clickonSubMenuItem('Plugins');
+        myEformsPage.Navbar.advancedDropdownClick();
+        myEformsPage.Navbar.clickOnSubMenuItem('Plugins');
         $('#plugin-name').waitForDisplayed({timeout: 50000});
         $('#plugin-name').waitForClickable({timeout: 50000});
         // End - This block is here because of the new plugin permission loading, requires a re-login.
