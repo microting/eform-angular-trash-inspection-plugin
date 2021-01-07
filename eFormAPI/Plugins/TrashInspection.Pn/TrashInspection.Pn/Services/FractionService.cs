@@ -120,9 +120,8 @@ namespace TrashInspection.Pn.Services
                 Core _core = await _coreHelper.GetCore();
                 List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();
 
-                var value = _httpContextAccessor?.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                var localeString = await _userService.GetUserLocale(int.Parse(value));
-                Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.Description.ToLower() == localeString.ToLower());
+                var locale = await _userService.GetCurrentUserLocale();
+                Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
                 foreach (FractionModel fractionModel in fractions)
                 {
                     if (fractionModel.eFormId > 0)
@@ -203,10 +202,8 @@ namespace TrashInspection.Pn.Services
                 if (fraction.eFormId > 0)
                 {
                     try {
-
-                        var value = _httpContextAccessor?.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                        var localeString = await _userService.GetUserLocale(int.Parse(value));
-                        Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.Description.ToLower() == localeString.ToLower());
+                        var locale = await _userService.GetCurrentUserLocale();
+                        Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
                         string eFormName = _core.TemplateItemRead(fraction.eFormId, language).Result.Label;
                         fraction.SelectedTemplateName = eFormName;
 

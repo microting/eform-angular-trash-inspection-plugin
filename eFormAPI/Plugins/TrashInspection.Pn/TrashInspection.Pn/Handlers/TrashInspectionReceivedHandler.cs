@@ -31,7 +31,9 @@ using Rebus.Handlers;
 using TrashInspection.Pn.Messages;
 using eFormCore;
 using Microsoft.EntityFrameworkCore;
+using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Bus;
@@ -45,14 +47,14 @@ namespace TrashInspection.Pn.Handlers
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly IBus _bus;
-        
+
         public TrashInspectionReceivedHandler(Core core, DbContextHelper dbContextHelper, IBus bus)
         {
             _core = core;
             _dbContext = dbContextHelper.GetDbContext();
             _bus = bus;
         }
-        
+
         #pragma warning disable 1998
         public async Task Handle(TrashInspectionReceived message)
         {
@@ -62,25 +64,28 @@ namespace TrashInspection.Pn.Handlers
             Fraction fraction = message.Fraction;
             Segment segment = message.Segment;
             Installation installation = message.Installation;
-            
+
             int eFormId = fraction.eFormId;
-            
+
             if (createModel.ExtendedInspection)
             {
                 var result = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:ExtendedInspectioneFormId");
                 eFormId = int.Parse(result.Value);
             }
-            
-            var mainElement = _core.TemplateRead(eFormId);
-            if (mainElement == null)
-            {
-                return;
-            }
+
             List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
             CultureInfo cultureInfo = new CultureInfo("de-DE");
+            await using MicrotingDbContext microtingDbContext = _core.dbContextHelper.GetDbContext();
 //            List<Task> tasks = new List<Task>();
             foreach (InstallationSite installationSite in installationSites)
             {
+                Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == installationSite.SDKSiteId);
+                Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
+                var mainElement = _core.ReadeForm(eFormId, language);
+                if (mainElement == null)
+                {
+                    return;
+                }
                 TrashInspectionCase trashInspectionCase = new TrashInspectionCase
                 {
                     SegmentId = segment.Id,
@@ -111,7 +116,7 @@ namespace TrashInspection.Pn.Handlers
         private void LogEvent(string appendText)
         {
             try
-            {                
+            {
                 var oldColor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("[DBG] " + appendText);

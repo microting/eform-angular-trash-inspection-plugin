@@ -29,7 +29,9 @@ using System.Threading.Tasks;
 using eFormCore;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Dto;
+using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eForm.Infrastructure.Models;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -57,9 +59,12 @@ namespace TrashInspection.Pn.Handlers
                 await _dbContext.TrashInspectionCases.SingleOrDefaultAsync(x => x.Id == message.TrashInspectionCaseId);
             LogEvent($"TrashInspectionCaseCreatedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber / message.TrashInspectionCase.Id : {message.TrashInspectionModel.WeighingNumber} / {message.TrashInspectionCaseId}");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
-            MainElement mainElement = await _core.TemplateRead(message.TemplateId);
-            TrashInspectionModel createModel = message.TrashInspectionModel;
             int sdkSiteId = trashInspectionCase.SdkSiteId;
+            await using MicrotingDbContext microtingDbContext = _core.dbContextHelper.GetDbContext();
+            Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == sdkSiteId);
+            Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
+            MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
+            TrashInspectionModel createModel = message.TrashInspectionModel;
             Segment segment = message.Segment;
             Fraction fraction = message.Fraction;
 

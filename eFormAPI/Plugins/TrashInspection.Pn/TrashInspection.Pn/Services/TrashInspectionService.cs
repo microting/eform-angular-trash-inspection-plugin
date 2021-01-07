@@ -217,9 +217,8 @@ namespace TrashInspection.Pn.Services
                         {
                             try
                             {
-                                var value = _httpContextAccessor?.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                                var localeString = await _userService.GetUserLocale(int.Parse(value));
-                                Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.Description.ToLower() == localeString.ToLower());
+                                var locale = await _userService.GetCurrentUserLocale();
+                                Language language = _core.dbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
                                 int eFormName = _core.TemplateItemRead(fraction.eFormId, language).Result.Id;
                                 trashInspectionModel.SdkeFormId = eFormName;
                                 KeyValuePair<int, int> kvp =
