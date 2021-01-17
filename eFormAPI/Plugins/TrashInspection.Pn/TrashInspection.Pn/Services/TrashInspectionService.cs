@@ -42,6 +42,7 @@ using System.Xml.Linq;
 using eFormCore;
 using Microsoft.AspNetCore.Http;
 using Microting.eForm.Dto;
+using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
@@ -829,12 +830,12 @@ namespace TrashInspection.Pn.Services
 
                     if (caseId != 0 && eFormId != 0)
                     {
-
-
                         _coreHelper.LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
+                        await using MicrotingDbContext sdkDbContext = core.dbContextHelper.GetDbContext();
+                        Language language = await sdkDbContext.Languages.SingleAsync(x => x.LanguageCode == "da");
                         var filePath = await core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
+                            $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent, language);
                         if (!System.IO.File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
