@@ -29,14 +29,14 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Helpers.PluginDbOptions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Services
 {
@@ -136,7 +136,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                TrashInspectionBaseToken trashInspectionBaseToken = new TrashInspectionBaseToken()
+                TrashInspectionBaseToken trashInspectionBaseToken = new TrashInspectionBaseToken
                 {
                     Token = _options.Value.Token
                 };

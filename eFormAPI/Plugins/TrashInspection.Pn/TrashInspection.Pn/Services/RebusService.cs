@@ -25,14 +25,14 @@ SOFTWARE.
 using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using eFormCore;
 using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using Rebus.Bus;
 using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Installers;
-using eFormCore;
 using TrashInspection.Pn.Infrastructure.Helpers;
+using TrashInspection.Pn.Installers;
 
 namespace TrashInspection.Pn.Services
 {

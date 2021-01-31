@@ -27,14 +27,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Castle.MicroKernel.ModelBuilder.Descriptors;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Newtonsoft.Json.Linq;
 using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
@@ -96,7 +95,7 @@ namespace TrashInspection.Pn.Services
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
-                List<TransporterModel> transporters = await transporterQuery.Select(x => new TransporterModel()
+                List<TransporterModel> transporters = await transporterQuery.Select(x => new TransporterModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -148,7 +147,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var transporter = await _dbContext.Transporters.Select(x => new TransporterModel()
+                var transporter = await _dbContext.Transporters.Select(x => new TransporterModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -336,7 +335,7 @@ namespace TrashInspection.Pn.Services
                 transporterQuery
                     = transporterQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel()
+                List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -490,17 +489,17 @@ namespace TrashInspection.Pn.Services
             {
                 StatByMonth statByMonth = new StatByMonth();
                 statByMonth.StatByMonthListData1 = new List<Period>();
-                List<string> months = new List<string>()
+                List<string> months = new List<string>
                 {
                     "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
                 };
-                List<string> outcomes = new List<string>()
+                List<string> outcomes = new List<string>
                 {
                     "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
                 };
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
                     _dbContext.TrashInspections.AsQueryable();
-                Period linePeriod = new Period()
+                Period linePeriod = new Period
                 {
                     Name = "Compliance"
                 };
@@ -532,25 +531,25 @@ namespace TrashInspection.Pn.Services
                             Math.Round((wheighingsPartiallyApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                     }
                        
-                    Period period = new Period()
+                    Period period = new Period
                     {
                         Name = month
                     };
                     //Bar Chart Data
                     period.Series = new List<SeriesObject>();
-                    SeriesObject seriesObject1 = new SeriesObject()
+                    SeriesObject seriesObject1 = new SeriesObject
                     {
                         Name = outcomes[0],
                         Value = approvedWheighingsPercentage
                     };
                     period.Series.Add(seriesObject1);
-                    SeriesObject seriesObject2 = new SeriesObject()
+                    SeriesObject seriesObject2 = new SeriesObject
                     {
                         Name = outcomes[1],
                         Value = partiallyApprovedWheighingPercentage
                     };
                     period.Series.Add(seriesObject2);
-                    SeriesObject seriesObject3 = new SeriesObject()
+                    SeriesObject seriesObject3 = new SeriesObject
                     {
                         Name = outcomes[2],
                         Value = notApprovedWheighingPercentage
@@ -559,7 +558,7 @@ namespace TrashInspection.Pn.Services
                     statByMonth.StatByMonthListData1.Add(period);
                     
                     //Line Chart Data
-                    SeriesObject lineSeriesObject1 = new SeriesObject()
+                    SeriesObject lineSeriesObject1 = new SeriesObject
                     {
                         Name = months[j],
                         Value = approvedWheighingsPercentage

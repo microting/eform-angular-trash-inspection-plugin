@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using TrashInspection.Pn.Infrastructure.Models;
 using Newtonsoft.Json.Linq;
+using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Infrastructure.Helpers
 {

@@ -60,7 +60,7 @@ namespace TrashInspection.Pn.Handlers
             LogEvent($"TrashInspectionCaseCreatedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber / message.TrashInspectionCase.Id : {message.TrashInspectionModel.WeighingNumber} / {message.TrashInspectionCaseId}");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             int sdkSiteId = trashInspectionCase.SdkSiteId;
-            await using MicrotingDbContext microtingDbContext = _core.dbContextHelper.GetDbContext();
+            await using MicrotingDbContext microtingDbContext = _core.DbContextHelper.GetDbContext();
             Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == sdkSiteId);
             Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
             MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
@@ -71,7 +71,7 @@ namespace TrashInspection.Pn.Handlers
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
             mainElement.StartDate = DateTime.Now.ToUniversalTime();
-            using (var dbContext = _core.dbContextHelper.GetDbContext())
+            using (var dbContext = _core.DbContextHelper.GetDbContext())
             {
                 mainElement.CheckListFolderName = dbContext.Folders.Single(x => x.Id == segment.SdkFolderId).MicrotingUid.ToString();
             }

@@ -1,6 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-
 namespace TrashInspection.Pn.Infrastructure.Models
 {
     public class StatByYearModel

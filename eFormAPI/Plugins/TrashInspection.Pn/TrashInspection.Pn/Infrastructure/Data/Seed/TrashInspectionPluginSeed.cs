@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
-using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
-using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
 using System;
 using System.Linq;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
 
 namespace TrashInspection.Pn.Infrastructure.Data.Seed
 {
@@ -41,7 +41,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Seed
             {
                 if (!dbContext.PluginConfigurationValues.Any(x=>x.Name == configurationItem.Name))
                 {
-                    var newConfigValue = new PluginConfigurationValue()
+                    var newConfigValue = new PluginConfigurationValue
                     {
                         Name = configurationItem.Name,
                         Value = configurationItem.Value,

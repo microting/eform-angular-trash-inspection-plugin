@@ -330,3 +330,4 @@ ASALocalRun/
 .mfractor/
 eFormAPI/eFormAPI.Web/Plugins/TrashInspection/netcoreapp2.2/
 eFormAPI/eFormAPI.Web/Plugins/TrashInspection/netcoreapp2.2/RentableItems.Pn.runtimeconfig.json
+eFormAPI/eFormAPI.Web/Plugins

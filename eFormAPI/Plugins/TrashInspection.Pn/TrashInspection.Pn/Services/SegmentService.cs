@@ -33,8 +33,8 @@ using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 
@@ -87,7 +87,7 @@ namespace TrashInspection.Pn.Services
                      .Skip(pnRequestModel.Offset)
                      .Take(pnRequestModel.PageSize);
                  
-                List<SegmentModel> segmentModels = await segmentQuery.Select(x => new SegmentModel()
+                List<SegmentModel> segmentModels = await segmentQuery.Select(x => new SegmentModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -129,7 +129,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var segment = await _dbContext.Segments.Select(x => new SegmentModel()
+                var segment = await _dbContext.Segments.Select(x => new SegmentModel
                     {
                         Id = x.Id,
                         Name = x.Name,
