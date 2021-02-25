@@ -160,7 +160,6 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        require: 'ts-node/register',
         compilers: ['tsconfig-paths/register'],
         timeout: 60000
     },
@@ -195,7 +194,6 @@ exports.config = {
      * @param {Array.<String>} specs List of spec file paths that are to be run
      */
     before: function () {
-        require('ts-node/register');
         browser.timeouts('implicit', 5000);
     },
     /**
