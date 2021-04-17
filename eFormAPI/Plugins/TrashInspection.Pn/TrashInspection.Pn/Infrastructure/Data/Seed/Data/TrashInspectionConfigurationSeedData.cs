@@ -31,67 +31,67 @@ namespace TrashInspection.Pn.Infrastructure.Data.Seed.Data
     {
         public PluginConfigurationValue[] Data => new[]
         {
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:LogLevel",
                 Value = "4"
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:LogLimit",
                 Value = "25000"
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:SdkConnectionString",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:MaxParallelism",
                 Value = "1"
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:NumberOfWorkers",
                 Value = "1"
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:Token",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:CallBackUrl",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:CallBackCredentialDomain",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:CallbackCredentialUserName",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:CallbackCredentialPassword",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:CallbackCredentialAuthType",
                 Value = "..."
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:ExtendedInspectioneFormId",
                 Value = "2"
             },
-            new PluginConfigurationValue()
+            new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:UtcAdjustment",
                 Value = "0"

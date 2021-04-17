@@ -40,7 +40,7 @@ namespace TrashInspection.Pn.Infrastructure.Extensions
             PropertyInfo propertyInfo = entityType.GetProperty(propertyName);
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
-            LambdaExpression selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+            LambdaExpression selector = Expression.Lambda(property, arg);
 
             //Get System.Linq.Queryable.OrderBy() method.
             Type enumarableType = typeof(Queryable);
@@ -72,7 +72,7 @@ namespace TrashInspection.Pn.Infrastructure.Extensions
             PropertyInfo propertyInfo = entityType.GetProperty(propertyName);
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
-            LambdaExpression selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+            LambdaExpression selector = Expression.Lambda(property, arg);
 
             //Get System.Linq.Queryable.OrderByDescending() method.
             Type enumarableType = typeof(Queryable);

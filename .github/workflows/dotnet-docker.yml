@@ -1,8 +1,9 @@
-name: .NET Master
+name: .NET Docker
 
 on:
   push:
-    branches: [ master, stable ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -10,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        path: main
+        path: eform-angular-trashinspection-plugin
     - uses: getong/mariadb-action@v1.1
       with:
         host port: 3306 # Optional, default value is 3306. The port of host
@@ -46,28 +47,31 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: microting/eform-angular-frontend
-        ref: ${{ steps.extract_branch.outputs.branch }}
+        ref: ${{ github.base_ref }}
         path: eform-angular-frontend
     - name: Install dependencies
-      run: dotnet restore main/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
+      run: dotnet restore eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
     - name: Get the version
       id: get_version
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3 | cut -d "v" -f 2)
+    - name: Get the frontend version
+      id: get_frontend_version
+      run: echo ::set-output name=FRONTENDVERSION::$(cd eform-angular-frontend && git describe --abbrev=0 --tags | cut -d "v" -f 2)
     - name: Build
-      run: dotnet build main/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
+      run: dotnet build eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
     - name: Unit Tests
-      run: dotnet test --no-restore -c Release -v n main/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
+      run: dotnet test --no-restore -c Release -v n eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test/TrashInspection.Pn.Test.csproj
     - name: Copy dependencies
       run: |
-        cp -av main/eform-client/src/app/plugins/modules/trash-inspection-pn eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
-        cp -av main/eform-client/e2e/Tests/trash-inspections-settings eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
-        cp -av main/eform-client/e2e/Tests/trash-inspection-general eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
-        cp -av main/eform-client/e2e/Page\ objects/trash-inspection eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
-        cp -av main/eform-client/wdio-headless-plugin-step2.conf.js eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
-        cp -av main/eform-client/wdio-plugin-step2.conf.js eform-angular-frontend/eform-client/wdio-plugin-step2.conf.js
+        cp -av eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
+        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspections-settings eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
+        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspection-general eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
+        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Page\ objects/trash-inspection eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
+        cp -av eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.js eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.js
+        cp -av eform-angular-trashinspection-plugin/eform-client/wdio-plugin-step2.conf.js eform-angular-frontend/eform-client/wdio-plugin-step2.conf.js
         mkdir -p eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins
-        cp -av main/eFormAPI/eFormAPI.Web/Plugins/TrashInspection eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
-        cd eform-angular-frontend/eform-client && ../../main/testinginstallpn.sh
+        cp -av eform-angular-trashinspection-plugin/eFormAPI/eFormAPI.Web/Plugins/TrashInspection eform-angular-frontend/eFormAPI/eFormAPI.Web/Plugins/TrashInspection
+        cd eform-angular-frontend/eform-client && ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
     - name: Build frontend
       run: dotnet build eform-angular-frontend/eFormAPI/eFormAPI.sln > dotnet_log 2>&1 &
     - name: NPM install
@@ -89,13 +93,20 @@ jobs:
       run: |
         cat dotnet_log
         cat eform-angular-frontend/eform-client/npm_log
-    - name: Notify slack fail
-      if: ${{ failure() }}
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
       with:
-        message_id: ${{ steps.slack.outputs.message_id }}
-        channel_id: C017TF7KLB1
-        status: FAILED
-        color: danger
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Copy frontendfiles
+      run: cp eform-angular-trashinspection-plugin/Dockerfile .
+    - name: Build the tagged Docker image
+      run: docker build . -t microtingas/trashinspection:latest -t microtingas/trashinspection:${{ steps.get_frontend_version.outputs.FRONTENDVERSION }} --build-arg GITVERSION=${{ steps.get_frontend_version.outputs.FRONTENDVERSION }} --build-arg PLUGINVERSION=${{ steps.get_version.outputs.VERSION }}
+    - name: Push the tagged Docker image
+      run: docker push microtingas/trashinspection:${{ steps.get_frontend_version.outputs.FRONTENDVERSION }}
+    - name: Push the latest Docker image
+      run: docker push microtingas/trashinspection:latest

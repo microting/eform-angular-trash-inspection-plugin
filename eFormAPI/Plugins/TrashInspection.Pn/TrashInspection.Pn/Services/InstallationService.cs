@@ -27,16 +27,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
+using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using OpenStack.NetCoreSwiftClient.Extensions;
+using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Services
 {
@@ -60,7 +60,7 @@ namespace TrashInspection.Pn.Services
             try
             {
                 InstallationsModel installationsModel = new InstallationsModel();
-                
+
                 IQueryable<Installation> installationsQuery = _dbContext.Installations.AsQueryable();
 
                 if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
@@ -91,8 +91,8 @@ namespace TrashInspection.Pn.Services
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
-                
-                List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel()
+
+                List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel
                 {
                     Id = x.Id,
                     Name = x.Name
@@ -100,8 +100,8 @@ namespace TrashInspection.Pn.Services
 
                 installationsModel.Total = _dbContext.Installations.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 installationsModel.InstallationList = installations;
-                
-                
+
+
                 return new OperationDataResult<InstallationsModel>(true, installationsModel);
             }
             catch (Exception e)
@@ -113,7 +113,7 @@ namespace TrashInspection.Pn.Services
 
             }
         }
-        
+
         public async Task<OperationResult> Create(InstallationModel createModel)
         {
             Installation installation = new Installation
@@ -121,10 +121,10 @@ namespace TrashInspection.Pn.Services
                 Name = createModel.Name
             };
             await installation.Create(_dbContext);
-            
+
             foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
             {
-                if (deployedCheckbox.IsChecked == true)
+                if (deployedCheckbox.IsChecked)
                 {
                     InstallationSite installationSite = new InstallationSite
                     {
@@ -152,12 +152,12 @@ namespace TrashInspection.Pn.Services
 
                 List<InstallationSite> installationSites = _dbContext.InstallationSites
                     .Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
-                
+
                 InstallationModel installationModel = new InstallationModel();
                 installationModel.Name = installation.Name;
                 installationModel.Id = installation.Id;
                 installationModel.DeployCheckboxes = new List<DeployCheckbox>();
-                
+
                 foreach (InstallationSite installationSite in installationSites)
                 {
                     DeployCheckbox deployCheckbox = new DeployCheckbox();
@@ -176,7 +176,7 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingInstallation"));
             }
         }
-        
+
         public async Task<OperationResult> Update(InstallationModel updateModel)
         {
             Installation installation =
@@ -210,7 +210,7 @@ namespace TrashInspection.Pn.Services
                         installationSite.WorkflowState = Constants.WorkflowStates.Created;
                         await installationSite.Update(_dbContext);
 
-                    } 
+                    }
                     toBeRemovedInstallationSites.Remove(installationSite);
                 }
             }

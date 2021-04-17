@@ -22,9 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using TrashInspection.Pn.Abstractions;
 using Microsoft.Extensions.Localization;
 using Microting.eFormApi.BasePn.Localization.Abstractions;
+using TrashInspection.Pn.Abstractions;
 
 namespace TrashInspection.Pn.Services
 {

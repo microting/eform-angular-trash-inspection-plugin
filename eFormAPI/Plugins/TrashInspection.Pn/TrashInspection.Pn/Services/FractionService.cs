@@ -28,13 +28,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using eFormCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Newtonsoft.Json.Linq;
 using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
@@ -48,13 +50,19 @@ namespace TrashInspection.Pn.Services
         private readonly IEFormCoreService _coreHelper;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
 
         public FractionService(TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
+            IHttpContextAccessor httpContextAccessor,
+            IUserService userService,
             ITrashInspectionLocalizationService trashInspectionLocalizationService)
         {
             _dbContext = dbContext;
             _coreHelper = coreHelper;
+            _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
@@ -63,7 +71,7 @@ namespace TrashInspection.Pn.Services
             try
             {
                 FractionsModel fractionsModel = new FractionsModel();
-                
+
                 IQueryable<Fraction> fractionsQuery = _dbContext.Fractions.AsQueryable();
                 if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
                 {
@@ -95,8 +103,8 @@ namespace TrashInspection.Pn.Services
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
-                
-                List<FractionModel> fractions = await fractionsQuery.Select(x => new FractionModel()
+
+                List<FractionModel> fractions = await fractionsQuery.Select(x => new FractionModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -111,6 +119,8 @@ namespace TrashInspection.Pn.Services
                 Core _core = await _coreHelper.GetCore();
                 List<KeyValuePair<int, string>> eFormNames = new List<KeyValuePair<int, string>>();
 
+                var locale = await _userService.GetCurrentUserLocale();
+                Language language = _core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
                 foreach (FractionModel fractionModel in fractions)
                 {
                     if (fractionModel.eFormId > 0)
@@ -123,7 +133,8 @@ namespace TrashInspection.Pn.Services
                         {
                             try
                             {
-                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId).Result.Label;
+
+                                string eFormName = _core.TemplateItemRead(fractionModel.eFormId, language).Result.Label;
                                 fractionModel.SelectedTemplateName = eFormName;
                                 KeyValuePair<int, string> kvp =
                                     new KeyValuePair<int, string>(fractionModel.eFormId, eFormName);
@@ -135,9 +146,9 @@ namespace TrashInspection.Pn.Services
                                 eFormNames.Add(kvp);
                             }
                         }
-                    }                    
+                    }
                 }
-                
+
                 return new OperationDataResult<FractionsModel>(true, fractionsModel);
             }
             catch (Exception e)
@@ -160,7 +171,7 @@ namespace TrashInspection.Pn.Services
                 eFormId = createModel.eFormId
             };
             await fraction.Create(_dbContext);
-            
+
             return new OperationResult(true);
 
         }
@@ -168,7 +179,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                var fraction = await _dbContext.Fractions.Select(x => new FractionModel()
+                var fraction = await _dbContext.Fractions.Select(x => new FractionModel
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -180,7 +191,7 @@ namespace TrashInspection.Pn.Services
                     .FirstOrDefaultAsync(x => x.Id == id);
 
                 if (fraction == null)
-                {                    
+                {
                     return new OperationDataResult<FractionModel>(false,
                         _trashInspectionLocalizationService.GetString($"FractionWithID:{id}DoesNotExist"));
                 }
@@ -190,9 +201,11 @@ namespace TrashInspection.Pn.Services
                 if (fraction.eFormId > 0)
                 {
                     try {
-                        string eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Label;
+                        var locale = await _userService.GetCurrentUserLocale();
+                        Language language = _core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
+                        string eFormName = _core.TemplateItemRead(fraction.eFormId, language).Result.Label;
                         fraction.SelectedTemplateName = eFormName;
-                        
+
                     } catch {}
                 }
                 return new OperationDataResult<FractionModel>(true, fraction);
@@ -205,7 +218,7 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingFraction"));
             }
         }
-        
+
         public async Task<OperationResult> Update(FractionModel updateModel)
         {
             Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
@@ -219,11 +232,11 @@ namespace TrashInspection.Pn.Services
 
                 await fraction.Update(_dbContext);
             }
-            
+
             return new OperationResult(true);
 
         }
-        
+
         public async Task<OperationResult> Delete(int id)
         {
             Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == id);
@@ -264,7 +277,7 @@ namespace TrashInspection.Pn.Services
 
                     JToken headers = rawHeadersJson;
                     IEnumerable<JToken> fractionObjects = rawJson.Skip(1);
-                    
+
                     foreach (JToken fractionObj in fractionObjects)
                     {
                         bool numberExists = int.TryParse(headers[0]["headerValue"].ToString(), out int numberColumn);
@@ -289,12 +302,12 @@ namespace TrashInspection.Pn.Services
 
                                 };
                                 await newFraction.Create(_dbContext);
-  
+
                             }
                             else
                             {
                                 if (existingFraction.WorkflowState == Constants.WorkflowStates.Removed)
-                                {                                    
+                                {
                                     Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == existingFraction.Id);
                                     if (fraction != null)
                                     {
@@ -309,7 +322,7 @@ namespace TrashInspection.Pn.Services
                                 }
                             }
                         }
-                        
+
                     }
                 }
                 return new OperationResult(true,
@@ -330,7 +343,7 @@ namespace TrashInspection.Pn.Services
                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
 
                 trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
-                
+
                 StatsByYearModel fractionsStatsByYearModel = new StatsByYearModel();
 
                 IQueryable<Fraction> fractionQuery = _dbContext.Fractions.AsQueryable();
@@ -344,7 +357,7 @@ namespace TrashInspection.Pn.Services
 
                 if (pnRequestModel.Sort == "Name")
                 {
-                    
+
                     if (!string.IsNullOrEmpty(pnRequestModel.Sort))
                     {
                         if (pnRequestModel.IsSortDsc)
@@ -364,11 +377,11 @@ namespace TrashInspection.Pn.Services
                             .OrderBy(x => x.Id);
                     }
                 }
-                
+
                 fractionQuery
                     = fractionQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                List<StatByYearModel> fractionsStatsByYear = await fractionQuery.Select(x => new StatByYearModel()
+                List<StatByYearModel> fractionsStatsByYear = await fractionQuery.Select(x => new StatByYearModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -383,7 +396,7 @@ namespace TrashInspection.Pn.Services
 
                 foreach (StatByYearModel statByYearModel in fractionsStatsByYear)
                 {
-                    
+
                     if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
                     {
                         statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
@@ -392,7 +405,7 @@ namespace TrashInspection.Pn.Services
                     {
                         statByYearModel.ControlPercentage = 0;
                     }
-                    
+
                     if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
                         statByYearModel.ApprovedPercentage =
@@ -405,7 +418,7 @@ namespace TrashInspection.Pn.Services
 
                     if (statByYearModel.ConditionalApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
-                        statByYearModel.ConditionalApprovedPercentage = 
+                        statByYearModel.ConditionalApprovedPercentage =
                             Math.Round((statByYearModel.ConditionalApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
                     }
                     else
@@ -423,25 +436,25 @@ namespace TrashInspection.Pn.Services
                         statByYearModel.NotApprovedPercentage = 0;
                     }
                 }
-                
+
                 if (pnRequestModel.Sort == "Weighings")
                 {
                     if (pnRequestModel.IsSortDsc)
                     {
-                        fractionsStatsByYear = 
+                        fractionsStatsByYear =
                             fractionsStatsByYear.OrderByDescending(x => x.Weighings).ToList();
                     }
                     else
                     {
                         fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.Weighings).ToList();
-                        
+
                     }
                 }
                 if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
                 {
                     if (pnRequestModel.IsSortDsc)
                     {
-                        fractionsStatsByYear = 
+                        fractionsStatsByYear =
                             fractionsStatsByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
                     }
                     else
@@ -498,14 +511,14 @@ namespace TrashInspection.Pn.Services
                     else
                     {
                         fractionsStatsByYear = fractionsStatsByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
- 
+
                     }
                 }
-                
+
                 fractionsStatsByYearModel.Total =
                     _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 fractionsStatsByYearModel.statsByYearList = fractionsStatsByYear;
-                
+
                 return new OperationDataResult<StatsByYearModel>(true, fractionsStatsByYearModel);
             }
             catch (Exception e)
@@ -523,17 +536,17 @@ namespace TrashInspection.Pn.Services
              {
                  StatByMonth statByMonth = new StatByMonth();
                  statByMonth.StatByMonthListData1 = new List<Period>();
-                 List<string> months = new List<string>()
+                 List<string> months = new List<string>
                  {
                      "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
                  };
-                 List<string> outcomes = new List<string>()
+                 List<string> outcomes = new List<string>
                  {
                      "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
                  };
-                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
+                 IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery =
                      _dbContext.TrashInspections.AsQueryable();
-                 Period linePeriod = new Period()
+                 Period linePeriod = new Period
                  {
                      Name = "Compliance"
                  };
@@ -561,38 +574,38 @@ namespace TrashInspection.Pn.Services
                              (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                          notApprovedWheighingPercentage =
                              Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
-                         partiallyApprovedWheighingPercentage = 
+                         partiallyApprovedWheighingPercentage =
                              Math.Round((wheighingsPartiallyApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                      }
-                       
-                     Period period = new Period()
+
+                     Period period = new Period
                      {
                          Name = month
                      };
                      //Bar Chart Data
                      period.Series = new List<SeriesObject>();
-                     SeriesObject seriesObject1 = new SeriesObject()
+                     SeriesObject seriesObject1 = new SeriesObject
                      {
                          Name = outcomes[0],
                          Value = approvedWheighingsPercentage
                      };
                      period.Series.Add(seriesObject1);
-                     SeriesObject seriesObject2 = new SeriesObject()
+                     SeriesObject seriesObject2 = new SeriesObject
                      {
                          Name = outcomes[1],
                          Value = partiallyApprovedWheighingPercentage
                      };
                      period.Series.Add(seriesObject2);
-                     SeriesObject seriesObject3 = new SeriesObject()
+                     SeriesObject seriesObject3 = new SeriesObject
                      {
                          Name = outcomes[2],
                          Value = notApprovedWheighingPercentage
                      };
                      period.Series.Add(seriesObject3);
                      statByMonth.StatByMonthListData1.Add(period);
-                    
+
                      //Line Chart Data
-                     SeriesObject lineSeriesObject1 = new SeriesObject()
+                     SeriesObject lineSeriesObject1 = new SeriesObject
                      {
                          Name = months[j],
                          Value = approvedWheighingsPercentage
@@ -604,7 +617,7 @@ namespace TrashInspection.Pn.Services
                  }
                  statByMonth.StatByMonthListData2.Add(linePeriod);
 
-//                   
+//
                  return new OperationDataResult<StatByMonth>(true,
                      statByMonth);
              }

@@ -29,7 +29,9 @@ using System.Threading.Tasks;
 using eFormCore;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Dto;
+using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eForm.Infrastructure.Models;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -44,7 +46,7 @@ namespace TrashInspection.Pn.Handlers
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
-        
+
         public TrashInspectionCaseCreatedHandler(Core core, DbContextHelper dbContextHelper)
         {
             _core = core;
@@ -57,18 +59,21 @@ namespace TrashInspection.Pn.Handlers
                 await _dbContext.TrashInspectionCases.SingleOrDefaultAsync(x => x.Id == message.TrashInspectionCaseId);
             LogEvent($"TrashInspectionCaseCreatedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber / message.TrashInspectionCase.Id : {message.TrashInspectionModel.WeighingNumber} / {message.TrashInspectionCaseId}");
             CultureInfo cultureInfo = new CultureInfo("de-DE");
-            MainElement mainElement = await _core.TemplateRead(message.TemplateId);
-            TrashInspectionModel createModel = message.TrashInspectionModel;
             int sdkSiteId = trashInspectionCase.SdkSiteId;
+            await using MicrotingDbContext microtingDbContext = _core.DbContextHelper.GetDbContext();
+            Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == sdkSiteId);
+            Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
+            MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
+            TrashInspectionModel createModel = message.TrashInspectionModel;
             Segment segment = message.Segment;
             Fraction fraction = message.Fraction;
 
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
             mainElement.StartDate = DateTime.Now.ToUniversalTime();
-            using (var dbContext = _core.dbContextHelper.GetDbContext())
+            using (var dbContext = _core.DbContextHelper.GetDbContext())
             {
-                mainElement.CheckListFolderName = dbContext.folders.Single(x => x.Id == segment.SdkFolderId).MicrotingUid.ToString();
+                mainElement.CheckListFolderName = dbContext.Folders.Single(x => x.Id == segment.SdkFolderId).MicrotingUid.ToString();
             }
             mainElement.Label = createModel.RegistrationNumber.ToUpper() + ", " + createModel.Transporter;
             mainElement.EnableQuickSync = true;
@@ -100,29 +105,29 @@ namespace TrashInspection.Pn.Handlers
                 cDataValue.InderValue += "<br><br><b>*** LOVPLIGTIG KONTROL ***</b>";
                 mainElement.Color = Constants.CheckListColors.Red;
             }
-            
+
             mainElement.PushMessageBody += $"Vare: {fraction.Name}\n";
-            
+
             if (createModel.Producer.Length > 17)
             {
                 mainElement.PushMessageBody += $"Producent: {createModel.Producer.Substring(0,17)}...";
             }
             else
             {
-                mainElement.PushMessageBody += $"Producent: {createModel.Producer}";    
+                mainElement.PushMessageBody += $"Producent: {createModel.Producer}";
             }
-            
+
             mainElement.ElementList[0].Description = cDataValue;
             mainElement.ElementList[0].Label = mainElement.Label;
             DataElement dataElement = (DataElement)mainElement.ElementList[0];
             dataElement.DataItemList[0].Label = mainElement.Label;
             dataElement.DataItemList[0].Description = cDataValue;
-            
+
             if (createModel.MustBeInspected || createModel.ExtendedInspection)
             {
                 dataElement.DataItemList[0].Color = Constants.FieldColors.Red;
             }
-            
+
             LogEvent("CreateTrashInspection: Trying to create SDK case");
             int? sdkCaseId = await _core.CaseCreate(mainElement, "", sdkSiteId, segment.SdkFolderId);
             LogEvent($"CreateTrashInspection: SDK case created and got id {sdkCaseId}");
@@ -154,11 +159,11 @@ namespace TrashInspection.Pn.Handlers
                 }
             }
         }
-        
+
         private void LogEvent(string appendText)
         {
             try
-            {                
+            {
                 var oldColor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("[DBG] " + appendText);

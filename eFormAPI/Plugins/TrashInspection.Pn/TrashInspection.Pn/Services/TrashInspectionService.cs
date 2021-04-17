@@ -25,24 +25,27 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using Microting.eFormApi.BasePn.Infrastructure.Extensions;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Microting.eFormTrashInspectionBase.Infrastructure.Data;
-using System.IO;
 using System.Xml.Linq;
 using eFormCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microting.eForm.Dto;
+using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
+using Microting.eForm.Infrastructure.Data.Entities;
+using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
+using Microting.eFormApi.BasePn.Infrastructure.Extensions;
+using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data;
+using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Rebus.Bus;
+using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
 namespace TrashInspection.Pn.Services
@@ -54,18 +57,24 @@ namespace TrashInspection.Pn.Services
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         private readonly IRebusService _rebusService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
         private readonly IBus _bus;
 
         public TrashInspectionService(ILogger<TrashInspectionService> logger,
             TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
+            IHttpContextAccessor httpContextAccessor,
+            IUserService userService,
             ITrashInspectionLocalizationService trashInspectionLocalizationService, IRebusService rebusService)
         {
             _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
+            _httpContextAccessor = httpContextAccessor;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
             _rebusService = rebusService;
+            _userService = userService;
             _bus = rebusService.GetBus();
         }
 
@@ -73,7 +82,7 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                
+
                 PluginConfigurationValue trashInspectionSettings =
                     await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
 
@@ -138,11 +147,11 @@ namespace TrashInspection.Pn.Services
 
                 TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
 
-                List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel()
+                List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel
                 {
                     Id = x.Id,
                     Date = x.Date,
-                    EakCode = x.Eak_Code,
+                    EakCode = x.EakCode,
                     InstallationId = x.InstallationId,
                     SegmentId = x.SegmentId,
                     MustBeInspected = x.MustBeInspected,
@@ -162,7 +171,7 @@ namespace TrashInspection.Pn.Services
                     Token = trashInspectionSettings.Value,
                     ResponseSendToCallBackUrl = x.ResponseSendToCallBackUrl
                 }).ToListAsync();
-                
+
                 Core _core = await _coreHelper.GetCore();
                 List<KeyValuePair<int, int>> eFormIds = new List<KeyValuePair<int, int>>(); // <FractionId, eFormId>
 
@@ -174,13 +183,13 @@ namespace TrashInspection.Pn.Services
                     {
                         trashInspectionModel.InstallationName = installation.Name;
                     }
-                     
+
                     Fraction fraction = await _dbContext.Fractions
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.FractionId);
                     if (fraction != null)
                     {
                         trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
-                    }       
+                    }
                     Segment segment = await _dbContext.Segments
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.SegmentId);
                     if (segment != null)
@@ -199,7 +208,7 @@ namespace TrashInspection.Pn.Services
                             trashInspectionModel.SdkCaseId =
                                 (int) _core.CaseLookupMUId(trashInspectionModel.SdkCaseId).Result.CaseId;
                         }
-                        
+
                         if (eFormIds.Any(x => x.Key == trashInspectionModel.FractionId))
                         {
                             trashInspectionModel.SdkeFormId = eFormIds.First(x => x.Key == trashInspectionModel.FractionId).Value;
@@ -208,7 +217,9 @@ namespace TrashInspection.Pn.Services
                         {
                             try
                             {
-                                int eFormName = _core.TemplateItemRead(fraction.eFormId).Result.Id;
+                                var locale = await _userService.GetCurrentUserLocale();
+                                Language language = _core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
+                                int eFormName = _core.TemplateItemRead(fraction.eFormId, language).Result.Id;
                                 trashInspectionModel.SdkeFormId = eFormName;
                                 KeyValuePair<int, int> kvp =
                                     new KeyValuePair<int, int>(fraction.eFormId, eFormName);
@@ -235,19 +246,19 @@ namespace TrashInspection.Pn.Services
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
-                return new OperationDataResult<TrashInspectionsModel>(false, 
+                return new OperationDataResult<TrashInspectionsModel>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspections"));
 
             }
         }
-        
+
         public async Task<OperationDataResult<TrashInspectionCaseVersionsModel>> IndexVersions(
             int trashInspectionId)
         {
             try
             {
                 var trashInspectionCaseVersionsModel = new TrashInspectionCaseVersionsModel();
-            
+
                 var trashInspectionCaseVersionsQuery = _dbContext.TrashInspectionCaseVersions.AsQueryable();
 
                 List<TrashInspectionCaseVersion> trashInspectionCaseVersions = await trashInspectionCaseVersionsQuery
@@ -260,7 +271,7 @@ namespace TrashInspection.Pn.Services
                     return new OperationDataResult<TrashInspectionCaseVersionsModel>(false,
                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
                 }
-                
+
                 return new OperationDataResult<TrashInspectionCaseVersionsModel>(true, trashInspectionCaseVersionsModel);
             }
             catch (Exception e)
@@ -280,97 +291,91 @@ namespace TrashInspection.Pn.Services
             {
                 return new OperationResult(false);
             }
-            else
+
+            if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
             {
-                if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
+                // Handling the situation, where incoming timestamp is not in UTC.
+                var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
+
+                if (utcAdjustment.Value == "1")
                 {
-                    // Handling the situation, where incoming timestamp is not in UTC.
-                    var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
-
-                    if (utcAdjustment.Value == "1")
+                    if (createModel.Time.Hour > dateTime.Hour)
                     {
-                        if (createModel.Time.Hour > dateTime.Hour)
-                        {
-                            TimeSpan timeSpan = createModel.Time.Subtract(dateTime);
-                            double minutes = timeSpan.Hours * 60.0 + timeSpan.Minutes;
-                            double hours = minutes / 60.0;
-                            double fullHours = Math.Round(hours);
-                            createModel.Time = createModel.Time.AddHours(-fullHours);
-                        }
+                        TimeSpan timeSpan = createModel.Time.Subtract(dateTime);
+                        double minutes = timeSpan.Hours * 60.0 + timeSpan.Minutes;
+                        double hours = minutes / 60.0;
+                        double fullHours = Math.Round(hours);
+                        createModel.Time = createModel.Time.AddHours(-fullHours);
                     }
-                    if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
-                    {
-                        var result =
-                            _dbContext.TrashInspections.SingleOrDefault(x =>
-                                x.WeighingNumber == createModel.WeighingNumber);
-                        return new OperationResult(true, result.Id.ToString());
-                    }
-
-                    Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection =
-                        new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
-                        {
-                            WeighingNumber = createModel.WeighingNumber,
-                            Date = createModel.Date,
-                            Time = createModel.Time,
-                            Eak_Code = createModel.EakCode,
-                            ExtendedInspection = createModel.ExtendedInspection,
-                            RegistrationNumber = createModel.RegistrationNumber,
-                            TrashFraction = createModel.TrashFraction,
-                            Producer = createModel.Producer,
-                            Transporter = createModel.Transporter,
-                            MustBeInspected = createModel.MustBeInspected,
-                            InspectionDone = false,
-                            Status = 0
-                        };
-                    
-                    await trashInspection.Create(_dbContext);
-                    
-                    Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
-                    Installation installation = 
-                        _dbContext.Installations.FirstOrDefault(x => x.Name == createModel.InstallationName);
-                    Fraction fraction = 
-                        _dbContext.Fractions.FirstOrDefault(x => x.ItemNumber == createModel.TrashFraction);                    
-
-                    _coreHelper.LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
-                    if (segment != null && installation != null && fraction != null)
-                    {
-                        trashInspection.SegmentId = segment.Id;
-                        trashInspection.FractionId = fraction.Id;
-                        trashInspection.InstallationId = installation.Id;
-                        await trashInspection.Update(_dbContext);
-                        createModel.SegmentId = segment.Id;
-                        createModel.FractionId = fraction.Id;
-                        createModel.InstallationId = installation.Id;
-                        createModel.Id = trashInspection.Id;
-                        
-                        await UpdateProducerAndTransporter(trashInspection, createModel);
-                        
-                        await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
-                    }
-                    
-                    return new OperationResult(true, createModel.Id.ToString());
                 }
-                else
+                if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
                 {
-                    
-                    return new OperationResult(false);
+                    var result =
+                        _dbContext.TrashInspections.SingleOrDefault(x =>
+                            x.WeighingNumber == createModel.WeighingNumber);
+                    return new OperationResult(true, result.Id.ToString());
                 }
-                
+
+                Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection =
+                    new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
+                    {
+                        WeighingNumber = createModel.WeighingNumber,
+                        Date = createModel.Date,
+                        Time = createModel.Time,
+                        EakCode = createModel.EakCode,
+                        ExtendedInspection = createModel.ExtendedInspection,
+                        RegistrationNumber = createModel.RegistrationNumber,
+                        TrashFraction = createModel.TrashFraction,
+                        Producer = createModel.Producer,
+                        Transporter = createModel.Transporter,
+                        MustBeInspected = createModel.MustBeInspected,
+                        InspectionDone = false,
+                        Status = 0
+                    };
+
+                await trashInspection.Create(_dbContext);
+
+                Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
+                Installation installation =
+                    _dbContext.Installations.FirstOrDefault(x => x.Name == createModel.InstallationName);
+                Fraction fraction =
+                    _dbContext.Fractions.FirstOrDefault(x => x.ItemNumber == createModel.TrashFraction);
+
+                _coreHelper.LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
+                if (segment != null && installation != null && fraction != null)
+                {
+                    trashInspection.SegmentId = segment.Id;
+                    trashInspection.FractionId = fraction.Id;
+                    trashInspection.InstallationId = installation.Id;
+                    await trashInspection.Update(_dbContext);
+                    createModel.SegmentId = segment.Id;
+                    createModel.FractionId = fraction.Id;
+                    createModel.InstallationId = installation.Id;
+                    createModel.Id = trashInspection.Id;
+
+                    await UpdateProducerAndTransporter(trashInspection, createModel);
+
+                    await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
+                }
+
+                return new OperationResult(true, createModel.Id.ToString());
             }
-                
+
+            return new OperationResult(false);
+
         }
-        
+
         public async Task<OperationDataResult<TrashInspectionModel>> Read(int trashInspectionId)
         {
             try
             {
                 TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
 
-                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
-                {
+                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
+                    {
                     Id = x.Id,
                     Date = x.Date,
-                    EakCode = x.Eak_Code,
+                    EakCode = x.EakCode,
                     InstallationId = x.InstallationId,
                     MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
@@ -415,11 +420,11 @@ namespace TrashInspection.Pn.Services
                 {
                     TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
 
-                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
                         {
                             Id = x.Id,
                             Date = x.Date,
-                            EakCode = x.Eak_Code,
+                            EakCode = x.EakCode,
                             InstallationId = x.InstallationId,
                             MustBeInspected = x.MustBeInspected,
                             RegistrationNumber = x.RegistrationNumber,
@@ -450,12 +455,10 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
                 }
             }
-            else
-            {
-                throw new UnauthorizedAccessException();
-            }
+
+            throw new UnauthorizedAccessException();
         }
-        
+
         public async Task<OperationDataResult<TrashInspectionVersionsModel>> ReadVersion(int trashInspectionId)
         {
             try
@@ -473,7 +476,7 @@ namespace TrashInspection.Pn.Services
                     await trashInspectionVersionsQuery.Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
                 trashInspectionVersionsModel.TrashInspectionVersionList = new List<TrashInspectionVersionModel>();
-                
+
                 foreach (TrashInspectionVersion trashInspectionVersion in trashInspectionVersions)
                 {
                     TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
@@ -510,7 +513,7 @@ namespace TrashInspection.Pn.Services
                     };
                     trashInspectionVersionsModel.TrashInspectionVersionList.Add(trashInspectionVersionModel);
                 }
-                
+
                 foreach (TrashInspectionVersionModel trashInspectionVersionModel in trashInspectionVersionsModel.TrashInspectionVersionList)
                 {
                     Installation installation = await _dbContext.Installations
@@ -519,19 +522,19 @@ namespace TrashInspection.Pn.Services
                     {
                         trashInspectionVersionModel.InstallationName = installation.Name;
                     }
-                     
+
                     Fraction fraction = await _dbContext.Fractions
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.FractionId);
                     if (fraction != null)
                     {
                         trashInspectionVersionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
-                    }       
+                    }
                     Segment segment = await _dbContext.Segments
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.SegmentId);
                     if (segment != null)
                     {
                         trashInspectionVersionModel.Segment = segment.Name;
-                    }             
+                    }
                 }
 
                 var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
@@ -553,9 +556,9 @@ namespace TrashInspection.Pn.Services
                      catch (Exception ex)
                      {
                          Trace.TraceError(ex.Message);
-                         
+
                      }
-                     
+
                      trashInspectionCaseStatusModel.Status = trashInspectionCase.Status;
 
                      var lists = await _dbContext.TrashInspectionCaseVersions.Where(x =>
@@ -579,7 +582,7 @@ namespace TrashInspection.Pn.Services
                                  {
                                      trashInspectionCaseStatusModel.SentToMicroting =
                                          TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionCaseVersion.UpdatedAt, timeZoneInfo);
-                                 } 
+                                 }
                                  break;
                              }
                              case 70:
@@ -605,9 +608,9 @@ namespace TrashInspection.Pn.Services
                                  else
                                  {
                                      Core core = await _coreHelper.GetCore();
-                                     using (var dbContext = core.dbContextHelper.GetDbContext())
+                                     using (var dbContext = core.DbContextHelper.GetDbContext())
                                      {
-                                         var result = dbContext.cases.Single(x =>
+                                         var result = dbContext.Cases.Single(x =>
                                              x.MicrotingUid == int.Parse(trashInspectionCaseVersion.SdkCaseId));
                                          trashInspectionCaseStatusModel.Answered =
                                              TimeZoneInfo.ConvertTimeFromUtc((DateTime) result.DoneAt, timeZoneInfo);
@@ -637,11 +640,11 @@ namespace TrashInspection.Pn.Services
         public async Task<OperationResult> Update(TrashInspectionModel updateModel)
         {
             Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection selectedTrashInspection =
-                new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection()
+                new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
                 {
                     Id = updateModel.Id,
                     Date = updateModel.Date,
-                    Eak_Code = updateModel.EakCode,
+                    EakCode = updateModel.EakCode,
                     InstallationId = updateModel.InstallationId,
                     MustBeInspected = updateModel.MustBeInspected,
                     Producer = updateModel.Producer,
@@ -656,18 +659,18 @@ namespace TrashInspection.Pn.Services
                     ExtendedInspection = updateModel.ExtendedInspection,
                     InspectionDone = updateModel.InspectionDone
                 };
-            
+
             await selectedTrashInspection.Update(_dbContext);
             return new OperationResult(true);
         }
 
         public async Task<OperationResult> Delete(int trashInspectionId)
         {
-            var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+            var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
                 {
                     Id = x.Id,
                     Date = x.Date,
-                    EakCode = x.Eak_Code,
+                    EakCode = x.EakCode,
                     InstallationId = x.InstallationId,
                     MustBeInspected = x.MustBeInspected,
                     Producer = x.Producer,
@@ -693,7 +696,7 @@ namespace TrashInspection.Pn.Services
         {
             PluginConfigurationValue trashInspectionSettings =
                 await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
-            
+
             if (trashInspectionSettings == null)
             {
                 return new OperationResult(false, "Unauthorized Access");
@@ -703,14 +706,14 @@ namespace TrashInspection.Pn.Services
             {
                 return new OperationResult(false, "Unauthorized Access");
             }
-            
+
             if (weighingNumber != null)
             {
-                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
                     {
                         Id = x.Id,
                         Date = x.Date,
-                        EakCode = x.Eak_Code,
+                        EakCode = x.EakCode,
                         InstallationId = x.InstallationId,
                         MustBeInspected = x.MustBeInspected,
                         Producer = x.Producer,
@@ -732,15 +735,15 @@ namespace TrashInspection.Pn.Services
                     await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, false));
 
                     return new OperationResult(true);
-                }               
+                }
 
-                return new OperationResult(false);                                    
+                return new OperationResult(false);
             }
 
             return new OperationResult(false);
         }
 
-        
+
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
             PluginConfigurationValue trashInspectionSettings =
@@ -755,11 +758,11 @@ namespace TrashInspection.Pn.Services
                     string microtingCheckUId;
                     int caseId = 0;
                     int eFormId = 0;
-                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel()
+                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
                         {
                             Id = x.Id,
                             Date = x.Date,
-                            EakCode = x.Eak_Code,
+                            EakCode = x.EakCode,
                             InstallationId = x.InstallationId,
                             MustBeInspected = x.MustBeInspected,
                             Producer = x.Producer,
@@ -785,25 +788,25 @@ namespace TrashInspection.Pn.Services
                     _coreHelper.LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
 
                     string segmentName = "";
-                    
+
                     Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
                     if (segment != null)
                     {
                         segmentName = segment.Name;
                     }
                     _coreHelper.LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
-                    
-                    string xmlContent = new XElement("TrashInspection", 
-                        new XElement("EakCode", trashInspection.EakCode), 
-                        new XElement("Producer", trashInspection.Producer), 
-                        new XElement("RegistrationNumber", trashInspection.RegistrationNumber), 
-                        new XElement("Transporter", trashInspection.Transporter), 
+
+                    string xmlContent = new XElement("TrashInspection",
+                        new XElement("EakCode", trashInspection.EakCode),
+                        new XElement("Producer", trashInspection.Producer),
+                        new XElement("RegistrationNumber", trashInspection.RegistrationNumber),
+                        new XElement("Transporter", trashInspection.Transporter),
                         new XElement("WeighingNumber", trashInspection.WeighingNumber),
                         new XElement("Segment", segmentName),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
                     _coreHelper.LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
-                    
+
                     foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
                         if (trashInspectionCase.Status == 100)
@@ -818,24 +821,22 @@ namespace TrashInspection.Pn.Services
 
                     if (caseId != 0 && eFormId != 0)
                     {
-
-
                         _coreHelper.LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
+                        await using MicrotingDbContext sdkDbContext = core.DbContextHelper.GetDbContext();
+                        Language language = await sdkDbContext.Languages.SingleAsync(x => x.LanguageCode == "da");
                         var filePath = await core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
-                            $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent);
-                        if (!System.IO.File.Exists(filePath))
+                            $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent, language);
+                        if (!File.Exists(filePath))
                         {
                             throw new FileNotFoundException();
                         }
 
                         return filePath;
                     }
-                    else
-                    {
-                        throw new Exception("could not find case of eform!");
-                    }
-                    
+
+                    throw new Exception("could not find case of eform!");
+
                 }
                 catch (Exception exception)
                 {
@@ -843,10 +844,8 @@ namespace TrashInspection.Pn.Services
                     throw new Exception("Something went wrong!", exception);
                 }
             }
-            else
-            {
-                throw new UnauthorizedAccessException();
-            }
+
+            throw new UnauthorizedAccessException();
         }
         private async Task UpdateProducerAndTransporter(Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection, TrashInspectionModel createModel)
         {
@@ -864,7 +863,7 @@ namespace TrashInspection.Pn.Services
                     ZipCode = createModel.ProducerZip,
                     ForeignId = createModel.ProducerForeignId
                 };
-                
+
                 await producer.Create(_dbContext);
             }
             else
@@ -894,7 +893,7 @@ namespace TrashInspection.Pn.Services
                     ContactPerson = createModel.TransporterContact,
                     ForeignId = createModel.TransporterForeignId
                 };
-                
+
                 await transporter.Create(_dbContext);
             }
             else
