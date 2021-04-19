@@ -1,96 +1,111 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AdminGuard, AuthGuard, PermissionGuard} from 'src/app/common/guards';
-import {TrashInspectionPnLayoutComponent} from './layouts';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AdminGuard, PermissionGuard } from 'src/app/common/guards';
+import { TrashInspectionPnLayoutComponent } from './layouts';
 import {
-  TrashInspectionsPageComponent,
-  InstallationsPageComponent,
-  TrashInspectionSettingsComponent,
   FractionsPageComponent,
-  FractionsPnImportComponent, ProducerImportComponent, TransporterImportComponent, ReportPreviewTableComponent
+  FractionsPnImportComponent,
+  InstallationsPageComponent,
+  ProducerImportComponent,
+  ReportPreviewTableContainerComponent,
+  TransporterImportComponent,
+  TransporterPageComponent,
+  TrashInspectionSettingsComponent,
+  ProducerPageComponent,
+  TrashInspectionsPageComponent,
+  SegmentsPageComponent,
 } from './components';
-import {SegmentsPageComponent} from './components/segments';
-import {ProducerPageComponent} from './components/producers';
-import {TransporterPageComponent} from './components/transporters';
-import {TrashInspectionPnClaims} from './enums';
+import {} from './components/segments';
+import {} from './components/producers';
+import {} from './components/transporters';
+import { TrashInspectionPnClaims } from './enums';
 
 export const routes: Routes = [
   {
     path: '',
     component: TrashInspectionPnLayoutComponent,
     canActivate: [PermissionGuard],
-    data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin},
+    data: {
+      requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin,
+    },
     children: [
       {
         path: 'trash-inspections',
         canActivate: [PermissionGuard],
         component: TrashInspectionsPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin}
+        data: {
+          requiredPermission:
+            TrashInspectionPnClaims.accessTrashInspectionPlugin,
+        },
       },
       {
         path: 'installations',
         canActivate: [PermissionGuard],
         component: InstallationsPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessInstallation}
+        data: {
+          requiredPermission: TrashInspectionPnClaims.accessInstallation,
+        },
       },
       {
         path: 'settings',
         canActivate: [AdminGuard],
-        component: TrashInspectionSettingsComponent
+        component: TrashInspectionSettingsComponent,
       },
       {
         path: 'fractions',
         canActivate: [PermissionGuard],
         component: FractionsPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessFraction}
+        data: { requiredPermission: TrashInspectionPnClaims.accessFraction },
       },
       {
         path: 'segments',
         canActivate: [PermissionGuard],
         component: SegmentsPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessSegment}
+        data: { requiredPermission: TrashInspectionPnClaims.accessSegment },
       },
       {
         path: 'importfraction',
         canActivate: [PermissionGuard],
         component: FractionsPnImportComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin}
+        data: {
+          requiredPermission:
+            TrashInspectionPnClaims.accessTrashInspectionPlugin,
+        },
       },
       {
         path: 'producers',
         canActivate: [PermissionGuard],
         component: ProducerPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessProducer}
+        data: { requiredPermission: TrashInspectionPnClaims.accessProducer },
       },
       {
         path: 'importproducers',
         canActivate: [PermissionGuard],
-        component: ProducerImportComponent
+        component: ProducerImportComponent,
       },
       {
         path: 'transporters',
         canActivate: [PermissionGuard],
         component: TransporterPageComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessTransporter}
+        data: { requiredPermission: TrashInspectionPnClaims.accessTransporter },
       },
       {
         path: 'importtransporters',
         canActivate: [PermissionGuard],
-        component: TransporterImportComponent
+        component: TransporterImportComponent,
       },
       {
         path: 'reports',
         canActivate: [PermissionGuard],
-        component: ReportPreviewTableComponent,
-        data: {requiredPermission: TrashInspectionPnClaims.accessReport}
-      }
-    ]
-  }
+        component: ReportPreviewTableContainerComponent,
+        data: { requiredPermission: TrashInspectionPnClaims.accessReport },
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class TrashInspectionPnRouting {
-}
+export class TrashInspectionPnRouting {}

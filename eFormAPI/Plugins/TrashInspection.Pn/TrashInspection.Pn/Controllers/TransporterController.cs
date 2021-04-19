@@ -6,6 +6,9 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Controllers
 {
+    using Infrastructure.Models.Transporters;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public class TransporterController : Controller
     {
 
@@ -63,10 +66,10 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _transporterService.GetSingleTransporterByMonth(id, year);
         }
-        
-        [HttpGet]
-        [Route("api/trash-inspection-pn/transporters/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel requestModel)
+
+        [HttpPost]
+        [Route("api/trash-inspection-pn/transporters/stats-by-year")]
+        public async Task<OperationDataResult<Paged<StatByYearModel>>> GetTransportersStatsByYear([FromBody] TransportersYearRequestModel requestModel)
         {
             return await _transporterService.GetTransportersStatsByYear(requestModel);
         }

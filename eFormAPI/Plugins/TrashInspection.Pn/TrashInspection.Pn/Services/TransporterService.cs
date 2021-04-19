@@ -42,6 +42,11 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Services
 {
+    using Infrastructure.Extensions;
+    using Infrastructure.Models.Transporters;
+    using Microting.eFormApi.BasePn.Infrastructure.Helpers;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public class TransporterService : ITransporterService
     {
         private readonly IEFormCoreService _coreHelper;
@@ -61,9 +66,9 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                TransportersModel transportersModel = new TransportersModel();
+                var transportersModel = new TransportersModel();
 
-                IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
+                var transporterQuery = _dbContext.Transporters.AsQueryable();
 
                 if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
                 {
@@ -89,13 +94,13 @@ namespace TrashInspection.Pn.Services
                     transporterQuery = _dbContext.Transporters
                         .OrderBy(x => x.Id);
                 }
-                
+
                 transporterQuery
                     = transporterQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
-                List<TransporterModel> transporters = await transporterQuery.Select(x => new TransporterModel
+                var transporters = await transporterQuery.Select(x => new TransporterModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -111,7 +116,7 @@ namespace TrashInspection.Pn.Services
                 transportersModel.Total =
                     _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 transportersModel.TransporterList = transporters;
-                
+
                 return new OperationDataResult<TransportersModel>(true, transportersModel);
             }
             catch (Exception e)
@@ -122,12 +127,12 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
             }
         }
-        
-        
-        
+
+
+
         public async Task<OperationResult> Create(TransporterModel transporterModel)
         {
-            Transporter transporter = new Transporter
+            var transporter = new Transporter
             {
                 Name = transporterModel.Name,
                 Description = transporterModel.Description,
@@ -138,10 +143,10 @@ namespace TrashInspection.Pn.Services
                 ZipCode = transporterModel.ZipCode,
                 ContactPerson = transporterModel.ContactPerson,
             };
-           
+
             await transporter.Create(_dbContext);
-           
-           return new OperationResult(true);
+
+            return new OperationResult(true);
         }
         public async Task<OperationDataResult<TransporterModel>> Read(int id)
         {
@@ -158,7 +163,7 @@ namespace TrashInspection.Pn.Services
                     ZipCode = x.ZipCode,
                     Phone = x.Phone,
                     ContactPerson = x.ContactPerson
-                    
+
                 }).FirstOrDefaultAsync(y => y.Id == id);
 
                 if (transporter == null)
@@ -179,8 +184,8 @@ namespace TrashInspection.Pn.Services
         }
         public async Task<OperationResult> Update(TransporterModel transporterModel)
         {
-            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == transporterModel.Id);
-            
+            var transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == transporterModel.Id);
+
             if (transporter != null)
             {
                 transporter.Name = transporterModel.Name;
@@ -191,15 +196,16 @@ namespace TrashInspection.Pn.Services
                 transporter.Phone = transporterModel.Phone;
                 transporter.ZipCode = transporterModel.ZipCode;
                 transporter.ContactPerson = transporterModel.ContactPerson;
-                
+
                 await transporter.Update(_dbContext);
                 return new OperationResult(true);
             }
-            return new OperationResult(false);        }
+            return new OperationResult(false);
+        }
 
         public async Task<OperationResult> Delete(int id)
         {
-            Transporter transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
+            var transporter = await _dbContext.Transporters.SingleOrDefaultAsync(x => x.Id == id);
             if (transporter != null)
             {
                 await transporter.Delete(_dbContext);
@@ -212,26 +218,26 @@ namespace TrashInspection.Pn.Services
             try
             {
                 {
-                    JToken rawJson = JRaw.Parse(transporterAsJson.ImportList);
-                    JToken rawHeadersJson = JRaw.Parse(transporterAsJson.Headers);
+                    var rawJson = JRaw.Parse(transporterAsJson.ImportList);
+                    var rawHeadersJson = JRaw.Parse(transporterAsJson.Headers);
 
-                    JToken headers = rawHeadersJson;
-                    IEnumerable<JToken> fractionObjects = rawJson.Skip(1);
-                    
-                    foreach (JToken fractionObj in fractionObjects)
+                    var headers = rawHeadersJson;
+                    var fractionObjects = rawJson.Skip(1);
+
+                    foreach (var fractionObj in fractionObjects)
                     {
-                        bool transporterNameExists = int.TryParse(headers[0]["headerValue"].ToString(), out int nameColumn);
+                        var transporterNameExists = int.TryParse(headers[0]["headerValue"].ToString(), out var nameColumn);
                         if (transporterNameExists)
                         {
-                            Transporter existingTransporter = FindTransporter(nameColumn, headers, fractionObj);
+                            var existingTransporter = FindTransporter(nameColumn, headers, fractionObj);
                             if (existingTransporter == null)
                             {
-                                TransporterModel transporterModel =
+                                var transporterModel =
                                     TransportersHelper.ComposeValues(new TransporterModel(), headers, fractionObj);
 
-                                Transporter newTransporter = new Transporter
+                                var newTransporter = new Transporter
                                 {
-                                    
+
                                     Name = transporterModel.Name,
                                     Description = transporterModel.Description,
                                     ForeignId = transporterModel.ForeignId,
@@ -240,14 +246,14 @@ namespace TrashInspection.Pn.Services
                                     ZipCode = transporterModel.ZipCode,
                                     Phone = transporterModel.Phone,
                                     ContactPerson = transporterModel.ContactPerson
-                                    
+
                                 };
                                 await newTransporter.Create(_dbContext);
-  
+
                             }
                             else
                             {
-                                TransporterModel transporterModel =
+                                var transporterModel =
                                     TransportersHelper.ComposeValues(new TransporterModel(), headers, fractionObj);
 
                                 existingTransporter.Name = transporterModel.Name;
@@ -258,16 +264,16 @@ namespace TrashInspection.Pn.Services
                                 existingTransporter.ZipCode = transporterModel.ZipCode;
                                 existingTransporter.Phone = transporterModel.Phone;
                                 existingTransporter.ContactPerson = transporterModel.ContactPerson;
-                                
+
                                 if (existingTransporter.WorkflowState == Constants.WorkflowStates.Removed)
                                 {
                                     existingTransporter.WorkflowState = Constants.WorkflowStates.Created;
                                 }
-                                
+
                                 await existingTransporter.Update(_dbContext);
                             }
                         }
-                        
+
                     }
                 }
                 return new OperationResult(true,
@@ -283,74 +289,66 @@ namespace TrashInspection.Pn.Services
         }
         private Transporter FindTransporter(int transporterNameColumn, JToken headers, JToken transporterObj)
         {
-            string transporterName = transporterObj[transporterNameColumn].ToString();
-            Transporter transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
+            var transporterName = transporterObj[transporterNameColumn].ToString();
+            var transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == transporterName);
 
             return transporter;
         }
 
-        public async Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel)
+        public async Task<OperationDataResult<Paged<StatByYearModel>>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel)
         {
             try
             {
-                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery
-                    = _dbContext.TrashInspections.AsQueryable();
+                var trashInspectionsQuery
+                    = _dbContext.TrashInspections
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                        .Where(x => x.Date.Year == pnRequestModel.Year)
+                        .AsQueryable();
 
-                trashInspectionsQuery.Where(x => x.Date.Year == pnRequestModel.Year);
-                
-                StatsByYearModel transportersStatsByYearModel = new StatsByYearModel();
+                var transportersStatsByYearModel = new Paged<StatByYearModel>();
 
-                IQueryable<Transporter> transporterQuery = _dbContext.Transporters.AsQueryable();
+                var transporterQuery = _dbContext.Transporters
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                        .AsQueryable();
 
-                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                var exludeSort = new List<string>
                 {
-                    transporterQuery = transporterQuery.Where(x =>
-                        x.Name.Contains(pnRequestModel.NameFilter) ||
-                        x.Description.Contains(pnRequestModel.NameFilter));
-                }
+                    "Weighings",
+                    "ControlPercentage",
+                    "AmountOfWeighingsControlled",
+                    "ApprovedPercentage",
+                    "NotApprovedPercentage",
+                    "ConditionalApprovedPercentage"
+                };
+                //if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                //{
+                //    transporterQuery = transporterQuery.Where(x =>
+                //        x.Name.Contains(pnRequestModel.NameFilter) ||
+                //        x.Description.Contains(pnRequestModel.NameFilter));
+                //}
 
-                if (pnRequestModel.Sort == "Name")
-                {
-                    
-                    if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                transporterQuery = QueryHelper.AddSortToQuery(transporterQuery, pnRequestModel.Sort,
+                    pnRequestModel.IsSortDsc, exludeSort);
+
+
+                var transportersStatByYear = await transporterQuery
+                    .Select(x => new StatByYearModel
                     {
-                        if (pnRequestModel.IsSortDsc)
-                        {
-                            transporterQuery = transporterQuery
-                                .CustomOrderByDescending(pnRequestModel.Sort);
-                        }
-                        else
-                        {
-                            transporterQuery = transporterQuery
-                                .CustomOrderBy(pnRequestModel.Sort);
-                        }
-                    }
-                    else
-                    {
-                        transporterQuery = _dbContext.Transporters
-                            .OrderBy(x => x.Id);
-                    }
-                }
+                        Id = x.Id,
+                        Name = x.Name,
+                        Weighings = trashInspectionsQuery.Count(t => t.TransporterId == x.Id),
+                        ControlPercentage = 0,
+                        AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.Status == 100),
+                        ApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.IsApproved && t.Status == 100),
+                        NotApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.ApprovedValue == "3" && t.Status == 100),
+                        ConditionalApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.ApprovedValue == "2" && t.Status == 100)
 
-                transporterQuery
-                    = transporterQuery
-                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                List<StatByYearModel> transportersStatByYear = await transporterQuery.Select(x => new StatByYearModel
+                    })
+                    .ToListAsync();
+
+                foreach (var statByYearModel in transportersStatByYear)
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Weighings = trashInspectionsQuery.Count(t => t.TransporterId == x.Id),
-                    ControlPercentage = 0,
-                    AmountOfWeighingsControlled = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.Status == 100),
-                    ApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.IsApproved && t.Status == 100),
-                    NotApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.ApprovedValue == "3" && t.Status == 100),
-                    ConditionalApprovedPercentage = trashInspectionsQuery.Count(t => t.TransporterId == x.Id && t.ApprovedValue == "2" && t.Status == 100)
 
-                }).ToListAsync();
-
-                foreach (StatByYearModel statByYearModel in transportersStatByYear)
-                {
-                    
                     if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
                     {
                         statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
@@ -359,7 +357,7 @@ namespace TrashInspection.Pn.Services
                     {
                         statByYearModel.ControlPercentage = 0;
                     }
-                    
+
                     if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
                         statByYearModel.ApprovedPercentage =
@@ -390,116 +388,47 @@ namespace TrashInspection.Pn.Services
                         statByYearModel.NotApprovedPercentage = 0;
                     }
                 }
-                if (pnRequestModel.Sort == "Weighings")
+
+                if (!string.IsNullOrEmpty(pnRequestModel.Sort) && exludeSort.Contains(pnRequestModel.Sort))
                 {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear = 
-                            transportersStatByYear.OrderByDescending(x => x.Weighings).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.Weighings).ToList();
-                        
-                    }
-                }
-                if (pnRequestModel.Sort == "AmountOfWeighingsControlled")
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear = 
-                            transportersStatByYear.OrderByDescending(x => x.AmountOfWeighingsControlled).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.AmountOfWeighingsControlled).ToList();
-                    }
+                    transportersStatByYear = pnRequestModel.IsSortDsc
+                        ? transportersStatByYear.OrderByDescending(x => x.GetPropValue(pnRequestModel.Sort)).ToList()
+                        : transportersStatByYear.OrderBy(x => x.GetPropValue(pnRequestModel.Sort)).ToList();
                 }
 
-                if (pnRequestModel.Sort == "ControlPercentage")
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear =
-                            transportersStatByYear.OrderByDescending(x => x.ControlPercentage).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ControlPercentage).ToList();
-                    }
-                }
-                if (pnRequestModel.Sort == "ApprovedPercentage")
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear =
-                            transportersStatByYear.OrderByDescending(x => x.ApprovedPercentage).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ApprovedPercentage).ToList();
 
-                    }
-                }
-                if (pnRequestModel.Sort == "ConditionalApprovedPercentage")
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear =
-                            transportersStatByYear.OrderByDescending(x => x.ConditionalApprovedPercentage).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.ConditionalApprovedPercentage).ToList();
-
-                    }
-                }
-                if (pnRequestModel.Sort == "NotApprovedPercentage")
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        transportersStatByYear =
-                            transportersStatByYear.OrderByDescending(x => x.NotApprovedPercentage).ToList();
-                    }
-                    else
-                    {
-                        transportersStatByYear = transportersStatByYear.OrderBy(x => x.NotApprovedPercentage).ToList();
- 
-                    }
-                }
-                
                 transportersStatsByYearModel.Total =
                     _dbContext.Transporters.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
-                transportersStatsByYearModel.statsByYearList = transportersStatByYear;
-                
-                return new OperationDataResult<StatsByYearModel>(true, transportersStatsByYearModel);
+                transportersStatsByYearModel.Entities = transportersStatByYear;
+
+                return new OperationDataResult<Paged<StatByYearModel>>(true, transportersStatsByYearModel);
             }
             catch (Exception e)
             {
                 Trace.TraceError(e.Message);
                 _coreHelper.LogException(e.Message);
-                return new OperationDataResult<StatsByYearModel>(false,
+                return new OperationDataResult<Paged<StatByYearModel>>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTransporters"));
             }
         }
-        
+
         public async Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int transporterId, int year)
         {
             try
             {
-                StatByMonth statByMonth = new StatByMonth();
+                var statByMonth = new StatByMonth();
                 statByMonth.StatByMonthListData1 = new List<Period>();
-                List<string> months = new List<string>
+                var months = new List<string>
                 {
                     "Jan","Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
                 };
-                List<string> outcomes = new List<string>
+                var outcomes = new List<string>
                 {
                     "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
                 };
-                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = 
+                var trashInspectionsQuery =
                     _dbContext.TrashInspections.AsQueryable();
-                Period linePeriod = new Period
+                var linePeriod = new Period
                 {
                     Name = "Compliance"
                 };
@@ -507,10 +436,10 @@ namespace TrashInspection.Pn.Services
                 trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Year == year && x.TransporterId == transporterId);
                 double wheigingsPrYear = await trashInspectionsQuery.CountAsync();
                 double wheigingsPrYearControlled = await trashInspectionsQuery.CountAsync(x => x.Status == 100);
-                double avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
-                int i = 1;
-                int j = 0;
-                foreach (string month in months)
+                var avgControlPercentagePrYear = (wheigingsPrYearControlled / wheigingsPrYear) * 100;
+                var i = 1;
+                var j = 0;
+                foreach (var month in months)
                 {
                     trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
                     double wheigingsPrMonth = await trashInspectionsQuery.CountAsync();
@@ -527,38 +456,38 @@ namespace TrashInspection.Pn.Services
                             (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                         notApprovedWheighingPercentage =
                             Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
-                        partiallyApprovedWheighingPercentage = 
+                        partiallyApprovedWheighingPercentage =
                             Math.Round((wheighingsPartiallyApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                     }
-                       
-                    Period period = new Period
+
+                    var period = new Period
                     {
                         Name = month
                     };
                     //Bar Chart Data
                     period.Series = new List<SeriesObject>();
-                    SeriesObject seriesObject1 = new SeriesObject
+                    var seriesObject1 = new SeriesObject
                     {
                         Name = outcomes[0],
                         Value = approvedWheighingsPercentage
                     };
                     period.Series.Add(seriesObject1);
-                    SeriesObject seriesObject2 = new SeriesObject
+                    var seriesObject2 = new SeriesObject
                     {
                         Name = outcomes[1],
                         Value = partiallyApprovedWheighingPercentage
                     };
                     period.Series.Add(seriesObject2);
-                    SeriesObject seriesObject3 = new SeriesObject
+                    var seriesObject3 = new SeriesObject
                     {
                         Name = outcomes[2],
                         Value = notApprovedWheighingPercentage
                     };
                     period.Series.Add(seriesObject3);
                     statByMonth.StatByMonthListData1.Add(period);
-                    
+
                     //Line Chart Data
-                    SeriesObject lineSeriesObject1 = new SeriesObject
+                    var lineSeriesObject1 = new SeriesObject
                     {
                         Name = months[j],
                         Value = approvedWheighingsPercentage
@@ -570,7 +499,7 @@ namespace TrashInspection.Pn.Services
                 }
                 statByMonth.StatByMonthListData2.Add(linePeriod);
 
-//                   
+                //                   
                 return new OperationDataResult<StatByMonth>(true,
                         statByMonth);
             }

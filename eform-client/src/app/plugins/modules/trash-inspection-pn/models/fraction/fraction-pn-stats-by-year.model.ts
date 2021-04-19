@@ -1,9 +1,4 @@
-export class TransporterYearPnModel {
-  total: number;
-  statsByYearList: Array<TransporterYearModel> = [];
-}
-
-export class TransporterYearModel {
+export class FractionPnStatsByYearModel {
   id: number;
   name: string;
   weighings: number;

@@ -8,6 +8,9 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Controllers
 {
+    using Infrastructure.Models.Fractions;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     [Authorize]
     public class FractionController : Controller
     {
@@ -18,9 +21,9 @@ namespace TrashInspection.Pn.Controllers
             _fractionService = fractionService;
         }
         
-        [HttpGet]
-        [Route("api/trash-inspection-pn/fractions")]
-        public async Task<OperationDataResult<FractionsModel>> Index(FractionRequestModel requestModel)
+        [HttpPost]
+        [Route("api/trash-inspection-pn/fractions/index")]
+        public async Task<OperationDataResult<Paged<FractionModel>>> Index([FromBody] FractionRequestModel requestModel)
         {
             return await _fractionService.Index(requestModel);
         }
@@ -62,9 +65,9 @@ namespace TrashInspection.Pn.Controllers
             return await _fractionService.ImportFraction(fractionImportModel);
         }
         
-        [HttpGet]
-        [Route("api/trash-inspection-pn/fractions/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetFractionsStatsByYear(FractionPnYearRequestModel requestModel)
+        [HttpPost]
+        [Route("api/trash-inspection-pn/fractions/stats-by-year")]
+        public async Task<OperationDataResult<Paged<StatByYearModel>>> GetFractionsStatsByYear([FromBody] FractionPnYearRequestModel requestModel)
         {
             return await _fractionService.GetFractionsStatsByYear(requestModel);
         }

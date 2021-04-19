@@ -1,21 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {InstallationPnCreateModel, TrashInspectionsPnModel} from '../../../models';
-import {TrashInspectionPnInstallationsService} from '../../../services';
-import {SiteNameDto} from '../../../../../../common/models/dto';
-import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eforms';
-import {EFormService} from '../../../../../../common/services/eform';
-import {SitesService} from '../../../../../../common/services/advanced';
-import {AuthService} from '../../../../../../common/services/auth';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { InstallationPnCreateModel } from '../../../models';
+import { TrashInspectionPnInstallationsService } from '../../../services';
+import { SiteNameDto } from 'src/app/common/models';
+import {
+  DeployCheckbox,
+  DeployModel,
+} from '../../../../../../common/models/eforms';
+import { EFormService } from 'src/app/common/services/eform';
+import { AuthService, SitesService } from 'src/app/common/services';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-create',
   templateUrl: './installation-create.component.html',
-  styleUrls: ['./installation-create.component.scss']
+  styleUrls: ['./installation-create.component.scss'],
 })
 export class InstallationCreateComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
-  @Output() onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
+  @Output()
+  onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
   @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
   newInstallationModel: InstallationPnCreateModel = new InstallationPnCreateModel();
   sitesDto: Array<SiteNameDto> = [];
@@ -26,30 +34,33 @@ export class InstallationCreateComponent implements OnInit {
   get userClaims() {
     return this.authService.userClaims;
   }
-  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
-              private sitesService: SitesService,
-              private authService: AuthService,
-              private eFormService: EFormService) { }
+  constructor(
+    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
+    private sitesService: SitesService,
+    private authService: AuthService,
+    private eFormService: EFormService
+  ) {}
 
   ngOnInit() {
     this.loadAllSites();
   }
 
   createInstallation() {
-    this.trashInspectionPnInstallationsService.createInstallation(this.newInstallationModel).subscribe((data) => {
-      if (data && data.success) {
-        this.onInstallationCreated.emit();
-        // this.submitDeployment();
-        this.newInstallationModel = new InstallationPnCreateModel();
-        this.frame.hide();
-      }
-    });
+    this.trashInspectionPnInstallationsService
+      .createInstallation(this.newInstallationModel)
+      .subscribe((data) => {
+        if (data && data.success) {
+          this.onInstallationCreated.emit();
+          // this.submitDeployment();
+          this.newInstallationModel = new InstallationPnCreateModel();
+          this.frame.hide();
+        }
+      });
   }
-
 
   loadAllSites() {
     if (this.userClaims.eformsPairingRead) {
-      this.sitesService.getAllSitesForPairing().subscribe(operation => {
+      this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
@@ -71,7 +82,9 @@ export class InstallationCreateComponent implements OnInit {
       deployObject.isChecked = true;
       this.newInstallationModel.deployCheckboxes.push(deployObject);
     } else {
-      this.newInstallationModel.deployCheckboxes = this.newInstallationModel.deployCheckboxes.filter(x => x.id !== deployId);
+      this.newInstallationModel.deployCheckboxes = this.newInstallationModel.deployCheckboxes.filter(
+        (x) => x.id !== deployId
+      );
     }
   }
 

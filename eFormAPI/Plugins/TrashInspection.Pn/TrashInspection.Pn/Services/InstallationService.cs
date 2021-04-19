@@ -23,14 +23,12 @@ SOFTWARE.
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microting.eForm.Infrastructure.Constants;
 using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -40,6 +38,8 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Services
 {
+    using Microting.eFormApi.BasePn.Infrastructure.Helpers;
+
     public class InstallationService : IInstallationService
     {
         private readonly IEFormCoreService _coreHelper;
@@ -59,46 +59,32 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                InstallationsModel installationsModel = new InstallationsModel();
+                var installationsModel = new InstallationsModel();
 
-                IQueryable<Installation> installationsQuery = _dbContext.Installations.AsQueryable();
+                var installationsQuery = _dbContext.Installations
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                        .AsQueryable();
 
                 if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
                 {
                     installationsQuery = installationsQuery.Where(x => x.Name.Contains(pnRequestModel.NameFilter));
                 }
-                if (!string.IsNullOrEmpty(pnRequestModel.Sort))
-                {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        installationsQuery = installationsQuery
-                            .CustomOrderByDescending(pnRequestModel.Sort);
-                    }
-                    else
-                    {
-                        installationsQuery = installationsQuery
-                            .CustomOrderBy(pnRequestModel.Sort);
-                    }
-                }
-                else
-                {
-                    installationsQuery = _dbContext.Installations
-                        .OrderBy(x => x.Id);
-                }
+
+                QueryHelper.AddSortToQuery(installationsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
+
+                installationsModel.Total = installationsQuery.Count();
 
                 installationsQuery
                     = installationsQuery
-                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Skip(pnRequestModel.Offset)
                         .Take(pnRequestModel.PageSize);
 
-                List<InstallationModel> installations = await installationsQuery.Select(x => new InstallationModel
+                var installations = await installationsQuery.Select(x => new InstallationModel
                 {
                     Id = x.Id,
                     Name = x.Name
                 }).ToListAsync();
 
-                installationsModel.Total = _dbContext.Installations.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 installationsModel.InstallationList = installations;
 
 
@@ -116,17 +102,17 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> Create(InstallationModel createModel)
         {
-            Installation installation = new Installation
+            var installation = new Installation
             {
                 Name = createModel.Name
             };
             await installation.Create(_dbContext);
 
-            foreach (DeployCheckbox deployedCheckbox in createModel.DeployCheckboxes)
+            foreach (var deployedCheckbox in createModel.DeployCheckboxes)
             {
                 if (deployedCheckbox.IsChecked)
                 {
-                    InstallationSite installationSite = new InstallationSite
+                    var installationSite = new InstallationSite
                     {
                         InstallationId = installation.Id,
                         SDKSiteId = deployedCheckbox.Id
@@ -142,7 +128,21 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                Installation installation = await _dbContext.Installations.FirstOrDefaultAsync(x => x.Id == id);
+                var installation = await _dbContext.Installations
+                    .AsNoTracking()
+                    .Select(x => new InstallationModel
+                    {
+                        Name = x.Name,
+                        Id = x.Id,
+                        DeployCheckboxes = x.InstallationSites
+                            .Where(y => y.WorkflowState != Constants.WorkflowStates.Removed)
+                            .Select(y => new DeployCheckbox
+                            {
+                                Id = y.SDKSiteId,
+                                IsChecked = true
+                            })
+                            .ToList()
+                    }).FirstOrDefaultAsync(x => x.Id == id);
 
                 if (installation == null)
                 {
@@ -150,23 +150,8 @@ namespace TrashInspection.Pn.Services
                         _trashInspectionLocalizationService.GetString($"InstallationWithID:{id}DoesNotExist"));
                 }
 
-                List<InstallationSite> installationSites = _dbContext.InstallationSites
-                    .Where(x => x.InstallationId == installation.Id && x.WorkflowState != Constants.WorkflowStates.Removed).ToList();
 
-                InstallationModel installationModel = new InstallationModel();
-                installationModel.Name = installation.Name;
-                installationModel.Id = installation.Id;
-                installationModel.DeployCheckboxes = new List<DeployCheckbox>();
-
-                foreach (InstallationSite installationSite in installationSites)
-                {
-                    DeployCheckbox deployCheckbox = new DeployCheckbox();
-                    deployCheckbox.Id = installationSite.SDKSiteId;
-                    deployCheckbox.IsChecked = true;
-                    installationModel.DeployCheckboxes.Add(deployCheckbox);
-                }
-
-                return new OperationDataResult<InstallationModel>(true, installationModel);
+                return new OperationDataResult<InstallationModel>(true, installation);
             }
             catch (Exception e)
             {
@@ -179,52 +164,53 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> Update(InstallationModel updateModel)
         {
-            Installation installation =
+            var installation =
                 await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == updateModel.Id);
             if (installation != null)
             {
                 installation.Name = updateModel.Name;
                 await installation.Update(_dbContext);
-            }
 
-            List<InstallationSite> installationSites = _dbContext.InstallationSites.Where(x => x.InstallationId == updateModel.Id).ToList();
-            List<InstallationSite> toBeRemovedInstallationSites = installationSites;
+                var installationSites = installation.InstallationSites;
+                var toBeRemovedInstallationSites = installationSites;
 
-            foreach (DeployCheckbox deployedCheckbox in updateModel.DeployCheckboxes)
-            {
-                InstallationSite installationSite =
-                    installationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id);
-                if (installationSite == null)
+                foreach (var deployedCheckbox in updateModel.DeployCheckboxes)
                 {
-                    installationSite = new InstallationSite
+                    var installationSite =
+                        installationSites.SingleOrDefault(x => x.SDKSiteId == deployedCheckbox.Id);
+                    if (installationSite == null)
                     {
-                        InstallationId = installation.Id,
-                        SDKSiteId = deployedCheckbox.Id
-                    };
-                    await installationSite.Create(_dbContext);
-                }
-                else
-                {
-                    if (installationSite.WorkflowState == Constants.WorkflowStates.Removed)
-                    {
-                        installationSite.WorkflowState = Constants.WorkflowStates.Created;
-                        await installationSite.Update(_dbContext);
-
+                        installationSite = new InstallationSite
+                        {
+                            InstallationId = installation.Id,
+                            SDKSiteId = deployedCheckbox.Id
+                        };
+                        await installationSite.Create(_dbContext);
                     }
-                    toBeRemovedInstallationSites.Remove(installationSite);
-                }
-            }
+                    else
+                    {
+                        if (installationSite.WorkflowState == Constants.WorkflowStates.Removed)
+                        {
+                            installationSite.WorkflowState = Constants.WorkflowStates.Created;
+                            await installationSite.Update(_dbContext);
 
-            foreach (InstallationSite installationSite in toBeRemovedInstallationSites)
-            {
-                await installationSite.Delete(_dbContext);
+                        }
+                        toBeRemovedInstallationSites.Remove(installationSite);
+                    }
+                }
+
+                foreach (var installationSite in toBeRemovedInstallationSites)
+                {
+                    await installationSite.Delete(_dbContext);
+                }
+                return new OperationResult(true);
             }
-            return new OperationResult(true);
+            return new OperationResult(false);
         }
 
         public async Task<OperationResult> Delete(int id)
         {
-            Installation installation =
+            var installation =
                 await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == id);
             await installation.Delete(_dbContext);
             return new OperationResult(true);

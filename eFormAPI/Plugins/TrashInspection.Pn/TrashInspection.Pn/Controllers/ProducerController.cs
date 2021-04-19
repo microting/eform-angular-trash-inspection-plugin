@@ -6,6 +6,9 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Controllers
 {
+    using Infrastructure.Models.Producers;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public class ProducerController : Controller
     {
 
@@ -57,10 +60,10 @@ namespace TrashInspection.Pn.Controllers
         {
             return await _producerService.ImportProducer(producerImportModel);
         }
-        
-        [HttpGet]
-        [Route("api/trash-inspection-pn/producers/year/{year}")]
-        public async Task<OperationDataResult<StatsByYearModel>> GetProducersStatsByYear(ProducersYearRequestModel requestModel)
+
+        [HttpPost]
+        [Route("api/trash-inspection-pn/producers/stats-by-year")]
+        public async Task<OperationDataResult<Paged<StatByYearModel>>> GetProducersStatsByYear([FromBody] ProducersYearRequestModel requestModel)
         {
             return await _producerService.GetProducersStatsByYear(requestModel);
         }
