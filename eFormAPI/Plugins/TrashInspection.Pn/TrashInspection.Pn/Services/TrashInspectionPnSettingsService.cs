@@ -45,24 +45,21 @@ namespace TrashInspection.Pn.Services
         private readonly ILogger<TrashInspectionPnSettingsService> _logger;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         private readonly TrashInspectionPnDbContext _dbContext;
-        private readonly IEFormCoreService _coreHelper;
         private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
-//        private readonly string _connectionString;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
 
 
-        public TrashInspectionPnSettingsService(ILogger<TrashInspectionPnSettingsService> logger,
+        public TrashInspectionPnSettingsService(
+            ILogger<TrashInspectionPnSettingsService> logger,
             ITrashInspectionLocalizationService trashInspectionLocalizationService,
             TrashInspectionPnDbContext dbContext,
             IPluginDbOptions<TrashInspectionBaseSettings> options,
-            IEFormCoreService coreHelper,
-            IHttpContextAccessor httpContextAccessor)
+            IUserService userService)
         {
             _logger = logger;
             _dbContext = dbContext;
-            _coreHelper = coreHelper;
             _options = options;
-            _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
         }
 
@@ -73,20 +70,20 @@ namespace TrashInspection.Pn.Services
                 var option = _options.Value;
                 if (option.Token == "...")
                 {
-                    string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                    Random random = new Random();
-                    string result = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(32).ToArray());
-                    await _options.UpdateDb(settings => { settings.Token = result;}, _dbContext, UserId);
+                    const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    var random = new Random();
+                    var result = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(32).ToArray());
+                    await _options.UpdateDb(settings => { settings.Token = result;}, _dbContext, _userService.UserId);
                 }
 
                 if (option.SdkConnectionString == "...")
                 {
-                    string connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
-                    string dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
-                    string dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
-                    string sdk = $"Database={dbPrefix}_SDK;";
+                    var connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+                    var dbNameSection = Regex.Match(connectionString, @"(Database=(...)_eform-angular-\w*-plugin;)").Groups[0].Value;
+                    var dbPrefix = Regex.Match(connectionString, @"Database=(\d*)_").Groups[1].Value;
+                    var sdk = $"Database={dbPrefix}_SDK;";
                     connectionString = connectionString.Replace(dbNameSection, sdk);
-                    await _options.UpdateDb(settings => { settings.SdkConnectionString = connectionString;}, _dbContext, UserId);
+                    await _options.UpdateDb(settings => { settings.SdkConnectionString = connectionString;}, _dbContext, _userService.UserId);
 
                 }
 
@@ -119,7 +116,7 @@ namespace TrashInspection.Pn.Services
                     settings.ExtendedInspectioneFormId = trashInspectionSettingsModel.ExtendedInspectioneFormId;
                     settings.CallbackCredentialAuthType = trashInspectionSettingsModel.CallbackCredentialAuthType;
                     settings.CallbackCredentialUserName = trashInspectionSettingsModel.CallbackCredentialUserName;
-                }, _dbContext, UserId);
+                }, _dbContext, _userService.UserId);
 
                 return new OperationResult(true,
                     _trashInspectionLocalizationService.GetString("SettingsHaveBeenUpdatedSuccessfully"));
@@ -149,15 +146,6 @@ namespace TrashInspection.Pn.Services
                 _logger.LogError(e.Message);
                 return new OperationDataResult<TrashInspectionBaseToken>(false,
                     _trashInspectionLocalizationService.GetString("ErrorWhileObtainingTrashInspectionToken"));
-            }
-        }
-
-        public int UserId
-        {
-            get
-            {
-                var value = _httpContextAccessor?.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                return value == null ? 0 : int.Parse(value);
             }
         }
     }

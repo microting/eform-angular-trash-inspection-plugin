@@ -1,32 +1,49 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {ToastrService} from 'ngx-toastr';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
-import { Observable} from 'rxjs';
-import {Router} from '@angular/router';
-import {OperationDataResult, OperationResult} from 'src/app/common/models/operation.models';
-import {BaseService} from 'src/app/common/services/base.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import {
+  OperationDataResult,
+  OperationResult,
+} from 'src/app/common/models/operation.models';
+import { BaseService } from 'src/app/common/services/base.service';
 
-import {SegmentPnModel, SegmentsPnModel, SegmentPnRequestModel, SegmentPnUpdateModel} from '../models/segment';
+import {
+  SegmentPnModel,
+  SegmentPnRequestModel,
+  SegmentPnUpdateModel,
+  SegmentsPnModel,
+} from '../models/segment';
 
 export let TrashInspectionPnSegmentMethods = {
   Segments: 'api/trash-inspection-pn/segments',
 };
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TrashInspectionPnSegmentsService extends BaseService {
-
-  constructor(private _http: HttpClient, router: Router, toastrService: ToastrService) {
+  constructor(
+    private _http: HttpClient,
+    router: Router,
+    toastrService: ToastrService
+  ) {
     super(_http, router, toastrService);
   }
 
-  getAllSegments(model: SegmentPnRequestModel): Observable<OperationDataResult<SegmentsPnModel>> {
+  getAllSegments(
+    model: SegmentPnRequestModel
+  ): Observable<OperationDataResult<SegmentsPnModel>> {
     return this.get(TrashInspectionPnSegmentMethods.Segments, model);
   }
 
-  getSingleSegment(fractionId: number): Observable<OperationDataResult<SegmentPnModel>> {
-    return this.get(TrashInspectionPnSegmentMethods.Segments + '/' + fractionId);
+  getSingleSegment(
+    fractionId: number
+  ): Observable<OperationDataResult<SegmentPnModel>> {
+    return this.get(
+      TrashInspectionPnSegmentMethods.Segments + '/' + fractionId
+    );
   }
 
   updateSegment(model: SegmentPnUpdateModel): Observable<OperationResult> {
@@ -38,6 +55,8 @@ export class TrashInspectionPnSegmentsService extends BaseService {
   }
 
   deleteSegment(segmentId: number): Observable<OperationResult> {
-    return this.delete(TrashInspectionPnSegmentMethods.Segments + '/' + segmentId);
+    return this.delete(
+      TrashInspectionPnSegmentMethods.Segments + '/' + segmentId
+    );
   }
 }

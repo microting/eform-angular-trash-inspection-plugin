@@ -1,158 +1,114 @@
-<subheader-pn>
+<eform-subheader>
   <div class="p-3">
-    <button *ngIf="pluginClaimsHelper.check(trashInspectionPnClaims.createFraction)"
+    <button
+      mdbBtn
+      *ngIf="pluginClaimsHelper.check(trashInspectionPnClaims.createFraction)"
       id="fractionCreateBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Fraction' | translate }}"
-      (click)="showCreateFractionModal()">{{ 'New Fraction' | translate }}
+      (click)="showCreateFractionModal()"
+    >
+      {{ 'New Fraction' | translate }}
     </button>
     <button
+      mdbBtn
       id="importFractionBtn"
       class="btn btn-success"
-      mdbTooltip="{{ 'Import Fraction' | translate}}"
-      routerLink="/plugins/trash-inspection-pn/importfraction">{{ 'Import Fraction' | translate}}</button>
+      mdbTooltip="{{ 'Import Fraction' | translate }}"
+      routerLink="/plugins/trash-inspection-pn/importfraction"
+    >
+      {{ 'Import Fraction' | translate }}
+    </button>
   </div>
-</subheader-pn>
+</eform-subheader>
 
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
     <table class="table table-sm table-striped text-center z-depth-1">
-      <thead>
-      <tr>
-        <th scope="col" class="table-header-sortable" id="idTableHeader"
-            (click)="sortTable('Id')">
-          <div class="d-flex align-items-center justify-content-center">
-            ID
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Id'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="itemNumberTableHeader"
-            (click)="sortTable('ItemNumber')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Item number' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'ItemNumber'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'ItemNumber' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'ItemNumber' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="nameTableHeader"
-            (click)="sortTable('Name')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Name' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="descriptionTableHeader"
-            (click)="sortTable('Description')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Description' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Description'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Description' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Description' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="locationCodeTableHeader"
-            (click)="sortTable('LocationCode')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'LocationCode' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'LocationCode'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'LocationCode' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'LocationCode' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="eFormTableHeader"
-            (click)="sortTable('eFormId')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'eForm' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'eFormId'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eFormId' && !fractionRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'eFormId' && fractionRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-
-        <th scope="col">
-          {{ 'Actions' | translate }}
-        </th>
-      </tr>
-      </thead>
+      <thead
+        table-headers
+        [tableHeaders]="tableHeaders"
+        [currentSortName]="fractionsStateService.getSort() | async"
+        (sortChanged)="sortTable($event)"
+        [isSortDsc]="fractionsStateService.getIsSortDsc() | async"
+      ></thead>
       <tbody id="tableBody">
-      <tr *ngFor="let fraction of fractionsModel.fractionList">
-        <td id="fractionId">
-          {{fraction.id}}
-        </td>
-        <td id="fractionItemNumber">
-          {{fraction.itemNumber}}
-        </td>
-        <td id="fractionName">
-          {{fraction.name}}
-        </td>
-        <td id="fractionDescription">
-          {{fraction.description}}
-        </td>
-        <td id="fractionLocationCode">
-          {{fraction.locationCode}}
-        </td>
-        <td id="fractionSelectedeForm">
-          {{fraction.selectedTemplateName}}
-        </td>
-        <td>
-          <div class="d-flex flex-row justify-content-center">
-            <button id="updateFractionBtn"
-              class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Fraction' | translate }}"
-                    (click)="showEditFractionModal(fraction)">
-              <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
-            </button>
-            <button id="deleteFractionBtn"
-              class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Fraction' | translate }}"
-                    (click)="showDeleteFractionModal(fraction)">
-              <fa-icon icon="trash-alt" size="lg" [fixedWidth]="true"></fa-icon>
-            </button>
-          </div>
-        </td>
-      </tr>
+        <tr *ngFor="let fraction of fractionsModel.entities">
+          <td id="fractionId">
+            {{ fraction.id }}
+          </td>
+          <td id="fractionItemNumber">
+            {{ fraction.itemNumber }}
+          </td>
+          <td id="fractionName">
+            {{ fraction.name }}
+          </td>
+          <td id="fractionDescription">
+            {{ fraction.description }}
+          </td>
+          <td id="fractionLocationCode">
+            {{ fraction.locationCode }}
+          </td>
+          <td id="fractionSelectedeForm">
+            {{ fraction.selectedTemplateName }}
+          </td>
+          <td>
+            <div class="d-flex flex-row justify-content-center">
+              <button
+                id="updateFractionBtn"
+                class="btn btn-accent text-black-50 btn-icon mb-2"
+                mdbTooltip="{{ 'Edit Fraction' | translate }}"
+                (click)="showEditFractionModal(fraction)"
+              >
+                <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
+              </button>
+              <button
+                id="deleteFractionBtn"
+                class="btn btn-danger btn-icon mb-2"
+                mdbTooltip="{{ 'Delete Fraction' | translate }}"
+                (click)="showDeleteFractionModal(fraction)"
+              >
+                <fa-icon
+                  icon="trash-alt"
+                  size="lg"
+                  [fixedWidth]="true"
+                ></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
   <div class="row justify-content-between mr-2 ml-2">
     <div class="col-md-1">
-      <page-size-pn
-        [pageSize]="localPageSettings.pageSize"
-        (onPageSizeChanged)="localPageSettings.pageSize = $event; fractionRequestModel.pageIndex = 1;
-        updateLocalPageSettings()">
-      </page-size-pn>
+      <eform-page-size
+        [pageSize]="fractionsStateService.getPageSize() | async"
+        (onPageSizeChanged)="onPageSizeChanged($event)"
+      >
+      </eform-page-size>
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
-      <pagination-pn *ngIf="fractionsModel.total > fractionRequestModel.pageSize"
-                     [limit]="fractionRequestModel.pageSize"
-                     [size]="fractionsModel.total"
-                     [offset]="fractionRequestModel.offset"
-                     (onPageChanged)="changePage($event)"></pagination-pn>
+      <eform-pagination
+        [limit]="fractionsStateService.getPageSize() | async"
+        [size]="fractionsModel.total"
+        [offset]="fractionsStateService.getOffset() | async"
+        (onPageChanged)="changePage($event)"
+      ></eform-pagination>
     </div>
   </div>
 </div>
 
-<app-trash-inspection-pn-fraction-create #createFractionModal
-                                             (onFractionCreated)="getAllFractions()">
+<app-trash-inspection-pn-fraction-create
+  #createFractionModal
+  (onFractionCreated)="getAllFractions()"
+>
 </app-trash-inspection-pn-fraction-create>
-<app-trash-inspection-pn-fraction-edit #editFractionModal
-                               (onFractionUpdated)="getAllFractions()"></app-trash-inspection-pn-fraction-edit>
-<app-trash-inspection-pn-fraction-delete #deleteFractionModal
-                                     (onFractionDeleted)="getAllFractions()"></app-trash-inspection-pn-fraction-delete>
+<app-trash-inspection-pn-fraction-edit
+  #editFractionModal
+  (onFractionUpdated)="getAllFractions()"
+></app-trash-inspection-pn-fraction-edit>
+<app-trash-inspection-pn-fraction-delete
+  #deleteFractionModal
+  (onFractionDeleted)="onFractionDeleted()"
+></app-trash-inspection-pn-fraction-delete>

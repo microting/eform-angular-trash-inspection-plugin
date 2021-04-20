@@ -1,259 +1,252 @@
 import Page from '../Page';
-import XMLForEformFractions from '../../Constants/XMLForEformFractions';
-import loginPage from '../../Page objects/Login.page';
+import myEformsPage from '../MyEforms.page';
+import trashInspectionsPage from './TrashInspections.page';
 
 export class TrashInspectionFractionPage extends Page {
   constructor() {
     super();
   }
+
   public get rowNum(): number {
     browser.pause(500);
     return $$('#tableBody > tr').length;
   }
-  public get newEformBtn() {
-    $('#newEFormBtn').waitForDisplayed({timeout: 20000});
-    $('#newEFormBtn').waitForClickable({timeout: 20000});
-    return $('#newEFormBtn');
-  }
-  public get xmlTextArea() {
-    $('#eFormXml').waitForDisplayed({timeout: 20000});
-    $('#eFormXml').waitForClickable({timeout: 20000});
-    return $('#eFormXml');
-  }
-  public get createEformBtn() {
-    $('#createEformBtn').waitForDisplayed({timeout: 20000});
-    $('#createEformBtn').waitForClickable({timeout: 20000});
-    return $('#createEformBtn');
-  }
-  public get createEformTagSelector() {
-    $('#createEFormMultiSelector').waitForDisplayed({timeout: 20000});
-    $('#createEFormMultiSelector').waitForClickable({timeout: 20000});
-    return $('#createEFormMultiSelector');
-  }
-  public get createEformNewTagInput() {
-    $('#addTagInput').waitForDisplayed({timeout: 20000});
-    $('#addTagInput').waitForClickable({timeout: 20000});
-    return $('#addTagInput');
-  }
+
   public trashInspectionDropDown() {
-    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    trashInspectionsPage.trashInspectionDropDown().click();
   }
-  public get trashInspectionDropdownName() {
-    return $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).$('..');
-  }
-  public get trashInspectionDropdownItemName() {
-    return $(`//*[contains(text(), 'Fraktioner')]`);
-  }
+
   public get fractionBtn() {
-    const ele = $(`//*[contains(text(), 'Fraktioner')]`);
-    ele.waitForDisplayed({timeout: 20000});
-    ele.waitForClickable({timeout: 20000});
+    const ele = $(`#trash-inspection-pn-fractions`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
-  public  fractionCreateBtn() {
-    $('#fractionCreateBtn').click();
+
+  public get fractionCreateBtn() {
+    const ele = $(`#fractionCreateBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public getBtnTxt(text: string) {
-    return $(`//*[contains(@class, 'p-3')]//*[text()="${text}"]`);
-  }
+
   public get fractionCreateNameBox() {
-    $('#createFractionName').waitForDisplayed({timeout: 20000});
-    $('#createFractionName').waitForClickable({timeout: 20000});
-    return $('#createFractionName');
+    const ele = $(`#createFractionName`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionCreateDescriptionBox() {
-    $('#createFractionDescription').waitForDisplayed({timeout: 20000});
-    $('#createFractionDescription').waitForClickable({timeout: 20000});
-    return $('#createFractionDescription');
+    const ele = $(`#createFractionDescription`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionCreateSelectorBox() {
-    return $(`//*[contains(@id, 'createFractionSelector')]//input`);
+    const ele = $(`#createFractionSelector`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get fractionCreateOption() {
-    return $(`//*[contains(@class, 'ng-option-label')]`);
+
+  public get fractionCreateSaveBtn() {
+    const ele = $(`#fractionCreateSaveBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get createSaveBtn() {
-    $('#fractionCreateSaveBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionCreateSaveBtn').waitForClickable({timeout: 20000});
-    return $('#fractionCreateSaveBtn');
-  }
+
   public get fractionCreateCancelBtn() {
-    $('#fractionCreateCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionCreateCancelBtn').waitForClickable({timeout: 20000});
-    return $('#fractionCreateCancelBtn');
+    const ele = $(`#fractionCreateCancelBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionEditBtn() {
-    $('#updateFractionBtn').waitForDisplayed({timeout: 20000});
-    $('#updateFractionBtn').waitForClickable({timeout: 20000});
-    return $('#updateFractionBtn');
+    const ele = $(`#updateFractionBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionUpdateNameBox() {
-    $('#updateFractionName').waitForDisplayed({timeout: 20000});
-    $('#updateFractionName').waitForClickable({timeout: 20000});
-    return $('#updateFractionName');
+    const ele = $(`#updateFractionName`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionUpdateDescriptionBox() {
-    $('#editFractionDescription').waitForDisplayed({timeout: 20000});
-    $('#editFractionDescription').waitForClickable({timeout: 20000});
-    return $('#editFractionDescription');
+    const ele = $(`#editFractionDescription`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get fractionUpdateSelecterBox() {
-    return $(`//*[contains(@id, 'fractionUpdateSelector')]//input`);
+
+  public get fractionUpdateSelectorBox() {
+    const ele = $(`#fractionUpdateSelector`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get fractionUpdateOption() {
-    return $(`//*[contains(@class, 'ng-option-label')]`);
-  }
+
   public get fractionUpdateSaveBtn() {
-    $('#fractionUpdateSaveBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionUpdateSaveBtn').waitForClickable({timeout: 20000});
-    return $('#fractionUpdateSaveBtn');
+    const ele = $(`#fractionUpdateSaveBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionUpdateCancelBtn() {
-    $('#fractionUpdateCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionUpdateCancelBtn').waitForClickable({timeout: 20000});
-    return $('#fractionUpdateCancelBtn');
+    const ele = $(`#fractionUpdateCancelBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get fractionDeleteBtn() {
-    $('#deleteFractionBtn').waitForDisplayed({timeout: 20000});
-    $('#deleteFractionBtn').waitForClickable({timeout: 20000});
-    return $('#deleteFractionBtn');
-  }
+
   public get fractionDeleteId() {
-    $('#selectedFractionId').waitForDisplayed({timeout: 20000});
-    $('#selectedFractionId').waitForClickable({timeout: 20000});
-    return $('#selectedFractionId');
+    const ele = $(`#selectedFractionId`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionDeleteName() {
-    $('#selectedFractionName').waitForDisplayed({timeout: 20000});
-    $('#selectedFractionName').waitForClickable({timeout: 20000});
-    return $('#selectedFractionName');
+    const ele = $(`#selectedFractionName`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
   }
+
   public get fractionDeleteDeleteBtn() {
-    $('#fractionDeleteDeleteBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionDeleteDeleteBtn').waitForClickable({timeout: 20000});
-    return $('#fractionDeleteDeleteBtn');
+    const ele = $('#fractionDeleteDeleteBtn');
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
-  public get fractionDelteCancelBtn() {
-    $('#fractionDeleteCancelBtn').waitForDisplayed({timeout: 20000});
-    $('#fractionDeleteCancelBtn').waitForClickable({timeout: 20000});
-    return $('#fractionDeleteCancelBtn');
+
+  public get fractionDeleteCancelBtn() {
+    const ele = $(`#fractionDeleteCancelBtn`);
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
+  public get updateFractionItemNumber() {
+    const ele = $('#updateFractionItemNumber');
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
+  }
+
+  public get editFractionLocationCode() {
+    const ele = $('#editFractionLocationCode');
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
+  }
+
+  public get fractionUpdateSelector() {
+    const ele = $('#fractionUpdateSelector');
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
+  }
+
+  public get createFractionItemNumber() {
+    const ele = $('#createFractionItemNumber');
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
+  }
+
+  public get createFractionLocationCode() {
+    const ele = $('#createFractionLocationCode');
+    ele.waitForDisplayed({ timeout: 20000 });
+    return ele;
+  }
+
   goToFractionsPage() {
     this.trashInspectionDropDown();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
     this.fractionBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+    fractionsPage.fractionCreateBtn.waitForClickable({ timeout: 20000 });
   }
-  createFraction(name: string, description: string) {
-    this.fractionCreateBtn();
-    $('#createFractionName').waitForDisplayed({timeout: 20000});
-    this.fractionCreateNameBox.addValue(name);
-    this.fractionCreateDescriptionBox.addValue(description);
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionCreateSelectorBox.addValue('Number 1');
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionCreateOption.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.createSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    $('#fractionCreateBtn').waitForDisplayed({timeout: 20000});
+
+  openCreateFraction(createModel?: FractionsCreateUpdate) {
+    this.fractionCreateBtn.click();
+    if (createModel) {
+      if (createModel.itemNumber) {
+        this.createFractionItemNumber.setValue(createModel.itemNumber);
+      }
+      if (createModel.name) {
+        this.fractionCreateNameBox.setValue(createModel.name);
+      }
+      if (createModel.description) {
+        this.fractionCreateDescriptionBox.setValue(createModel.description);
+      }
+      if (createModel.locationCode) {
+        this.createFractionLocationCode.setValue(createModel.locationCode);
+      }
+      if (createModel.eForm) {
+        const ngOption = $('.ng-option');
+        this.fractionCreateSelectorBox.$('input').setValue(createModel.eForm);
+        ngOption.waitForDisplayed({ timeout: 20000 });
+        const value = this.fractionCreateSelectorBox
+          .$('.ng-dropdown-panel')
+          .$(`.ng-option=${createModel.eForm}`);
+        value.waitForClickable({ timeout: 20000 });
+        value.click();
+      }
+    }
+
+    this.fractionCreateCancelBtn.waitForClickable({ timeout: 20000 });
   }
-  cancelCreateFraction(name: string, description: string) {
-    this.fractionCreateBtn();
-    // $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    $('#createFractionName').waitForDisplayed({timeout: 20000});
-    this.fractionCreateNameBox.addValue(name);
-    this.fractionCreateDescriptionBox.addValue(description);
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionCreateSelectorBox.addValue('Number 1');
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionCreateOption.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionCreateCancelBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    $('#fractionCreateBtn').waitForDisplayed({timeout: 20000});
+
+  closeCreateFraction(clickCancel = false) {
+    if (clickCancel) {
+      this.fractionCreateCancelBtn.click();
+    } else {
+      this.fractionCreateSaveBtn.click();
+    }
+    this.fractionCreateBtn.waitForClickable({ timeout: 20000 });
   }
-  editFraction(newName: string, newDescription: string) {
-    this.fractionEditBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateNameBox.clearValue();
-    this.fractionUpdateNameBox.addValue(newName);
-    this.fractionUpdateDescriptionBox.clearValue();
-    this.fractionUpdateDescriptionBox.addValue(newDescription);
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateSelecterBox.addValue('Number 2');
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateOption.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateSaveBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+
+  createFraction(createModel?: FractionsCreateUpdate, clickCancel = false) {
+    this.openCreateFraction(createModel);
+    this.closeCreateFraction(clickCancel);
   }
-  cancelEditFraction(newName: string, newDescription: string) {
-    this.fractionEditBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateNameBox.clearValue();
-    this.fractionUpdateNameBox.addValue(newName);
-    this.fractionUpdateDescriptionBox.clearValue();
-    this.fractionUpdateDescriptionBox.addValue(newDescription);
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateSelecterBox.addValue('Number 2');
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateOption.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    this.fractionUpdateCancelBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-  }
-  deleteFraction() {
-    const fractionForDelete = this.getFirstRowObject();
-    fractionForDelete.deleteBtn.click();
-    // browser.pause(4000);
-    $('#fractionDeleteDeleteBtn').waitForDisplayed({timeout: 10000});
-    this.fractionDeleteDeleteBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-  }
-  cancelDeleteFraction() {
-    const fractionForDelete = this.getFirstRowObject();
-    fractionForDelete.deleteBtn.click();
-    // browser.pause(4000);
-    $('#fractionDeleteDeleteBtn').waitForDisplayed({timeout: 10000});
-    this.fractionDelteCancelBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-  }
+
   getFirstRowObject(): FractionsRowObject {
     browser.pause(500);
     return new FractionsRowObject(1);
   }
+
+  getFractionsRowObjectByIndex(index: number): FractionsRowObject {
+    browser.pause(500);
+    return new FractionsRowObject(index);
+  }
+
   createNewEform(eFormLabel, newTagsList = [], tagAddedNum = 0) {
-    this.newEformBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    // Create replaced xml and insert it in textarea
-    const xml = XMLForEformFractions.XML.replace('TEST_LABEL', eFormLabel);
-    browser.execute(function (xmlText) {
-      (<HTMLInputElement>document.getElementById('eFormXml')).value = xmlText;
-    }, xml);
-    this.xmlTextArea.addValue(' ');
-    // Create new tags
-    const addedTags: string[] = newTagsList;
-    if (newTagsList.length > 0) {
-      this.createEformNewTagInput.setValue(newTagsList.join(','));
-      $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+    return myEformsPage.createNewEform(eFormLabel, newTagsList, tagAddedNum);
+  }
+
+  public clearTable() {
+    browser.pause(2000);
+    let rowCount = this.rowNum;
+    for (let i = 1; i <= rowCount; i++) {
+      if (i % 9 === 0 && this.rowNum > 0) {
+        rowCount += this.rowNum;
+      }
+      const fractionsRowObject = this.getFirstRowObject();
+      fractionsRowObject.delete();
     }
-    // Add existing tags
-    const selectedTags: string[] = [];
-    if (tagAddedNum > 0) {
-      $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-      for (let i = 0; i < tagAddedNum; i++) {
-        this.createEformTagSelector.click();
-        const selectedTag = $('.ng-option:not(.ng-option-selected)');
-        selectedTags.push(selectedTag.getText());
-        console.log('selectedTags is ' + JSON.stringify(selectedTags));
-        selectedTag.click();
-        $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+  }
+
+  public getFractionsRowObjectByName(name: string): FractionsRowObject {
+    for (let i = 1; i < this.rowNum + 1; i++) {
+      const fraction = this.getFractionsRowObjectByIndex(i);
+      if (fraction.name === name) {
+        return fraction;
       }
     }
-    this.createEformBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
-    return {added: addedTags, selected: selectedTags};
+    return null;
   }
 }
 
@@ -262,25 +255,110 @@ export default fractionsPage;
 
 export class FractionsRowObject {
   constructor(rowNum) {
-    if ($$('#fractionId')[rowNum - 1]) {
-      this.id = +$$('#fractionId')[rowNum - 1];
-      try {
-        this.name = $$('#fractionName')[rowNum - 1].getText();
-      } catch (e) {}
-      try {
-        this.description = $$('#fractionDescription')[rowNum - 1].getText();
-      } catch (e) {}
-      try {
-        this.eForm = $$('#fractionSelectedeForm')[rowNum - 1].getText();
-      } catch (e) {}
-      this.editBtn = $$('#updateFractionBtn')[rowNum - 1];
-      this.deleteBtn = $$('#deleteFractionBtn')[rowNum - 1];
+    this.element = $$('#tableBody > tr')[rowNum - 1];
+    if (this.element) {
+      this.id = +this.element.$('#fractionId').getText();
+      this.itemNumber = this.element.$('#fractionItemNumber').getText();
+      this.name = this.element.$('#fractionName').getText();
+      this.description = this.element.$('#fractionDescription').getText();
+      this.locationCode = this.element.$('#fractionLocationCode').getText();
+      this.eForm = this.element.$('#fractionSelectedeForm').getText();
+      this.editBtn = this.element.$('#updateFractionBtn');
+      this.deleteBtn = this.element.$('#deleteFractionBtn');
     }
   }
-  id;
-  name;
-  description;
-  eForm;
-  editBtn;
-  deleteBtn;
+  element: WebdriverIO.Element;
+  id: number;
+  itemNumber: string;
+  name: string;
+  description: string;
+  locationCode: string;
+  eForm: string;
+  editBtn: WebdriverIO.Element;
+  deleteBtn: WebdriverIO.Element;
+
+  openDeleteModal() {
+    this.deleteBtn.scrollIntoView();
+    this.deleteBtn.click();
+    fractionsPage.fractionDeleteCancelBtn.waitForDisplayed({
+      timeout: 20000,
+    });
+  }
+
+  closeDeleteModal(clickCancel = false) {
+    if (clickCancel) {
+      fractionsPage.fractionDeleteCancelBtn.click();
+    } else {
+      fractionsPage.fractionDeleteDeleteBtn.click();
+      $('#spinner-animation').waitForDisplayed({
+        timeout: 20000,
+        reverse: true,
+      });
+    }
+    fractionsPage.fractionCreateBtn.waitForClickable({ timeout: 20000 });
+  }
+
+  delete(clickCancel = false) {
+    this.openDeleteModal();
+    this.closeDeleteModal(clickCancel);
+  }
+
+  openEditModal(updateModel?: FractionsCreateUpdate) {
+    this.editBtn.click();
+    if (updateModel) {
+      if (updateModel.itemNumber) {
+        fractionsPage.updateFractionItemNumber.setValue(updateModel.itemNumber);
+      }
+      if (updateModel.name) {
+        fractionsPage.fractionUpdateNameBox.setValue(updateModel.name);
+      }
+      if (updateModel.description) {
+        fractionsPage.fractionUpdateDescriptionBox.setValue(
+          updateModel.description
+        );
+      }
+      if (updateModel.locationCode) {
+        fractionsPage.editFractionLocationCode.setValue(
+          updateModel.locationCode
+        );
+      }
+      if (updateModel.eForm) {
+        fractionsPage.fractionUpdateSelector
+          .$('input')
+          .setValue(updateModel.eForm);
+        const value = fractionsPage.fractionUpdateSelector
+          .$('.ng-dropdown-panel')
+          .$(`.ng-option=${updateModel.eForm}`);
+        value.waitForClickable({ timeout: 20000 });
+        $('#spinner-animation').waitForDisplayed({
+          timeout: 20000,
+          reverse: true,
+        });
+        value.click();
+      }
+    }
+    fractionsPage.fractionUpdateCancelBtn.waitForClickable({ timeout: 20000 });
+  }
+
+  closeEditModal(clickCancel = false) {
+    if (clickCancel) {
+      fractionsPage.fractionUpdateCancelBtn.click();
+    } else {
+      fractionsPage.fractionUpdateSaveBtn.click();
+    }
+    fractionsPage.fractionCreateBtn.waitForClickable({ timeout: 20000 });
+  }
+
+  edit(updateModel?: FractionsCreateUpdate, clickCancel = false) {
+    this.openEditModal(updateModel);
+    this.closeEditModal(clickCancel);
+  }
+}
+
+export class FractionsCreateUpdate {
+  itemNumber: string;
+  name: string;
+  description: string;
+  locationCode: string;
+  eForm: string;
 }

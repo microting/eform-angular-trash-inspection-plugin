@@ -1,9 +1,4 @@
-export class ProducerYearPnModel {
-  total: number;
-  statsByYearList: Array<ProducerYearModel> = [];
-}
-
-export class ProducerYearModel {
+export class ProducerPnStatsByYearModel {
   id: number;
   name: string;
   weighings: number;

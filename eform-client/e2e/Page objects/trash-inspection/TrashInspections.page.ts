@@ -4,22 +4,29 @@ export class TrashInspectionsPage extends Page {
   constructor() {
     super();
   }
+
   public get rowNum(): number {
     return $$('#tableBody > tr').length;
   }
+
   public trashInspectionDropDown() {
-    $(`//*[contains(@class, 'dropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+    const ele = $('#trash-inspection-pn');
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   public get trashInspectionBtn() {
-    $('#trash-inspection-pn-trash-inspection').waitForDisplayed({timeout: 20000});
-    $('#trash-inspection-pn-trash-inspection').waitForClickable({timeout: 20000});
-    return $('#trash-inspection-pn-trash-inspection');
+    const ele = $('#trash-inspection-pn-trash-inspection');
+    ele.waitForDisplayed({ timeout: 20000 });
+    ele.waitForClickable({ timeout: 20000 });
+    return ele;
   }
+
   goToTrashInspectionPage() {
-    this.trashInspectionDropDown();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+    this.trashInspectionDropDown().click();
     this.trashInspectionBtn.click();
-    $('#spinner-animation').waitForDisplayed({timeout: 20000, reverse: true});
+    $('#spinner-animation').waitForDisplayed({ timeout: 20000, reverse: true });
   }
 }
 
@@ -31,14 +38,24 @@ export class TrashInspectionsRowObject {
     this.id = $$('#idTableHeader')[rowNumber - 1].getText();
     this.date = $$('#dateTableHeader')[rowNumber - 1].getText();
     this.eakCode = $$('#eakCodeTableHeader')[rowNumber - 1].getText();
-    this.installationId = $$('#installationIdTableHeader')[rowNumber - 1].getText();
-    this.mustBeInspected = $$('#mustBeInspectedTableHeader')[rowNumber - 1].getText();
+    this.installationId = $$('#installationIdTableHeader')[
+      rowNumber - 1
+    ].getText();
+    this.mustBeInspected = $$('#mustBeInspectedTableHeader')[
+      rowNumber - 1
+    ].getText();
     this.producer = $$('#producerTableHeader')[rowNumber - 1].getText();
-    this.registrationNumber = $$('#registrationNumberTableHeader')[rowNumber - 1].getText();
+    this.registrationNumber = $$('#registrationNumberTableHeader')[
+      rowNumber - 1
+    ].getText();
     this.time = $$('#timeTableHeader')[rowNumber - 1].getText();
     this.transporter = $$('#transporterTableHeader')[rowNumber - 1].getText();
-    this.trashFraction = $$('#trashFractionTableHeader')[rowNumber - 1].getText();
-    this.weighingNumber = $$('#weighingNumberTableHeader')[rowNumber - 1].getText();
+    this.trashFraction = $$('#trashFractionTableHeader')[
+      rowNumber - 1
+    ].getText();
+    this.weighingNumber = $$('#weighingNumberTableHeader')[
+      rowNumber - 1
+    ].getText();
     this.name = $$('#nameTableHeader')[rowNumber - 1].getText();
     this.status = $$('#statusTableHeader')[rowNumber - 1].getText();
   }

@@ -1,47 +1,31 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PageSettingsModel} from 'src/app/common/models/settings';
-import {InstallationPnRequestModel,
-        InstallationsPnModel,
-        InstallationPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
-import {TrashInspectionsPnRequestModel, TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  TrashInspectionPnInstallationsService,
-  TrashInspectionPnTrashInspectionsService
-} from 'src/app/plugins/modules/trash-inspection-pn/services';
-import {SharedPnService} from 'src/app/plugins/modules/shared/services';
+  InstallationPnModel,
+  InstallationsPnModel,
+} from '../../../models/installation';
+import { TableHeaderElementModel } from 'src/app/common/models';
+import { InstallationsStateService } from '../state/installations-state-service';
 
 @Component({
   selector: 'app-trash-inspection-pn-installations-page',
   templateUrl: './installations-page.component.html',
-  styleUrls: ['./installations-page.component.scss']
+  styleUrls: ['./installations-page.component.scss'],
 })
 export class InstallationsPageComponent implements OnInit {
   @ViewChild('createInspectionModal') createInspectionModal;
   @ViewChild('editInstallationModal') editInstallationModal;
   @ViewChild('deleteInstallationModal') deleteInstallationModal;
-  localPageSettings: PageSettingsModel = new PageSettingsModel();
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
-  mappingTrashInspections: TrashInspectionsPnModel = new TrashInspectionsPnModel();
-  installationRequestModel: InstallationPnRequestModel = new InstallationPnRequestModel();
 
-  constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
-              private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService) { }
+  tableHeaders: TableHeaderElementModel[] = [
+    { name: 'Id', elementId: 'idTableHeader', sortable: true },
+    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
+    { name: 'Actions', elementId: '', sortable: false },
+  ];
+  constructor(public installationsStateService: InstallationsStateService) {}
 
   ngOnInit() {
-    this.getLocalPageSettings();
-  }
-
-  getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Installations').settings;
     this.getAllInitialData();
-  }
-
-  updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'Installations');
-    this.getAllInstallations();
   }
 
   getAllInitialData() {
@@ -49,21 +33,9 @@ export class InstallationsPageComponent implements OnInit {
   }
 
   getAllInstallations() {
-    this.installationRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.installationRequestModel.sort = this.localPageSettings.sort;
-    this.installationRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnInstallationsService.getAllInstallations(this.installationRequestModel).subscribe((data) => {
+    this.installationsStateService.getAllInstallations().subscribe((data) => {
       if (data && data.success) {
         this.installationsModel = data.model;
-      }
-      this.getTrashInspectionsForMapping();
-    });
-  }
-
-  getTrashInspectionsForMapping() {
-    this.trashInspectionPnTrashInspectionsService.getAllTrashInspections(new TrashInspectionsPnRequestModel()).subscribe((data) => {
-      if (data && data.success) {
-        this.mappingTrashInspections = data.model;
       }
     });
   }
@@ -81,25 +53,22 @@ export class InstallationsPageComponent implements OnInit {
   }
 
   sortTable(sort: string) {
-    if (this.localPageSettings.sort === sort) {
-      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
-    } else {
-      this.localPageSettings.isSortDsc = false;
-      this.localPageSettings.sort = sort;
-    }
-    this.updateLocalPageSettings();
+    this.installationsStateService.onSortTable(sort);
+    this.getAllInstallations();
   }
 
-  changePage(e: any) {
-    if (e || e === 0) {
-      this.installationRequestModel.offset = e;
-      if (e === 0) {
-        this.installationRequestModel.pageIndex = 0;
-      } else {
-        this.installationRequestModel.pageIndex
-          = Math.floor(e / this.installationRequestModel.pageSize);
-      }
-      this.getAllInstallations();
-    }
+  changePage(offset: number) {
+    this.installationsStateService.changePage(offset);
+    this.getAllInstallations();
+  }
+
+  onPageSizeChanged(pageSize: number) {
+    this.installationsStateService.updatePageSize(pageSize);
+    this.getAllInstallations();
+  }
+
+  onInstallationDeleted() {
+    this.installationsStateService.onDelete();
+    this.getAllInstallations();
   }
 }

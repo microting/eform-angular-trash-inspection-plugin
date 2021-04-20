@@ -1,16 +1,10 @@
-export class TrashInspectionsPnRequestModel {
-  pageIndex: number;
-  pageSize: number;
-  sort: string;
-  isSortDsc: boolean;
-  offset: number;
+import { PagedEntityRequest } from 'src/app/common/models';
+
+export class TrashInspectionsPnRequestModel extends PagedEntityRequest {
   nameFilter: string;
+
   constructor() {
-    this.sort = 'Id';
-    this.isSortDsc = true;
+    super();
     this.nameFilter = '';
-    this.pageSize = 10;
-    this.pageIndex = 1;
-    this.offset = 0;
   }
 }

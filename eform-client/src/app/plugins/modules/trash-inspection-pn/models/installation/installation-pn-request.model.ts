@@ -1,16 +1,7 @@
-export class InstallationPnRequestModel {
-  pageIndex: number;
-  nameFilter: string;
-  pageSize: number;
-  sort: string;
-  isSortDsc: boolean;
-  offset: number;
+import { PagedEntityRequest } from 'src/app/common/models';
 
+export class InstallationPnRequestModel extends PagedEntityRequest {
   constructor() {
-    this.sort = 'Id';
-    this.isSortDsc = true;
-    this.pageSize = 5 ;
-    this.pageIndex = 1;
-    this.offset = 0;
+    super();
   }
 }

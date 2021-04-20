@@ -1,13 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PageSettingsModel} from '../../../../../../common/models/settings';
-import {TransporterPnModel, TransporterPnRequestModel, TransportersPnModel} from '../../../models/transporter';
-import {SharedPnService} from '../../../../shared/services';
-import {TrashInspectionPnTransporterService} from '../../../services';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PageSettingsModel } from '../../../../../../common/models/settings';
+import {
+  TransporterPnModel,
+  TransporterPnRequestModel,
+  TransportersPnModel,
+} from '../../../models/transporter';
+import { SharedPnService } from '../../../../shared/services';
+import { TrashInspectionPnTransporterService } from '../../../services';
 
 @Component({
   selector: 'app-transporter-page',
   templateUrl: './transporter-page.component.html',
-  styleUrls: ['./transporter-page.component.scss']
+  styleUrls: ['./transporter-page.component.scss'],
 })
 export class TransporterPageComponent implements OnInit {
   @ViewChild('createTransporterModal') createTransporterModal;
@@ -17,22 +21,28 @@ export class TransporterPageComponent implements OnInit {
   transportersModel: TransportersPnModel = new TransportersPnModel();
   transporterRequestModel: TransporterPnRequestModel = new TransporterPnRequestModel();
 
-
-  constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnTransporterService: TrashInspectionPnTransporterService) { }
+  constructor(
+    private sharedPnService: SharedPnService,
+    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
+  ) {}
 
   ngOnInit() {
     this.getLocalPageSettings();
   }
 
   getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Transporters').settings;
+    this.localPageSettings = this.sharedPnService.getLocalPageSettings(
+      'trashInspectionsPnSettings',
+      'Transporters'
+    ).settings;
     this.getAllInitialData();
   }
   updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'Transporters');
+    this.sharedPnService.updateLocalPageSettings(
+      'trashInspectionsPnSettings',
+      this.localPageSettings,
+      'Transporters'
+    );
     this.getAllTransporters();
   }
   getAllInitialData() {
@@ -43,11 +53,13 @@ export class TransporterPageComponent implements OnInit {
     this.transporterRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.transporterRequestModel.sort = this.localPageSettings.sort;
     this.transporterRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnTransporterService.getAllTransporters(this.transporterRequestModel).subscribe((data) => {
-      if (data && data.success) {
-        this.transportersModel = data.model;
-      }
-    });
+    this.trashInspectionPnTransporterService
+      .getAllTransporters(this.transporterRequestModel)
+      .subscribe((data) => {
+        if (data && data.success) {
+          this.transportersModel = data.model;
+        }
+      });
   }
   showCreateTransporterModal() {
     this.createTransporterModal.show();
@@ -74,8 +86,9 @@ export class TransporterPageComponent implements OnInit {
       if (e === 0) {
         this.transporterRequestModel.pageIndex = 0;
       } else {
-        this.transporterRequestModel.pageIndex
-          = Math.floor(e / this.transporterRequestModel.pageSize);
+        this.transporterRequestModel.pageIndex = Math.floor(
+          e / this.transporterRequestModel.pageSize
+        );
       }
       this.getAllTransporters();
     }

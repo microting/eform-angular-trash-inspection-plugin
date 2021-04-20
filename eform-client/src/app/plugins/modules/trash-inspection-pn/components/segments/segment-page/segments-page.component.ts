@@ -1,40 +1,41 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PageSettingsModel} from 'src/app/common/models/settings';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
-import {SharedPnService} from 'src/app/plugins/modules/shared/services';
-import {SegmentsPnModel, SegmentPnRequestModel, SegmentPnModel} from '../../../models/segment';
-import {TrashInspectionPnSegmentsService} from '../../../services/trash-inspection-pn-segments.service';
+import { SegmentPnModel, SegmentsPnModel } from '../../../models/segment';
+import { SegmentsStateService } from 'src/app/plugins/modules/trash-inspection-pn/components/segments/state/segments-state-service';
+import { TableHeaderElementModel } from 'src/app/common/models';
 
 @Component({
   selector: 'app-trash-inspection-pn-segments-page',
   templateUrl: './segments-page.component.html',
-  styleUrls: ['./segments-page.component.scss']
+  styleUrls: ['./segments-page.component.scss'],
 })
 export class SegmentsPageComponent implements OnInit {
   @ViewChild('createSegmentModal') createSegmentModal;
   @ViewChild('editSegmentModal') editSegmentModal;
   @ViewChild('deleteSegmentModal') deleteSegmentModal;
-  localPageSettings: PageSettingsModel = new PageSettingsModel();
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
-  segmentPnRequestModel: SegmentPnRequestModel = new SegmentPnRequestModel();
 
-  constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService) { }
+  tableHeaders: TableHeaderElementModel[] = [
+    { name: 'Id', elementId: 'idTableHeader', sortable: true },
+    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
+    {
+      name: 'Description',
+      elementId: 'descriptionTableHeader',
+      sortable: true,
+    },
+    {
+      name: 'SdkFolderId',
+      elementId: 'sdkFolderIdTableHeader',
+      sortable: true,
+      visibleName: 'SDK folder id',
+    },
+    { name: 'Actions', elementId: '', sortable: false },
+  ];
+
+  constructor(public segmentsStateService: SegmentsStateService) {}
 
   ngOnInit() {
-    this.getLocalPageSettings();
-  }
-
-  getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Segments').settings;
     this.getAllInitialData();
-  }
-
-  updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'Segments');
-    this.getAllSegments();
   }
 
   getAllInitialData() {
@@ -42,10 +43,7 @@ export class SegmentsPageComponent implements OnInit {
   }
 
   getAllSegments() {
-    this.segmentPnRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.segmentPnRequestModel.sort = this.localPageSettings.sort;
-    this.segmentPnRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnSegmentsService.getAllSegments(this.segmentPnRequestModel).subscribe((data) => {
+    this.segmentsStateService.getAllSegments().subscribe((data) => {
       if (data && data.success) {
         this.segmentsPnModel = data.model;
       }
@@ -64,24 +62,22 @@ export class SegmentsPageComponent implements OnInit {
   }
 
   sortTable(sort: string) {
-    if (this.localPageSettings.sort === sort) {
-      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
-    } else {
-      this.localPageSettings.isSortDsc = false;
-      this.localPageSettings.sort = sort;
-    }
-    this.updateLocalPageSettings();
+    this.segmentsStateService.onSortTable(sort);
+    this.getAllSegments();
   }
 
-  changePage(e: any) {
-    if (e || e === 0) {
-      this.segmentPnRequestModel.offset = e;
-      if (e === 0) {
-        this.segmentPnRequestModel.pageIndex = 0;
-      } else {
-        this.segmentPnRequestModel.pageIndex = Math.floor(e / this.segmentPnRequestModel.pageSize);
-      }
-      this.getAllSegments();
-    }
+  changePage(offset: number) {
+    this.segmentsStateService.changePage(offset);
+    this.getAllSegments();
+  }
+
+  onSegmentDeleted() {
+    this.segmentsStateService.onDelete();
+    this.getAllSegments();
+  }
+
+  onPageSizeChanged(pageSize: number) {
+    this.segmentsStateService.updatePageSize(pageSize);
+    this.getAllSegments();
   }
 }

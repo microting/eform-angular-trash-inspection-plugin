@@ -4,9 +4,11 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Abstractions
 {
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public interface ITrashInspectionService
     {
-        Task<OperationDataResult<TrashInspectionsModel>> Index(TrashInspectionRequestModel requestModel);
+        Task<OperationDataResult<Paged<TrashInspectionModel>>> Index(TrashInspectionRequestModel requestModel);
         Task<OperationResult> Create(TrashInspectionModel model);
         Task<OperationDataResult<TrashInspectionModel>> Read(int trashInspectionId);
         Task<OperationDataResult<TrashInspectionModel>> Read(string weighingNumber, string token);
