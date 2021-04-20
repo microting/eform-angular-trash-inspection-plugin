@@ -164,9 +164,6 @@ export class TrashInspectionInstallationPage extends Page {
     browser.pause(2000);
     let rowCount = this.rowNum;
     for (let i = 1; i <= rowCount; i++) {
-      if (i % 9 === 0 && this.rowNum > 0) {
-        rowCount += this.rowNum;
-      }
       const installationPageRowObject = new InstallationPageRowObject(1);
       installationPageRowObject.delete();
     }
