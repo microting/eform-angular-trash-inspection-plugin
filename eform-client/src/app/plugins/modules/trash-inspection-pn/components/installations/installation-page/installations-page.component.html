@@ -1,103 +1,92 @@
-<subheader-pn>
+<eform-subheader>
   <div class="p-3">
     <button
+      mdbBtn
       id="createInstallationBtn"
-      class="btn btn-success"
+      class="btn-success btn-small-height"
       mdbTooltip="{{ 'Create Installation' | translate }}"
-      (click)="showCreateInstallationModal()">{{ 'New Installation' | translate }}
+      (click)="showCreateInstallationModal()"
+    >
+      {{ 'New Installation' | translate }}
     </button>
   </div>
-</subheader-pn>
+</eform-subheader>
 
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
     <table class="table table-sm table-striped text-center z-depth-1">
-      <thead>
-      <tr>
-        <th scope="col" class="table-header-sortable" id="idTableHeader"
-            (click)="sortTable('id')">
-          <div class="d-flex align-items-center justify-content-center">
-            ID
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Id'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && !installationRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && installationRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="nameTableHeader"
-            (click)="sortTable('Name')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Name' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !installationRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && installationRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-
-        <th scope="col">
-          {{ 'Actions' | translate }}
-        </th>
-      </tr>
-      </thead>
-      <tbody id="tableBody">
-      <tr *ngFor="let installation of installationsModel.installationList">
-        <td id="installationId">
-          {{installation.id}}
-        </td>
-        <td id="installationName">
-          {{installation.name}}
-        </td>
-        <td>
-          <div class="d-flex flex-row justify-content-center">
-            <button id="updateInstallationBtn"
-              class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Installation' | translate }}"
-                    (click)="showEditInstallationModal(installation)">
-              <i class="material-icons">
-                edit
-              </i>
-            </button>
-            <button id="deleteInstallationBtn"
-              class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Installation' | translate }}"
-                    (click)="showDeleteInstallationModal(installation)">
-              <i class="material-icons">
-                delete_forever
-              </i>
-            </button>
-          </div>
-        </td>
-      </tr>
+      <thead
+        table-headers
+        [tableHeaders]="tableHeaders"
+        [currentSortName]="installationsStateService.getSort() | async"
+        (sortChanged)="sortTable($event)"
+        [isSortDsc]="installationsStateService.getIsSortDsc() | async"
+      ></thead>
+      <tbody id="installationsTableBody">
+        <tr *ngFor="let installation of installationsModel.installationList">
+          <td id="installationId">
+            {{ installation.id }}
+          </td>
+          <td id="installationName">
+            {{ installation.name }}
+          </td>
+          <td>
+            <div class="d-flex flex-row justify-content-center">
+              <button
+                id="updateInstallationBtn"
+                class="btn btn-accent text-black-50 btn-icon mb-2"
+                mdbTooltip="{{ 'Edit Installation' | translate }}"
+                (click)="showEditInstallationModal(installation)"
+              >
+                <fa-icon icon="pen" size="lg" [fixedWidth]="true"></fa-icon>
+              </button>
+              <button
+                id="deleteInstallationBtn"
+                class="btn btn-danger btn-icon mb-2"
+                mdbTooltip="{{ 'Delete Installation' | translate }}"
+                (click)="showDeleteInstallationModal(installation)"
+              >
+                <fa-icon
+                  icon="trash-alt"
+                  size="lg"
+                  [fixedWidth]="true"
+                ></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
   <div class="row justify-content-between mr-2 ml-2">
     <div class="col-md-1">
-      <page-size-pn
-        [pageSize]="localPageSettings.pageSize"
-        (onPageSizeChanged)="localPageSettings.pageSize = $event; installationRequestModel.pageIndex = 1;
-        updateLocalPageSettings()">
-      </page-size-pn>
+      <eform-page-size
+        [pageSize]="installationsStateService.getPageSize() | async"
+        (onPageSizeChanged)="onPageSizeChanged($event)"
+      >
+      </eform-page-size>
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
-      <pagination-pn *ngIf="installationsModel.total > installationRequestModel.pageSize"
-                     [limit]="installationRequestModel.pageSize"
-                     [size]="installationsModel.total"
-                     [offset]="installationRequestModel.offset"
-                     (onPageChanged)="changePage($event)"></pagination-pn>
+      <eform-pagination
+        [limit]="installationsStateService.getPageSize() | async"
+        [size]="installationsModel.total"
+        [offset]="installationsStateService.getOffset() | async"
+        (onPageChanged)="changePage($event)"
+      ></eform-pagination>
     </div>
   </div>
 </div>
 
-<app-trash-inspection-pn-installation-create #createInspectionModal
-                                             [mappingTrashInspections]="mappingTrashInspections"
-                                             (onInstallationCreated)="getAllInstallations()">
+<app-trash-inspection-pn-installation-create
+  #createInspectionModal
+  (onInstallationCreated)="getAllInstallations()"
+>
 </app-trash-inspection-pn-installation-create>
-<app-trash-inspection-pn-installation-edit #editInstallationModal
-
-                               (onInstallationUpdated)="getAllInstallations()"></app-trash-inspection-pn-installation-edit>
-<app-trash-inspection-pn-installation-delete #deleteInstallationModal
-                                     (onInstallationDeleted)="getAllInstallations()"></app-trash-inspection-pn-installation-delete>
+<app-trash-inspection-pn-installation-edit
+  #editInstallationModal
+  (onInstallationUpdated)="getAllInstallations()"
+></app-trash-inspection-pn-installation-edit>
+<app-trash-inspection-pn-installation-delete
+  #deleteInstallationModal
+  (onInstallationDeleted)="onInstallationDeleted()"
+></app-trash-inspection-pn-installation-delete>

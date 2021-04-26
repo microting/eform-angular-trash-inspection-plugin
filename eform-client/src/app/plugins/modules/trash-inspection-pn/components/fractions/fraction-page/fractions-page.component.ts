@@ -1,24 +1,20 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {PageSettingsModel} from 'src/app/common/models/settings';
-
-import {SharedPnService} from 'src/app/plugins/modules/shared/services';
-import {FractionPnModel, FractionPnRequestModel, FractionsPnModel} from '../../../models/fraction';
-import {TrashInspectionPnFractionsService} from '../../../services';
-import {PluginClaimsHelper} from '../../../../../../common/helpers';
-import {TrashInspectionPnClaims} from '../../../enums';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FractionPnModel } from '../../../models';
+import { PluginClaimsHelper } from 'src/app/common/helpers';
+import { TrashInspectionPnClaims } from '../../../enums';
+import { Paged, TableHeaderElementModel } from 'src/app/common/models';
+import { FractionsStateService } from '../state/fractions-state-service';
 
 @Component({
   selector: 'app-trash-inspection-pn-fractions-page',
   templateUrl: './fractions-page.component.html',
-  styleUrls: ['./fractions-page.component.scss']
+  styleUrls: ['./fractions-page.component.scss'],
 })
 export class FractionsPageComponent implements OnInit {
   @ViewChild('createFractionModal') createFractionModal;
   @ViewChild('editFractionModal') editFractionModal;
   @ViewChild('deleteFractionModal') deleteFractionModal;
-  localPageSettings: PageSettingsModel = new PageSettingsModel();
-  fractionsModel: FractionsPnModel = new FractionsPnModel();
-  fractionRequestModel: FractionPnRequestModel = new FractionPnRequestModel();
+  fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();
 
   get pluginClaimsHelper() {
     return PluginClaimsHelper;
@@ -28,23 +24,39 @@ export class FractionsPageComponent implements OnInit {
     return TrashInspectionPnClaims;
   }
 
-  constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnFractionsService: TrashInspectionPnFractionsService) { }
+  tableHeaders: TableHeaderElementModel[] = [
+    { name: 'Id', elementId: 'idTableHeader', sortable: true },
+    {
+      name: 'ItemNumber',
+      elementId: 'itemNumberTableHeader',
+      sortable: true,
+      visibleName: 'Item number',
+    },
+    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
+    {
+      name: 'Description',
+      elementId: 'descriptionTableHeader',
+      sortable: true,
+    },
+    {
+      name: 'LocationCode',
+      elementId: 'locationCodeTableHeader',
+      sortable: true,
+      visibleName: 'Location code',
+    },
+    {
+      name: 'eFormId',
+      elementId: 'eFormTableHeader',
+      sortable: true,
+      visibleName: 'eForm',
+    },
+    { name: 'Actions', elementId: '', sortable: false },
+  ];
+
+  constructor(public fractionsStateService: FractionsStateService) {}
 
   ngOnInit() {
-    this.getLocalPageSettings();
-  }
-
-  getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Fractions').settings;
     this.getAllInitialData();
-  }
-
-  updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'Fractions');
-    this.getAllFractions();
   }
 
   getAllInitialData() {
@@ -52,10 +64,7 @@ export class FractionsPageComponent implements OnInit {
   }
 
   getAllFractions() {
-    this.fractionRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.fractionRequestModel.sort = this.localPageSettings.sort;
-    this.fractionRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnFractionsService.getAllFractions(this.fractionRequestModel).subscribe((data) => {
+    this.fractionsStateService.getAllFractions().subscribe((data) => {
       if (data && data.success) {
         this.fractionsModel = data.model;
       }
@@ -72,26 +81,24 @@ export class FractionsPageComponent implements OnInit {
   showCreateFractionModal() {
     this.createFractionModal.show();
   }
+
   sortTable(sort: string) {
-    if (this.localPageSettings.sort === sort) {
-      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
-    } else {
-      this.localPageSettings.isSortDsc = false;
-      this.localPageSettings.sort = sort;
-    }
-    this.updateLocalPageSettings();
+    this.fractionsStateService.onSortTable(sort);
+    this.getAllFractions();
   }
 
-  changePage(e: any) {
-    if (e || e === 0) {
-      this.fractionRequestModel.offset = e;
-      if (e === 0) {
-        this.fractionRequestModel.pageIndex = 0;
-      } else {
-        this.fractionRequestModel.pageIndex
-          = Math.floor(e / this.fractionRequestModel.pageSize);
-      }
-      this.getAllFractions();
-    }
+  changePage(offset: number) {
+    this.fractionsStateService.changePage(offset);
+    this.getAllFractions();
+  }
+
+  onFractionDeleted() {
+    this.fractionsStateService.onDelete();
+    this.getAllFractions();
+  }
+
+  onPageSizeChanged(pageSize: number) {
+    this.fractionsStateService.updatePageSize(pageSize);
+    this.getAllFractions();
   }
 }

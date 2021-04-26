@@ -1,5 +1,4 @@
-import {SiteNameDto} from '../../../../../common/models/dto';
-import {DeployCheckbox} from '../../../../../common/models/eforms';
+import { DeployCheckbox, SiteNameDto } from 'src/app/common/models';
 
 export class InstallationsPnModel {
   total: number;

@@ -1,27 +1,35 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
-  InstallationPnModel, InstallationsPnModel,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {
+  InstallationsPnModel,
   TrashInspectionPnModel,
-  TrashInspectionPnUpdateModel
+  TrashInspectionPnUpdateModel,
 } from '../../../models';
-import {
-  TrashInspectionPnTrashInspectionsService
-} from '../../../services';
+import { TrashInspectionPnTrashInspectionsService } from '../../../services';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-edit',
   templateUrl: './trash-inspection-edit.component.html',
-  styleUrls: ['./trash-inspection-edit.component.scss']
+  styleUrls: ['./trash-inspection-edit.component.scss'],
 })
 export class TrashInspectionEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Input() mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
-  @Output() onTrashInspectionUpdated: EventEmitter<void> = new EventEmitter<void>();
+  @Input()
+  mappingInstallations: InstallationsPnModel = new InstallationsPnModel();
+  @Output()
+  onTrashInspectionUpdated: EventEmitter<void> = new EventEmitter<void>();
   selectedTrashInspectionModel: TrashInspectionPnModel = new TrashInspectionPnModel();
-  constructor(private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService) { }
+  constructor(
+    private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   show(trashInspectionModel: TrashInspectionPnModel) {
     this.getSelectedTrashInspection(trashInspectionModel.id);
@@ -29,37 +37,50 @@ export class TrashInspectionEditComponent implements OnInit {
   }
 
   getSelectedTrashInspection(id: number) {
-    this.trashInspectionPnTrashInspectionsService.getSingleTrashInspection(id).subscribe((data) => {
-      if (data && data.success) {
-        this.selectedTrashInspectionModel = data.model;
-      }
-    });
+    this.trashInspectionPnTrashInspectionsService
+      .getSingleTrashInspection(id)
+      .subscribe((data) => {
+        if (data && data.success) {
+          this.selectedTrashInspectionModel = data.model;
+        }
+      });
   }
 
   updateTrashInspection() {
-    this.trashInspectionPnTrashInspectionsService.updateTrashInspection(new TrashInspectionPnUpdateModel(this.selectedTrashInspectionModel))
+    this.trashInspectionPnTrashInspectionsService
+      .updateTrashInspection(
+        new TrashInspectionPnUpdateModel(this.selectedTrashInspectionModel)
+      )
       .subscribe((data) => {
-      if (data && data.success) {
-        this.onTrashInspectionUpdated.emit();
-        this.selectedTrashInspectionModel = new TrashInspectionPnModel();
-        this.frame.hide();
-      }
-    });
+        if (data && data.success) {
+          this.onTrashInspectionUpdated.emit();
+          this.selectedTrashInspectionModel = new TrashInspectionPnModel();
+          this.frame.hide();
+        }
+      });
   }
 
   addToEditMapping(e: any, installationId: number) {
     if (e.target.checked) {
       this.selectedTrashInspectionModel.relatedAreasIds.push(installationId);
     } else {
-      this.selectedTrashInspectionModel.relatedAreasIds = this.selectedTrashInspectionModel.relatedAreasIds
-        .filter(x => x !== installationId);
+      this.selectedTrashInspectionModel.relatedAreasIds = this.selectedTrashInspectionModel.relatedAreasIds.filter(
+        (x) => x !== installationId
+      );
     }
   }
 
   isChecked(installationId: number) {
-    if (this.selectedTrashInspectionModel.relatedAreasIds && this.selectedTrashInspectionModel.relatedAreasIds.length > 0) {
-      return this.selectedTrashInspectionModel.relatedAreasIds.findIndex(x => x === installationId) !== -1;
-    } return false;
+    if (
+      this.selectedTrashInspectionModel.relatedAreasIds &&
+      this.selectedTrashInspectionModel.relatedAreasIds.length > 0
+    ) {
+      return (
+        this.selectedTrashInspectionModel.relatedAreasIds.findIndex(
+          (x) => x === installationId
+        ) !== -1
+      );
+    }
+    return false;
   }
-
 }

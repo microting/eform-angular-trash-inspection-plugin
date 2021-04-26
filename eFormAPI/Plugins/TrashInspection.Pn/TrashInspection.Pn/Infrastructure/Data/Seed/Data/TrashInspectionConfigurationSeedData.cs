@@ -94,7 +94,7 @@ namespace TrashInspection.Pn.Infrastructure.Data.Seed.Data
             new PluginConfigurationValue
             {
                 Name = "TrashInspectionBaseSettings:UtcAdjustment",
-                Value = "0"
+                Value = "false"
             },
         };
     }
