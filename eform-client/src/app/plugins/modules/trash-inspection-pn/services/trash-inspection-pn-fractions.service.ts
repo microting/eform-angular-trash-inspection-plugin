@@ -1,14 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import {
   OperationDataResult,
   OperationResult,
 } from 'src/app/common/models/operation.models';
-import { BaseService } from 'src/app/common/services/base.service';
 import {
   FractionPnImportModel,
   FractionPnModel,
@@ -19,6 +14,7 @@ import {
   StatByMonthPnModel,
 } from '../models';
 import { Paged } from 'src/app/common/models';
+import { ApiBaseService } from 'src/app/common/services';
 
 export let TrashInspectionPnFractionMethods = {
   Fractions: 'api/trash-inspection-pn/fractions',
@@ -29,25 +25,22 @@ export let TrashInspectionPnFractionMethods = {
 @Injectable({
   providedIn: 'root',
 })
-export class TrashInspectionPnFractionsService extends BaseService {
-  constructor(
-    private _http: HttpClient,
-    router: Router,
-    toastrService: ToastrService
-  ) {
-    super(_http, router, toastrService);
-  }
+export class TrashInspectionPnFractionsService {
+  constructor(private apiBaseService: ApiBaseService) {}
 
   getAllFractions(
     model: FractionPnRequestModel
   ): Observable<OperationDataResult<Paged<FractionPnModel>>> {
-    return this.post(TrashInspectionPnFractionMethods.FractionsIndex, model);
+    return this.apiBaseService.post(
+      TrashInspectionPnFractionMethods.FractionsIndex,
+      model
+    );
   }
 
   getSingleFraction(
     fractionId: number
   ): Observable<OperationDataResult<FractionPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnFractionMethods.Fractions + '/' + fractionId
     );
   }
@@ -56,32 +49,41 @@ export class TrashInspectionPnFractionsService extends BaseService {
     fractionId: number,
     year: number
   ): Observable<OperationDataResult<StatByMonthPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnFractionMethods.Fractions + '/' + fractionId + '/' + year
     );
   }
 
   updateFraction(model: FractionPnUpdateModel): Observable<OperationResult> {
-    return this.put(TrashInspectionPnFractionMethods.Fractions, model);
+    return this.apiBaseService.put(
+      TrashInspectionPnFractionMethods.Fractions,
+      model
+    );
   }
 
   createFraction(model: FractionPnModel): Observable<OperationResult> {
-    return this.post(TrashInspectionPnFractionMethods.Fractions, model);
+    return this.apiBaseService.post(
+      TrashInspectionPnFractionMethods.Fractions,
+      model
+    );
   }
 
   deleteFraction(fractionId: number): Observable<OperationResult> {
-    return this.delete(
+    return this.apiBaseService.delete(
       TrashInspectionPnFractionMethods.Fractions + '/' + fractionId
     );
   }
   importFraction(model: FractionPnImportModel): Observable<OperationResult> {
-    return this.post(TrashInspectionPnFractionMethods.FractionsImport, model);
+    return this.apiBaseService.post(
+      TrashInspectionPnFractionMethods.FractionsImport,
+      model
+    );
   }
 
   getAllFractionsStatsByYear(
     model: FractionPnYearRequestModel
   ): Observable<OperationDataResult<Paged<FractionPnStatsByYearModel>>> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnFractionMethods.FractionsStatsByYear,
       model
     );

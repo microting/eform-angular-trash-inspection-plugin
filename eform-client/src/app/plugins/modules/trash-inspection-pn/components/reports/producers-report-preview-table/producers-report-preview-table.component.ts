@@ -10,7 +10,7 @@ import {
 
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
 import { ProducerPnStatsByYearModel } from '../../../models/producer';
-import { ProducersReportPreviewTableStateService } from './state/producers-report-preview-table-state-service';
+import { ProducersReportPreviewTableStateService } from './store/producers-report-preview-table-state-service';
 
 @Component({
   selector: 'app-producers-report-preview-table',

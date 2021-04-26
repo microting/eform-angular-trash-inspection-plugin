@@ -52,7 +52,6 @@ export class TrashInspectionSettingsComponent implements OnInit {
   }
 
   getSettings() {
-    debugger;
     this.trashInspectionPnSettingsService.getAllSettings().subscribe((data) => {
       if (data && data.success) {
         this.settingsModel = data.model;

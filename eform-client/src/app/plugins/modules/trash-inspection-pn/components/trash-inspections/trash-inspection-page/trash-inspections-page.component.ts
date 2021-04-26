@@ -4,11 +4,11 @@ import {
   TrashInspectionPnSettingsService,
   TrashInspectionPnTrashInspectionsService,
 } from '../../../services';
-import { AuthService } from 'src/app/common/services';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { TrashInspectionsStateService } from '../state/trash-inspections-state-service';
+import { TrashInspectionsStateService } from '../store/trash-inspections-state-service';
+import { AuthStateService } from 'src/app/common/store';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
@@ -102,8 +102,8 @@ export class TrashInspectionsPageComponent implements OnInit {
   constructor(
     private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
     private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
-    private authService: AuthService,
-    public trashInspectionsStateService: TrashInspectionsStateService
+    public trashInspectionsStateService: TrashInspectionsStateService,
+    private authStateService: AuthStateService
   ) {
     this.searchSubject.pipe(debounceTime(500)).subscribe((val: string) => {
       this.trashInspectionsStateService.updateNameFilter(val);
@@ -112,7 +112,7 @@ export class TrashInspectionsPageComponent implements OnInit {
   }
 
   get currentRole(): string {
-    return this.authService.currentRole;
+    return this.authStateService.currentRole;
   }
 
   ngOnInit() {

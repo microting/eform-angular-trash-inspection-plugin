@@ -1,24 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AdminGuard, PermissionGuard } from 'src/app/common/guards';
-import { TrashInspectionPnLayoutComponent } from './layouts';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AdminGuard, PermissionGuard} from 'src/app/common/guards';
+import {TrashInspectionPnLayoutComponent} from './layouts';
 import {
   FractionsPageComponent,
   FractionsPnImportComponent,
   InstallationsPageComponent,
   ProducerImportComponent,
+  ProducerPageComponent,
   ReportPreviewTableContainerComponent,
+  SegmentsPageComponent,
   TransporterImportComponent,
   TransporterPageComponent,
   TrashInspectionSettingsComponent,
-  ProducerPageComponent,
   TrashInspectionsPageComponent,
-  SegmentsPageComponent,
 } from './components';
-import {} from './components/segments';
-import {} from './components/producers';
-import {} from './components/transporters';
-import { TrashInspectionPnClaims } from './enums';
+import {TrashInspectionPnClaims} from './enums';
 
 export const routes: Routes = [
   {

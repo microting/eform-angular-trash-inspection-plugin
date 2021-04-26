@@ -5,12 +5,11 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { SiteNameDto } from '../../../../../../common/models/dto';
-import { DeployModel } from '../../../../../../common/models/eforms';
-import { SitesService } from '../../../../../../common/services/advanced';
-import { AuthService } from '../../../../../../common/services/auth';
-import { SegmentPnModel } from '../../../models/segment';
-import { TrashInspectionPnSegmentsService } from '../../../services/trash-inspection-pn-segments.service';
+import { SiteNameDto, DeployModel } from 'src/app/common/models';
+import { SegmentPnModel } from '../../../models';
+import { TrashInspectionPnSegmentsService } from '../../../services';
+import { AuthStateService } from 'src/app/common/store';
+import { SitesService } from 'src/app/common/services';
 
 @Component({
   selector: 'app-trash-inspection-pn-segment-create',
@@ -26,12 +25,13 @@ export class SegmentCreateComponent implements OnInit {
   deployViewModel: DeployModel = new DeployModel();
 
   get userClaims() {
-    return this.authService.userClaims;
+    return this.authStateService.currentUserClaims;
   }
+
   constructor(
     private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
     private sitesService: SitesService,
-    private authService: AuthService
+    private authStateService: AuthStateService
   ) {}
 
   ngOnInit() {
@@ -42,7 +42,6 @@ export class SegmentCreateComponent implements OnInit {
     this.trashInspectionPnSegmentsService
       .createSegment(this.segmentPnModel)
       .subscribe((data) => {
-        debugger;
         if (data && data.success) {
           this.onSegmentCreated.emit();
           this.segmentPnModel = new SegmentPnModel();

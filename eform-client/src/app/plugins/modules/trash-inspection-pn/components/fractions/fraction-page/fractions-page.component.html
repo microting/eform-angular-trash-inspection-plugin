@@ -2,7 +2,9 @@
   <div class="p-3">
     <button
       mdbBtn
-      *ngIf="pluginClaimsHelper.check(trashInspectionPnClaims.createFraction)"
+      *ngIf="
+        authStateService.checkClaim(trashInspectionPnClaims.createFraction)
+      "
       id="fractionCreateBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Fraction' | translate }}"

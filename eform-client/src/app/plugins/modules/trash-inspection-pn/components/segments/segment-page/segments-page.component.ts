@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { SegmentPnModel, SegmentsPnModel } from '../../../models/segment';
-import { SegmentsStateService } from 'src/app/plugins/modules/trash-inspection-pn/components/segments/state/segments-state-service';
+import { SegmentsStateService } from '../../../components/segments/store/segments-state-service';
 import { TableHeaderElementModel } from 'src/app/common/models';
 
 @Component({

@@ -24,11 +24,11 @@ export class TrashInspectionsStateService {
   > {
     return this.service
       .getAllTrashInspections({
-        isSortDsc: this.query.pageSetting.isSortDsc,
-        offset: this.query.pageSetting.offset,
-        pageSize: this.query.pageSetting.pageSize,
-        sort: this.query.pageSetting.sort,
-        nameFilter: this.query.pageSetting.nameFilter,
+        isSortDsc: this.query.pageSetting.pagination.isSortDsc,
+        offset: this.query.pageSetting.pagination.offset,
+        pageSize: this.query.pageSetting.pagination.pageSize,
+        sort: this.query.pageSetting.pagination.sort,
+        nameFilter: this.query.pageSetting.pagination.nameFilter,
         pageIndex: 0,
       })
       .pipe(
@@ -42,11 +42,22 @@ export class TrashInspectionsStateService {
   }
 
   updateNameFilter(nameFilter: string) {
-    this.store.update({ nameFilter: nameFilter, offset: 0 });
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        nameFilter: nameFilter,
+        offset: 0,
+      },
+    }));
   }
 
   updatePageSize(pageSize: number) {
-    this.store.update({ pageSize: pageSize });
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        pageSize: pageSize,
+      },
+    }));
     this.checkOffset();
   }
 
@@ -71,9 +82,12 @@ export class TrashInspectionsStateService {
   }
 
   changePage(offset: number) {
-    this.store.update({
-      offset: offset,
-    });
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        offset: offset,
+      },
+    }));
   }
 
   onDelete() {
@@ -84,25 +98,31 @@ export class TrashInspectionsStateService {
   onSortTable(sort: string) {
     const localPageSettings = updateTableSort(
       sort,
-      this.query.pageSetting.sort,
-      this.query.pageSetting.isSortDsc
+      this.query.pageSetting.pagination.sort,
+      this.query.pageSetting.pagination.isSortDsc
     );
-    this.store.update({
-      isSortDsc: localPageSettings.isSortDsc,
-      sort: localPageSettings.sort,
-    });
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        isSortDsc: localPageSettings.isSortDsc,
+        sort: localPageSettings.sort,
+      },
+    }));
   }
 
   checkOffset() {
     const newOffset = getOffset(
-      this.query.pageSetting.pageSize,
-      this.query.pageSetting.offset,
+      this.query.pageSetting.pagination.pageSize,
+      this.query.pageSetting.pagination.offset,
       this.total
     );
-    if (newOffset !== this.query.pageSetting.offset) {
-      this.store.update({
-        offset: newOffset,
-      });
+    if (newOffset !== this.query.pageSetting.pagination.offset) {
+      this.store.update((state) => ({
+        pagination: {
+          ...state.pagination,
+          offset: newOffset,
+        },
+      }));
     }
   }
 }

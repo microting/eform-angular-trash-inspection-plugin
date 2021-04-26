@@ -57,6 +57,7 @@ import {
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { trashInspectionStoreProviders } from './store-providers.config';
 
 @NgModule({
   imports: [
@@ -118,6 +119,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
     TrashInspectionPnProducersService,
     TrashInspectionsStateService,
     InstallationsStateService,
+    ...trashInspectionStoreProviders,
   ],
 })
 export class TrashInspectionPnModule {}
