@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.0.150](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.150) (2021-04-26)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.149...v2.0.150)
+
 ## [v2.0.149](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.149) (2021-04-26)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.148...v2.0.149)
