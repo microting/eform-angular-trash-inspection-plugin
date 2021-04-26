@@ -4,41 +4,36 @@ import {
   OperationDataResult,
   OperationResult,
 } from '../../../../common/models';
-import { BaseService } from '../../../../common/services/base.service';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { TrashInspectionBaseSettingsModel } from '../models/trash-inspection-base-settings.model';
+import { TrashInspectionBaseSettingsModel } from '../models';
+import { ApiBaseService } from 'src/app/common/services';
 
 export let TrashInspectionSettingsMethods = {
   TrashInspectionSettings: 'api/trash-inspection-pn/settings',
   TrashInspectionToken: 'api/trash-inspection-pn/token',
 };
 @Injectable()
-export class TrashInspectionPnSettingsService extends BaseService {
-  constructor(
-    private _http: HttpClient,
-    router: Router,
-    toastrService: ToastrService
-  ) {
-    super(_http, router, toastrService);
-  }
+export class TrashInspectionPnSettingsService {
+  constructor(private apiBaseService: ApiBaseService) {}
 
   getAllSettings(): Observable<
     OperationDataResult<TrashInspectionBaseSettingsModel>
   > {
-    return this.get(TrashInspectionSettingsMethods.TrashInspectionSettings);
+    return this.apiBaseService.get(
+      TrashInspectionSettingsMethods.TrashInspectionSettings
+    );
   }
   updateSettings(
     model: TrashInspectionBaseSettingsModel
   ): Observable<OperationResult> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionSettingsMethods.TrashInspectionSettings,
       model
     );
   }
 
   getToken(): Observable<OperationDataResult<string>> {
-    return this.get(TrashInspectionSettingsMethods.TrashInspectionToken);
+    return this.apiBaseService.get(
+      TrashInspectionSettingsMethods.TrashInspectionToken
+    );
   }
 }

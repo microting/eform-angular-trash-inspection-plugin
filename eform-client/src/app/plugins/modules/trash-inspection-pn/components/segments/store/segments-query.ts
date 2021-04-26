@@ -12,8 +12,8 @@ export class SegmentsQuery extends Query<SegmentsState> {
     return this.getValue();
   }
 
-  selectPageSize$ = this.select('pageSize');
-  selectIsSortDsc$ = this.select('isSortDsc');
-  selectSort$ = this.select('sort');
-  selectOffset$ = this.select('offset');
+  selectPageSize$ = this.select((state) => state.pagination.pageSize);
+  selectIsSortDsc$ = this.select((state) => state.pagination.isSortDsc);
+  selectSort$ = this.select((state) => state.pagination.sort);
+  selectOffset$ = this.select((state) => state.pagination.offset);
 }

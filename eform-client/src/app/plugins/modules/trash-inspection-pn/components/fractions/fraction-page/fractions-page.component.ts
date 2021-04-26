@@ -3,7 +3,8 @@ import { FractionPnModel } from '../../../models';
 import { PluginClaimsHelper } from 'src/app/common/helpers';
 import { TrashInspectionPnClaims } from '../../../enums';
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { FractionsStateService } from '../state/fractions-state-service';
+import { FractionsStateService } from '../store/fractions-state-service';
+import { AuthStateService } from 'src/app/common/store';
 
 @Component({
   selector: 'app-trash-inspection-pn-fractions-page',
@@ -15,10 +16,6 @@ export class FractionsPageComponent implements OnInit {
   @ViewChild('editFractionModal') editFractionModal;
   @ViewChild('deleteFractionModal') deleteFractionModal;
   fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();
-
-  get pluginClaimsHelper() {
-    return PluginClaimsHelper;
-  }
 
   get trashInspectionPnClaims() {
     return TrashInspectionPnClaims;
@@ -53,7 +50,10 @@ export class FractionsPageComponent implements OnInit {
     { name: 'Actions', elementId: '', sortable: false },
   ];
 
-  constructor(public fractionsStateService: FractionsStateService) {}
+  constructor(
+    public fractionsStateService: FractionsStateService,
+    public authStateService: AuthStateService
+  ) {}
 
   ngOnInit() {
     this.getAllInitialData();

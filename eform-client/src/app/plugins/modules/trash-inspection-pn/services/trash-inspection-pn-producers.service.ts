@@ -1,14 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import {
   OperationDataResult,
   OperationResult,
 } from 'src/app/common/models/operation.models';
-import { BaseService } from 'src/app/common/services/base.service';
 import {
   ProducerPnImportModel,
   ProducerPnModel,
@@ -17,9 +12,10 @@ import {
   ProducerPnUpdateModel,
   ProducerPnYearRequestModel,
   ProducersPnModel,
-} from '../models/producer';
-import { StatByMonthPnModel } from '../models/transporter/stat-by-month-pn-model';
+  StatByMonthPnModel,
+} from '../models';
 import { Paged } from 'src/app/common/models';
+import { ApiBaseService } from 'src/app/common/services';
 
 export let TrashInspectionPnProducerMethods = {
   Producers: 'api/trash-inspection-pn/producers',
@@ -28,24 +24,21 @@ export let TrashInspectionPnProducerMethods = {
 @Injectable({
   providedIn: 'root',
 })
-export class TrashInspectionPnProducersService extends BaseService {
-  constructor(
-    private _http: HttpClient,
-    router: Router,
-    toastrService: ToastrService
-  ) {
-    super(_http, router, toastrService);
-  }
+export class TrashInspectionPnProducersService {
+  constructor(private apiBaseService: ApiBaseService) {}
   getAllProducers(
     model: ProducerPnRequestModel
   ): Observable<OperationDataResult<ProducersPnModel>> {
-    return this.get(TrashInspectionPnProducerMethods.Producers, model);
+    return this.apiBaseService.get(
+      TrashInspectionPnProducerMethods.Producers,
+      model
+    );
   }
 
   getSingleProducer(
     producerId: number
   ): Observable<OperationDataResult<ProducerPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnProducerMethods.Producers + '/' + producerId
     );
   }
@@ -54,26 +47,32 @@ export class TrashInspectionPnProducersService extends BaseService {
     producerId: number,
     year: number
   ): Observable<OperationDataResult<StatByMonthPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnProducerMethods.Producers + '/' + producerId + '/' + year
     );
   }
 
   updateProducer(model: ProducerPnUpdateModel): Observable<OperationResult> {
-    return this.put(TrashInspectionPnProducerMethods.Producers, model);
+    return this.apiBaseService.put(
+      TrashInspectionPnProducerMethods.Producers,
+      model
+    );
   }
 
   createProducer(model: ProducerPnModel): Observable<OperationResult> {
-    return this.post(TrashInspectionPnProducerMethods.Producers, model);
+    return this.apiBaseService.post(
+      TrashInspectionPnProducerMethods.Producers,
+      model
+    );
   }
 
   deleteProducer(producerId: number): Observable<OperationResult> {
-    return this.delete(
+    return this.apiBaseService.delete(
       TrashInspectionPnProducerMethods.Producers + '/' + producerId
     );
   }
   importProducer(model: ProducerPnImportModel): Observable<OperationResult> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnProducerMethods.Producers + '/import',
       model
     );
@@ -82,7 +81,7 @@ export class TrashInspectionPnProducersService extends BaseService {
   getAllProducersStatsByYear(
     model: ProducerPnYearRequestModel
   ): Observable<OperationDataResult<Paged<ProducerPnStatsByYearModel>>> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnProducerMethods.ProducersStatsByYear,
       model
     );

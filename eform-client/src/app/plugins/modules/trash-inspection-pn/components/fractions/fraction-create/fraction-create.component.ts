@@ -8,16 +8,14 @@ import {
 } from '@angular/core';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { TrashInspectionPnFractionsService } from '../../../services';
-import { SiteNameDto } from '../../../../../../common/models/dto';
-import { DeployModel } from '../../../../../../common/models/eforms';
-import { EFormService } from '../../../../../../common/services/eform';
-import { SitesService } from '../../../../../../common/services/advanced';
-import { AuthService } from '../../../../../../common/services/auth';
-import { FractionPnModel } from '../../../models/fraction';
+import { SiteNameDto, DeployModel } from 'src/app/common/models';
+import { SitesService, EFormService } from 'src/app/common/services';
+import { FractionPnModel } from '../../../models';
 import {
   TemplateListModel,
   TemplateRequestModel,
 } from 'src/app/common/models/eforms';
+import { AuthStateService } from 'src/app/common/store';
 
 @Component({
   selector: 'app-trash-inspection-pn-fraction-create',
@@ -37,12 +35,13 @@ export class FractionCreateComponent implements OnInit {
   typeahead = new EventEmitter<string>();
 
   get userClaims() {
-    return this.authService.userClaims;
+    return this.authStateService.currentUserClaims;
   }
+
   constructor(
     private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
     private sitesService: SitesService,
-    private authService: AuthService,
+    private authStateService: AuthStateService,
     private eFormService: EFormService,
     private cd: ChangeDetectorRef
   ) {
@@ -65,11 +64,9 @@ export class FractionCreateComponent implements OnInit {
   }
 
   createInstallation() {
-    // debugger;
     this.trashInspectionPnFractionsService
       .createFraction(this.newFractionModel)
       .subscribe((data) => {
-        // debugger;
         if (data && data.success) {
           this.onFractionCreated.emit();
           // this.submitDeployment();
@@ -96,7 +93,6 @@ export class FractionCreateComponent implements OnInit {
   }
 
   onSelectedChanged(e: any) {
-    // debugger;
     this.newFractionModel.eFormId = e.id;
   }
   // submitDeployment() {

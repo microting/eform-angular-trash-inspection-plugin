@@ -16,6 +16,7 @@ import {
   TrashInspectionVersionsPnModel,
 } from '../models';
 import { Paged } from 'src/app/common/models';
+import { ApiBaseService } from 'src/app/common/services';
 
 export let TrashInspectionPnTrashInspectionMethods = {
   TrashInspectionsIndex: 'api/trash-inspection-pn/inspections/index',
@@ -24,19 +25,13 @@ export let TrashInspectionPnTrashInspectionMethods = {
 };
 
 @Injectable()
-export class TrashInspectionPnTrashInspectionsService extends BaseService {
-  constructor(
-    private _http: HttpClient,
-    router: Router,
-    toastrService: ToastrService
-  ) {
-    super(_http, router, toastrService);
-  }
+export class TrashInspectionPnTrashInspectionsService {
+  constructor(private apiBaseService: ApiBaseService) {}
 
   getAllTrashInspections(
     model: TrashInspectionsPnRequestModel
   ): Observable<OperationDataResult<Paged<TrashInspectionPnModel>>> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnTrashInspectionMethods.TrashInspectionsIndex,
       model
     );
@@ -45,7 +40,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
   getSingleTrashInspection(
     trashInspectionId: number
   ): Observable<OperationDataResult<TrashInspectionPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnTrashInspectionMethods.TrashInspections +
         '/' +
         trashInspectionId
@@ -55,7 +50,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
   getTrashInspectionVersions(
     trashInspectionId: number
   ): Observable<OperationDataResult<TrashInspectionVersionsPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnTrashInspectionMethods.TrashInspectionVersions +
         '/' +
         trashInspectionId
@@ -64,7 +59,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
   updateTrashInspection(
     model: TrashInspectionPnUpdateModel
   ): Observable<OperationResult> {
-    return this.put(
+    return this.apiBaseService.put(
       TrashInspectionPnTrashInspectionMethods.TrashInspections,
       model
     );
@@ -73,7 +68,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
   createTrashInspection(
     model: TrashInspectionPnModel
   ): Observable<OperationResult> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnTrashInspectionMethods.TrashInspections,
       model
     );
@@ -82,7 +77,7 @@ export class TrashInspectionPnTrashInspectionsService extends BaseService {
   deleteTrashInspection(
     trashInspectionId: number
   ): Observable<OperationResult> {
-    return this.delete(
+    return this.apiBaseService.delete(
       TrashInspectionPnTrashInspectionMethods.TrashInspections +
         '/' +
         trashInspectionId

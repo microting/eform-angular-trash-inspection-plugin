@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
 import { FractionPnStatsByYearModel } from '../../../models';
-import { FractionsReportPreviewTableStateService } from './state/fractions-report-preview-table-state-service';
+import { FractionsReportPreviewTableStateService } from './store/fractions-report-preview-table-state-service';
 
 @Component({
   selector: 'app-fractions-report-preview-table',

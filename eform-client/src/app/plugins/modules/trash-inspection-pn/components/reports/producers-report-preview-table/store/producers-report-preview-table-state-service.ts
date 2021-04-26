@@ -21,8 +21,8 @@ export class ProducersReportPreviewTableStateService {
     OperationDataResult<Paged<ProducerPnStatsByYearModel>>
   > {
     return this.service.getAllProducersStatsByYear({
-      isSortDsc: this.query.pageSetting.isSortDsc,
-      sort: this.query.pageSetting.sort,
+      isSortDsc: this.query.pageSetting.pagination.isSortDsc,
+      sort: this.query.pageSetting.pagination.sort,
       year: this.year,
     });
   }
@@ -42,12 +42,15 @@ export class ProducersReportPreviewTableStateService {
   onSortTable(sort: string) {
     const localPageSettings = updateTableSort(
       sort,
-      this.query.pageSetting.sort,
-      this.query.pageSetting.isSortDsc
+      this.query.pageSetting.pagination.sort,
+      this.query.pageSetting.pagination.isSortDsc
     );
-    this.store.update({
-      isSortDsc: localPageSettings.isSortDsc,
-      sort: localPageSettings.sort,
-    });
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        isSortDsc: localPageSettings.isSortDsc,
+        sort: localPageSettings.sort,
+      },
+    }));
   }
 }

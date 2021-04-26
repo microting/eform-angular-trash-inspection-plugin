@@ -15,6 +15,6 @@ export class FractionsReportPreviewTableQuery extends Query<FractionsReportPrevi
     return this.getValue();
   }
 
-  selectIsSortDsc$ = this.select('isSortDsc');
-  selectSort$ = this.select('sort');
+  selectIsSortDsc$ = this.select((state) => state.pagination.isSortDsc);
+  selectSort$ = this.select((state) => state.pagination.sort);
 }

@@ -1,15 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import {
   OperationDataResult,
   OperationResult,
 } from 'src/app/common/models/operation.models';
-import { BaseService } from 'src/app/common/services/base.service';
-
 import {
   TransporterPnImportModel,
   TransporterPnModel,
@@ -18,9 +12,10 @@ import {
   TransporterPnUpdateModel,
   TransportersPnModel,
   TransporterYearPnRequestModel,
-} from '../models/transporter';
-import { StatByMonthPnModel } from '../models/transporter/stat-by-month-pn-model';
+  StatByMonthPnModel,
+} from '../models';
 import { Paged } from 'src/app/common/models';
+import { ApiBaseService } from 'src/app/common/services';
 
 export let TrashInspectionPnTransporterMethods = {
   Transporter: 'api/trash-inspection-pn/transporters',
@@ -30,24 +25,22 @@ export let TrashInspectionPnTransporterMethods = {
 @Injectable({
   providedIn: 'root',
 })
-export class TrashInspectionPnTransporterService extends BaseService {
-  constructor(
-    private _http: HttpClient,
-    router: Router,
-    toastrService: ToastrService
-  ) {
-    super(_http, router, toastrService);
-  }
+export class TrashInspectionPnTransporterService {
+  constructor(private apiBaseService: ApiBaseService) {}
+
   getAllTransporters(
     model: TransporterPnRequestModel
   ): Observable<OperationDataResult<TransportersPnModel>> {
-    return this.get(TrashInspectionPnTransporterMethods.Transporter, model);
+    return this.apiBaseService.get(
+      TrashInspectionPnTransporterMethods.Transporter,
+      model
+    );
   }
 
   getSingleTransporter(
     transporterId: number
   ): Observable<OperationDataResult<TransporterPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnTransporterMethods.Transporter + '/' + transporterId
     );
   }
@@ -56,7 +49,7 @@ export class TrashInspectionPnTransporterService extends BaseService {
     transporterId: number,
     year: number
   ): Observable<OperationDataResult<StatByMonthPnModel>> {
-    return this.get(
+    return this.apiBaseService.get(
       TrashInspectionPnTransporterMethods.Transporter +
         '/' +
         transporterId +
@@ -68,22 +61,28 @@ export class TrashInspectionPnTransporterService extends BaseService {
   updateTransporter(
     model: TransporterPnUpdateModel
   ): Observable<OperationResult> {
-    return this.put(TrashInspectionPnTransporterMethods.Transporter, model);
+    return this.apiBaseService.put(
+      TrashInspectionPnTransporterMethods.Transporter,
+      model
+    );
   }
 
   createTransporter(model: TransporterPnModel): Observable<OperationResult> {
-    return this.post(TrashInspectionPnTransporterMethods.Transporter, model);
+    return this.apiBaseService.post(
+      TrashInspectionPnTransporterMethods.Transporter,
+      model
+    );
   }
 
   deleteTransporter(transporterId: number): Observable<OperationResult> {
-    return this.delete(
+    return this.apiBaseService.delete(
       TrashInspectionPnTransporterMethods.Transporter + '/' + transporterId
     );
   }
   importTransporter(
     model: TransporterPnImportModel
   ): Observable<OperationResult> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnTransporterMethods.Transporter + '/import',
       model
     );
@@ -91,7 +90,7 @@ export class TrashInspectionPnTransporterService extends BaseService {
   getAllTransportersByYear(
     model: TransporterYearPnRequestModel
   ): Observable<OperationDataResult<Paged<TransporterPnStatsByYearModel>>> {
-    return this.post(
+    return this.apiBaseService.post(
       TrashInspectionPnTransporterMethods.ProducersStatsByYear,
       model
     );
