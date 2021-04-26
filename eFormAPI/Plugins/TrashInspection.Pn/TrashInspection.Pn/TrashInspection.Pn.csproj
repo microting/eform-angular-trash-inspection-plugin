@@ -24,10 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microting.eForm" Version="4.4.37" />
-    <PackageReference Include="Microting.eFormApi.BasePn" Version="2.0.128" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="2.0.48" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.14" />
+    <PackageReference Include="Microting.eForm" Version="4.5.1" />
+    <PackageReference Include="Microting.eFormApi.BasePn" Version="2.1.1" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="2.1.2" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
     <PackageReference Include="Rebus.RabbitMQ" Version="7.3.0" />
   </ItemGroup>
