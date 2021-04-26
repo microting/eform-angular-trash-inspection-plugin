@@ -1,14 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {SharedPnService} from '../../../../shared/services';
-import {TrashInspectionPnProducersService} from '../../../services';
-import {PageSettingsModel} from '../../../../../../common/models/settings';
-import {ProducerPnModel, ProducerPnRequestModel, ProducersPnModel} from '../../../models/producer';
-import {TransporterPnModel} from '../../../models/transporter';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SharedPnService } from '../../../../shared/services';
+import { TrashInspectionPnProducersService } from '../../../services';
+import { PageSettingsModel } from '../../../../../../common/models/settings';
+import {
+  ProducerPnModel,
+  ProducerPnRequestModel,
+  ProducersPnModel,
+} from '../../../models/producer';
 
 @Component({
   selector: 'app-producer-page',
   templateUrl: './producer-page.component.html',
-  styleUrls: ['./producer-page.component.scss']
+  styleUrls: ['./producer-page.component.scss'],
 })
 export class ProducerPageComponent implements OnInit {
   @ViewChild('createProducerModal') createProducerModal;
@@ -18,21 +21,28 @@ export class ProducerPageComponent implements OnInit {
   producersModel: ProducersPnModel = new ProducersPnModel();
   producersRequestModel: ProducerPnRequestModel = new ProducerPnRequestModel();
 
-  constructor(private sharedPnService: SharedPnService,
-              private trashInspectionPnProducerService: TrashInspectionPnProducersService) { }
+  constructor(
+    private sharedPnService: SharedPnService,
+    private trashInspectionPnProducerService: TrashInspectionPnProducersService
+  ) {}
 
   ngOnInit() {
     this.getLocalPageSettings();
   }
 
   getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings
-    ('trashInspectionsPnSettings', 'Producers').settings;
+    this.localPageSettings = this.sharedPnService.getLocalPageSettings(
+      'trashInspectionsPnSettings',
+      'Producers'
+    ).settings;
     this.getAllInitialData();
   }
   updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings
-    ('trashInspectionsPnSettings', this.localPageSettings, 'Producers');
+    this.sharedPnService.updateLocalPageSettings(
+      'trashInspectionsPnSettings',
+      this.localPageSettings,
+      'Producers'
+    );
     this.getAllProducers();
   }
   getAllInitialData() {
@@ -43,11 +53,13 @@ export class ProducerPageComponent implements OnInit {
     this.producersRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
     this.producersRequestModel.sort = this.localPageSettings.sort;
     this.producersRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnProducerService.getAllProducers(this.producersRequestModel).subscribe((data) => {
-      if (data && data.success) {
-        this.producersModel = data.model;
-      }
-    });
+    this.trashInspectionPnProducerService
+      .getAllProducers(this.producersRequestModel)
+      .subscribe((data) => {
+        if (data && data.success) {
+          this.producersModel = data.model;
+        }
+      });
   }
   showCreateProducerModal() {
     this.createProducerModal.show();
@@ -74,8 +86,9 @@ export class ProducerPageComponent implements OnInit {
       if (e === 0) {
         this.producersRequestModel.pageIndex = 0;
       } else {
-        this.producersRequestModel.pageIndex
-          = Math.floor(e / this.producersRequestModel.pageSize);
+        this.producersRequestModel.pageIndex = Math.floor(
+          e / this.producersRequestModel.pageSize
+        );
       }
       this.getAllProducers();
     }

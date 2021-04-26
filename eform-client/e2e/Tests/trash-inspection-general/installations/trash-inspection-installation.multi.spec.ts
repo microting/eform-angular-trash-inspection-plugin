@@ -1,74 +1,22 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
-import {Guid} from 'guid-typescript';
+import { generateRandmString } from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Installation', function () {
   before(function () {
     loginPage.open('/auth');
     loginPage.login();
+    installationPage.goToInstallationsPage();
+    installationPage.clearTable();
   });
   it('Should create multiple installations without site.', function () {
-    installationPage.goToInstallationsPage();
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    installationPage.createInstallation_DoesntAddSite(Guid.create().toString());
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    console.log('installationPage.page2Object is ' + installationPage.page2Object.getText());
+    for (let i = 0; i < 11; i++) {
+      installationPage.createInstallation(generateRandmString());
+    }
     expect(installationPage.page2Object.getText()).equal('2');
-    expect(installationPage.rowNum).equal(10);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(10);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    console.log('installationPage.page2Object is ' + installationPage.page2Object);
-    installationPage.page2Object.waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(9);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(8);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(7);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(6);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(5);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(4);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(3);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(2);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(1);
-    installationPage.deleteInstallation_Deletes();
-    $('#spinner-animation').waitForDisplayed({timeout: 50000, reverse: true});
-    expect(installationPage.rowNum).equal(0);
+  });
+  after(function () {
+    installationPage.clearTable();
   });
 });

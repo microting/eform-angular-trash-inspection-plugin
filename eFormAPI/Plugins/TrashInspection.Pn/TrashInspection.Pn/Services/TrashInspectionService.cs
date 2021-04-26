@@ -29,17 +29,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using eFormCore;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microting.eForm.Dto;
-using Microting.eForm.Infrastructure;
 using Microting.eForm.Infrastructure.Constants;
-using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eFormApi.BasePn.Abstractions;
-using Microting.eFormApi.BasePn.Infrastructure.Database.Entities;
-using Microting.eFormApi.BasePn.Infrastructure.Extensions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
@@ -47,59 +41,62 @@ using Rebus.Bus;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
+using Microting.eFormApi.BasePn.Infrastructure.Helpers;
+using Microting.eFormApi.BasePn.Infrastructure.Helpers.PluginDbOptions;
+using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
 
 namespace TrashInspection.Pn.Services
 {
+    using TrashInspection = Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection;
+
     public class TrashInspectionService : ITrashInspectionService
     {
         private readonly IEFormCoreService _coreHelper;
         private readonly ILogger<TrashInspectionService> _logger;
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
-        private readonly IRebusService _rebusService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
         private readonly IBus _bus;
+        private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
 
         public TrashInspectionService(ILogger<TrashInspectionService> logger,
             TrashInspectionPnDbContext dbContext,
             IEFormCoreService coreHelper,
-            IHttpContextAccessor httpContextAccessor,
             IUserService userService,
-            ITrashInspectionLocalizationService trashInspectionLocalizationService, IRebusService rebusService)
+            ITrashInspectionLocalizationService trashInspectionLocalizationService,
+            IPluginDbOptions<TrashInspectionBaseSettings> options,
+            IRebusService rebusService)
         {
             _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
-            _httpContextAccessor = httpContextAccessor;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
-            _rebusService = rebusService;
             _userService = userService;
             _bus = rebusService.GetBus();
+            _options = options;
         }
 
-        public async Task<OperationDataResult<TrashInspectionsModel>> Index(TrashInspectionRequestModel pnRequestModel)
+        public async Task<OperationDataResult<Paged<TrashInspectionModel>>> Index(TrashInspectionRequestModel pnRequestModel)
         {
             try
             {
-
-                PluginConfigurationValue trashInspectionSettings =
-                    await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
-
-                IQueryable<Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection> trashInspectionsQuery = _dbContext.TrashInspections.AsQueryable();
+                var trashInspectionSettings = _options.Value;
+                
+                var trashInspectionsQuery = _dbContext.TrashInspections
+                    .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                    .AsNoTracking()
+                    .AsQueryable();
 
                 if (!string.IsNullOrEmpty(pnRequestModel.NameFilter))
                 {
-                    int i;
-                    DateTime dateTime;
-                    if (int.TryParse(pnRequestModel.NameFilter, out i))
+                    if (int.TryParse(pnRequestModel.NameFilter, out var i))
                     {
                         trashInspectionsQuery = trashInspectionsQuery.Where(x =>
                             x.Id == i);
                     }
                     else
                     {
-                        if (DateTime.TryParse(pnRequestModel.NameFilter, out dateTime))
+                        if (DateTime.TryParse(pnRequestModel.NameFilter, out var dateTime))
                         {
                             trashInspectionsQuery = trashInspectionsQuery.Where(x =>
                                 x.Date.Year == dateTime.Year &&
@@ -115,98 +112,41 @@ namespace TrashInspection.Pn.Services
                     }
                 }
 
-                if (!string.IsNullOrEmpty(pnRequestModel.Sort))
+                QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
+
+                var total = await trashInspectionsQuery.Select(x => x.Id).CountAsync();
+
+                trashInspectionsQuery = trashInspectionsQuery
+                    .Skip(pnRequestModel.Offset)
+                    .Take(pnRequestModel.PageSize);
+
+                var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
+
+                var trashInspections = await AddSelectToQuery(trashInspectionsQuery, timeZoneInfo, trashInspectionSettings.Token)
+                    .ToListAsync();
+
+                var core = await _coreHelper.GetCore();
+                var eFormIds = new List<KeyValuePair<int, int>>(); // <FractionId, eFormId>
+
+                foreach (var trashInspectionModel in trashInspections)
                 {
-                    if (pnRequestModel.IsSortDsc)
-                    {
-                        trashInspectionsQuery = trashInspectionsQuery
-                            .CustomOrderByDescending(pnRequestModel.Sort);
-                    }
-                    else
-                    {
-                        trashInspectionsQuery = trashInspectionsQuery
-                            .CustomOrderBy(pnRequestModel.Sort);
-                    }
-                }
-                else
-                {
-                    trashInspectionsQuery = _dbContext.TrashInspections
-                        .OrderBy(x => x.Id);
-                }
-
-                int total = await trashInspectionsQuery.CountAsync();
-
-                if (pnRequestModel.PageSize != null)
-                {
-                    trashInspectionsQuery
-                        = trashInspectionsQuery
-                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
-                        .Skip(pnRequestModel.Offset)
-                        .Take((int)pnRequestModel.PageSize);
-                }
-
-                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
-
-                List<TrashInspectionModel> trashInspections = await trashInspectionsQuery.Select(x => new TrashInspectionModel
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    EakCode = x.EakCode,
-                    InstallationId = x.InstallationId,
-                    SegmentId = x.SegmentId,
-                    MustBeInspected = x.MustBeInspected,
-                    Producer = x.Producer,
-                    RegistrationNumber = x.RegistrationNumber,
-                    Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
-                    Transporter = x.Transporter,
-                    WeighingNumber = x.WeighingNumber,
-                    Status = x.Status,
-                    Version = x.Version,
-                    WorkflowState = x.WorkflowState,
-                    ExtendedInspection = x.ExtendedInspection,
-                    InspectionDone = x.InspectionDone,
-                    FractionId = x.FractionId,
-                    IsApproved = x.IsApproved,
-                    Comment = x.Comment,
-                    Token = trashInspectionSettings.Value,
-                    ResponseSendToCallBackUrl = x.ResponseSendToCallBackUrl
-                }).ToListAsync();
-
-                Core _core = await _coreHelper.GetCore();
-                List<KeyValuePair<int, int>> eFormIds = new List<KeyValuePair<int, int>>(); // <FractionId, eFormId>
-
-                foreach (TrashInspectionModel trashInspectionModel in trashInspections)
-                {
-                    Installation installation = await _dbContext.Installations
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.InstallationId);
-                    if (installation != null)
-                    {
-                        trashInspectionModel.InstallationName = installation.Name;
-                    }
-
-                    Fraction fraction = await _dbContext.Fractions
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.FractionId);
-                    if (fraction != null)
-                    {
-                        trashInspectionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
-                    }
-                    Segment segment = await _dbContext.Segments
-                        .SingleOrDefaultAsync(y => y.Id == trashInspectionModel.SegmentId);
-                    if (segment != null)
-                    {
-                        trashInspectionModel.Segment = segment.Name;
-                    }
+                    var fractionEFormId = await _dbContext.Fractions
+                        .Where(y => y.Id == trashInspectionModel.FractionId)
+                        .Select(x => x.eFormId)
+                        .FirstOrDefaultAsync();
 
                     if (trashInspectionModel.Status == 100)
                     {
-                        var result = await _dbContext.TrashInspectionCases.Where(x =>
-                            x.TrashInspectionId == trashInspectionModel.Id && x.Status == 100).ToListAsync();
+                        var result = await _dbContext.TrashInspectionCases
+                            .Where(x => x.TrashInspectionId == trashInspectionModel.Id)
+                            .Where(x => x.Status == 100)
+                            .ToListAsync();
                         if (result.Any())
                         {
                             trashInspectionModel.SdkCaseId = int.Parse(result.First().SdkCaseId);
 
                             trashInspectionModel.SdkCaseId =
-                                (int) _core.CaseLookupMUId(trashInspectionModel.SdkCaseId).Result.CaseId;
+                                (int) core.CaseLookupMUId(trashInspectionModel.SdkCaseId).Result.CaseId;
                         }
 
                         if (eFormIds.Any(x => x.Key == trashInspectionModel.FractionId))
@@ -218,35 +158,38 @@ namespace TrashInspection.Pn.Services
                             try
                             {
                                 var locale = await _userService.GetCurrentUserLocale();
-                                Language language = _core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode.ToLower() == locale.ToLower());
-                                int eFormName = _core.TemplateItemRead(fraction.eFormId, language).Result.Id;
-                                trashInspectionModel.SdkeFormId = eFormName;
-                                KeyValuePair<int, int> kvp =
-                                    new KeyValuePair<int, int>(fraction.eFormId, eFormName);
+                                var language = core.DbContextHelper.GetDbContext().
+                                    Languages
+                                    .Single(x => string.Equals(x.LanguageCode, locale, StringComparison.CurrentCultureIgnoreCase));
+                                var eForm = await core.TemplateItemRead(fractionEFormId, language);
+                                trashInspectionModel.SdkeFormId = eForm.Id;
+                                var kvp =
+                                    new KeyValuePair<int, int>(fractionEFormId, eForm.Id);
                                 eFormIds.Add(kvp);
                             }
                             catch
                             {
-//                                KeyValuePair<int, int> kvp = new KeyValuePair<int, int>(fraction.eFormId, "");
-//                                eFormIds.Add(kvp);
+                               // KeyValuePair<int, int> kvp = new KeyValuePair<int, int>(fraction.eFormId, "");
+                               // eFormIds.Add(kvp);
                             }
                         }
                     }
                 }
 
-                TrashInspectionsModel trashInspectionsModel = new TrashInspectionsModel
+                var trashInspectionsModel = new Paged<TrashInspectionModel>
                 {
-                    Total = total, TrashInspectionList = trashInspections
+                    Total = total,
+                    Entities = trashInspections
                 };
 
 
-                return new OperationDataResult<TrashInspectionsModel>(true, trashInspectionsModel);
+                return new OperationDataResult<Paged<TrashInspectionModel>>(true, trashInspectionsModel);
             }
             catch(Exception e)
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
-                return new OperationDataResult<TrashInspectionsModel>(false,
+                return new OperationDataResult<Paged<TrashInspectionModel>>(false,
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspections"));
 
             }
@@ -261,16 +204,17 @@ namespace TrashInspection.Pn.Services
 
                 var trashInspectionCaseVersionsQuery = _dbContext.TrashInspectionCaseVersions.AsQueryable();
 
-                List<TrashInspectionCaseVersion> trashInspectionCaseVersions = await trashInspectionCaseVersionsQuery
+                var trashInspectionCaseVersions = await trashInspectionCaseVersionsQuery
                     .Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
-                trashInspectionCaseVersionsModel.Total = trashInspectionCaseVersions.Count;
-                trashInspectionCaseVersionsModel.TrashInspectionCaseVersionList = trashInspectionCaseVersions;
                 if (trashInspectionCaseVersions == null)
                 {
                     return new OperationDataResult<TrashInspectionCaseVersionsModel>(false,
                         _trashInspectionLocalizationService.GetString($"TrashInspectionWithID:{trashInspectionId}DoesNotExist"));
                 }
+
+                trashInspectionCaseVersionsModel.Total = trashInspectionCaseVersions.Count;
+                trashInspectionCaseVersionsModel.TrashInspectionCaseVersionList = trashInspectionCaseVersions;
 
                 return new OperationDataResult<TrashInspectionCaseVersionsModel>(true, trashInspectionCaseVersionsModel);
             }
@@ -285,7 +229,7 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> Create(TrashInspectionModel createModel)
         {
-            DateTime dateTime = DateTime.UtcNow;
+            var dateTime = DateTime.UtcNow;
             var pluginConfiguration = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             if (pluginConfiguration == null)
             {
@@ -301,14 +245,14 @@ namespace TrashInspection.Pn.Services
                 {
                     if (createModel.Time.Hour > dateTime.Hour)
                     {
-                        TimeSpan timeSpan = createModel.Time.Subtract(dateTime);
-                        double minutes = timeSpan.Hours * 60.0 + timeSpan.Minutes;
-                        double hours = minutes / 60.0;
-                        double fullHours = Math.Round(hours);
+                        var timeSpan = createModel.Time.Subtract(dateTime);
+                        var minutes = timeSpan.Hours * 60.0 + timeSpan.Minutes;
+                        var hours = minutes / 60.0;
+                        var fullHours = Math.Round(hours);
                         createModel.Time = createModel.Time.AddHours(-fullHours);
                     }
                 }
-                if ((_dbContext.TrashInspections.Count(x => x.WeighingNumber == createModel.WeighingNumber) > 0))
+                if (_dbContext.TrashInspections.Any(x => x.WeighingNumber == createModel.WeighingNumber))
                 {
                     var result =
                         _dbContext.TrashInspections.SingleOrDefault(x =>
@@ -316,7 +260,7 @@ namespace TrashInspection.Pn.Services
                     return new OperationResult(true, result.Id.ToString());
                 }
 
-                Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection =
+                var trashInspection =
                     new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
                     {
                         WeighingNumber = createModel.WeighingNumber,
@@ -330,15 +274,17 @@ namespace TrashInspection.Pn.Services
                         Transporter = createModel.Transporter,
                         MustBeInspected = createModel.MustBeInspected,
                         InspectionDone = false,
-                        Status = 0
+                        Status = 0,
+                        UpdatedByUserId = _userService.UserId,
+                        CreatedByUserId = _userService.UserId,
                     };
 
                 await trashInspection.Create(_dbContext);
 
-                Segment segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
-                Installation installation =
+                var segment = _dbContext.Segments.FirstOrDefault(x => x.Name == createModel.Segment);
+                var installation =
                     _dbContext.Installations.FirstOrDefault(x => x.Name == createModel.InstallationName);
-                Fraction fraction =
+                var fraction =
                     _dbContext.Fractions.FirstOrDefault(x => x.ItemNumber == createModel.TrashFraction);
 
                 _coreHelper.LogEvent($"CreateTrashInspection: Segment: {createModel.Segment}, InstallationName: {createModel.InstallationName}, TrashFraction: {createModel.TrashFraction} ");
@@ -369,28 +315,16 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+                var trashInspectionQuery = _dbContext.TrashInspections
+                    .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                    .Where(x => x.Id == trashInspectionId)
+                    .AsNoTracking()
+                    .AsQueryable();
 
-                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
-                    {
-                    Id = x.Id,
-                    Date = x.Date,
-                    EakCode = x.EakCode,
-                    InstallationId = x.InstallationId,
-                    MustBeInspected = x.MustBeInspected,
-                    Producer = x.Producer,
-                    RegistrationNumber = x.RegistrationNumber,
-                    Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
-                    Transporter = x.Transporter,
-                    TrashFraction = x.TrashFraction,
-                    WeighingNumber = x.WeighingNumber,
-                    Status = x.Status,
-                    Version = x.Version,
-                    WorkflowState = x.WorkflowState,
-                    ExtendedInspection = x.ExtendedInspection,
-                    InspectionDone = x.InspectionDone
-                })
-                .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
+                var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
+
+                var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "")
+                .FirstOrDefaultAsync();
 
                 if (trashInspection == null)
                 {
@@ -400,7 +334,7 @@ namespace TrashInspection.Pn.Services
 
                 return new OperationDataResult<TrashInspectionModel>(true, trashInspection);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Trace.TraceError(e.Message);
                 _logger.LogError(e.Message);
@@ -411,33 +345,23 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationDataResult<TrashInspectionModel>> Read(string weighingNumber, string token)
         {
-            PluginConfigurationValue trashInspectionSettings =
+            var trashInspectionSettings =
                 await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
             _coreHelper.LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
             if (token == trashInspectionSettings.Value && weighingNumber != null)
             {
                 try
                 {
-                    TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+                    var trashInspectionQuery = _dbContext.TrashInspections
+                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                        .Where(x => x.WeighingNumber == weighingNumber)
+                        .AsNoTracking()
+                        .AsQueryable();
 
-                    var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
-                        {
-                            Id = x.Id,
-                            Date = x.Date,
-                            EakCode = x.EakCode,
-                            InstallationId = x.InstallationId,
-                            MustBeInspected = x.MustBeInspected,
-                            RegistrationNumber = x.RegistrationNumber,
-                            Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
-                            WeighingNumber = x.WeighingNumber,
-                            Status = x.Status,
-                            Version = x.Version,
-                            ExtendedInspection = x.ExtendedInspection,
-                            InspectionDone = x.InspectionDone,
-                            IsApproved = x.IsApproved,
-                            Comment = x.Comment
-                        })
-                        .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
+                    var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
+
+                    var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "")
+                        .FirstOrDefaultAsync();
 
                     if (trashInspection == null)
                     {
@@ -463,23 +387,23 @@ namespace TrashInspection.Pn.Services
         {
             try
             {
-                TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+                var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
 
-                TrashInspectionVersionsModel trashInspectionVersionsModel = new TrashInspectionVersionsModel
+                var trashInspectionVersionsModel = new TrashInspectionVersionsModel
                 {
                     TrashInspectionId = trashInspectionId
                 };
 
                 var trashInspectionVersionsQuery = _dbContext.TrashInspectionVersions.AsQueryable();
 
-                List<TrashInspectionVersion> trashInspectionVersions =
+                var trashInspectionVersions =
                     await trashInspectionVersionsQuery.Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
                 trashInspectionVersionsModel.TrashInspectionVersionList = new List<TrashInspectionVersionModel>();
 
-                foreach (TrashInspectionVersion trashInspectionVersion in trashInspectionVersions)
+                foreach (var trashInspectionVersion in trashInspectionVersions)
                 {
-                    TrashInspectionVersionModel trashInspectionVersionModel = new TrashInspectionVersionModel
+                    var trashInspectionVersionModel = new TrashInspectionVersionModel
                     {
                         Id = trashInspectionVersion.Id,
                         UpdatedAt = TimeZoneInfo.ConvertTimeFromUtc((DateTime) trashInspectionVersion.UpdatedAt, timeZoneInfo),
@@ -514,22 +438,22 @@ namespace TrashInspection.Pn.Services
                     trashInspectionVersionsModel.TrashInspectionVersionList.Add(trashInspectionVersionModel);
                 }
 
-                foreach (TrashInspectionVersionModel trashInspectionVersionModel in trashInspectionVersionsModel.TrashInspectionVersionList)
+                foreach (var trashInspectionVersionModel in trashInspectionVersionsModel.TrashInspectionVersionList)
                 {
-                    Installation installation = await _dbContext.Installations
+                    var installation = await _dbContext.Installations
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.InstallationId);
                     if (installation != null)
                     {
                         trashInspectionVersionModel.InstallationName = installation.Name;
                     }
 
-                    Fraction fraction = await _dbContext.Fractions
+                    var fraction = await _dbContext.Fractions
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.FractionId);
                     if (fraction != null)
                     {
                         trashInspectionVersionModel.TrashFraction = $"{fraction.ItemNumber} {fraction.Name}";
                     }
-                    Segment segment = await _dbContext.Segments
+                    var segment = await _dbContext.Segments
                         .SingleOrDefaultAsync(y => y.Id == trashInspectionVersionModel.SegmentId);
                     if (segment != null)
                     {
@@ -539,13 +463,13 @@ namespace TrashInspection.Pn.Services
 
                 var trashInspectionCaseQuery = _dbContext.TrashInspectionCases.AsQueryable();
 
-                 List<TrashInspectionCase> trashInspectionCases = await trashInspectionCaseQuery
+                 var trashInspectionCases = await trashInspectionCaseQuery
                      .Where(x => x.TrashInspectionId == trashInspectionId).ToListAsync();
 
                  var statusModels = new List<TrashInspectionCaseStatusModel>();
                  foreach (var trashInspectionCase in trashInspectionCases)
                  {
-                     TrashInspectionCaseStatusModel trashInspectionCaseStatusModel = new TrashInspectionCaseStatusModel();
+                     var trashInspectionCaseStatusModel = new TrashInspectionCaseStatusModel();
 
                      trashInspectionCaseStatusModel.SdkSiteId = trashInspectionCase.SdkSiteId;
                      try
@@ -607,7 +531,7 @@ namespace TrashInspection.Pn.Services
                                  }
                                  else
                                  {
-                                     Core core = await _coreHelper.GetCore();
+                                     var core = await _coreHelper.GetCore();
                                      using (var dbContext = core.DbContextHelper.GetDbContext())
                                      {
                                          var result = dbContext.Cases.Single(x =>
@@ -637,9 +561,10 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingTrashInspection"));
             }
         }
+
         public async Task<OperationResult> Update(TrashInspectionModel updateModel)
         {
-            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection selectedTrashInspection =
+            var selectedTrashInspection =
                 new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
                 {
                     Id = updateModel.Id,
@@ -694,70 +619,63 @@ namespace TrashInspection.Pn.Services
 
         public async Task<OperationResult> Delete(string weighingNumber, string token)
         {
-            PluginConfigurationValue trashInspectionSettings =
-                await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
+            var trashInspectionSettings = _options.Value.Token;
 
-            if (trashInspectionSettings == null)
+            if (trashInspectionSettings != token)
             {
                 return new OperationResult(false, "Unauthorized Access");
             }
 
-            if (token != trashInspectionSettings.Value)
+            if (weighingNumber == null)
             {
-                return new OperationResult(false, "Unauthorized Access");
-            }
-
-            if (weighingNumber != null)
-            {
-                var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
-                    {
-                        Id = x.Id,
-                        Date = x.Date,
-                        EakCode = x.EakCode,
-                        InstallationId = x.InstallationId,
-                        MustBeInspected = x.MustBeInspected,
-                        Producer = x.Producer,
-                        RegistrationNumber = x.RegistrationNumber,
-                        Time = x.Time,
-                        Transporter = x.Transporter,
-                        TrashFraction = x.TrashFraction,
-                        WeighingNumber = x.WeighingNumber,
-                        Status = x.Status,
-                        Version = x.Version,
-                        WorkflowState = x.WorkflowState,
-                        ExtendedInspection = x.ExtendedInspection,
-                        InspectionDone = x.InspectionDone
-                    })
-                    .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
-
-                if (trashInspection != null)
-                {
-                    await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, false));
-
-                    return new OperationResult(true);
-                }
-
                 return new OperationResult(false);
+            }
+
+            var trashInspection = await _dbContext.TrashInspections
+                .Select(x => new TrashInspectionModel
+                {
+                    Id = x.Id,
+                    Date = x.Date,
+                    EakCode = x.EakCode,
+                    InstallationId = x.InstallationId,
+                    MustBeInspected = x.MustBeInspected,
+                    Producer = x.Producer,
+                    RegistrationNumber = x.RegistrationNumber,
+                    Time = x.Time,
+                    Transporter = x.Transporter,
+                    TrashFraction = x.TrashFraction,
+                    WeighingNumber = x.WeighingNumber,
+                    Status = x.Status,
+                    Version = x.Version,
+                    WorkflowState = x.WorkflowState,
+                    ExtendedInspection = x.ExtendedInspection,
+                    InspectionDone = x.InspectionDone
+                })
+                .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
+
+            if (trashInspection != null)
+            {
+                await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, false));
+
+                return new OperationResult(true);
             }
 
             return new OperationResult(false);
         }
 
-
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
-            PluginConfigurationValue trashInspectionSettings =
-                await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:Token");
+            var trashInspectionSettings = _options.Value.Token;
             _coreHelper.LogEvent($"DownloadEFormPdf: weighingNumber is {weighingNumber} token is {token}");
-            if (token == trashInspectionSettings.Value && weighingNumber != null)
+            if (token == trashInspectionSettings && weighingNumber != null)
             {
                 try
                 {
                     var core = await _coreHelper.GetCore();
                     string microtingUId;
                     string microtingCheckUId;
-                    int caseId = 0;
-                    int eFormId = 0;
+                    var caseId = 0;
+                    var eFormId = 0;
                     var trashInspection = await _dbContext.TrashInspections.Select(x => new TrashInspectionModel
                         {
                             Id = x.Id,
@@ -780,23 +698,23 @@ namespace TrashInspection.Pn.Services
                         })
                         .FirstOrDefaultAsync(x => x.WeighingNumber == weighingNumber);
 
-                    Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
+                    var fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.ItemNumber == trashInspection.TrashFraction);
                     if (fraction == null)
                     {
                         fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Name == trashInspection.TrashFraction);
                     }
                     _coreHelper.LogEvent($"DownloadEFormPdf: fraction is {fraction.Name}");
 
-                    string segmentName = "";
+                    var segmentName = "";
 
-                    Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
+                    var segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == trashInspection.SegmentId);
                     if (segment != null)
                     {
                         segmentName = segment.Name;
                     }
                     _coreHelper.LogEvent($"DownloadEFormPdf: segmentName is {segmentName}");
 
-                    string xmlContent = new XElement("TrashInspection",
+                    var xmlContent = new XElement("TrashInspection",
                         new XElement("EakCode", trashInspection.EakCode),
                         new XElement("Producer", trashInspection.Producer),
                         new XElement("RegistrationNumber", trashInspection.RegistrationNumber),
@@ -807,11 +725,11 @@ namespace TrashInspection.Pn.Services
                     ).ToString();
                     _coreHelper.LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
 
-                    foreach (TrashInspectionCase trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
+                    foreach (var trashInspectionCase in _dbContext.TrashInspectionCases.Where(x => x.TrashInspectionId == trashInspection.Id).ToList())
                     {
                         if (trashInspectionCase.Status == 100)
                         {
-                            CaseDto caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
+                            var caseDto = await core.CaseLookupMUId(int.Parse(trashInspectionCase.SdkCaseId));
                             microtingUId = caseDto.MicrotingUId.ToString();
                             microtingCheckUId = caseDto.CheckUId.ToString();
                             caseId = (int)caseDto.CaseId;
@@ -822,8 +740,8 @@ namespace TrashInspection.Pn.Services
                     if (caseId != 0 && eFormId != 0)
                     {
                         _coreHelper.LogEvent($"DownloadEFormPdf: caseId is {caseId}, eFormId is {eFormId}");
-                        await using MicrotingDbContext sdkDbContext = core.DbContextHelper.GetDbContext();
-                        Language language = await sdkDbContext.Languages.SingleAsync(x => x.LanguageCode == "da");
+                        await using var sdkDbContext = core.DbContextHelper.GetDbContext();
+                        var language = await sdkDbContext.Languages.SingleAsync(x => x.LanguageCode == "da");
                         var filePath = await core.CaseToPdf(caseId, eFormId.ToString(),
                             DateTime.Now.ToString("yyyyMMddHHmmssffff"),
                             $"{await core.GetSdkSetting(Settings.httpServerAddress)}/" + "api/template-files/get-image/", fileType, xmlContent, language);
@@ -847,9 +765,12 @@ namespace TrashInspection.Pn.Services
 
             throw new UnauthorizedAccessException();
         }
-        private async Task UpdateProducerAndTransporter(Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection, TrashInspectionModel createModel)
+
+        private async Task UpdateProducerAndTransporter(TrashInspection trashInspection, TrashInspectionModel createModel)
         {
-            var producer = _dbContext.Producers.SingleOrDefault(x => x.Name == createModel.Producer);
+            var producer = _dbContext.Producers
+                .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                .SingleOrDefault(x => x.Name == createModel.Producer);
 
             if (producer == null)
             {
@@ -861,7 +782,9 @@ namespace TrashInspection.Pn.Services
                     ContactPerson = createModel.ProducerContact,
                     Phone = createModel.ProducerPhone,
                     ZipCode = createModel.ProducerZip,
-                    ForeignId = createModel.ProducerForeignId
+                    ForeignId = createModel.ProducerForeignId,
+                    UpdatedByUserId = _userService.UserId,
+                    CreatedByUserId = _userService.UserId,
                 };
 
                 await producer.Create(_dbContext);
@@ -874,12 +797,15 @@ namespace TrashInspection.Pn.Services
                 producer.Phone = createModel.ProducerPhone;
                 producer.ZipCode = createModel.ProducerZip;
                 producer.ForeignId = createModel.ProducerForeignId;
+                producer.UpdatedByUserId = _userService.UserId;
                 await producer.Update(_dbContext);
             }
 
             trashInspection.ProducerId = producer.Id;
 
-            var transporter = _dbContext.Transporters.SingleOrDefault(x => x.Name == createModel.Transporter);
+            var transporter = _dbContext.Transporters
+                .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
+                .SingleOrDefault(x => x.Name == createModel.Transporter);
 
             if (transporter == null)
             {
@@ -891,7 +817,9 @@ namespace TrashInspection.Pn.Services
                     ZipCode = createModel.TransporterZip,
                     Phone = createModel.TransporterPhone,
                     ContactPerson = createModel.TransporterContact,
-                    ForeignId = createModel.TransporterForeignId
+                    ForeignId = createModel.TransporterForeignId,
+                    UpdatedByUserId = _userService.UserId,
+                    CreatedByUserId = _userService.UserId,
                 };
 
                 await transporter.Create(_dbContext);
@@ -904,12 +832,46 @@ namespace TrashInspection.Pn.Services
                 transporter.Phone = createModel.TransporterPhone;
                 transporter.ContactPerson = createModel.TransporterContact;
                 transporter.ForeignId = createModel.TransporterForeignId;
+                transporter.UpdatedByUserId = _userService.UserId;
                 await transporter.Update(_dbContext);
             }
 
             trashInspection.TransporterId = transporter.Id;
+            transporter.UpdatedByUserId = _userService.UserId;
 
             await trashInspection.Update(_dbContext);
+        }
+
+        private static IQueryable<TrashInspectionModel> AddSelectToQuery(IQueryable<TrashInspection> query, TimeZoneInfo timeZoneInfo, string token)
+        {
+            return query
+                .Select(x => new TrashInspectionModel
+                {
+                    Id = x.Id,
+                    Date = x.Date,
+                    EakCode = x.EakCode,
+                    InstallationId = x.InstallationId,
+                    SegmentId = x.SegmentId,
+                    MustBeInspected = x.MustBeInspected,
+                    Producer = x.Producer,
+                    RegistrationNumber = x.RegistrationNumber,
+                    Time = TimeZoneInfo.ConvertTimeFromUtc(x.Time, timeZoneInfo),
+                    Transporter = x.Transporter,
+                    WeighingNumber = x.WeighingNumber,
+                    Status = x.Status,
+                    Version = x.Version,
+                    WorkflowState = x.WorkflowState,
+                    ExtendedInspection = x.ExtendedInspection,
+                    InspectionDone = x.InspectionDone,
+                    FractionId = x.FractionId,
+                    IsApproved = x.IsApproved,
+                    Comment = x.Comment,
+                    Token = token,
+                    ResponseSendToCallBackUrl = x.ResponseSendToCallBackUrl,
+                    InstallationName = x.Installation.Name,
+                    TrashFraction = $"{x.Fraction.ItemNumber} {x.Fraction.Name}",
+                    Segment = x.Segment.Name,
+                });
         }
     }
 }

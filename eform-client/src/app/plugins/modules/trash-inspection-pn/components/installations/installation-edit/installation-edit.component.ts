@@ -1,24 +1,31 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {
-  InstallationPnCreateModel,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {
   InstallationPnModel,
-  InstallationPnUpdateModel
+  InstallationPnUpdateModel,
 } from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
-import {TrashInspectionsPnModel} from 'src/app/plugins/modules/trash-inspection-pn/models/trash-inspection';
-import {TrashInspectionPnInstallationsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
-import {SitesService} from '../../../../../../common/services/advanced';
-import {AuthService} from '../../../../../../common/services/auth';
-import {SiteNameDto} from '../../../../../../common/models/dto';
-import {DeployCheckbox, DeployModel} from '../../../../../../common/models/eforms';
+import { TrashInspectionPnInstallationsService } from '../../../services';
+import { AuthService, SitesService } from 'src/app/common/services';
+import { SiteNameDto } from 'src/app/common/models';
+import {
+  DeployCheckbox,
+  DeployModel,
+} from '../../../../../../common/models/eforms';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-edit',
   templateUrl: './installation-edit.component.html',
-  styleUrls: ['./installation-edit.component.scss']
+  styleUrls: ['./installation-edit.component.scss'],
 })
 export class InstallationEditComponent implements OnInit {
   @ViewChild('frame') frame;
-  @Output() onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
+  @Output()
+  onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
 
   deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
@@ -29,15 +36,15 @@ export class InstallationEditComponent implements OnInit {
     return this.authService.userClaims;
   }
 
-  constructor(private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
-              private sitesService: SitesService,
-              private authService: AuthService) {
-  }
+  constructor(
+    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
+    private sitesService: SitesService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadAllSites();
     this.selectedInstallationModel.deployCheckboxes = new Array<DeployCheckbox>();
-
   }
 
   show(installationModel: InstallationPnModel) {
@@ -48,31 +55,34 @@ export class InstallationEditComponent implements OnInit {
 
   getSelectedInstallation(id: number) {
     // debugger;
-    this.trashInspectionPnInstallationsService.getSingleInstallation(id).subscribe((data) => {
-      if (data && data.success) {
-        this.selectedInstallationModel = data.model;
-        this.fillCheckboxes();
-      }
-     
-    });
+    this.trashInspectionPnInstallationsService
+      .getSingleInstallation(id)
+      .subscribe((data) => {
+        if (data && data.success) {
+          this.selectedInstallationModel = data.model;
+          this.fillCheckboxes();
+        }
+      });
   }
 
   updateInstallation() {
     // debugger;
-    this.trashInspectionPnInstallationsService.updateInstallation(new InstallationPnUpdateModel(this.selectedInstallationModel))
+    this.trashInspectionPnInstallationsService
+      .updateInstallation(
+        new InstallationPnUpdateModel(this.selectedInstallationModel)
+      )
       .subscribe((data) => {
         if (data && data.success) {
           this.onInstallationUpdated.emit();
           this.selectedInstallationModel = new InstallationPnModel();
           this.frame.hide();
         }
-       
       });
   }
 
   loadAllSites() {
     if (this.userClaims.eformsPairingRead) {
-      this.sitesService.getAllSitesForPairing().subscribe(operation => {
+      this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
@@ -84,8 +94,9 @@ export class InstallationEditComponent implements OnInit {
     if (e.target.checked) {
       this.selectedInstallationModel.SdkSiteIds.push(sdkSiteId);
     } else {
-      this.selectedInstallationModel.SdkSiteIds = this.selectedInstallationModel.SdkSiteIds
-        .filter(x => x !== sdkSiteId);
+      this.selectedInstallationModel.SdkSiteIds = this.selectedInstallationModel.SdkSiteIds.filter(
+        (x) => x !== sdkSiteId
+      );
     }
   }
 
@@ -97,7 +108,9 @@ export class InstallationEditComponent implements OnInit {
       deployObject.isChecked = true;
       this.selectedInstallationModel.deployCheckboxes.push(deployObject);
     } else {
-      this.selectedInstallationModel.deployCheckboxes = this.selectedInstallationModel.deployCheckboxes.filter(x => x.id !== deployId);
+      this.selectedInstallationModel.deployCheckboxes = this.selectedInstallationModel.deployCheckboxes.filter(
+        (x) => x.id !== deployId
+      );
     }
   }
 
@@ -112,7 +125,8 @@ export class InstallationEditComponent implements OnInit {
   fillCheckboxes() {
     for (const siteDto of this.sitesDto) {
       const deployObject = new DeployCheckbox();
-      for (const deployCheckboxes of this.selectedInstallationModel.deployCheckboxes) {
+      for (const deployCheckboxes of this.selectedInstallationModel
+        .deployCheckboxes) {
         if (deployCheckboxes.id === siteDto.siteUId) {
           this.matchFound = true;
           deployObject.id = siteDto.siteUId;

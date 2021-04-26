@@ -1,7 +1,7 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
-import {Guid} from 'guid-typescript';
+import { generateRandmString } from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Installation', function () {
   before(function () {
@@ -9,20 +9,24 @@ describe('Trash Inspection Plugin - Installation', function () {
     loginPage.login();
   });
   it('Should create installation without site.', function () {
-    const name = Guid.create().toString();
+    const rowNumBeforeCreate = installationPage.rowNum;
+    const name = generateRandmString();
     installationPage.goToInstallationsPage();
-    $('#createInstallationBtn').waitForDisplayed({timeout: 30000});
-    installationPage.createInstallation_DoesntAddSite(name);
+    installationPage.createInstallation(name);
+    expect(installationPage.rowNum, 'installation is not created').equal(
+      rowNumBeforeCreate + 1
+    );
     const installation = installationPage.getFirstRowObject();
     expect(installation.name).equal(name);
-    installationPage.deleteInstallation_Deletes();
+    installation.delete();
   });
   it('should not create installation', function () {
-    const name = Guid.create().toString();
-    // installationPage.goToInstallationsPage();
-    $('#createInstallationBtn').waitForDisplayed({timeout: 30000});
-    installationPage.createInstallation_DoesntAddSite_Cancels(name);
-    const installation = installationPage.getFirstRowObject();
-    expect(installationPage.rowNum).equal(0);
+    const rowNumBeforeCreate = installationPage.rowNum;
+    const name = generateRandmString();
+    installationPage.createInstallation(name, true);
+    expect(installationPage.rowNum).equal(rowNumBeforeCreate);
+  });
+  after(function () {
+    installationPage.clearTable();
   });
 });

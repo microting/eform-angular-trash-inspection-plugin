@@ -161,7 +161,7 @@ exports.config = {
     mochaOpts: {
         ui: 'bdd',
         compilers: ['tsconfig-paths/register'],
-        timeout: 60000
+        timeout: 180000
     },
     //
     // =====

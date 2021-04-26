@@ -22,27 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace TrashInspection.Pn.Infrastructure.Models
+namespace TrashInspection.Pn.Infrastructure.Models.Fractions
 {
     public class FractionModel
     {
         public int Id { get; set; }
-        
-        public DateTime? CreatedAt { get; set; }
-        
-        public DateTime? UpdatedAt { get; set; }
-        
-        [StringLength(255)]
-        public string WorkflowState { get; set; }
-        
-        public int Version { get; set; }
-        
-        public int CreatedByUserId { get; set; }
-        
-        public int UpdatedByUserId { get; set; }
         
         public string Name { get; set; }
         

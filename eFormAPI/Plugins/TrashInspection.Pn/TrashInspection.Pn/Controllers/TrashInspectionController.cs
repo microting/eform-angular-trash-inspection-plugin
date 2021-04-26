@@ -1,16 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microting.eFormApi.BasePn.Infrastructure.Models.API;
-using TrashInspection.Pn.Abstractions;
-using TrashInspection.Pn.Infrastructure.Const;
-using TrashInspection.Pn.Infrastructure.Models;
-
-namespace TrashInspection.Pn.Controllers
+﻿namespace TrashInspection.Pn.Controllers
 {
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Abstractions;
+    using Infrastructure.Const;
+    using Infrastructure.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.API;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public class TrashInspectionController : Controller
     {
         private readonly ITrashInspectionService _trashInspectionService;
@@ -20,17 +21,16 @@ namespace TrashInspection.Pn.Controllers
             _trashInspectionService = trashInspectionService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
-        [Route("api/trash-inspection-pn/inspections")]
-        public async Task<OperationDataResult<TrashInspectionsModel>> Index(TrashInspectionRequestModel requestModel)
+        [Route("api/trash-inspection-pn/inspections/index")]
+        public async Task<OperationDataResult<Paged<TrashInspectionModel>>> Index([FromBody] TrashInspectionRequestModel requestModel)
         {
             return await _trashInspectionService.Index(requestModel);
         }
         
         [HttpPost]
         [AllowAnonymous]
-        [DebuggingFilter]
         [Route("api/trash-inspection-pn/inspections")]
         public async Task<OperationResult> Create([FromBody] TrashInspectionModel createModel)
         {
@@ -106,7 +106,7 @@ namespace TrashInspection.Pn.Controllers
                 {
                     fileType = "pdf";
                 }
-                string filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token, fileType);
+                var filePath = await _trashInspectionService.DownloadEFormPdf(weighingNumber, token, fileType);
                 
                 if (!System.IO.File.Exists(filePath))
                 {
@@ -125,27 +125,6 @@ namespace TrashInspection.Pn.Controllers
                 
             }
 
-        }
-    }
-    
-    public class DebuggingFilter : ActionFilterAttribute
-    {
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (filterContext.HttpContext.Request.Method != "POST")
-            {
-                return;
-            }
-            
-            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
-
-            string text = new StreamReader(filterContext.HttpContext.Request.Body).ReadToEndAsync().Result;
-
-            filterContext.HttpContext.Request.Body.Seek(0, SeekOrigin.Begin);
-            
-            Console.WriteLine(text);
-
-            base.OnActionExecuting(filterContext);
         }
     }
 }

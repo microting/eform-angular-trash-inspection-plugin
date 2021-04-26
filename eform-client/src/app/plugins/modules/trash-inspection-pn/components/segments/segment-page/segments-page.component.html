@@ -1,128 +1,94 @@
-<subheader-pn>
+<eform-subheader>
   <div class="p-3">
     <button
+      mdbBtn
       id="createSegmentBtn"
       class="btn btn-success"
       mdbTooltip="{{ 'Create Segment' | translate }}"
-      (click)="showCreateSegmentModal()">{{ 'New Segment' | translate }}
+      (click)="showCreateSegmentModal()"
+    >
+      {{ 'New Segment' | translate }}
     </button>
   </div>
-</subheader-pn>
+</eform-subheader>
 
 <div class="container-fluid">
   <div class="row p-1 mt-4 table-responsive no-gutters">
     <table class="table table-sm table-striped text-center z-depth-1">
-      <thead>
-      <tr>
-        <th scope="col" class="table-header-sortable" id="idTableHeader"
-            (click)="sortTable('id')">
-          <div class="d-flex align-items-center justify-content-center">
-            ID
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Id'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && !segmentPnRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Id' && segmentPnRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="nameTableHeader"
-            (click)="sortTable('Name')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Name' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Name'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && !segmentPnRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Name' && segmentPnRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="descriptionTableHeader"
-            (click)="sortTable('Description')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'Description' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'Description'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Description' && !segmentPnRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'Description' && segmentPnRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col" class="table-header-sortable" id="sdkFolderIdTableHeader"
-            (click)="sortTable('SdkFolderId')">
-          <div class="d-flex align-items-center justify-content-center">
-            {{'SDK folder id' | translate}}
-            <i class="material-icons text-black-50" *ngIf="localPageSettings.sort != 'SdkFolderId'">unfold_more</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'SdkFolderId' && !segmentPnRequestModel.isSortDsc">expand_less</i>
-            <i class="material-icons"
-               *ngIf="localPageSettings.sort == 'SdkFolderId' && segmentPnRequestModel.isSortDsc">expand_more</i>
-          </div>
-        </th>
-        <th scope="col">
-          {{ 'Actions' | translate }}
-        </th>
-      </tr>
-      </thead>
+      <thead
+        table-headers
+        [tableHeaders]="tableHeaders"
+        [currentSortName]="segmentsStateService.getSort() | async"
+        (sortChanged)="sortTable($event)"
+        [isSortDsc]="segmentsStateService.getIsSortDsc() | async"
+      ></thead>
       <tbody id="tableBody">
-      <tr *ngFor="let segment of segmentsPnModel.segmentList">
-        <td id="segmentId">
-          {{segment.id}}
-        </td>
-        <td id="segmentName">
-          {{segment.name}}
-        </td>
-        <td id="segmentDescription">
-          {{segment.description}}
-        </td>
-        <td id="segmentSDKFolderID">
-          {{segment.sdkFolderId}}
-        </td>
-        <td>
-          <div class="d-flex flex-row justify-content-center">
-            <button id="editSegmentBtn"
-              class="btn btn-accent text-black-50 btn-icon mb-2"
-                    mdbTooltip="{{ 'Edit Segment' | translate }}"
-                    (click)="showEditSegmentModal(segment)">
-              <i class="material-icons">
-                edit
-              </i>
-            </button>
-            <button id="deleteSegmentBtn"
-              class="btn btn-danger btn-icon mb-2 "
-                    mdbTooltip="{{ 'Delete Segment' | translate }}"
-                    (click)="showDeleteSegmentModal(segment)">
-              <i class="material-icons">
-                delete_forever
-              </i>
-            </button>
-          </div>
-        </td>
-      </tr>
+        <tr *ngFor="let segment of segmentsPnModel.segmentList">
+          <td id="segmentId">
+            {{ segment.id }}
+          </td>
+          <td id="segmentName">
+            {{ segment.name }}
+          </td>
+          <td id="segmentDescription">
+            {{ segment.description }}
+          </td>
+          <td id="segmentSDKFolderID">
+            {{ segment.sdkFolderId }}
+          </td>
+          <td>
+            <div class="d-flex flex-row justify-content-center">
+              <button
+                id="editSegmentBtn"
+                class="btn btn-accent text-black-50 btn-icon mb-2"
+                mdbTooltip="{{ 'Edit Segment' | translate }}"
+                (click)="showEditSegmentModal(segment)"
+              >
+                <i class="material-icons"> edit </i>
+              </button>
+              <button
+                id="deleteSegmentBtn"
+                class="btn btn-danger btn-icon mb-2"
+                mdbTooltip="{{ 'Delete Segment' | translate }}"
+                (click)="showDeleteSegmentModal(segment)"
+              >
+                <i class="material-icons"> delete_forever </i>
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
   <div class="row justify-content-between mr-2 ml-2">
     <div class="col-md-1">
-      <page-size-pn
-        [pageSize]="localPageSettings.pageSize"
-        (onPageSizeChanged)="localPageSettings.pageSize = $event; segmentPnRequestModel.pageIndex = 1;
-        updateLocalPageSettings()">
-      </page-size-pn>
+      <eform-page-size
+        [pageSize]="segmentsStateService.getPageSize() | async"
+        (onPageSizeChanged)="onPageSizeChanged($event)"
+      >
+      </eform-page-size>
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
-      <pagination-pn *ngIf="segmentsPnModel.total > segmentPnRequestModel.pageSize"
-                     [limit]="segmentPnRequestModel.pageSize"
-                     [size]="segmentsPnModel.total"
-                     [offset]="segmentPnRequestModel.offset"
-                     (onPageChanged)="changePage($event)"></pagination-pn>
+      <eform-pagination
+        [limit]="segmentsStateService.getPageSize() | async"
+        [size]="segmentsPnModel.total"
+        [offset]="segmentsStateService.getOffset() | async"
+        (onPageChanged)="changePage($event)"
+      ></eform-pagination>
     </div>
   </div>
 </div>
 
-<app-trash-inspection-pn-segment-create #createSegmentModal
-                                             (onSegmentCreated)="getAllSegments()">
+<app-trash-inspection-pn-segment-create
+  #createSegmentModal
+  (onSegmentCreated)="getAllSegments()"
+>
 </app-trash-inspection-pn-segment-create>
-<app-trash-inspection-pn-segment-edit #editSegmentModal
-                               (onSegmentUpdated)="getAllSegments()"></app-trash-inspection-pn-segment-edit>
-<app-trash-inspection-pn-segment-delete #deleteSegmentModal
-                                     (onSegmentDeleted)="getAllSegments()"></app-trash-inspection-pn-segment-delete>
+<app-trash-inspection-pn-segment-edit
+  #editSegmentModal
+  (onSegmentUpdated)="getAllSegments()"
+></app-trash-inspection-pn-segment-edit>
+<app-trash-inspection-pn-segment-delete
+  #deleteSegmentModal
+  (onSegmentDeleted)="onSegmentDeleted()"
+></app-trash-inspection-pn-segment-delete>

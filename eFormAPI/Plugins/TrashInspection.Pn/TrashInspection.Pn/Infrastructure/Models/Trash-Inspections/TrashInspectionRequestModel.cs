@@ -1,7 +1,7 @@
 ﻿/*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2019 Microting A/S
+Copyright (c) 2007 - 2021 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,13 @@ SOFTWARE.
 
 namespace TrashInspection.Pn.Infrastructure.Models
 {
-    public class TrashInspectionRequestModel
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
+    public class TrashInspectionRequestModel : PaginationModel
     {
         public string Sort { get; set; }
         
-        public int PageIndex { get; set; }
-        
-        public int Offset { get; set; }
-        
         public bool IsSortDsc { get; set; }
-        
-        public int? PageSize { get; set; }
 
         public string NameFilter { get; set; }
     }

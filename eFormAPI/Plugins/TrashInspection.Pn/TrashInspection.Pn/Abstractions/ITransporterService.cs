@@ -4,6 +4,9 @@ using TrashInspection.Pn.Infrastructure.Models;
 
 namespace TrashInspection.Pn.Abstractions
 {
+    using Infrastructure.Models.Transporters;
+    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
+
     public interface ITransporterService
     {
         Task<OperationDataResult<TransportersModel>> Index(TransporterRequestModel pnRequestModel);
@@ -12,7 +15,7 @@ namespace TrashInspection.Pn.Abstractions
         Task<OperationResult> Update(TransporterModel transporterModel);
         Task<OperationResult> Delete(int Id);
         Task<OperationResult> ImportTransporter(TransporterImportModel transporterImportModel);
-        Task<OperationDataResult<StatsByYearModel>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel);
+        Task<OperationDataResult<Paged<StatByYearModel>>> GetTransportersStatsByYear(TransportersYearRequestModel pnRequestModel);
         Task<OperationDataResult<StatByMonth>> GetSingleTransporterByMonth(int transporterId, int year);
     }
 }
