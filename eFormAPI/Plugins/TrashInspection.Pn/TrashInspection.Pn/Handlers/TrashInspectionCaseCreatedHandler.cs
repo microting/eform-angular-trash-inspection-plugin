@@ -61,7 +61,7 @@ namespace TrashInspection.Pn.Handlers
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             int sdkSiteId = trashInspectionCase.SdkSiteId;
             await using MicrotingDbContext microtingDbContext = _core.DbContextHelper.GetDbContext();
-            Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == sdkSiteId);
+            Site site = await microtingDbContext.Sites.SingleAsync(x => x.MicrotingUid == sdkSiteId);
             Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
             MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
             TrashInspectionModel createModel = message.TrashInspectionModel;
