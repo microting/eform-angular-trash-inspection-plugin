@@ -81,7 +81,7 @@ namespace TrashInspection.Pn.Services
             try
             {
                 var trashInspectionSettings = _options.Value;
-                
+
                 var trashInspectionsQuery = _dbContext.TrashInspections
                     .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                     .AsNoTracking()
@@ -252,16 +252,17 @@ namespace TrashInspection.Pn.Services
                         createModel.Time = createModel.Time.AddHours(-fullHours);
                     }
                 }
-                if (_dbContext.TrashInspections.Any(x => x.WeighingNumber == createModel.WeighingNumber))
+
+                TrashInspection trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
+                    x.WeighingNumber == createModel.WeighingNumber);
+
+                if (trashInspection != null)
                 {
-                    var result =
-                        _dbContext.TrashInspections.SingleOrDefault(x =>
-                            x.WeighingNumber == createModel.WeighingNumber);
-                    return new OperationResult(true, result.Id.ToString());
+                    return new OperationResult(true, trashInspection.Id.ToString());
                 }
 
-                var trashInspection =
-                    new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
+                trashInspection =
+                    new TrashInspection
                     {
                         WeighingNumber = createModel.WeighingNumber,
                         Date = createModel.Date,
