@@ -238,7 +238,9 @@ namespace TrashInspection.Pn.Services
 
             if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
             {
-                // Handling the situation, where incoming timestamp is not in UTC.
+                try
+                {
+// Handling the situation, where incoming timestamp is not in UTC.
                 var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
 
                 if (utcAdjustment.Value == "1")
@@ -253,7 +255,7 @@ namespace TrashInspection.Pn.Services
                     }
                 }
 
-                TrashInspection trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
+                TrashInspection trashInspection = await _dbContext.TrashInspections.FirstOrDefaultAsync(x =>
                     x.WeighingNumber == createModel.WeighingNumber);
 
                 if (trashInspection != null)
@@ -306,10 +308,15 @@ namespace TrashInspection.Pn.Services
                 }
 
                 return new OperationResult(true, createModel.Id.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return new OperationResult(false);
+                }
             }
 
             return new OperationResult(false);
-
         }
 
         public async Task<OperationDataResult<TrashInspectionModel>> Read(int trashInspectionId)
