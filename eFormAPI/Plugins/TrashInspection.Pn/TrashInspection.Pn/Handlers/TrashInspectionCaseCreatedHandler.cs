@@ -153,7 +153,7 @@ namespace TrashInspection.Pn.Handlers
 
             if (allDone)
             {
-                var trashInspection = await _dbContext.TrashInspections.AsNoTracking().SingleOrDefaultAsync(x =>
+                var trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
                     x.Id == trashInspectionCase.TrashInspectionId);
                 if (trashInspection.Status < 66)
                 {
