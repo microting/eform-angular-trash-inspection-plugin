@@ -79,7 +79,7 @@ namespace TrashInspection.Pn.Handlers
 //            List<Task> tasks = new List<Task>();
             foreach (InstallationSite installationSite in installationSites)
             {
-                Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == installationSite.SDKSiteId);
+                Site site = await microtingDbContext.Sites.SingleAsync(x => x.MicrotingUid == installationSite.SDKSiteId);
                 Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
                 var mainElement = _core.ReadeForm(eFormId, language);
                 if (mainElement == null)
