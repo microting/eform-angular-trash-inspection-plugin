@@ -63,6 +63,7 @@ namespace TrashInspection.Pn.Handlers
             await using MicrotingDbContext microtingDbContext = _core.DbContextHelper.GetDbContext();
             Site site = await microtingDbContext.Sites.SingleAsync(x => x.MicrotingUid == sdkSiteId);
             Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
+            LogEvent($"TrashInspectionCaseCreatedHandler: sdkSiteId: {sdkSiteId}, message.TemplateId: {message.TemplateId} ");
             MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
             TrashInspectionModel createModel = message.TrashInspectionModel;
             Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == message.SegmentId);
