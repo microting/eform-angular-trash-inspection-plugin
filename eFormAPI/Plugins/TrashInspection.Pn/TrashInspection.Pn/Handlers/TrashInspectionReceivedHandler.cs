@@ -98,8 +98,12 @@ namespace TrashInspection.Pn.Handlers
                 LogEvent("TrashInspectionReceivedHandler: trashInspectionCase created dispatching TrashInspectionCaseCreated");
 
                 LogEvent($"TrashInspectionReceivedHandler: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
-                await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment.Id,
-                    fraction.Id));
+
+                if (eFormId != 0)
+                {
+                    await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment.Id,
+                        fraction.Id));
+                }
 //                tasks.Add(sendLocal);
                 LogEvent("TrashInspectionReceivedHandler: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }
