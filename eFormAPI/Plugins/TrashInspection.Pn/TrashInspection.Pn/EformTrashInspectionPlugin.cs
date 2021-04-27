@@ -196,7 +196,7 @@ namespace TrashInspection.Pn
                                         new PluginMenuTranslationModel
                                         {
                                             LocaleName = LocaleNames.Danish,
-                                            Name = "Underretningsregler",
+                                            Name = "Affaldsinspektioner",
                                             Language = LanguageNames.Danish,
                                         },
                                     }
@@ -218,7 +218,7 @@ namespace TrashInspection.Pn
                                         new PluginMenuTranslationModel
                                         {
                                             LocaleName = LocaleNames.Danish,
-                                            Name = "Underretningsregler",
+                                            Name = "Affaldsinspektioner",
                                             Language = LanguageNames.Danish,
                                         },
                                     }

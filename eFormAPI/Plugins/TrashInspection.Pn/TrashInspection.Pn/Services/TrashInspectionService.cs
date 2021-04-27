@@ -112,7 +112,7 @@ namespace TrashInspection.Pn.Services
                     }
                 }
 
-                QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
+                trashInspectionsQuery = QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
 
                 var total = await trashInspectionsQuery.Select(x => x.Id).CountAsync();
 
