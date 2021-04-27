@@ -65,8 +65,10 @@ namespace TrashInspection.Pn.Handlers
             Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
             MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
             TrashInspectionModel createModel = message.TrashInspectionModel;
-            Segment segment = message.Segment;
-            Fraction fraction = message.Fraction;
+            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == message.SegmentId);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == message.FractionId);
+
+            LogEvent($"TrashInspectionCaseCreatedHandler: Segment: {segment.Name}, TrashFraction: {fraction.Name} ");
 
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();

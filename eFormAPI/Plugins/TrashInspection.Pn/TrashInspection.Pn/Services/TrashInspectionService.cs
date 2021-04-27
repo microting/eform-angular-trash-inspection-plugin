@@ -304,6 +304,7 @@ namespace TrashInspection.Pn.Services
 
                     await UpdateProducerAndTransporter(trashInspection, createModel);
 
+                    _coreHelper.LogEvent($"CreateTrashInspection: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
                     await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                 }
 
