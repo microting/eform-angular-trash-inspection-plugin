@@ -29,6 +29,7 @@
     <PackageReference Include="Microting.eFormApi.BasePn" Version="3.0.1" />
     <PackageReference Include="Microting.eFormTrashInspectionBase" Version="2.1.4" />
     <PackageReference Include="OtpSharp.Core" Version="1.0.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
     <PackageReference Include="Rebus.RabbitMQ" Version="7.3.0" />
   </ItemGroup>
 
