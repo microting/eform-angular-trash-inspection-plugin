@@ -160,7 +160,7 @@ namespace TrashInspection.Pn.Services
                                 var locale = await _userService.GetCurrentUserLocale();
                                 var language = core.DbContextHelper.GetDbContext().
                                     Languages
-                                    .Single(x => string.Equals(x.LanguageCode, locale, StringComparison.CurrentCultureIgnoreCase));
+                                    .Single(x => x.LanguageCode == locale);
                                 var eForm = await core.TemplateItemRead(fractionEFormId, language);
                                 trashInspectionModel.SdkeFormId = eForm.Id;
                                 var kvp =

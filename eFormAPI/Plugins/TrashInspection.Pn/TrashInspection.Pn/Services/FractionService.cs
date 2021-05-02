@@ -106,7 +106,7 @@ namespace TrashInspection.Pn.Services
                 var eFormNames = new List<KeyValuePair<int, string>>();
 
                 var locale = await _userService.GetCurrentUserLocale();
-                var language = core.DbContextHelper.GetDbContext().Languages.Single(x => string.Equals(x.LanguageCode, locale, StringComparison.CurrentCultureIgnoreCase));
+                var language = core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode == locale);
                 foreach (var fractionModel in fractionsModel.Entities)
                 {
                     if (fractionModel.eFormId > 0)
@@ -188,7 +188,7 @@ namespace TrashInspection.Pn.Services
                 {
                     try {
                         var locale = await _userService.GetCurrentUserLocale();
-                        var language = core.DbContextHelper.GetDbContext().Languages.Single(x => string.Equals(x.LanguageCode, locale, StringComparison.CurrentCultureIgnoreCase));
+                        var language = core.DbContextHelper.GetDbContext().Languages.Single(x => x.LanguageCode == locale);
                         var eFormName = core.TemplateItemRead(fraction.eFormId, language).Result.Label;
                         fraction.SelectedTemplateName = eFormName;
 
@@ -334,7 +334,7 @@ namespace TrashInspection.Pn.Services
                     .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                     .Where(x => x.Date.Year == pnRequestModel.Year)
                     .AsQueryable();
-                
+
                 var fractionsStatsByYearModel = new Paged<StatByYearModel>();
 
                 var fractionQuery = _dbContext.Fractions
