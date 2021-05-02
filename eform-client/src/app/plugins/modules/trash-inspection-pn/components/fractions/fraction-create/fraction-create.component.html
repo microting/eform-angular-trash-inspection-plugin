@@ -74,10 +74,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button id="fractionCreateSaveBtn" class="btn btn-success" [disabled]="!newFractionModel.name" (click)="createInstallation()">
+        <button id="fractionCreateSaveBtn" class="btn btn-success btn-small-height" [disabled]="!newFractionModel.name" (click)="createInstallation()">
           {{ 'Create' | translate }}
         </button>
-        <button id="fractionCreateCancelBtn" class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button id="fractionCreateCancelBtn" class="btn btn-accent text-black-50 btn-small-height" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>
