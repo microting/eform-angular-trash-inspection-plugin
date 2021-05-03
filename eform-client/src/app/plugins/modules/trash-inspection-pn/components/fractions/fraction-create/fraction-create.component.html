@@ -9,67 +9,47 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-md-12 col-xs-12">
-              <div class="md-form">
-                <input mdbInput
+          <div class="md-form">
+            <input mdbInput
 
-                       [(ngModel)]="newFractionModel.itemNumber"
-                       type="text" id="createFractionItemNumber"
-                       name="createFractionItemNumber" class="form-control">
-                <label for="createFractionItemNumber">{{'Item number' | translate}}</label>
-              </div>
-            </div>
+                   [(ngModel)]="newFractionModel.itemNumber"
+                   type="text" id="createFractionItemNumber"
+                   name="createFractionItemNumber" class="form-control">
+            <label for="createFractionItemNumber">{{'Item number' | translate}}</label>
           </div>
-          <div class="row mb-2">
-            <div class="col-md-12 col-xs-12">
-              <div class="md-form">
-                <input mdbInput
+          <div class="md-form">
+            <input mdbInput
 
-                       [(ngModel)]="newFractionModel.name"
-                       type="text" id="createFractionName"
-                       name="createFractionName" class="form-control">
-                <label for="createFractionName">{{'Name' | translate}}</label>
-              </div>
-            </div>
+                   [(ngModel)]="newFractionModel.name"
+                   type="text" id="createFractionName"
+                   name="createFractionName" class="form-control">
+            <label for="createFractionName">{{'Name' | translate}}</label>
           </div>
-          <div class="row mb-2">
-            <div class="col-md-12 col-xs-12">
-              <div class="md-form">
-                <input mdbInput
+          <div class="md-form">
+            <input mdbInput
 
-                       [(ngModel)]="newFractionModel.description"
-                       type="text" id="createFractionDescription"
-                       name="createFractionDescription" class="form-control">
-                <label for="createFractionDescription">{{'Description' | translate}}</label>
-              </div>
-            </div>
+                   [(ngModel)]="newFractionModel.description"
+                   type="text" id="createFractionDescription"
+                   name="createFractionDescription" class="form-control">
+            <label for="createFractionDescription">{{'Description' | translate}}</label>
           </div>
-          <div class="row mb-2">
-            <div class="col-md-12 col-xs-12">
-              <div class="md-form">
-                <input mdbInput
+          <div class="md-form">
+            <input mdbInput
 
-                       [(ngModel)]="newFractionModel.locationCode"
-                       type="text" id="createFractionLocationCode"
-                       name="createFractionLocationCode" class="form-control">
-                <label for="createFractionLocationCode">{{'Location code' | translate}}</label>
-              </div>
-            </div>
+                   [(ngModel)]="newFractionModel.locationCode"
+                   type="text" id="createFractionLocationCode"
+                   name="createFractionLocationCode" class="form-control">
+            <label for="createFractionLocationCode">{{'Location code' | translate}}</label>
           </div>
-          <div class="row mt-2">
-            <div class="col-md-12 col-xs-12">
-              <div class="md-form">
-                <ng-select [items]="templatesModel.templates"
-                           bindLabel="label"
-                           [placeholder]="('Selected template' | translate)"
-                           bindValue="id"
-                           [typeahead]="typeahead"
-                           (change)="onSelectedChanged($event)"
-                id="createFractionSelector">
-                </ng-select>
-              </div>
-            </div>
+          <div class="md-form">
+            <ng-select [items]="templatesModel.templates"
+                       bindLabel="label"
+                       [placeholder]="('Selected template' | translate)"
+                       bindValue="id"
+                       [typeahead]="typeahead"
+                       (change)="onSelectedChanged($event)"
+            id="createFractionSelector">
+            </ng-select>
           </div>
         </div>
       </div>
