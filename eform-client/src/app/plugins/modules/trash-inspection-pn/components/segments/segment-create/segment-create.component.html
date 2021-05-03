@@ -48,10 +48,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button id="segmentCreateSaveBtn" class="btn btn-success" [disabled]="!segmentPnModel.name" (click)="createSegment()">
+        <button id="segmentCreateSaveBtn" class="btn btn-success btn-small-height" [disabled]="!segmentPnModel.name" (click)="createSegment()">
           {{ 'Create' | translate }}
         </button>
-        <button id="segmentCreateCancelBtn" class="btn btn-accent text-black-50" (click)="frame.hide()">{{'Cancel' | translate}}</button>
+        <button id="segmentCreateCancelBtn" class="btn btn-accent text-black-50 btn-small-height" (click)="frame.hide()">{{'Cancel' | translate}}</button>
       </div>
     </div>
   </div>

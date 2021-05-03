@@ -79,7 +79,7 @@ namespace TrashInspection.Pn.Handlers
 //            List<Task> tasks = new List<Task>();
             foreach (InstallationSite installationSite in installationSites)
             {
-                Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == installationSite.SDKSiteId);
+                Site site = await microtingDbContext.Sites.SingleAsync(x => x.MicrotingUid == installationSite.SDKSiteId);
                 Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
                 var mainElement = _core.ReadeForm(eFormId, language);
                 if (mainElement == null)
@@ -95,11 +95,17 @@ namespace TrashInspection.Pn.Handlers
                 };
 
                 await trashInspectionCase.Create(_dbContext);
-                LogEvent("CreateTrashInspection: trashInspectionCase created dispatching TrashInspectionCaseCreated");
-                await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment,
-                    fraction));
+                LogEvent("TrashInspectionReceivedHandler: trashInspectionCase created dispatching TrashInspectionCaseCreated");
+
+                LogEvent($"TrashInspectionReceivedHandler: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
+
+                if (eFormId != 0)
+                {
+                    await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment.Id,
+                        fraction.Id));
+                }
 //                tasks.Add(sendLocal);
-                LogEvent("CreateTrashInspection: trashInspectionCase created TrashInspectionCaseCreated dispatched");
+                LogEvent("TrashInspectionReceivedHandler: trashInspectionCase created TrashInspectionCaseCreated dispatched");
             }
 
 //            await Task.WhenAll(tasks);

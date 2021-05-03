@@ -90,8 +90,13 @@ namespace TrashInspection.Pn
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
         {
             _connectionString = connectionString;
-            services.AddDbContext<TrashInspectionPnDbContext>(o => o.UseMySql(connectionString,
-                b => b.MigrationsAssembly(PluginAssembly().FullName)));
+            services.AddDbContext<TrashInspectionPnDbContext>(o =>
+                o.UseMySql(connectionString, new MariaDbServerVersion(
+                    new Version(10, 4, 0)), mySqlOptionsAction: builder =>
+                {
+                    builder.EnableRetryOnFailure();
+                    builder.MigrationsAssembly(PluginAssembly().FullName);
+                }));
 
             TrashInspectionPnContextFactory contextFactory = new TrashInspectionPnContextFactory();
             var context = contextFactory.CreateDbContext(new[] { connectionString });
@@ -196,7 +201,7 @@ namespace TrashInspection.Pn
                                         new PluginMenuTranslationModel
                                         {
                                             LocaleName = LocaleNames.Danish,
-                                            Name = "Underretningsregler",
+                                            Name = "Affaldsinspektioner",
                                             Language = LanguageNames.Danish,
                                         },
                                     }
@@ -218,7 +223,7 @@ namespace TrashInspection.Pn
                                         new PluginMenuTranslationModel
                                         {
                                             LocaleName = LocaleNames.Danish,
-                                            Name = "Underretningsregler",
+                                            Name = "Affaldsinspektioner",
                                             Language = LanguageNames.Danish,
                                         },
                                     }

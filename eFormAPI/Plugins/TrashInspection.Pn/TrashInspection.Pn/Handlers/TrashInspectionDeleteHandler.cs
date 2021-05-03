@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,42 +41,48 @@ namespace TrashInspection.Pn.Handlers
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
-        
+
         public TrashInspectionDeleteHandler(Core core, DbContextHelper dbContextHelper)
         {
             _core = core;
             _dbContext = dbContextHelper.GetDbContext();
         }
-        
+
         #pragma warning disable 1998
         public async Task Handle(TrashInspectionDeleted message)
         {
-            TrashInspectionModel createModel = message.TrashInspectionModel;
-
-            List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases
-                .Where(x => x.TrashInspectionId == createModel.Id).ToList();
-
-            foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
+            try
             {
-                bool result = await _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
-                if (result)
+                TrashInspectionModel createModel = message.TrashInspectionModel;
+
+                List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases
+                    .Where(x => x.TrashInspectionId == createModel.Id).ToList();
+
+                foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
                 {
-                    await trashInspectionCase.Delete(_dbContext);
+                    bool result = await _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
+                    if (result)
+                    {
+                        await trashInspectionCase.Delete(_dbContext);
+                    }
+
                 }
-                
+
+                Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = await
+                    _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
+
+                trashInspection.InspectionDone = true;
+                await trashInspection.Update(_dbContext);
+
+                if (message.ShouldDelete)
+                {
+                    await trashInspection.Delete(_dbContext);
+                }
             }
-
-            Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = await 
-                _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
-
-            trashInspection.InspectionDone = true;
-            await trashInspection.Update(_dbContext);
-
-            if (message.ShouldDelete)
+            catch (Exception exception)
             {
-                await trashInspection.Delete(_dbContext);
+                Console.WriteLine(exception.Message);
             }
-
         }
     }
 }

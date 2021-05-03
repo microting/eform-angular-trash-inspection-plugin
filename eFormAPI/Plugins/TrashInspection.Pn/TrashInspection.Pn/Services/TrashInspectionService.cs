@@ -81,7 +81,7 @@ namespace TrashInspection.Pn.Services
             try
             {
                 var trashInspectionSettings = _options.Value;
-                
+
                 var trashInspectionsQuery = _dbContext.TrashInspections
                     .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                     .AsNoTracking()
@@ -112,7 +112,7 @@ namespace TrashInspection.Pn.Services
                     }
                 }
 
-                QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
+                trashInspectionsQuery = QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
 
                 var total = await trashInspectionsQuery.Select(x => x.Id).CountAsync();
 
@@ -160,7 +160,7 @@ namespace TrashInspection.Pn.Services
                                 var locale = await _userService.GetCurrentUserLocale();
                                 var language = core.DbContextHelper.GetDbContext().
                                     Languages
-                                    .Single(x => string.Equals(x.LanguageCode, locale, StringComparison.CurrentCultureIgnoreCase));
+                                    .Single(x => x.LanguageCode == locale);
                                 var eForm = await core.TemplateItemRead(fractionEFormId, language);
                                 trashInspectionModel.SdkeFormId = eForm.Id;
                                 var kvp =
@@ -238,7 +238,9 @@ namespace TrashInspection.Pn.Services
 
             if (createModel.Token == pluginConfiguration.Value && createModel.WeighingNumber != null)
             {
-                // Handling the situation, where incoming timestamp is not in UTC.
+                try
+                {
+// Handling the situation, where incoming timestamp is not in UTC.
                 var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
 
                 if (utcAdjustment.Value == "1")
@@ -252,16 +254,17 @@ namespace TrashInspection.Pn.Services
                         createModel.Time = createModel.Time.AddHours(-fullHours);
                     }
                 }
-                if (_dbContext.TrashInspections.Any(x => x.WeighingNumber == createModel.WeighingNumber))
+
+                TrashInspection trashInspection = await _dbContext.TrashInspections.FirstOrDefaultAsync(x =>
+                    x.WeighingNumber == createModel.WeighingNumber);
+
+                if (trashInspection != null)
                 {
-                    var result =
-                        _dbContext.TrashInspections.SingleOrDefault(x =>
-                            x.WeighingNumber == createModel.WeighingNumber);
-                    return new OperationResult(true, result.Id.ToString());
+                    return new OperationResult(true, trashInspection.Id.ToString());
                 }
 
-                var trashInspection =
-                    new Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection
+                trashInspection =
+                    new TrashInspection
                     {
                         WeighingNumber = createModel.WeighingNumber,
                         Date = createModel.Date,
@@ -301,14 +304,20 @@ namespace TrashInspection.Pn.Services
 
                     await UpdateProducerAndTransporter(trashInspection, createModel);
 
+                    _coreHelper.LogEvent($"CreateTrashInspection: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
                     await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
                 }
 
                 return new OperationResult(true, createModel.Id.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return new OperationResult(false);
+                }
             }
 
             return new OperationResult(false);
-
         }
 
         public async Task<OperationDataResult<TrashInspectionModel>> Read(int trashInspectionId)

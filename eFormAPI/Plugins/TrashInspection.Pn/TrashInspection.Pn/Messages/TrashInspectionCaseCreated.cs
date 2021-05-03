@@ -32,17 +32,17 @@ namespace TrashInspection.Pn.Messages
         public int TemplateId { get; protected set; }
         public int TrashInspectionCaseId { get; protected set; }
         public TrashInspectionModel TrashInspectionModel { get; protected set; }
-        public Fraction Fraction  { get; protected set; }
-        public Segment Segment  { get; protected set; }
+        public int FractionId  { get; protected set; }
+        public int SegmentId  { get; protected set; }
 
         public TrashInspectionCaseCreated(int templateId, int trashInspectionCaseId,
-            TrashInspectionModel trashInspectionModel, Segment segment, Fraction fraction)
+            TrashInspectionModel trashInspectionModel, int segmentId, int fractionId)
         {
             TemplateId = templateId;
             TrashInspectionCaseId = trashInspectionCaseId;
             TrashInspectionModel = trashInspectionModel;
-            Segment = segment;
-            Fraction = fraction;
+            SegmentId = segmentId;
+            FractionId = fractionId;
         }
     }
 }

@@ -61,12 +61,15 @@ namespace TrashInspection.Pn.Handlers
             CultureInfo cultureInfo = new CultureInfo("de-DE");
             int sdkSiteId = trashInspectionCase.SdkSiteId;
             await using MicrotingDbContext microtingDbContext = _core.DbContextHelper.GetDbContext();
-            Site site = await microtingDbContext.Sites.SingleAsync(x => x.Id == sdkSiteId);
+            Site site = await microtingDbContext.Sites.SingleAsync(x => x.MicrotingUid == sdkSiteId);
             Language language = await microtingDbContext.Languages.SingleAsync(x => x.Id == site.LanguageId);
+            LogEvent($"TrashInspectionCaseCreatedHandler: sdkSiteId: {sdkSiteId}, message.TemplateId: {message.TemplateId} ");
             MainElement mainElement = await _core.ReadeForm(message.TemplateId, language);
             TrashInspectionModel createModel = message.TrashInspectionModel;
-            Segment segment = message.Segment;
-            Fraction fraction = message.Fraction;
+            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == message.SegmentId);
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == message.FractionId);
+
+            LogEvent($"TrashInspectionCaseCreatedHandler: Segment: {segment.Name}, TrashFraction: {fraction.Name} ");
 
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
@@ -150,7 +153,7 @@ namespace TrashInspection.Pn.Handlers
 
             if (allDone)
             {
-                var trashInspection = await _dbContext.TrashInspections.AsNoTracking().SingleOrDefaultAsync(x =>
+                var trashInspection = await _dbContext.TrashInspections.SingleOrDefaultAsync(x =>
                     x.Id == trashInspectionCase.TrashInspectionId);
                 if (trashInspection.Status < 66)
                 {
