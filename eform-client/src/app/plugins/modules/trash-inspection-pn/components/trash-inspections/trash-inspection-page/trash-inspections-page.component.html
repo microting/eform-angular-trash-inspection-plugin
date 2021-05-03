@@ -36,9 +36,8 @@
       <thead
         table-headers
         [tableHeaders]="tableHeaders"
-        [currentSortName]="trashInspectionsStateService.getSort() | async"
+        [sort]="trashInspectionsStateService.getSort() | async"
         (sortChanged)="sortTable($event)"
-        [isSortDsc]="trashInspectionsStateService.getIsSortDsc() | async"
       ></thead>
       <tbody id="tableBody">
         <tr *ngFor="let trashInspection of trashInspectionsModel.entities">
@@ -217,9 +216,7 @@
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
       <eform-pagination
-        [limit]="trashInspectionsStateService.getPageSize() | async"
-        [size]="trashInspectionsModel.total"
-        [offset]="trashInspectionsStateService.getOffset() | async"
+        [pagination]="trashInspectionsStateService.getPagination() | async"
         (onPageChanged)="changePage($event)"
       ></eform-pagination>
     </div>

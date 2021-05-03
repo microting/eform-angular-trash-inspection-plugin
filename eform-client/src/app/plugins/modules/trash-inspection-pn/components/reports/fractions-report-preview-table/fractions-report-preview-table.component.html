@@ -7,11 +7,8 @@
   <thead
     table-headers
     [tableHeaders]="tableHeaders"
-    [currentSortName]="
-      fractionsReportPreviewTableStateService.getSort() | async
-    "
+    [sort]="fractionsReportPreviewTableStateService.getSort() | async"
     (sortChanged)="sortTableFractions($event)"
-    [isSortDsc]="fractionsReportPreviewTableStateService.getIsSortDsc() | async"
   ></thead>
   <tbody id="tableBodyFractions">
     <tr *ngFor="let fraction of fractionYearModel.entities">

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { persistState, Store, StoreConfig } from '@datorama/akita';
-import { CommonPaginationState } from 'src/app/common/models/common-pagination-state';
+import { CommonPaginationState } from 'src/app/common/models';
 
 export interface ProducersReportPreviewTableState {
   pagination: CommonPaginationState;
@@ -16,13 +16,18 @@ export function createInitialState(): ProducersReportPreviewTableState {
 }
 
 const producersReportPreviewTablePersistStorage = persistState({
-  include: ['trashInspectionsProducersReportPreviewTable'],
-  key: 'pluginsStore',
+  include: ['producersReportPreviewTable'],
+  key: 'trashInspectionPn',
+  preStorageUpdate(storeName, state) {
+    return {
+      pagination: state.pagination,
+    };
+  },
 });
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'trashInspectionsProducersReportPreviewTable',
+  name: 'producersReportPreviewTable',
   resettable: true,
 })
 export class ProducersReportPreviewTableStore extends Store<ProducersReportPreviewTableState> {

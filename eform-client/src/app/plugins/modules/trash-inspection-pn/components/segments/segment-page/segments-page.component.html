@@ -18,9 +18,8 @@
       <thead
         table-headers
         [tableHeaders]="tableHeaders"
-        [currentSortName]="segmentsStateService.getSort() | async"
+        [sort]="segmentsStateService.getSort() | async"
         (sortChanged)="sortTable($event)"
-        [isSortDsc]="segmentsStateService.getIsSortDsc() | async"
       ></thead>
       <tbody id="tableBody">
         <tr *ngFor="let segment of segmentsPnModel.segmentList">
@@ -70,9 +69,7 @@
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
       <eform-pagination
-        [limit]="segmentsStateService.getPageSize() | async"
-        [size]="segmentsPnModel.total"
-        [offset]="segmentsStateService.getOffset() | async"
+        [pagination]="segmentsStateService.getPagination() | async"
         (onPageChanged)="changePage($event)"
       ></eform-pagination>
     </div>

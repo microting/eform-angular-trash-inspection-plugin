@@ -4,7 +4,7 @@ import {
   InstallationsPnModel,
 } from '../../../models/installation';
 import { TableHeaderElementModel } from 'src/app/common/models';
-import { InstallationsStateService } from '../store/installations-state-service';
+import { InstallationsStateService } from '../store';
 
 @Component({
   selector: 'app-trash-inspection-pn-installations-page',

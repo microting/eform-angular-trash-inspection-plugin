@@ -3,7 +3,8 @@ import { Query } from '@datorama/akita';
 import {
   TransportersReportPreviewTableState,
   TransportersReportPreviewTableStore,
-} from './transporters-report-preview-table-store';
+} from './';
+import { SortModel } from 'src/app/common/models';
 
 @Injectable({ providedIn: 'root' })
 export class TransportersReportPreviewTableQuery extends Query<TransportersReportPreviewTableState> {
@@ -15,6 +16,7 @@ export class TransportersReportPreviewTableQuery extends Query<TransportersRepor
     return this.getValue();
   }
 
-  selectIsSortDsc$ = this.select((state) => state.pagination.isSortDsc);
-  selectSort$ = this.select((state) => state.pagination.sort);
+  selectSort$ = this.select(
+    (state) => new SortModel(state.pagination.sort, state.pagination.isSortDsc)
+  );
 }

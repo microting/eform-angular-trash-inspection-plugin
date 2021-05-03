@@ -27,7 +27,6 @@ import {
   InstallationDeleteComponent,
   InstallationEditComponent,
   InstallationsPageComponent,
-  InstallationsStateService,
   ProducerCreateComponent,
   ProducerDeleteComponent,
   ProducerEditComponent,
@@ -51,13 +50,14 @@ import {
   TrashInspectionEditComponent,
   TrashInspectionSettingsComponent,
   TrashInspectionsPageComponent,
-  TrashInspectionsStateService,
   TrashInspectionVersionViewComponent,
 } from './components';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { trashInspectionStoreProviders } from './store-providers.config';
+import { TrashInspectionsStateService } from './components/trash-inspections/store';
+import { InstallationsStateService } from './components/installations/store';
 
 @NgModule({
   imports: [

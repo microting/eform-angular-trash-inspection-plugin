@@ -9,13 +9,8 @@
   <thead
     table-headers
     [tableHeaders]="tableHeaders"
-    [currentSortName]="
-      transportersReportPreviewTableStateService.getSort() | async
-    "
+    [sort]="transportersReportPreviewTableStateService.getSort() | async"
     (sortChanged)="sortTableTransporters($event)"
-    [isSortDsc]="
-      transportersReportPreviewTableStateService.getIsSortDsc() | async
-    "
   ></thead>
   <tbody id="tableBodyTransporters">
     <tr *ngFor="let transporter of transporterYearModel.entities">

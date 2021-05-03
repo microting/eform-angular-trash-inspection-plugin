@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FractionPnModel } from '../../../models';
-import { PluginClaimsHelper } from 'src/app/common/helpers';
 import { TrashInspectionPnClaims } from '../../../enums';
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { FractionsStateService } from '../store/fractions-state-service';
+import { FractionsStateService } from '../store';
 import { AuthStateService } from 'src/app/common/store';
 
 @Component({

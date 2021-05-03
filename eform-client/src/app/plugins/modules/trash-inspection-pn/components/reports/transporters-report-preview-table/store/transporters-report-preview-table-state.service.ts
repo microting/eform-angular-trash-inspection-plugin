@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TransportersReportPreviewTableStore } from './transporters-report-preview-table-store';
 import { Observable } from 'rxjs';
-import { OperationDataResult, Paged } from 'src/app/common/models';
+import { OperationDataResult, Paged, SortModel } from 'src/app/common/models';
 import { updateTableSort } from 'src/app/common/helpers';
-import { TransportersReportPreviewTableQuery } from './transporters-report-preview-table-query';
+import {
+  TransportersReportPreviewTableQuery,
+  TransportersReportPreviewTableStore,
+} from './';
 import { TrashInspectionPnTransporterService } from '../../../../services';
 import { FractionPnStatsByYearModel } from '../../../../models';
 
@@ -21,8 +23,7 @@ export class TransportersReportPreviewTableStateService {
     OperationDataResult<Paged<FractionPnStatsByYearModel>>
   > {
     return this.service.getAllTransportersByYear({
-      isSortDsc: this.query.pageSetting.pagination.isSortDsc,
-      sort: this.query.pageSetting.pagination.sort,
+      ...this.query.pageSetting.pagination,
       year: this.year,
     });
   }
@@ -31,12 +32,8 @@ export class TransportersReportPreviewTableStateService {
     this.year = year;
   }
 
-  getSort(): Observable<string> {
+  getSort(): Observable<SortModel> {
     return this.query.selectSort$;
-  }
-
-  getIsSortDsc(): Observable<boolean> {
-    return this.query.selectIsSortDsc$;
   }
 
   onSortTable(sort: string) {

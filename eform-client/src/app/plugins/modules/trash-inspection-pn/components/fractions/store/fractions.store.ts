@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { persistState, Store, StoreConfig } from '@datorama/akita';
-import { CommonPaginationState } from 'src/app/common/models/common-pagination-state';
+import { CommonPaginationState } from 'src/app/common/models';
 
 export interface FractionsState {
   pagination: CommonPaginationState;
+  total: number;
 }
 
 export function createInitialState(): FractionsState {
@@ -14,16 +15,23 @@ export function createInitialState(): FractionsState {
       isSortDsc: false,
       offset: 0,
     },
+    total: 0,
   };
 }
 
-export const fractionsPersistStorage = persistState({
-  include: ['trashInspectionPnFractions'],
-  key: 'pluginsStore',
+const fractionsPersistStorage = persistState({
+  include: ['fractions'],
+  key: 'trashInspectionPn',
+  preStorageUpdate(storeName, state) {
+    return {
+      pagination: state.pagination,
+      // filters: state.filters,
+    };
+  },
 });
 
 @Injectable({ providedIn: 'root' })
-@StoreConfig({ name: 'trashInspectionPnFractions', resettable: true })
+@StoreConfig({ name: 'fractions', resettable: true })
 export class FractionsStore extends Store<FractionsState> {
   constructor() {
     super(createInitialState());

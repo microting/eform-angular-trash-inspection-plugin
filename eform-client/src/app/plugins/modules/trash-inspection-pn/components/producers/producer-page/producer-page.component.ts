@@ -1,12 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SharedPnService } from '../../../../shared/services';
-import { TrashInspectionPnProducersService } from '../../../services';
-import { PageSettingsModel } from '../../../../../../common/models/settings';
-import {
-  ProducerPnModel,
-  ProducerPnRequestModel,
-  ProducersPnModel,
-} from '../../../models/producer';
+import { TableHeaderElementModel } from 'src/app/common/models';
+import { ProducerPnModel, ProducersPnModel } from '../../../models';
+import { ProducersStateService } from '../store';
 
 @Component({
   selector: 'app-producer-page',
@@ -17,80 +12,87 @@ export class ProducerPageComponent implements OnInit {
   @ViewChild('createProducerModal') createProducerModal;
   @ViewChild('editProducerModal') editProducerModal;
   @ViewChild('deleteProducerModal') deleteProducerModal;
-  localPageSettings: PageSettingsModel = new PageSettingsModel();
   producersModel: ProducersPnModel = new ProducersPnModel();
-  producersRequestModel: ProducerPnRequestModel = new ProducerPnRequestModel();
 
-  constructor(
-    private sharedPnService: SharedPnService,
-    private trashInspectionPnProducerService: TrashInspectionPnProducersService
-  ) {}
+  tableHeaders: TableHeaderElementModel[] = [
+    { name: 'Id', elementId: 'idTableHeader', sortable: true },
+    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
+    {
+      name: 'Description',
+      elementId: 'descriptionTableHeader',
+      sortable: true,
+    },
+    {
+      name: 'ForeignId',
+      elementId: 'locationCodeTableHeader',
+      sortable: true,
+      visibleName: 'Foreign ID',
+    },
+    { name: 'Address', elementId: 'addressTableHeader', sortable: true },
+    { name: 'City', elementId: 'cityTableHeader', sortable: true },
+    {
+      name: 'ZipCode',
+      elementId: 'zipCodeTableHeader',
+      sortable: true,
+      visibleName: 'Zip Code',
+    },
+    { name: 'Phone', elementId: 'phoneTableHeader', sortable: true },
+    {
+      name: 'ContactPerson',
+      elementId: 'contactPersonTableHeader',
+      sortable: true,
+      visibleName: 'Contact Person',
+    },
+    { name: 'Actions', elementId: '', sortable: false },
+  ];
+
+  constructor(public producersStateService: ProducersStateService) {}
 
   ngOnInit() {
-    this.getLocalPageSettings();
-  }
-
-  getLocalPageSettings() {
-    this.localPageSettings = this.sharedPnService.getLocalPageSettings(
-      'trashInspectionsPnSettings',
-      'Producers'
-    ).settings;
     this.getAllInitialData();
   }
-  updateLocalPageSettings() {
-    this.sharedPnService.updateLocalPageSettings(
-      'trashInspectionsPnSettings',
-      this.localPageSettings,
-      'Producers'
-    );
-    this.getAllProducers();
-  }
+
   getAllInitialData() {
     this.getAllProducers();
   }
 
   getAllProducers() {
-    this.producersRequestModel.isSortDsc = this.localPageSettings.isSortDsc;
-    this.producersRequestModel.sort = this.localPageSettings.sort;
-    this.producersRequestModel.pageSize = this.localPageSettings.pageSize;
-    this.trashInspectionPnProducerService
-      .getAllProducers(this.producersRequestModel)
-      .subscribe((data) => {
-        if (data && data.success) {
-          this.producersModel = data.model;
-        }
-      });
+    this.producersStateService.getAllProducers().subscribe((data) => {
+      if (data && data.success) {
+        this.producersModel = data.model;
+      }
+    });
   }
+
   showCreateProducerModal() {
     this.createProducerModal.show();
   }
+
   showEditProducerModal(producer: ProducerPnModel) {
     this.editProducerModal.show(producer);
   }
+
   showDeleteProducerModal(producer: ProducerPnModel) {
     this.deleteProducerModal.show(producer);
   }
+
   sortTable(sort: string) {
-    if (this.localPageSettings.sort === sort) {
-      this.localPageSettings.isSortDsc = !this.localPageSettings.isSortDsc;
-    } else {
-      this.localPageSettings.isSortDsc = false;
-      this.localPageSettings.sort = sort;
-    }
-    this.updateLocalPageSettings();
+    this.producersStateService.onSortTable(sort);
+    this.getAllProducers();
   }
 
-  changePage(e: any) {
-    if (e || e === 0) {
-      this.producersRequestModel.offset = e;
-      if (e === 0) {
-        this.producersRequestModel.pageIndex = 0;
-      } else {
-        this.producersRequestModel.pageIndex = Math.floor(
-          e / this.producersRequestModel.pageSize
-        );
-      }
-      this.getAllProducers();
-    }
+  changePage(offset: number) {
+    this.producersStateService.changePage(offset);
+    this.getAllProducers();
+  }
+
+  onProducerDeleted() {
+    this.producersStateService.onDelete();
+    this.getAllProducers();
+  }
+
+  onPageSizeChanged(pageSize: number) {
+    this.producersStateService.updatePageSize(pageSize);
+    this.getAllProducers();
   }
 }
