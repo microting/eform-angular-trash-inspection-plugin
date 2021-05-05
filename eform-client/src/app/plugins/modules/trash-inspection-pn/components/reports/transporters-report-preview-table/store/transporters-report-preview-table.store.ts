@@ -16,13 +16,18 @@ export function createInitialState(): TransportersReportPreviewTableState {
 }
 
 const transportersReportPreviewTablePersistStorage = persistState({
-  include: ['trashInspectionsTransportersReportPreviewTable'],
-  key: 'pluginsStore',
+  include: ['transportersReportPreviewTable'],
+  key: 'trashInspectionPn',
+  preStorageUpdate(storeName, state) {
+    return {
+      pagination: state.pagination,
+    };
+  },
 });
 
 @Injectable({ providedIn: 'root' })
 @StoreConfig({
-  name: 'trashInspectionsTransportersReportPreviewTable',
+  name: 'transportersReportPreviewTable',
   resettable: true,
 })
 export class TransportersReportPreviewTableStore extends Store<TransportersReportPreviewTableState> {

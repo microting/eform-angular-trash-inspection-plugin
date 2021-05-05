@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { TransporterPnStatsByYearModel } from '../../../models/transporter';
 import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { TransportersReportPreviewTableStateService } from './store/transporters-report-preview-table-state-service';
+import { TransportersReportPreviewTableStateService } from './store';
 
 @Component({
   selector: 'app-transporters-report-preview-table',

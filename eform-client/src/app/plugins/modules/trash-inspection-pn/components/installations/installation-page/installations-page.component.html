@@ -18,9 +18,8 @@
       <thead
         table-headers
         [tableHeaders]="tableHeaders"
-        [currentSortName]="installationsStateService.getSort() | async"
+        [sort]="installationsStateService.getSort() | async"
         (sortChanged)="sortTable($event)"
-        [isSortDsc]="installationsStateService.getIsSortDsc() | async"
       ></thead>
       <tbody id="installationsTableBody">
         <tr *ngFor="let installation of installationsModel.installationList">
@@ -68,9 +67,7 @@
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
       <eform-pagination
-        [limit]="installationsStateService.getPageSize() | async"
-        [size]="installationsModel.total"
-        [offset]="installationsStateService.getOffset() | async"
+        [pagination]="installationsStateService.getPagination() | async"
         (onPageChanged)="changePage($event)"
       ></eform-pagination>
     </div>

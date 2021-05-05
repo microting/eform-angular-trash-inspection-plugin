@@ -1,37 +1,35 @@
 import { Injectable } from '@angular/core';
-import { FractionsStore } from './fractions-store';
 import { Observable } from 'rxjs';
-import { OperationDataResult, Paged } from 'src/app/common/models';
-import { updateTableSort } from 'src/app/common/helpers';
-import { getOffset } from 'src/app/common/helpers/pagination.helper';
+import {
+  OperationDataResult,
+  PaginationModel,
+  SortModel,
+} from 'src/app/common/models';
+import { updateTableSort, getOffset } from 'src/app/common/helpers';
 import { map } from 'rxjs/operators';
-import { FractionsQuery } from './fractions-query';
-import { TrashInspectionPnFractionsService } from '../../../services';
-import { FractionPnModel } from '../../../models';
+import { SegmentsQuery, SegmentsStore } from './';
+import { SegmentsPnModel } from '../../../models';
+import { TrashInspectionPnSegmentsService } from '../../../services';
 
 @Injectable({ providedIn: 'root' })
-export class FractionsStateService {
+export class SegmentsStateService {
   constructor(
-    private store: FractionsStore,
-    private service: TrashInspectionPnFractionsService,
-    private query: FractionsQuery
+    private store: SegmentsStore,
+    private service: TrashInspectionPnSegmentsService,
+    private query: SegmentsQuery
   ) {}
 
-  private total: number;
-
-  getAllFractions(): Observable<OperationDataResult<Paged<FractionPnModel>>> {
+  getAllSegments(): Observable<OperationDataResult<SegmentsPnModel>> {
     return this.service
-      .getAllFractions({
-        isSortDsc: this.query.pageSetting.pagination.isSortDsc,
-        offset: this.query.pageSetting.pagination.offset,
-        pageSize: this.query.pageSetting.pagination.pageSize,
-        sort: this.query.pageSetting.pagination.sort,
-        pageIndex: 0,
+      .getAllSegments({
+        ...this.query.pageSetting.pagination,
       })
       .pipe(
         map((response) => {
           if (response && response.success && response.model) {
-            this.total = response.model.total;
+            this.store.update(() => ({
+              total: response.model.total,
+            }));
           }
           return response;
         })
@@ -48,20 +46,12 @@ export class FractionsStateService {
     this.checkOffset();
   }
 
-  getOffset(): Observable<number> {
-    return this.query.selectOffset$;
-  }
-
   getPageSize(): Observable<number> {
     return this.query.selectPageSize$;
   }
 
-  getSort(): Observable<string> {
+  getSort(): Observable<SortModel> {
     return this.query.selectSort$;
-  }
-
-  getIsSortDsc(): Observable<boolean> {
-    return this.query.selectIsSortDsc$;
   }
 
   changePage(offset: number) {
@@ -74,7 +64,9 @@ export class FractionsStateService {
   }
 
   onDelete() {
-    this.total -= 1;
+    this.store.update((state) => ({
+      total: state.total - 1,
+    }));
     this.checkOffset();
   }
 
@@ -97,7 +89,7 @@ export class FractionsStateService {
     const newOffset = getOffset(
       this.query.pageSetting.pagination.pageSize,
       this.query.pageSetting.pagination.offset,
-      this.total
+      this.query.pageSetting.total
     );
     if (newOffset !== this.query.pageSetting.pagination.offset) {
       this.store.update((state) => ({
@@ -107,5 +99,9 @@ export class FractionsStateService {
         },
       }));
     }
+  }
+
+  getPagination(): Observable<PaginationModel> {
+    return this.query.selectPagination$;
   }
 }

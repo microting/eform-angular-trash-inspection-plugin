@@ -1,37 +1,36 @@
 import { Injectable } from '@angular/core';
-import { InstallationsStore } from './installations-store';
 import { Observable } from 'rxjs';
-import { OperationDataResult } from 'src/app/common/models';
-import { updateTableSort } from 'src/app/common/helpers';
-import { getOffset } from 'src/app/common/helpers/pagination.helper';
+import {
+  OperationDataResult,
+  Paged,
+  PaginationModel,
+  SortModel,
+} from 'src/app/common/models';
+import { updateTableSort, getOffset } from 'src/app/common/helpers';
 import { map } from 'rxjs/operators';
-import { InstallationsQuery } from './installations-query';
-import { InstallationsPnModel } from '../../../models';
-import { TrashInspectionPnInstallationsService } from '../../../services';
+import { ProducersQuery, ProducersStore } from './';
+import { TrashInspectionPnProducersService } from '../../../services';
+import { ProducersPnModel } from '../../../models';
 
 @Injectable({ providedIn: 'root' })
-export class InstallationsStateService {
+export class ProducersStateService {
   constructor(
-    private store: InstallationsStore,
-    private service: TrashInspectionPnInstallationsService,
-    private query: InstallationsQuery
+    private store: ProducersStore,
+    private service: TrashInspectionPnProducersService,
+    private query: ProducersQuery
   ) {}
 
-  private total: number;
-
-  getAllInstallations(): Observable<OperationDataResult<InstallationsPnModel>> {
+  getAllProducers(): Observable<OperationDataResult<ProducersPnModel>> {
     return this.service
-      .getAllInstallations({
-        isSortDsc: this.query.pageSetting.pagination.isSortDsc,
-        offset: this.query.pageSetting.pagination.offset,
-        pageSize: this.query.pageSetting.pagination.pageSize,
-        sort: this.query.pageSetting.pagination.sort,
-        pageIndex: 0,
+      .getAllProducers({
+        ...this.query.pageSetting.pagination,
       })
       .pipe(
         map((response) => {
           if (response && response.success && response.model) {
-            this.total = response.model.total;
+            this.store.update(() => ({
+              total: response.model.total,
+            }));
           }
           return response;
         })
@@ -48,20 +47,12 @@ export class InstallationsStateService {
     this.checkOffset();
   }
 
-  getOffset(): Observable<number> {
-    return this.query.selectOffset$;
-  }
-
   getPageSize(): Observable<number> {
     return this.query.selectPageSize$;
   }
 
-  getSort(): Observable<string> {
+  getSort(): Observable<SortModel> {
     return this.query.selectSort$;
-  }
-
-  getIsSortDsc(): Observable<boolean> {
-    return this.query.selectIsSortDsc$;
   }
 
   changePage(offset: number) {
@@ -74,7 +65,9 @@ export class InstallationsStateService {
   }
 
   onDelete() {
-    this.total -= 1;
+    this.store.update((state) => ({
+      total: state.total - 1,
+    }));
     this.checkOffset();
   }
 
@@ -97,7 +90,7 @@ export class InstallationsStateService {
     const newOffset = getOffset(
       this.query.pageSetting.pagination.pageSize,
       this.query.pageSetting.pagination.offset,
-      this.total
+      this.query.pageSetting.total
     );
     if (newOffset !== this.query.pageSetting.pagination.offset) {
       this.store.update((state) => ({
@@ -107,5 +100,9 @@ export class InstallationsStateService {
         },
       }));
     }
+  }
+
+  getPagination(): Observable<PaginationModel> {
+    return this.query.selectPagination$;
   }
 }

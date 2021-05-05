@@ -1,41 +1,56 @@
 import { Injectable } from '@angular/core';
-import { SegmentsStore } from './segments-store';
 import { Observable } from 'rxjs';
-import { OperationDataResult } from 'src/app/common/models';
-import { updateTableSort } from 'src/app/common/helpers';
-import { getOffset } from 'src/app/common/helpers/pagination.helper';
+import {
+  OperationDataResult,
+  Paged,
+  PaginationModel,
+  SortModel,
+} from 'src/app/common/models';
+import { updateTableSort, getOffset } from 'src/app/common/helpers';
 import { map } from 'rxjs/operators';
-import { SegmentsQuery } from './segments-query';
-import { SegmentsPnModel } from '../../../models';
-import { TrashInspectionPnSegmentsService } from '../../../services';
+import { TrashInspectionsQuery, TrashInspectionsStore } from './';
+import { TrashInspectionPnTrashInspectionsService } from '../../../services';
+import { TrashInspectionPnModel } from '../../../models';
 
 @Injectable({ providedIn: 'root' })
-export class SegmentsStateService {
+export class TrashInspectionsStateService {
   constructor(
-    private store: SegmentsStore,
-    private service: TrashInspectionPnSegmentsService,
-    private query: SegmentsQuery
+    private store: TrashInspectionsStore,
+    private service: TrashInspectionPnTrashInspectionsService,
+    private query: TrashInspectionsQuery
   ) {}
 
-  private total: number;
-
-  getAllSegments(): Observable<OperationDataResult<SegmentsPnModel>> {
+  getAllTrashInspections(): Observable<
+    OperationDataResult<Paged<TrashInspectionPnModel>>
+  > {
     return this.service
-      .getAllSegments({
-        isSortDsc: this.query.pageSetting.pagination.isSortDsc,
-        offset: this.query.pageSetting.pagination.offset,
-        pageSize: this.query.pageSetting.pagination.pageSize,
-        sort: this.query.pageSetting.pagination.sort,
-        pageIndex: 0,
+      .getAllTrashInspections({
+        ...this.query.pageSetting.pagination,
+        ...this.query.pageSetting.filters,
       })
       .pipe(
         map((response) => {
           if (response && response.success && response.model) {
-            this.total = response.model.total;
+            this.store.update(() => ({
+              total: response.model.total,
+            }));
           }
           return response;
         })
       );
+  }
+
+  updateNameFilter(nameFilter: string) {
+    this.store.update((state) => ({
+      filters: {
+        ...state.filters,
+        nameFilter: nameFilter,
+      },
+      pagination: {
+        ...state.pagination,
+        offset: 0,
+      },
+    }));
   }
 
   updatePageSize(pageSize: number) {
@@ -48,20 +63,16 @@ export class SegmentsStateService {
     this.checkOffset();
   }
 
-  getOffset(): Observable<number> {
-    return this.query.selectOffset$;
-  }
-
   getPageSize(): Observable<number> {
     return this.query.selectPageSize$;
   }
 
-  getSort(): Observable<string> {
+  getSort(): Observable<SortModel> {
     return this.query.selectSort$;
   }
 
-  getIsSortDsc(): Observable<boolean> {
-    return this.query.selectIsSortDsc$;
+  getNameFilter(): Observable<string> {
+    return this.query.selectNameFilter$;
   }
 
   changePage(offset: number) {
@@ -74,7 +85,9 @@ export class SegmentsStateService {
   }
 
   onDelete() {
-    this.total -= 1;
+    this.store.update((state) => ({
+      total: state.total - 1,
+    }));
     this.checkOffset();
   }
 
@@ -97,7 +110,7 @@ export class SegmentsStateService {
     const newOffset = getOffset(
       this.query.pageSetting.pagination.pageSize,
       this.query.pageSetting.pagination.offset,
-      this.total
+      this.query.pageSetting.total
     );
     if (newOffset !== this.query.pageSetting.pagination.offset) {
       this.store.update((state) => ({
@@ -107,5 +120,9 @@ export class SegmentsStateService {
         },
       }));
     }
+  }
+
+  getPagination(): Observable<PaginationModel> {
+    return this.query.selectPagination$;
   }
 }

@@ -30,9 +30,8 @@
       <thead
         table-headers
         [tableHeaders]="tableHeaders"
-        [currentSortName]="fractionsStateService.getSort() | async"
+        [sort]="fractionsStateService.getSort() | async"
         (sortChanged)="sortTable($event)"
-        [isSortDsc]="fractionsStateService.getIsSortDsc() | async"
       ></thead>
       <tbody id="tableBody">
         <tr *ngFor="let fraction of fractionsModel.entities">
@@ -92,9 +91,7 @@
     </div>
     <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
       <eform-pagination
-        [limit]="fractionsStateService.getPageSize() | async"
-        [size]="fractionsModel.total"
-        [offset]="fractionsStateService.getOffset() | async"
+        [pagination]="fractionsStateService.getPagination() | async"
         (onPageChanged)="changePage($event)"
       ></eform-pagination>
     </div>

@@ -9,11 +9,8 @@
   <thead
     table-headers
     [tableHeaders]="tableHeaders"
-    [currentSortName]="
-      producersReportPreviewTableStateService.getSort() | async
-    "
+    [sort]="producersReportPreviewTableStateService.getSort() | async"
     (sortChanged)="sortTableProducers($event)"
-    [isSortDsc]="producersReportPreviewTableStateService.getIsSortDsc() | async"
   ></thead>
   <tbody id="tableBodyProducers">
     <tr *ngFor="let producer of producerYearModel.entities">
@@ -42,7 +39,6 @@
         {{ producer.conditionalApprovedPercentage }}%
       </td>
       <td id="NotApprovedProducers">{{ producer.notApprovedPercentage }}%</td>
-
       <td></td>
     </tr>
   </tbody>

@@ -1,9 +1,8 @@
-export * from './fractions/index';
-export * from './installations/index';
-export * from './trash-inspections/index';
-export * from './trash-inspections-setting/index';
-export * from './segments/index';
-export * from './producers/index';
-export * from './transporters/index';
-export * from './reports/index';
-
+export * from './fractions';
+export * from './installations';
+export * from './trash-inspections';
+export * from './trash-inspections-setting';
+export * from './segments';
+export * from './producers';
+export * from './transporters';
+export * from './reports';

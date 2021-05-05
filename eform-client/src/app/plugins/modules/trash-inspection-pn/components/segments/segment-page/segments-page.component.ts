@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { SegmentPnModel, SegmentsPnModel } from '../../../models/segment';
-import { SegmentsStateService } from '../../../components/segments/store/segments-state-service';
+import { SegmentPnModel, SegmentsPnModel } from '../../../models';
+import { SegmentsStateService } from '../../../components/segments/store';
 import { TableHeaderElementModel } from 'src/app/common/models';
 
 @Component({
@@ -49,6 +48,7 @@ export class SegmentsPageComponent implements OnInit {
       }
     });
   }
+
   showEditSegmentModal(segment: SegmentPnModel) {
     this.editSegmentModal.show(segment);
   }
