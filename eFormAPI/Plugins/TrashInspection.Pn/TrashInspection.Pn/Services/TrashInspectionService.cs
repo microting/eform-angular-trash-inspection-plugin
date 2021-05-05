@@ -730,6 +730,7 @@ namespace TrashInspection.Pn.Services
                         new XElement("Transporter", trashInspection.Transporter),
                         new XElement("WeighingNumber", trashInspection.WeighingNumber),
                         new XElement("Segment", segmentName),
+                        new XElement("noImageTitle", "true"),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
                     _coreHelper.LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");
