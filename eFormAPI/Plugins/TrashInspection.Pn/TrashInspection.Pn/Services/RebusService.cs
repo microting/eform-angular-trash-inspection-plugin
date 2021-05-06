@@ -46,25 +46,26 @@ namespace TrashInspection.Pn.Services
         private DbContextHelper _dbContextHelper;
 
         public RebusService(IEFormCoreService coreHelper)
-        {            
+        {
             _coreHelper = coreHelper;
+            _container = new WindsorContainer();
         }
 
         public async Task Start(string sdkConnectionString, string connectionString, int maxParallelism, int numberOfWorkers)
         {
             _connectionString = connectionString;
             _sdkConnectionString = sdkConnectionString;
-            _container = new WindsorContainer();
+
+            Core core = await _coreHelper.GetCore();
+            _dbContextHelper = new DbContextHelper(connectionString);
+            _container.Register(Component.For<Core>().Instance(core));
+            _container.Register(Component.For<DbContextHelper>().Instance(_dbContextHelper));
             _container.Install(
                 new RebusHandlerInstaller()
                 , new RebusInstaller(connectionString, maxParallelism, numberOfWorkers)
             );
-            
-            Core core = await _coreHelper.GetCore();
-            _dbContextHelper = new DbContextHelper(connectionString);
-            
-            _container.Register(Component.For<Core>().Instance(core));
-            _container.Register(Component.For<DbContextHelper>().Instance(_dbContextHelper));
+
+
             _bus = _container.Resolve<IBus>();
         }
 
@@ -77,6 +78,11 @@ namespace TrashInspection.Pn.Services
             TrashInspectionPnContextFactory contextFactory = new TrashInspectionPnContextFactory();
             return contextFactory.CreateDbContext(new[] {_connectionString});
 
+        }
+
+        public WindsorContainer GetContainer()
+        {
+            return (WindsorContainer)_container;
         }
     }
 }

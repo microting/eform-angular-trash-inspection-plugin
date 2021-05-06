@@ -26,6 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -124,6 +126,8 @@ namespace TrashInspection.Pn
             Console.WriteLine($"[DBG] EformTrashInspectionPlugin.Configure _sdkConnectionString is {_sdkConnectionString}");
             if (!_sdkConnectionString.Contains("..."))
             {
+                WindsorContainer container = rebusService.GetContainer();
+                container.Register(Component.For<EformTrashInspectionPlugin>().Instance(this));
                 rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
             }
 

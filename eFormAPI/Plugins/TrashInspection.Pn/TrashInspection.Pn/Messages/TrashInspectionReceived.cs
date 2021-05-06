@@ -30,17 +30,17 @@ namespace TrashInspection.Pn.Messages
     public class TrashInspectionReceived
     {
         public TrashInspectionModel TrashInspectionModel { get; protected set; }
-        public Fraction Fraction { get; protected set; }
-        public Segment Segment { get; protected set; }
-        public Installation Installation { get; protected set; }
-        
-        public TrashInspectionReceived(TrashInspectionModel trashInspectionModel, Fraction fraction, Segment segment, Installation installation)
+        public int FractionId { get; protected set; }
+        public int SegmentId { get; protected set; }
+        public int InstallationId { get; protected set; }
+
+        public TrashInspectionReceived(TrashInspectionModel trashInspectionModel, int fractionId, int segmentId, int installationId)
         {
 
             TrashInspectionModel = trashInspectionModel;
-            Fraction = fraction;
-            Segment = segment;
-            Installation = installation;
+            FractionId = fractionId;
+            SegmentId = segmentId;
+            InstallationId = installationId;
         }
     }
 }
