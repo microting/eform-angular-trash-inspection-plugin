@@ -1,8 +1,16 @@
 # Changelog
 
+## [v2.0.162](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.162) (2021-05-06)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.161...v2.0.162)
+
 ## [v2.0.161](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.161) (2021-05-05)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.160...v2.0.161)
+
+**Implemented enhancements:**
+
+- Bump Microting.eFormTrashInspectionBase from 3.0.1 to 3.0.2 [\#142](https://github.com/microting/eform-angular-trashinspection-plugin/issues/142)
 
 **Merged pull requests:**
 
