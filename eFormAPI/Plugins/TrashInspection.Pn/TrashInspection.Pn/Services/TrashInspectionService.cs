@@ -243,7 +243,7 @@ namespace TrashInspection.Pn.Services
 // Handling the situation, where incoming timestamp is not in UTC.
                 var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
 
-                if (utcAdjustment.Value == "1")
+                if (utcAdjustment.Value == "true")
                 {
                     if (createModel.Time.Hour > dateTime.Hour)
                     {
