@@ -6,7 +6,7 @@ if (( "$GIT_STATUS" > 0 )); then
 	cd eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn
   CURRENT_NUMBER_OF_COMMITS=`git log --oneline | wc -l`
 
-	PACKAGES=('Microting.eForm' 'Microting.eFormApi.BasePn' 'Microting.eFormTrashInspectionBase')
+	PACKAGES=('Microting.eForm' 'Microting.eFormApi.BasePn' 'Microting.eFormTrashInspectionBase' 'Microsoft.AspNetCore.Identity.EntityFrameworkCore')
 	PROJECT_NAME='TrashInspection.Pn.csproj'
 	REPOSITORY='eform-angular-trashinspection-plugin'
 
