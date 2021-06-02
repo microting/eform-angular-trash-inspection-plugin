@@ -243,7 +243,7 @@ namespace TrashInspection.Pn.Services
 // Handling the situation, where incoming timestamp is not in UTC.
                 var utcAdjustment = await _dbContext.PluginConfigurationValues.SingleOrDefaultAsync(x => x.Name == "TrashInspectionBaseSettings:UtcAdjustment");
 
-                if (utcAdjustment.Value == "1")
+                if (utcAdjustment.Value == "true")
                 {
                     if (createModel.Time.Hour > dateTime.Hour)
                     {
@@ -305,7 +305,7 @@ namespace TrashInspection.Pn.Services
                     await UpdateProducerAndTransporter(trashInspection, createModel);
 
                     _coreHelper.LogEvent($"CreateTrashInspection: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
-                    await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction, segment, installation));
+                    await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction.Id, segment.Id, installation.Id));
                 }
 
                 return new OperationResult(true, createModel.Id.ToString());
@@ -730,6 +730,7 @@ namespace TrashInspection.Pn.Services
                         new XElement("Transporter", trashInspection.Transporter),
                         new XElement("WeighingNumber", trashInspection.WeighingNumber),
                         new XElement("Segment", segmentName),
+                        new XElement("noImageTitle", "true"),
                         new XElement("TrashFraction", $"{fraction.ItemNumber} {fraction.Name}")
                     ).ToString();
                     _coreHelper.LogEvent($"DownloadEFormPdf: xmlContent is {xmlContent}");

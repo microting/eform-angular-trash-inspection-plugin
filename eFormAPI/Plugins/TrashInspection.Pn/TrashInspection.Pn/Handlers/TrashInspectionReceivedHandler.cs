@@ -61,9 +61,13 @@ namespace TrashInspection.Pn.Handlers
 
             LogEvent($"TrashInspectionReceivedHandler.Handle: called for message.TrashInspectionModel.WeighingNumber {message.TrashInspectionModel.WeighingNumber}");
             TrashInspectionModel createModel = message.TrashInspectionModel;
-            Fraction fraction = message.Fraction;
-            Segment segment = message.Segment;
-            Installation installation = message.Installation;
+            //int fraction = message.FractionId;
+            Fraction fraction = await _dbContext.Fractions.SingleOrDefaultAsync(x => x.Id == message.FractionId);
+            //int segment = message.SegmentId;
+            Segment segment = await _dbContext.Segments.SingleOrDefaultAsync(x => x.Id == message.SegmentId);
+            //int installation = message.InstallationId;
+            Installation installation =
+                await _dbContext.Installations.SingleOrDefaultAsync(x => x.Id == message.InstallationId);
 
             int eFormId = fraction.eFormId;
 
