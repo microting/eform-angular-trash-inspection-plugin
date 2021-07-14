@@ -24,6 +24,7 @@ export class ProducersStateService {
     return this.service
       .getAllProducers({
         ...this.query.pageSetting.pagination,
+        ...this.query.pageSetting.filters,
       })
       .pipe(
         map((response) => {
@@ -47,8 +48,21 @@ export class ProducersStateService {
     this.checkOffset();
   }
 
+  updateNameFilter(nameFilter: string) {
+    this.store.update((state) => ({
+      filters: {
+        ...state.filters,
+        pageSize: nameFilter,
+      },
+    }));
+  }
+
   getPageSize(): Observable<number> {
     return this.query.selectPageSize$;
+  }
+
+  getNameFilter(): Observable<string> {
+    return this.query.selectNameFilter$;
   }
 
   getSort(): Observable<SortModel> {
