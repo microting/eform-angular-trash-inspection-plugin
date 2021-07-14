@@ -74,7 +74,7 @@ namespace TrashInspection.Pn.Handlers
             mainElement.Repeated = 1;
             mainElement.EndDate = DateTime.Now.AddDays(2).ToUniversalTime();
             mainElement.StartDate = DateTime.Now.ToUniversalTime();
-            using (var dbContext = _core.DbContextHelper.GetDbContext())
+            await using (var dbContext = _core.DbContextHelper.GetDbContext())
             {
                 mainElement.CheckListFolderName = dbContext.Folders.Single(x => x.Id == segment.SdkFolderId).MicrotingUid.ToString();
             }
@@ -82,9 +82,18 @@ namespace TrashInspection.Pn.Handlers
             mainElement.EnableQuickSync = true;
             mainElement.DisplayOrder = (int)Math.Round(DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds) * -1;
 
-            CDataValue cDataValue = new CDataValue();
-            cDataValue.InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>";
-            cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + createModel.Time.ToString("T", cultureInfo)}<br>";
+            TimeZoneInfo timeZoneInfo;
+            try
+            {
+                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Europe/Copenhagen");
+            }
+            catch
+            {
+                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+            }
+            var localTime = TimeZoneInfo.ConvertTimeFromUtc(createModel.Time, timeZoneInfo);
+            CDataValue cDataValue = new CDataValue {InderValue = $"<b>Vejenr:</b> {createModel.WeighingNumber}<br>"};
+            cDataValue.InderValue += $"<b>Dato:</b> {createModel.Date.ToString("dd-MM-yyyy") + " " + localTime.ToString("T", cultureInfo)}<br>";
             cDataValue.InderValue += $"<b>Område:</b> {segment.Name}<br>";
             cDataValue.InderValue += $"<b>Producent:</b> {createModel.Producer}<br>";
             cDataValue.InderValue += $"<b>Varenummer:</b> {fraction.ItemNumber} {fraction.Name}";
@@ -174,6 +183,7 @@ namespace TrashInspection.Pn.Handlers
             }
             catch
             {
+                // ignored
             }
         }
 
@@ -188,7 +198,7 @@ namespace TrashInspection.Pn.Handlers
             }
             catch
             {
-
+                // ignored
             }
         }
     }
