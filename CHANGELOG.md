@@ -1,5 +1,36 @@
 # Changelog
 
+## [v2.0.172](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.172) (2021-07-15)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.171...v2.0.172)
+
+**Implemented enhancements:**
+
+- Bump Microting.eFormTrashInspectionBase from 3.0.15 to 3.0.16 [\#206](https://github.com/microting/eform-angular-trashinspection-plugin/issues/206)
+- Bump Microting.eFormApi.BasePn from 3.0.28 to 3.0.30 [\#205](https://github.com/microting/eform-angular-trashinspection-plugin/issues/205)
+- Bump Microting.eForm from 5.2.15 to 5.2.17 [\#204](https://github.com/microting/eform-angular-trashinspection-plugin/issues/204)
+
+**Merged pull requests:**
+
+- Bump Pomelo.EntityFrameworkCore.MySql from 5.0.0 to 5.0.1 in /eFormAPI/Plugins/TrashInspection.Pn [\#194](https://github.com/microting/eform-angular-trashinspection-plugin/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump NUnit3TestAdapter from 3.17.0 to 4.0.0 in /eFormAPI/Plugins/TrashInspection.Pn [\#181](https://github.com/microting/eform-angular-trashinspection-plugin/pull/181) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump Microsoft.NET.Test.Sdk from 16.9.4 to 16.10.0 in /eFormAPI/Plugins/TrashInspection.Pn [\#158](https://github.com/microting/eform-angular-trashinspection-plugin/pull/158) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v2.0.171](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.171) (2021-07-14)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.170...v2.0.171)
+
+**Implemented enhancements:**
+
+- Bump Microsoft.AspNetCore.Identity.EntityFrameworkCore from 5.0.7 to 5.0.8 [\#203](https://github.com/microting/eform-angular-trashinspection-plugin/issues/203)
+- Bump Microting.eFormTrashInspectionBase from 3.0.14 to 3.0.15 [\#202](https://github.com/microting/eform-angular-trashinspection-plugin/issues/202)
+- Bump Microting.eFormApi.BasePn from 3.0.27 to 3.0.28 [\#201](https://github.com/microting/eform-angular-trashinspection-plugin/issues/201)
+- Bump Microting.eForm from 5.2.14 to 5.2.15 [\#200](https://github.com/microting/eform-angular-trashinspection-plugin/issues/200)
+
+## [v2.0.170](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.170) (2021-07-05)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.169...v2.0.170)
+
 ## [v2.0.169](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.169) (2021-06-27)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.168...v2.0.169)
@@ -165,11 +196,14 @@
 
 - Bump Microting.eFormApi.BasePn from 2.1.2 to 2.1.3 [\#117](https://github.com/microting/eform-angular-trashinspection-plugin/issues/117)
 - Bump Microting.eForm from 4.5.2 to 4.5.3 [\#116](https://github.com/microting/eform-angular-trashinspection-plugin/issues/116)
-- Bump Microting.eFormTrashInspectionBase from 2.1.3 to 2.1.4 [\#115](https://github.com/microting/eform-angular-trashinspection-plugin/issues/115)
 
 ## [v2.0.152](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.152) (2021-04-27)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.151...v2.0.152)
+
+**Implemented enhancements:**
+
+- Bump Microting.eFormTrashInspectionBase from 2.1.3 to 2.1.4 [\#115](https://github.com/microting/eform-angular-trashinspection-plugin/issues/115)
 
 ## [v2.0.151](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.151) (2021-04-27)
 
