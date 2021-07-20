@@ -23,6 +23,7 @@ export class TransportersStateService {
     return this.service
       .getAllTransporters({
         ...this.query.pageSetting.pagination,
+        ...this.query.pageSetting.filters,
       })
       .pipe(
         map((response) => {
@@ -44,6 +45,19 @@ export class TransportersStateService {
       },
     }));
     this.checkOffset();
+  }
+
+  updateNameFilter(nameFilter: string) {
+    this.store.update((state) => ({
+      filters: {
+        ...state.filters,
+        nameFilter: nameFilter,
+      },
+    }));
+  }
+
+  getNameFilter(): Observable<string> {
+    return this.query.selectNameFilter$;
   }
 
   getPageSize(): Observable<number> {
