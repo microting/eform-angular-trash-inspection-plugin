@@ -25,4 +25,6 @@ export class ProducersQuery extends Query<ProducersState> {
   selectSort$ = this.select(
     (state) => new SortModel(state.pagination.sort, state.pagination.isSortDsc)
   );
+
+  selectNameFilter$ = this.select((state) => state.filters.nameFilter);
 }

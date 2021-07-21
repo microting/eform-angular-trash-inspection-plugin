@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { persistState, Store, StoreConfig } from '@datorama/akita';
-import { CommonPaginationState } from 'src/app/common/models';
+import {
+  CommonPaginationState,
+  FiltrationStateModel,
+} from 'src/app/common/models';
 
 export interface ProducersState {
   pagination: CommonPaginationState;
+  filters: FiltrationStateModel;
   total: number;
 }
 
@@ -15,6 +19,7 @@ export function createInitialState(): ProducersState {
       isSortDsc: false,
       offset: 0,
     },
+    filters: { nameFilter: '' },
     total: 0,
   };
 }
@@ -25,7 +30,7 @@ const producersPersistStorage = persistState({
   preStorageUpdate(storeName, state) {
     return {
       pagination: state.pagination,
-      // filters: state.filters,
+      filters: state.filters,
     };
   },
 });
