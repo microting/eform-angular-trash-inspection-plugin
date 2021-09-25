@@ -1,5 +1,13 @@
 # Changelog
 
+## [v2.0.187](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.187) (2021-09-25)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.186...v2.0.187)
+
+## [v2.0.186](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.186) (2021-09-16)
+
+[Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.185...v2.0.186)
+
 ## [v2.0.185](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.185) (2021-09-16)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.184...v2.0.185)
@@ -113,7 +121,6 @@
 
 - Bump Microting.eFormTrashInspectionBase from 3.0.19 to 3.0.21 [\#225](https://github.com/microting/eform-angular-trashinspection-plugin/issues/225)
 - Bump Microting.eFormApi.BasePn from 3.0.34 to 3.0.37 [\#224](https://github.com/microting/eform-angular-trashinspection-plugin/issues/224)
-- Bump Microting.eForm from 5.2.22 to 5.2.26 [\#223](https://github.com/microting/eform-angular-trashinspection-plugin/issues/223)
 
 ## [v2.0.174](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.174) (2021-08-05)
 
@@ -121,6 +128,7 @@
 
 **Implemented enhancements:**
 
+- Bump Microting.eForm from 5.2.22 to 5.2.26 [\#223](https://github.com/microting/eform-angular-trashinspection-plugin/issues/223)
 - Bump Microting.eFormTrashInspectionBase from 3.0.18 to 3.0.19 [\#219](https://github.com/microting/eform-angular-trashinspection-plugin/issues/219)
 - Bump Microting.eFormApi.BasePn from 3.0.33 to 3.0.34 [\#218](https://github.com/microting/eform-angular-trashinspection-plugin/issues/218)
 - Bump Microting.eForm from 5.2.21 to 5.2.22 [\#217](https://github.com/microting/eform-angular-trashinspection-plugin/issues/217)
@@ -281,6 +289,8 @@
 **Implemented enhancements:**
 
 - Bump Microting.eFormTrashInspectionBase from 3.0.0 to 3.0.1 [\#139](https://github.com/microting/eform-angular-trashinspection-plugin/issues/139)
+- Bump Microting.eFormApi.BasePn from 3.0.4 to 3.0.5 [\#138](https://github.com/microting/eform-angular-trashinspection-plugin/issues/138)
+- Bump Microting.eForm from 5.1.0 to 5.1.1 [\#137](https://github.com/microting/eform-angular-trashinspection-plugin/issues/137)
 
 ## [v2.0.158](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.158) (2021-05-04)
 
@@ -288,7 +298,6 @@
 
 **Implemented enhancements:**
 
-- Bump Microting.eFormApi.BasePn from 3.0.4 to 3.0.5 [\#138](https://github.com/microting/eform-angular-trashinspection-plugin/issues/138)
 - Bump Microting.eFormApi.BasePn from 3.0.1 to 3.0.4 [\#134](https://github.com/microting/eform-angular-trashinspection-plugin/issues/134)
 - Bump Microting.eForm from 5.0.2 to 5.1.0 [\#133](https://github.com/microting/eform-angular-trashinspection-plugin/issues/133)
 
@@ -298,7 +307,6 @@
 
 **Implemented enhancements:**
 
-- Bump Microting.eForm from 5.1.0 to 5.1.1 [\#137](https://github.com/microting/eform-angular-trashinspection-plugin/issues/137)
 - Bump Microting.eFormApi.BasePn from 3.0.1 to 3.0.3 [\#130](https://github.com/microting/eform-angular-trashinspection-plugin/issues/130)
 - Bump Microting.eForm from 5.0.2 to 5.0.4 [\#129](https://github.com/microting/eform-angular-trashinspection-plugin/issues/129)
 
@@ -335,11 +343,14 @@
 
 - Bump Microting.eFormApi.BasePn from 2.1.2 to 2.1.3 [\#117](https://github.com/microting/eform-angular-trashinspection-plugin/issues/117)
 - Bump Microting.eForm from 4.5.2 to 4.5.3 [\#116](https://github.com/microting/eform-angular-trashinspection-plugin/issues/116)
-- Bump Microting.eFormTrashInspectionBase from 2.1.3 to 2.1.4 [\#115](https://github.com/microting/eform-angular-trashinspection-plugin/issues/115)
 
 ## [v2.0.152](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.152) (2021-04-27)
 
 [Full Changelog](https://github.com/microting/eform-angular-trashinspection-plugin/compare/v2.0.151...v2.0.152)
+
+**Implemented enhancements:**
+
+- Bump Microting.eFormTrashInspectionBase from 2.1.3 to 2.1.4 [\#115](https://github.com/microting/eform-angular-trashinspection-plugin/issues/115)
 
 ## [v2.0.151](https://github.com/microting/eform-angular-trashinspection-plugin/tree/v2.0.151) (2021-04-27)
 
