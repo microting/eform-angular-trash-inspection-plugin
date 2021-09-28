@@ -6,149 +6,150 @@ export class TrashInspectionInstallationPage extends Page {
     super();
   }
 
-  public get rowNum(): number {
-    browser.pause(500);
-    return $$('#installationsTableBody > tr').length;
+  public async rowNum(): Promise<number> {
+    await browser.pause(500);
+    return (await $$('#installationsTableBody > tr')).length;
   }
 
-  public trashInspectionDropDown() {
-    trashInspectionsPage.trashInspectionDropDown().click();
+  public async trashInspectionDropDown() {
+    await (await trashInspectionsPage.trashInspectionDropDown()).click();
   }
 
-  public get installationBtn() {
+  public async installationBtn() {
     const ele = $('#trash-inspection-pn-installations');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationCreateBtn() {
+  public async installationCreateBtn() {
     const ele = $('#createInstallationBtn');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationCreateNameBox() {
+  public async installationCreateNameBox() {
     const ele = $('#createInstallationName');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationCreateSiteCheckbox() {
+  public async installationCreateSiteCheckbox() {
     const ele = $(`#checkbox`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationCreateSaveBtn() {
+  public async installationCreateSaveBtn() {
     const ele = $(`#installationCreateSaveBtn`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationCreateCancelBtn() {
+  public async installationCreateCancelBtn() {
     const ele = $(`#installationCreateCancelBtn`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationUpdateNameBox() {
+  public async installationUpdateNameBox() {
     const ele = $(`#updateInstallationName`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public installationUpdateSiteCheckbox(Index: number) {
+  public async installationUpdateSiteCheckbox(Index: number) {
     const ele = $(`#installationUpdateSiteCheckbox${Index}`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationUpdateSaveBtn() {
+  public async installationUpdateSaveBtn() {
     const ele = $(`#installationUpdateSaveBtn`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationUpdateCancelBtn() {
+  public async installationUpdateCancelBtn() {
     const ele = $(`#installationUpdateCancelBtn`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationDeleteId() {
+  public async installationDeleteId() {
     const ele = $(`#selectedInstallationId`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationDeleteName() {
+  public async installationDeleteName() {
     const ele = $(`#selectedInstallationName`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get installationDeleteDeleteBtn() {
+  public async installationDeleteDeleteBtn() {
     const ele = $('#installationDeleteDeleteBtn');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
-  public get installationDeleteCancelBtn() {
+  public async installationDeleteCancelBtn() {
     const ele = $(`#installationDeleteCancelBtn`);
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
-  public get page2Object() {
-    const ele = $$('eform-pagination ul li')[1];
+  public async page2Object() {
+    const ele = (await $$('eform-pagination ul li'))[1];
     // ele.waitForDisplayed({timeout: 20000});
     // ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
-  goToInstallationsPage() {
-    this.trashInspectionDropDown();
-    this.installationBtn.click();
-    this.installationCreateBtn.waitForClickable({ timeout: 20000 });
+  async goToInstallationsPage() {
+    await this.trashInspectionDropDown();
+    await (await this.installationBtn()).click();
+    await (await this.installationCreateBtn()).waitForClickable({ timeout: 20000 });
   }
 
-  createInstallation(name?: string, clickCancel = false) {
-    this.installationCreateBtn.click();
+  async createInstallation(name?: string, clickCancel = false) {
+    await (await this.installationCreateBtn()).click();
     if (name) {
-      this.installationCreateNameBox.addValue(name);
+      await (await this.installationCreateNameBox()).addValue(name);
     }
     if (!clickCancel) {
-      this.installationCreateSaveBtn.click();
-      $('#spinner-animation').waitForDisplayed({
+      await (await this.installationCreateSaveBtn()).click();
+      await (await $('#spinner-animation')).waitForDisplayed({
         timeout: 20000,
         reverse: true,
       });
     } else {
-      this.installationCreateCancelBtn.click();
+      await (await this.installationCreateCancelBtn()).click();
     }
-    this.installationCreateBtn.waitForDisplayed({ timeout: 10000 });
+    await (await this.installationCreateBtn()).waitForDisplayed({ timeout: 10000 });
   }
 
-  getFirstRowObject(): InstallationPageRowObject {
-    browser.pause(500);
-    return new InstallationPageRowObject(1);
+  async getFirstRowObject(): Promise<InstallationPageRowObject> {
+    await  browser.pause(500);
+    const rowObj = new InstallationPageRowObject();
+    return await rowObj.getRow(1);
   }
 
-  getInstallationByName(name: string): InstallationPageRowObject {
-    for (let i = 1; i < this.rowNum + 1; i++) {
-      const installation = this.getInstallation(i);
+  async getInstallationByName(name: string): Promise<InstallationPageRowObject> {
+    for (let i = 1; i < await this.rowNum() + 1; i++) {
+      const installation = await this.getInstallation(i);
       if (installation.name === name) {
         return installation;
       }
@@ -156,16 +157,18 @@ export class TrashInspectionInstallationPage extends Page {
     return null;
   }
 
-  getInstallation(num): InstallationPageRowObject {
-    return new InstallationPageRowObject(num);
+  async getInstallation(num): Promise<InstallationPageRowObject> {
+    const rowObj = new InstallationPageRowObject();
+    return await rowObj.getRow(num);
   }
 
-  public clearTable() {
-    browser.pause(2000);
-    let rowCount = this.rowNum;
+  public async clearTable() {
+    await browser.pause(2000);
+    const rowCount = await this.rowNum();
     for (let i = 1; i <= rowCount; i++) {
-      const installationPageRowObject = new InstallationPageRowObject(1);
-      installationPageRowObject.delete();
+      const installationPageRowObject = new InstallationPageRowObject();
+      const obj = await installationPageRowObject.getRow(i);
+      await obj.delete();
     }
   }
 }
@@ -174,17 +177,7 @@ const installationPage = new TrashInspectionInstallationPage();
 export default installationPage;
 
 export class InstallationPageRowObject {
-  constructor(rowNum) {
-    this.element = $$('#installationsTableBody > tr')[rowNum - 1];
-    if (this.element) {
-      this.id = +this.element.$('#installationId').getText();
-      try {
-        this.name = this.element.$('#installationName').getText();
-      } catch (e) {}
-      this.editBtn = this.element.$('#updateInstallationBtn');
-      this.deleteBtn = this.element.$('#deleteInstallationBtn');
-    }
-  }
+  constructor() {}
 
   element: WebdriverIO.Element;
   id: number;
@@ -192,53 +185,67 @@ export class InstallationPageRowObject {
   editBtn: WebdriverIO.Element;
   deleteBtn: WebdriverIO.Element;
 
-  openDeleteModal() {
-    this.deleteBtn.scrollIntoView();
-    this.deleteBtn.click();
-    installationPage.installationDeleteDeleteBtn.waitForDisplayed({
+  async getRow(rowNum: number): Promise<InstallationPageRowObject> {
+    this.element = (await $$('#installationsTableBody > tr'))[rowNum - 1];
+    if (this.element) {
+      this.id = +await (await this.element.$('#installationId')).getText();
+      try {
+        this.name = await (await this.element.$('#installationName')).getText();
+      } catch (e) {}
+      this.editBtn = await this.element.$('#updateInstallationBtn');
+      this.deleteBtn = await this.element.$('#deleteInstallationBtn');
+    }
+
+    return this;
+  }
+
+  async openDeleteModal() {
+    await this.deleteBtn.scrollIntoView();
+    await this.deleteBtn.click();
+    await (await installationPage.installationDeleteDeleteBtn()).waitForDisplayed({
       timeout: 20000,
     });
   }
 
-  closeDeleteModal(clickCancel = false) {
+  async closeDeleteModal(clickCancel = false) {
     if (clickCancel) {
-      installationPage.installationDeleteCancelBtn.click();
+      await (await installationPage.installationDeleteCancelBtn()).click();
     } else {
-      installationPage.installationDeleteDeleteBtn.click();
-      $('#spinner-animation').waitForDisplayed({
+      await (await installationPage.installationDeleteDeleteBtn()).click();
+      await (await $('#spinner-animation')).waitForDisplayed({
         timeout: 20000,
         reverse: true,
       });
     }
-    installationPage.installationCreateBtn.waitForClickable({ timeout: 20000 });
+    await (await installationPage.installationCreateBtn()).waitForClickable({ timeout: 20000 });
   }
 
-  delete(clickCancel = false) {
-    this.openDeleteModal();
-    this.closeDeleteModal(clickCancel);
+  async delete(clickCancel = false) {
+    await this.openDeleteModal();
+    await this.closeDeleteModal(clickCancel);
   }
 
-  openEditModal(name?: string) {
-    this.editBtn.click();
-    installationPage.installationUpdateCancelBtn.waitForClickable({
+  async openEditModal(name?: string) {
+    await this.editBtn.click();
+    (await installationPage.installationUpdateCancelBtn()).waitForClickable({
       timeout: 20000,
     });
     if (name) {
-      installationPage.installationUpdateNameBox.setValue(name);
+      await (await installationPage.installationUpdateNameBox()).setValue(name);
     }
   }
 
-  closeEditModal(clickCancel = false) {
+  async closeEditModal(clickCancel = false) {
     if (clickCancel) {
-      installationPage.installationUpdateCancelBtn.click();
+      await (await installationPage.installationUpdateCancelBtn()).click();
     } else {
-      installationPage.installationUpdateSaveBtn.click();
+      await (await installationPage.installationUpdateSaveBtn()).click();
     }
-    installationPage.installationCreateBtn.waitForDisplayed({ timeout: 10000 });
+    await (await installationPage.installationCreateBtn()).waitForDisplayed({ timeout: 10000 });
   }
 
-  edit(name, clickCancel = false) {
-    this.openEditModal(name);
-    this.closeEditModal(clickCancel);
+  async edit(name, clickCancel = false) {
+    await this.openEditModal(name);
+    await this.closeEditModal(clickCancel);
   }
 }

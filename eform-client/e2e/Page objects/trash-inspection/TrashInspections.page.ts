@@ -5,28 +5,28 @@ export class TrashInspectionsPage extends Page {
     super();
   }
 
-  public get rowNum(): number {
+  public async rowNum(): number {
     return $$('#tableBody > tr').length;
   }
 
   public trashInspectionDropDown() {
     const ele = $('#trash-inspection-pn');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get trashInspectionBtn() {
+  public async trashInspectionBtn() {
     const ele = $('#trash-inspection-pn-trash-inspection');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   goToTrashInspectionPage() {
     this.trashInspectionDropDown().click();
     this.trashInspectionBtn.click();
-    $('#spinner-animation').waitForDisplayed({ timeout: 20000, reverse: true });
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
   }
 }
 
