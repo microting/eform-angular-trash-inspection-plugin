@@ -9,11 +9,11 @@ export class TrashInspectionFractionPage extends Page {
 
   public async rowNum(): Promise<number> {
     await browser.pause(500);
-    return $$('#tableBody > tr').length;
+    return (await $$('#tableBody > tr')).length;
   }
 
-  public trashInspectionDropDown() {
-    trashInspectionsPage.trashInspectionDropDown().click();
+  public async trashInspectionDropDown() {
+    await (await trashInspectionsPage.trashInspectionDropDown()).click();
   }
 
   public async fractionBtn() {
@@ -213,35 +213,37 @@ export class TrashInspectionFractionPage extends Page {
     await this.closeCreateFraction(clickCancel);
   }
 
-  async getFirstRowObject(): FractionsRowObject {
+  async getFirstRowObject(): Promise<FractionsRowObject> {
     await browser.pause(500);
-    return new FractionsRowObject(1);
+    const obj = new FractionsRowObject();
+    return await obj.getRow(1);
   }
 
-  getFractionsRowObjectByIndex(index: number): FractionsRowObject {
-    browser.pause(500);
-    return new FractionsRowObject(index);
+  async getFractionsRowObjectByIndex(index: number): Promise<FractionsRowObject> {
+    await browser.pause(500);
+    const obj = new FractionsRowObject();
+    return await obj.getRow(index);
   }
 
-  createNewEform(eFormLabel, newTagsList = [], tagAddedNum = 0) {
-    return myEformsPage.createNewEform(eFormLabel, newTagsList, tagAddedNum);
+  async createNewEform(eFormLabel, newTagsList = [], tagAddedNum = 0) {
+    return await myEformsPage.createNewEform(eFormLabel, newTagsList, tagAddedNum);
   }
 
-  public clearTable() {
+  public async clearTable() {
     browser.pause(2000);
-    let rowCount = this.rowNum;
+    let rowCount = await this.rowNum();
     for (let i = 1; i <= rowCount; i++) {
-      if (i % 9 === 0 && this.rowNum > 0) {
-        rowCount += this.rowNum;
+      if (i % 9 === 0 && await this.rowNum() > 0) {
+        rowCount += await this.rowNum();
       }
-      const fractionsRowObject = this.getFirstRowObject();
-      fractionsRowObject.delete();
+      const fractionsRowObject = await this.getFirstRowObject();
+      await fractionsRowObject.delete();
     }
   }
 
-  public getFractionsRowObjectByName(name: string): FractionsRowObject {
-    for (let i = 1; i < this.rowNum + 1; i++) {
-      const fraction = this.getFractionsRowObjectByIndex(i);
+  public async getFractionsRowObjectByName(name: string): Promise<FractionsRowObject> {
+    for (let i = 1; i < await this.rowNum() + 1; i++) {
+      const fraction = await this.getFractionsRowObjectByIndex(i);
       if (fraction.name === name) {
         return fraction;
       }

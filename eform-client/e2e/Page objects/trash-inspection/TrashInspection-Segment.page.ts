@@ -9,8 +9,8 @@ export class TrashInspectionSegemtnsPage extends Page {
     await browser.pause(500);
     return (await $$('#tableBody > tr')).length;
   }
-  public trashInspectionDropDown() {
-    trashInspectionsPage.trashInspectionDropDown().click();
+  public async trashInspectionDropDown() {
+    await (await trashInspectionsPage.trashInspectionDropDown()).click();
   }
   public async segmentnBtn() {
     const ele = await $('#trash-inspection-pn-segments');
@@ -157,50 +157,52 @@ export class TrashInspectionSegemtnsPage extends Page {
     }
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
     if (sdkFolderId != null) {
-      this.segmentCreateSDKFolderId.addValue(sdkFolderId);
+      await (await this.segmentCreateSDKFolderId()).addValue(sdkFolderId);
     }
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
-    this.segmentCreateCancelBtn.click();
+    await (await this.segmentCreateCancelBtn()).click();
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
   }
-  editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
-    this.editSegmentBtn.click();
+  async editSegment(newName: string, newDescription?: string, newSDKFolderId?: any) {
+    await (await this.editSegmentBtn()).click();
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
-    this.segmentUpdateNameBox.clearValue();
-    this.segmentUpdateNameBox.addValue(newName);
+    await (await this.segmentUpdateNameBox()).clearValue();
+    await (await this.segmentUpdateNameBox()).addValue(newName);
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
     if (newDescription != null) {
-      this.segmentUpdateDesciptionBox.clearValue();
-      this.segmentUpdateDesciptionBox.addValue(newDescription);
+      await (await this.segmentUpdateDesciptionBox()).clearValue();
+      await (await this.segmentUpdateDesciptionBox()).addValue(newDescription);
     }
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
     if (newSDKFolderId != null) {
-      this.segmentUpdateSDKFolderId.clearValue();
-      this.segmentUpdateSDKFolderId.addValue(newSDKFolderId);
+      await (await this.segmentUpdateSDKFolderId()).clearValue();
+      await (await this.segmentUpdateSDKFolderId()).addValue(newSDKFolderId);
     }
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
-    this.segmentUpdateSaveBtn.click();
+    await (await this.segmentUpdateSaveBtn()).click();
     await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
   }
-  deleteSegment() {
-    const segmentForDelete = this.getFirstRowObject();
-    segmentForDelete.deleteBtn.click();
-    $('#spinner-animation').waitForDisplayed({ timeout: 40000, reverse: true });
-    this.segmentDeleteDeleteBtn.click();
-    $('#spinner-animation').waitForDisplayed({ timeout: 40000, reverse: true });
+  async deleteSegment() {
+    const segmentForDelete = await this.getFirstRowObject();
+    await segmentForDelete.deleteBtn.click();
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 40000, reverse: true });
+    await (await this.segmentDeleteDeleteBtn()).click();
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 40000, reverse: true });
   }
-  deleteSegmentCancel() {
-    const segmentForDelete = this.getFirstRowObject();
-    segmentForDelete.deleteBtn.click();
-    $('#segmentDeleteDeleteBtn').waitForDisplayed({ timeout: 20000 });
+  async deleteSegmentCancel() {
+    const segmentForDelete = await this.getFirstRowObject();
+    await segmentForDelete.deleteBtn.click();
+    await (await $('#segmentDeleteDeleteBtn')).waitForDisplayed({ timeout: 20000 });
   }
-  getFirstRowObject(): SegmentsRowObject {
-    browser.pause(500);
-    return new SegmentsRowObject(1);
+  async getFirstRowObject(): Promise<SegmentsRowObject> {
+    await browser.pause(500);
+    const obj = new SegmentsRowObject();
+    return await obj.getRow(1);
   }
-  getRowObject(rowNum): SegmentsRowObject {
-    browser.pause(500);
-    return new SegmentsRowObject(rowNum);
+  async getRowObject(rowNum): Promise<SegmentsRowObject> {
+    await browser.pause(500);
+    const obj = new SegmentsRowObject();
+    return await obj.getRow(rowNum);
   }
 }
 
@@ -208,26 +210,29 @@ const segmentsPage = new TrashInspectionSegemtnsPage();
 export default segmentsPage;
 
 export class SegmentsRowObject {
-  constructor(rowNum) {
-    if ($$('#segmentId')[rowNum - 1]) {
-      this.id = +$$('#segmentId')[rowNum - 1];
-      try {
-        this.name = $$('#segmentName')[rowNum - 1].getText();
-      } catch (e) {}
-      try {
-        this.description = $$('#segmentDescription')[rowNum - 1].getText();
-      } catch (e) {}
-      try {
-        this.sdkFolderId = $$('#segmentSDKFolderID')[rowNum - 1].getText();
-      } catch (e) {}
-      this.editBtn = $$('#editSegmentBtn')[rowNum - 1];
-      this.deleteBtn = $$('#deleteSegmentBtn')[rowNum - 1];
-    }
-  }
+  constructor() { }
   id;
   name;
   description;
   sdkFolderId;
   editBtn;
   deleteBtn;
+
+  async getRow(rowNum: number): Promise<SegmentsRowObject> {
+    if ((await $$('#segmentId'))[rowNum - 1]) {
+      this.id = +(await $$('#segmentId'))[rowNum - 1];
+      try {
+        this.name = await (await $$('#segmentName'))[rowNum - 1].getText();
+      } catch (e) {}
+      try {
+        this.description = await (await $$('#segmentDescription'))[rowNum - 1].getText();
+      } catch (e) {}
+      try {
+        this.sdkFolderId = await (await $$('#segmentSDKFolderID'))[rowNum - 1].getText();
+      } catch (e) {}
+      this.editBtn = (await $$('#editSegmentBtn'))[rowNum - 1];
+      this.deleteBtn = (await $$('#deleteSegmentBtn'))[rowNum - 1];
+    }
+    return this;
+  }
 }

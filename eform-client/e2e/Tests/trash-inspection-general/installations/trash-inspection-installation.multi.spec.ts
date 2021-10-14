@@ -4,19 +4,21 @@ import installationPage from '../../../Page objects/trash-inspection/TrashInspec
 import { generateRandmString } from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Installation', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
-    installationPage.goToInstallationsPage();
-    installationPage.clearTable();
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await installationPage.goToInstallationsPage();
+    await installationPage.clearTable();
   });
-  it('Should create multiple installations without site.', function () {
+  it('Should create multiple installations without site.', async () => {
     for (let i = 0; i < 11; i++) {
-      installationPage.createInstallation(generateRandmString());
+      await installationPage.createInstallation(generateRandmString());
     }
-    expect(installationPage.page2Object.getText()).equal('2');
+    expect(await (await installationPage.page2Object()).getText()).equal('2');
   });
-  after(function () {
-    installationPage.clearTable();
+  after(async () => {
+    await loginPage.open('/');
+    await installationPage.goToInstallationsPage();
+    await installationPage.clearTable();
   });
 });

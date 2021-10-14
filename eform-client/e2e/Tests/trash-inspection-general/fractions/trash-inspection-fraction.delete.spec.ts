@@ -11,34 +11,34 @@ const createModel = {
   itemNumber: '',
 };
 describe('Trash Inspection Plugin - Fraction Delete', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
-    fractionsPage.goToFractionsPage();
-    fractionsPage.createFraction(createModel);
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await fractionsPage.goToFractionsPage();
+    await fractionsPage.createFraction(createModel);
   });
-  it('should not delete fraction', function () {
-    const rowNumBeforeDelete = fractionsPage.rowNum;
-    const fraction = fractionsPage.getFirstRowObject();
-    fraction.openDeleteModal();
-    expect(+fractionsPage.fractionDeleteId.getText()).eq(fraction.id);
-    expect(fractionsPage.fractionDeleteName.getText()).eq(fraction.name);
-    fraction.closeDeleteModal(true);
-    expect(fractionsPage.rowNum, 'fraction is deleted').equal(
+  it('should not delete fraction', async () => {
+    const rowNumBeforeDelete = await fractionsPage.rowNum();
+    const fraction = await fractionsPage.getFirstRowObject();
+    await fraction.openDeleteModal();
+    expect(+await (await fractionsPage.fractionDeleteId()).getText()).eq(fraction.id);
+    expect(await (await fractionsPage.fractionDeleteName()).getText()).eq(fraction.name);
+    await fraction.closeDeleteModal(true);
+    expect(await fractionsPage.rowNum(), 'fraction is deleted').equal(
       rowNumBeforeDelete
     );
   });
-  it('should delete Fraction', function () {
-    const rowNumBeforeDelete = fractionsPage.rowNum;
-    const fraction = fractionsPage.getFractionsRowObjectByName(
+  it('should delete Fraction', async () => {
+    const rowNumBeforeDelete = await fractionsPage.rowNum();
+    const fraction = await fractionsPage.getFractionsRowObjectByName(
       createModel.name
     );
-    fraction.delete();
-    expect(fractionsPage.rowNum, 'fraction is not deleted').equal(
+    await fraction.delete();
+    expect(await fractionsPage.rowNum(), 'fraction is not deleted').equal(
       rowNumBeforeDelete - 1
     );
   });
-  after(function () {
-    fractionsPage.clearTable();
+  after(async () => {
+    await fractionsPage.clearTable();
   });
 });

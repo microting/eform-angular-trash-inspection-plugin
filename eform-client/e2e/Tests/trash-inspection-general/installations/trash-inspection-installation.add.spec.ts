@@ -4,29 +4,29 @@ import installationPage from '../../../Page objects/trash-inspection/TrashInspec
 import { generateRandmString } from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Installation', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
   });
-  it('Should create installation without site.', function () {
-    const rowNumBeforeCreate = installationPage.rowNum;
+  it('Should create installation without site.', async () => {
+    const rowNumBeforeCreate = await installationPage.rowNum();
     const name = generateRandmString();
-    installationPage.goToInstallationsPage();
-    installationPage.createInstallation(name);
-    expect(installationPage.rowNum, 'installation is not created').equal(
+    await installationPage.goToInstallationsPage();
+    await installationPage.createInstallation(name);
+    expect(await installationPage.rowNum(), 'installation is not created').equal(
       rowNumBeforeCreate + 1
     );
-    const installation = installationPage.getFirstRowObject();
+    const installation = await installationPage.getFirstRowObject();
     expect(installation.name).equal(name);
-    installation.delete();
+    await installation.delete();
   });
-  it('should not create installation', function () {
-    const rowNumBeforeCreate = installationPage.rowNum;
+  it('should not create installation', async () => {
+    const rowNumBeforeCreate = await installationPage.rowNum();
     const name = generateRandmString();
-    installationPage.createInstallation(name, true);
-    expect(installationPage.rowNum).equal(rowNumBeforeCreate);
+    await installationPage.createInstallation(name, true);
+    expect(await installationPage.rowNum()).equal(rowNumBeforeCreate);
   });
-  after(function () {
-    installationPage.clearTable();
+  after(async () => {
+    await installationPage.clearTable();
   });
 });
