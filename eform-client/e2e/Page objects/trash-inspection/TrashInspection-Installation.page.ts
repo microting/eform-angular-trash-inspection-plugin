@@ -163,11 +163,12 @@ export class TrashInspectionInstallationPage extends Page {
   }
 
   public async clearTable() {
-    await browser.pause(2000);
+    await browser.pause(500);
     const rowCount = await this.rowNum();
     for (let i = 1; i <= rowCount; i++) {
       const installationPageRowObject = new InstallationPageRowObject();
-      const obj = await installationPageRowObject.getRow(i);
+      const obj = await installationPageRowObject.getRow(1);
+      // await browser.pause(5000);
       await obj.delete();
     }
   }
