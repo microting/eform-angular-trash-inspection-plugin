@@ -5,28 +5,28 @@ export class TrashInspectionsPage extends Page {
     super();
   }
 
-  public get rowNum(): number {
-    return $$('#tableBody > tr').length;
+  public async rowNum(): Promise<number> {
+    return (await $$('#tableBody > tr')).length;
   }
 
-  public trashInspectionDropDown() {
+  public async trashInspectionDropDown() {
     const ele = $('#trash-inspection-pn');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  public get trashInspectionBtn() {
+  public async trashInspectionBtn() {
     const ele = $('#trash-inspection-pn-trash-inspection');
-    ele.waitForDisplayed({ timeout: 20000 });
-    ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
-  goToTrashInspectionPage() {
-    this.trashInspectionDropDown().click();
-    this.trashInspectionBtn.click();
-    $('#spinner-animation').waitForDisplayed({ timeout: 20000, reverse: true });
+  async goToTrashInspectionPage() {
+    await (await this.trashInspectionDropDown()).click();
+    await (await this.trashInspectionBtn()).click();
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 20000, reverse: true });
   }
 }
 
@@ -35,29 +35,6 @@ export default trashInspectionsPage;
 
 export class TrashInspectionsRowObject {
   constructor(rowNumber) {
-    this.id = $$('#idTableHeader')[rowNumber - 1].getText();
-    this.date = $$('#dateTableHeader')[rowNumber - 1].getText();
-    this.eakCode = $$('#eakCodeTableHeader')[rowNumber - 1].getText();
-    this.installationId = $$('#installationIdTableHeader')[
-      rowNumber - 1
-    ].getText();
-    this.mustBeInspected = $$('#mustBeInspectedTableHeader')[
-      rowNumber - 1
-    ].getText();
-    this.producer = $$('#producerTableHeader')[rowNumber - 1].getText();
-    this.registrationNumber = $$('#registrationNumberTableHeader')[
-      rowNumber - 1
-    ].getText();
-    this.time = $$('#timeTableHeader')[rowNumber - 1].getText();
-    this.transporter = $$('#transporterTableHeader')[rowNumber - 1].getText();
-    this.trashFraction = $$('#trashFractionTableHeader')[
-      rowNumber - 1
-    ].getText();
-    this.weighingNumber = $$('#weighingNumberTableHeader')[
-      rowNumber - 1
-    ].getText();
-    this.name = $$('#nameTableHeader')[rowNumber - 1].getText();
-    this.status = $$('#statusTableHeader')[rowNumber - 1].getText();
   }
   public id;
   public version;
@@ -75,4 +52,32 @@ export class TrashInspectionsRowObject {
   public weighingNumber;
   public name;
   public status;
+
+  async getRow(rowNum: number): Promise<TrashInspectionsRowObject> {
+    this.id = $$('#idTableHeader')[rowNum - 1].getText();
+    this.date = $$('#dateTableHeader')[rowNum - 1].getText();
+    this.eakCode = $$('#eakCodeTableHeader')[rowNum - 1].getText();
+    this.installationId = $$('#installationIdTableHeader')[
+    rowNum - 1
+      ].getText();
+    this.mustBeInspected = $$('#mustBeInspectedTableHeader')[
+    rowNum - 1
+      ].getText();
+    this.producer = $$('#producerTableHeader')[rowNum - 1].getText();
+    this.registrationNumber = $$('#registrationNumberTableHeader')[
+    rowNum - 1
+      ].getText();
+    this.time = $$('#timeTableHeader')[rowNum - 1].getText();
+    this.transporter = $$('#transporterTableHeader')[rowNum - 1].getText();
+    this.trashFraction = $$('#trashFractionTableHeader')[
+    rowNum - 1
+      ].getText();
+    this.weighingNumber = $$('#weighingNumberTableHeader')[
+    rowNum - 1
+      ].getText();
+    this.name = $$('#nameTableHeader')[rowNum - 1].getText();
+    this.status = $$('#statusTableHeader')[rowNum - 1].getText();
+
+    return this;
+  }
 }

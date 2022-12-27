@@ -4,53 +4,53 @@ import segmentPage from '../../../Page objects/trash-inspection/TrashInspection-
 import {Guid} from 'guid-typescript';
 
 describe('Trash Inspection Plugin - Segment', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
   });
-  it('Should create segment.', function () {
+  it('Should create segment.', async () => {
     const name = Guid.create().toString();
     const description = Guid.create().toString();
     const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    segmentPage.goToSegmentsPage();
-    segmentPage.createSegment(name, description, sdkFolderId);
-    const segment = segmentPage.getFirstRowObject();
+    await segmentPage.goToSegmentsPage();
+    await segmentPage.createSegment(name, description, sdkFolderId);
+    const segment = await segmentPage.getFirstRowObject();
     expect(segment.name).equal(name);
     expect(segment.description).equal(description);
     expect(segment.sdkFolderId).equal(`${sdkFolderId}`);
-    segmentPage.deleteSegment();
+    await segmentPage.deleteSegment();
   });
-  it('Should create segment with only Name.', function () {
+  it('Should create segment with only Name.', async () => {
     const name = Guid.create().toString();
-    segmentPage.createSegment(name);
-    const segment = segmentPage.getFirstRowObject();
+    await segmentPage.createSegment(name);
+    const segment = await segmentPage.getFirstRowObject();
     expect(segment.name).equal(name);
-    segmentPage.deleteSegment();
+    await segmentPage.deleteSegment();
   });
-  it('Should create segment with name and description.', function () {
+  it('Should create segment with name and description.', async () => {
     const name = Guid.create().toString();
     const description = Guid.create().toString();
-    segmentPage.createSegment(name, description);
-    const segment = segmentPage.getFirstRowObject();
+    await segmentPage.createSegment(name, description);
+    const segment = await segmentPage.getFirstRowObject();
     expect(segment.name).equal(name);
     expect(segment.description).equal(description);
-    segmentPage.deleteSegment();
+    await segmentPage.deleteSegment();
   });
-  it('Should create segment with name and sdkFolderId.', function () {
+  it('Should create segment with name and sdkFolderId.', async () => {
     const name = Guid.create().toString();
     const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    segmentPage.createSegment(name, '', sdkFolderId);
-    const segment = segmentPage.getFirstRowObject();
+    await segmentPage.createSegment(name, '', sdkFolderId);
+    const segment = await segmentPage.getFirstRowObject();
     expect(segment.name).equal(name);
     expect(segment.sdkFolderId).equal(`${sdkFolderId}`);
-    segmentPage.deleteSegment();
+    await segmentPage.deleteSegment();
   });
-  it('should not create segment', function () {
+  it('should not create segment', async () => {
     const name = Guid.create().toString();
     const description = Guid.create().toString();
     const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    segmentPage.goToSegmentsPage();
-    segmentPage.createSegment_cancel(name, description, sdkFolderId);
-    expect(segmentPage.rowNum).equal(0);
+    await segmentPage.goToSegmentsPage();
+    await segmentPage.createSegment_cancel(name, description, sdkFolderId);
+    expect(await segmentPage.rowNum()).equal(0);
   });
 });

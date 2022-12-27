@@ -5,35 +5,35 @@ import { generateRandmString } from '../../../Helpers/helper-functions';
 
 const name = generateRandmString();
 describe('Trash Inspection Plugin - Installation', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
-    installationPage.goToInstallationsPage();
-    installationPage.createInstallation(name);
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await installationPage.goToInstallationsPage();
+    await installationPage.createInstallation(name);
   });
-  it('should not delete', function () {
-    const rowNumBeforeDelete = installationPage.rowNum;
-    const installation = installationPage.getInstallationByName(name);
-    installation.openDeleteModal();
-    expect(+installationPage.installationDeleteId.getText()).eq(
+  it('should not delete', async () => {
+    const rowNumBeforeDelete = await installationPage.rowNum();
+    const installation = await installationPage.getInstallationByName(name);
+    await installation.openDeleteModal();
+    expect(+await (await installationPage.installationDeleteId()).getText()).eq(
       installation.id
     );
-    expect(installationPage.installationDeleteName.getText()).eq(
+    expect(await (await installationPage.installationDeleteName()).getText()).eq(
       installation.name
     );
-    installation.closeDeleteModal(true);
-    expect(installationPage.rowNum, 'installation is deleted').equal(
+    await installation.closeDeleteModal(true);
+    expect(await installationPage.rowNum(), 'installation is deleted').equal(
       rowNumBeforeDelete
     );
   });
-  it('Should delete installation.', function () {
-    const rowNumBeforeDelete = installationPage.rowNum;
-    installationPage.getInstallationByName(name).delete();
-    expect(installationPage.rowNum, 'installation is not deleted').equal(
+  it('Should delete installation.', async () => {
+    const rowNumBeforeDelete = await installationPage.rowNum();
+    await (await installationPage.getInstallationByName(name)).delete();
+    expect(await installationPage.rowNum(), 'installation is not deleted').equal(
       rowNumBeforeDelete - 1
     );
   });
-  after(function () {
-    installationPage.clearTable();
+  after(async () => {
+    await installationPage.clearTable();
   });
 });

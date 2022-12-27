@@ -35,7 +35,6 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Newtonsoft.Json.Linq;
-using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -70,7 +69,7 @@ namespace TrashInspection.Pn.Services
 
                 var transporterQuery = _dbContext.Transporters.AsQueryable();
 
-                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                if (!string.IsNullOrEmpty(pnRequestModel.NameFilter) && pnRequestModel.NameFilter != "")
                 {
                     transporterQuery = transporterQuery.Where(x =>
                         x.Name.Contains(pnRequestModel.NameFilter) ||
@@ -499,7 +498,7 @@ namespace TrashInspection.Pn.Services
                 }
                 statByMonth.StatByMonthListData2.Add(linePeriod);
 
-                //                   
+                //
                 return new OperationDataResult<StatByMonth>(true,
                         statByMonth);
             }

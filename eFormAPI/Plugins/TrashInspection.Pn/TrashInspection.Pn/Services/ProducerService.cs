@@ -35,7 +35,6 @@ using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using Newtonsoft.Json.Linq;
-using OpenStack.NetCoreSwiftClient.Extensions;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
@@ -70,7 +69,7 @@ namespace TrashInspection.Pn.Services
 
                 var producersQuery = _dbContext.Producers.AsQueryable();
 
-                if (!pnRequestModel.NameFilter.IsNullOrEmpty() && pnRequestModel.NameFilter != "")
+                if (!string.IsNullOrEmpty(pnRequestModel.NameFilter) && pnRequestModel.NameFilter != "")
                 {
                     producersQuery = producersQuery.Where(x =>
                         x.Name.Contains(pnRequestModel.NameFilter) ||
@@ -94,7 +93,7 @@ namespace TrashInspection.Pn.Services
                     producersQuery = _dbContext.Producers
                         .OrderBy(x => x.Id);
                 }
-                
+
                 producersQuery
                     = producersQuery
                         .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
@@ -116,7 +115,7 @@ namespace TrashInspection.Pn.Services
                 producersModel.Total =
                     _dbContext.Producers.Count(x => x.WorkflowState != Constants.WorkflowStates.Removed);
                 producersModel.ProducerList = producers;
-                
+
                 return new OperationDataResult<ProducersModel>(true, producersModel);
             }
             catch (Exception e)
@@ -127,7 +126,7 @@ namespace TrashInspection.Pn.Services
                     _trashInspectionLocalizationService.GetString("ErrorObtainingProducers"));
             }
         }
-        
+
         public async Task<OperationResult> Create(ProducerModel producerModel)
         {
             var producer = new Producer
@@ -142,7 +141,7 @@ namespace TrashInspection.Pn.Services
                 ContactPerson = producerModel.ContactPerson
             };
             await producer.Create(_dbContext);
-           
+
            return new OperationResult(true);
         }
         public async Task<OperationDataResult<ProducerModel>> Read(int id)
@@ -193,7 +192,7 @@ namespace TrashInspection.Pn.Services
                 producer.ContactPerson = producerModel.ContactPerson;
             }
             await producer.Update(_dbContext);
-            
+
             return new OperationResult(true);
         }
 
@@ -213,7 +212,7 @@ namespace TrashInspection.Pn.Services
 
                     var headers = rawHeadersJson;
                     var fractionObjects = rawJson.Skip(1);
-                    
+
                     foreach (var fractionObj in fractionObjects)
                     {
                         var producerNameExists = int.TryParse(headers[0]["headerValue"].ToString(), out var nameColumn);
@@ -226,7 +225,7 @@ namespace TrashInspection.Pn.Services
 
                             var newProducer = new Producer
                             {
-                                    
+
                                 Name = producerModel.Name,
                                 Description = producerModel.Description,
                                 ForeignId = producerModel.ForeignId,
@@ -235,10 +234,10 @@ namespace TrashInspection.Pn.Services
                                 ZipCode = producerModel.ZipCode,
                                 Phone = producerModel.Phone,
                                 ContactPerson = producerModel.ContactPerson
-                                    
+
                             };
                             await newProducer.Create(_dbContext);
-  
+
                         }
                         else
                         {
@@ -252,12 +251,12 @@ namespace TrashInspection.Pn.Services
                             existingProducer.ZipCode = producerModel.ZipCode;
                             existingProducer.Phone = producerModel.Phone;
                             existingProducer.ContactPerson = producerModel.ContactPerson;
-                                
+
                             if (existingProducer.WorkflowState == Constants.WorkflowStates.Removed)
                             {
                                 existingProducer.WorkflowState = Constants.WorkflowStates.Created;
                             }
-                            
+
                             await existingProducer.Update(_dbContext);
                         }
 
@@ -281,7 +280,7 @@ namespace TrashInspection.Pn.Services
 
             return producer;
         }
-        
+
         public async Task<OperationDataResult<Paged<StatByYearModel>>> GetProducersStatsByYear(ProducersYearRequestModel pnRequestModel)
         {
             try
@@ -336,7 +335,7 @@ namespace TrashInspection.Pn.Services
 
                 foreach (var statByYearModel in producersStatByYear)
                 {
-                    
+
                     if (statByYearModel.AmountOfWeighingsControlled > 0 && statByYearModel.Weighings > 0)
                     {
                         statByYearModel.ControlPercentage = Math.Round((statByYearModel.AmountOfWeighingsControlled / statByYearModel.Weighings) * 100, 1);
@@ -345,7 +344,7 @@ namespace TrashInspection.Pn.Services
                     {
                         statByYearModel.ControlPercentage = 0;
                     }
-                    
+
                     if (statByYearModel.ApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
                         statByYearModel.ApprovedPercentage =
@@ -358,14 +357,14 @@ namespace TrashInspection.Pn.Services
 
                     if (statByYearModel.ConditionalApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
-                        statByYearModel.ConditionalApprovedPercentage = 
+                        statByYearModel.ConditionalApprovedPercentage =
                             Math.Round((statByYearModel.ConditionalApprovedPercentage / statByYearModel.AmountOfWeighingsControlled) * 100, 1);
                     }
                     else
                     {
                         statByYearModel.ConditionalApprovedPercentage = 0;
                     }
-                    
+
                     if (statByYearModel.NotApprovedPercentage > 0 && statByYearModel.AmountOfWeighingsControlled > 0)
                     {
                         statByYearModel.NotApprovedPercentage =
@@ -385,7 +384,7 @@ namespace TrashInspection.Pn.Services
                 }
 
                 producersStatsByYearModel.Entities = producersStatByYear;
-                
+
                 return new OperationDataResult<Paged<StatByYearModel>>(true, producersStatsByYearModel);
             }
             catch (Exception e)
@@ -411,7 +410,7 @@ namespace TrashInspection.Pn.Services
                  {
                      "Godkendt", "Betinget Godkendt", "Ikke Godkendt"
                  };
-                 var trashInspectionsQuery = 
+                 var trashInspectionsQuery =
                      _dbContext.TrashInspections.AsQueryable();
                  var linePeriod = new Period
                  {
@@ -428,12 +427,12 @@ namespace TrashInspection.Pn.Services
                  {
                      trashInspectionsQuery = trashInspectionsQuery.Where(x => x.Date.Month == i);
                      double wheigingsPrMonth = await trashInspectionsQuery.CountAsync();
-                    
+
                      double value1 = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "1" && x.Status == 100);
                      double value2 = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "2" && x.Status == 100);
                      double value3 = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "3" && x.Status == 100);
-                    
-                    
+
+
                      double wheigingsPrMonthControlled = await trashInspectionsQuery.CountAsync(x => x.Status == 100);
                      double wheighingsApprovedPrMonth = await trashInspectionsQuery.CountAsync(x => x.IsApproved && x.Status == 100);
                      double wheighingsNotApprovedPrMonth = await trashInspectionsQuery.CountAsync(x => x.ApprovedValue == "3" && x.Status == 100);
@@ -447,10 +446,10 @@ namespace TrashInspection.Pn.Services
                              (wheighingsApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                          notApprovedWheighingPercentage =
                              Math.Round((wheighingsNotApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
-                         partiallyApprovedWheighingPercentage = 
+                         partiallyApprovedWheighingPercentage =
                              Math.Round((wheighingsPartiallyApprovedPrMonth / wheigingsPrMonthControlled) * 100, 1);
                      }
-                       
+
                      var period = new Period
                      {
                          Name = month
@@ -476,7 +475,7 @@ namespace TrashInspection.Pn.Services
                      };
                      period.Series.Add(seriesObject3);
                      statByMonth.StatByMonthListData1.Add(period);
-                    
+
                      //Line Chart Data
                      var lineSeriesObject1 = new SeriesObject
                      {
@@ -490,7 +489,7 @@ namespace TrashInspection.Pn.Services
                  }
                  statByMonth.StatByMonthListData2.Add(linePeriod);
 
-//                   
+//
                  return new OperationDataResult<StatByMonth>(true,
                      statByMonth);
              }

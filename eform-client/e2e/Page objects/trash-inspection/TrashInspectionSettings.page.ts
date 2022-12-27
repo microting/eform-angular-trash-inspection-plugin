@@ -4,21 +4,22 @@ export class TrashInspectionSettingsPage extends Page {
   constructor() {
     super();
   }
-  public get rowNum(): number {
-    return $$('#tableBody > tr').length;
+  public async rowNum(): Promise<number> {
+    return (await $$('#tableBody > tr')).length;
   }
-  public trashInspectionDropDown() {
-    $(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`).click();
+  public async trashInspectionDropDown() {
+    await (await $(`//*[contains(@class, 'fadeInDropdown')]//*[contains(text(), 'Affaldsinspektion')]`)).click();
   }
-  public get trashInspectionSettingsBtn() {
-    $('#trash-inspection-pn-settings').waitForDisplayed({timeout: 20000});
-    $('#trash-inspection-pn-settings').waitForClickable({timeout: 20000});
+  public async trashInspectionSettingsBtn() {
+    const ele = await $('#trash-inspection-pn-settings');
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return $('#trash-inspection-pn-settings');
   }
-  goToTrashInspectionSettignsPage() {
-    this.trashInspectionDropDown();
-    browser.pause(1000);
-    this.trashInspectionSettingsBtn.click();
-    browser.pause(8000);
+  async goToTrashInspectionSettignsPage() {
+    await this.trashInspectionDropDown();
+    await browser.pause(1000);
+    await (await this.trashInspectionSettingsBtn()).click();
+    await browser.pause(8000);
   }
 }

@@ -362,12 +362,21 @@ namespace TrashInspection.Pn.Services
                 try
                 {
                     var trashInspectionQuery = _dbContext.TrashInspections
-                        .Where(x => x.WorkflowState != Constants.WorkflowStates.Removed)
                         .Where(x => x.WeighingNumber == weighingNumber)
                         .AsNoTracking()
                         .AsQueryable();
 
-                    var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
+                    var timeZone = "Europe/Copenhagen";
+
+                    TimeZoneInfo timeZoneInfo;
+                    try
+                    {
+                        timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+                    }
+                    catch
+                    {
+                        timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+                    }
 
                     var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "")
                         .FirstOrDefaultAsync();

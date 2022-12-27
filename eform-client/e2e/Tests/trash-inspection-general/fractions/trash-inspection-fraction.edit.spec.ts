@@ -12,22 +12,22 @@ let createModel = {
   itemNumber: '',
 };
 describe('Trash Inspection Plugin - Fraction', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
-    myEformsPage.createNewEform('Number 2');
-    fractionsPage.goToFractionsPage();
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await myEformsPage.createNewEform('Number 2');
+    await fractionsPage.goToFractionsPage();
   });
-  it('should create fraction', function () {
-    fractionsPage.createFraction(createModel);
-    const fraction = fractionsPage.getFirstRowObject();
+  it('should create fraction', async () => {
+    await fractionsPage.createFraction(createModel);
+    const fraction = await fractionsPage.getFirstRowObject();
     expect(fraction.name).equal(createModel.name);
     expect(fraction.description).equal(createModel.description);
     expect(fraction.itemNumber).equal(createModel.itemNumber);
     expect(fraction.locationCode).equal(createModel.locationCode);
     expect(fraction.eForm).equal(createModel.eForm);
   });
-  it('should edit Fraction', function () {
+  it('should edit Fraction', async () => {
     const updateModel = {
       name: generateRandmString(),
       description: generateRandmString(),
@@ -35,10 +35,10 @@ describe('Trash Inspection Plugin - Fraction', function () {
       eForm: 'Number 2',
       itemNumber: '',
     };
-    fractionsPage
-      .getFractionsRowObjectByName(createModel.name)
+    await (await fractionsPage
+      .getFractionsRowObjectByName(createModel.name))
       .edit(updateModel);
-    const fraction = fractionsPage.getFractionsRowObjectByName(
+    const fraction = await fractionsPage.getFractionsRowObjectByName(
       updateModel.name
     );
     expect(fraction.name).equal(updateModel.name);
@@ -47,7 +47,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(fraction.eForm).equal(updateModel.eForm);
     createModel = updateModel;
   });
-  it('should not edit fraction', function () {
+  it('should not edit fraction', async () => {
     const updateModel = {
       name: generateRandmString(),
       description: generateRandmString(),
@@ -55,10 +55,10 @@ describe('Trash Inspection Plugin - Fraction', function () {
       eForm: 'Number 2',
       itemNumber: '',
     };
-    fractionsPage
-      .getFractionsRowObjectByName(createModel.name)
+    await (await fractionsPage
+      .getFractionsRowObjectByName(createModel.name))
       .edit(updateModel, true);
-    const fraction = fractionsPage.getFractionsRowObjectByName(
+    const fraction = await fractionsPage.getFractionsRowObjectByName(
       createModel.name
     );
     expect(fraction.name).equal(createModel.name);
@@ -67,7 +67,7 @@ describe('Trash Inspection Plugin - Fraction', function () {
     expect(fraction.locationCode).equal(createModel.locationCode);
     expect(fraction.eForm).equal(createModel.eForm);
   });
-  after(function () {
-    fractionsPage.clearTable();
+  after(async () => {
+    await fractionsPage.clearTable();
   });
 });

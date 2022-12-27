@@ -11,33 +11,33 @@ const createModel = {
   itemNumber: '',
 };
 describe('Trash Inspection Plugin - Fraction Add', function () {
-  before(function () {
-    loginPage.open('/auth');
-    loginPage.login();
-    fractionsPage.createNewEform(createModel.eForm);
-    fractionsPage.goToFractionsPage();
+  before(async () => {
+    await loginPage.open('/auth');
+    await loginPage.login();
+    await fractionsPage.createNewEform(createModel.eForm);
+    await fractionsPage.goToFractionsPage();
   });
-  it('should not create fraction', function () {
-    const rowNumBeforeCreate = fractionsPage.rowNum;
-    fractionsPage.createFraction(createModel, true);
-    expect(fractionsPage.rowNum, 'fraction not created').equal(
+  it('should not create fraction', async () => {
+    const rowNumBeforeCreate = await fractionsPage.rowNum();
+    await fractionsPage.createFraction(createModel, true);
+    expect(await fractionsPage.rowNum(), 'fraction not created').equal(
       rowNumBeforeCreate
     );
   });
-  it('should create fraction', function () {
-    const rowNumBeforeCreate = fractionsPage.rowNum;
-    fractionsPage.createFraction(createModel);
-    expect(fractionsPage.rowNum, 'fraction is not created').equal(
+  it('should create fraction', async () => {
+    const rowNumBeforeCreate = await fractionsPage.rowNum();
+    await fractionsPage.createFraction(createModel);
+    expect(await fractionsPage.rowNum(), 'fraction is not created').equal(
       rowNumBeforeCreate + 1
     );
-    const fraction = fractionsPage.getFirstRowObject();
+    const fraction = await fractionsPage.getFirstRowObject();
     expect(fraction.name).equal(createModel.name);
     expect(fraction.description).equal(createModel.description);
     expect(fraction.itemNumber).equal(createModel.itemNumber);
     expect(fraction.locationCode).equal(createModel.locationCode);
     expect(fraction.eForm).equal(createModel.eForm);
   });
-  after(function () {
-    fractionsPage.clearTable();
+  after(async () => {
+    await fractionsPage.clearTable();
   });
 });
