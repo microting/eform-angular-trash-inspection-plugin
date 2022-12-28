@@ -15,7 +15,7 @@ import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/componen
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {TrashInspectionPnTransporterService} from '../../../../services';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
-import {TransporterEditComponent} from '../';
+import {TransporterCreateComponent, TransporterEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -66,6 +66,7 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   translatesSub$: Subscription;
   transporterDeletedSub$: Subscription;
   transporterUpdatedSub$: Subscription;
+  transporterCreatedSub$: Subscription;
 
   constructor(
     public transportersStateService: TransportersStateService,
@@ -92,7 +93,9 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   }
 
   showCreateTransporterModal() {
-    this.createTransporterModal.show();
+    const createTransporterModal =
+      this.dialog.open(TransporterCreateComponent, {...dialogConfigHelper(this.overlay), minWidth: 400});
+    this.transporterCreatedSub$ = createTransporterModal.componentInstance.transporterCreated.subscribe(() => this.getAllTransporters());
   }
 
   showEditTransporterModal(transporter: TransporterPnModel) {

@@ -2,11 +2,10 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { TransporterPnModel } from '../../../../models';
-import { TrashInspectionPnTransporterService } from '../../../../services';
+import {TransporterPnModel} from '../../../../models';
+import {TrashInspectionPnTransporterService} from '../../../../services';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-transporter-create',
@@ -14,30 +13,32 @@ import { TrashInspectionPnTransporterService } from '../../../../services';
   styleUrls: ['./transporter-create.component.scss'],
 })
 export class TransporterCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onTransporterCreated: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
+  transporterCreated: EventEmitter<void> = new EventEmitter<void>();
   newTransporterModel: TransporterPnModel = new TransporterPnModel();
-  constructor(
-    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
-  ) {}
 
-  ngOnInit() {}
+  constructor(
+    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService,
+    public dialogRef: MatDialogRef<TransporterCreateComponent>,
+  ) {
+  }
+
+  ngOnInit() {
+  }
+
   createTransporter() {
     this.trashInspectionPnTransporterService
       .createTransporter(this.newTransporterModel)
       .subscribe((data) => {
-        // debugger;
         if (data && data.success) {
-          this.onTransporterCreated.emit();
-          // this.submitDeployment();
-          this.newTransporterModel = new TransporterPnModel();
-          this.frame.hide();
+          this.transporterCreated.emit();
+          this.hide();
         }
       });
   }
 
-  show() {
-    this.frame.show();
+
+  hide() {
+    this.newTransporterModel = new TransporterPnModel();
+    this.dialogRef.close();
   }
 }
