@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit,} from '@angular/core';
 import {
   TransporterPnModel,
   TransportersPnModel,
@@ -24,9 +24,7 @@ import {TransporterCreateComponent, TransporterEditComponent} from '../';
   styleUrls: ['./transporter-page.component.scss'],
 })
 export class TransporterPageComponent implements OnInit, OnDestroy {
-  @ViewChild('createTransporterModal') createTransporterModal;
   transportersModel: TransportersPnModel = new TransportersPnModel();
-
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
