@@ -15,6 +15,7 @@ import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/componen
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {TrashInspectionPnTransporterService} from '../../../../services';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
+import {TransporterEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -24,7 +25,6 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 })
 export class TransporterPageComponent implements OnInit, OnDestroy {
   @ViewChild('createTransporterModal') createTransporterModal;
-  @ViewChild('editTransporterModal') editTransporterModal;
   transportersModel: TransportersPnModel = new TransportersPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -65,6 +65,7 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
 
   translatesSub$: Subscription;
   transporterDeletedSub$: Subscription;
+  transporterUpdatedSub$: Subscription;
 
   constructor(
     public transportersStateService: TransportersStateService,
@@ -95,11 +96,12 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   }
 
   showEditTransporterModal(transporter: TransporterPnModel) {
-    this.editTransporterModal.show(transporter);
+    const editTransporterModal =
+      this.dialog.open(TransporterEditComponent, {...dialogConfigHelper(this.overlay, transporter), minWidth: 400});
+    this.transporterUpdatedSub$ = editTransporterModal.componentInstance.transporterUpdated.subscribe(() => this.getAllTransporters());
   }
 
   showDeleteTransporterModal(transporter: TransporterPnModel) {
-
     this.translatesSub$ = zip(
       this.translateService.stream('Are you sure you want to delete'),
       this.translateService.stream('Name'),

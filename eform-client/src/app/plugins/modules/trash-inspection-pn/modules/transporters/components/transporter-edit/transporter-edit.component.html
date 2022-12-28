@@ -1,83 +1,93 @@
-<div mdbModal class="modal fade" #frame="mdbModal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-          <h3>{{ 'Edit Transporter' | translate }}</h3>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.address"
-                   type="text" id="editProducerAddress"
-                   name="editProducerAddress" class="form-control">
-            <label for="editProducerAddress">{{'Address' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.name"
-                   type="text" id="editProducerName"
-                   name="editProducerName" class="form-control">
-            <label for="editProducerName">{{'Name' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.description"
-                   type="text" id="edotProducerDescription"
-                   name="edotProducerDescription" class="form-control">
-            <label for="edotProducerDescription">{{'Description' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.city"
-                   type="text" id="editProducerCity"
-                   name="editProducerCity" class="form-control">
-            <label for="editProducerCity">{{'City' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.contactPerson"
-                   type="text" id="editProducerContactPerson"
-                   name="editProducerContactPerson" class="form-control">
-            <label for="editProducerContactPerson">{{'Contact Person' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.foreignId"
-                   type="text" id="editProducerForeignId"
-                   name="editProducerForeignId" class="form-control">
-            <label for="editProducerForeignId">{{'Foreign Id' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.phone"
-                   type="text" id="editProducerPhone"
-                   name="editProducerPhone" class="form-control">
-            <label for="editProducerPhone">{{'Phone' | translate}}</label>
-          </div>
-          <div class="md-form">
-            <input mdbInput
-
-                   [(ngModel)]="selectedTransporter.zipCode"
-                   type="text" id="editProducerZipCode"
-                   name="editProducerZipCode" class="form-control">
-            <label for="editProducerZipCode">{{'Zip code' | translate}}</label>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="fractionEditSaveBtn" class="btn btn-success btn-small-height" [disabled]="!selectedTransporter.name" (click)="editTransporter()">
-          {{ 'Update' | translate }}
-        </button>
-        <button id="fractionEditCancelBtn" class="btn btn-accent text-black-50 btn-small-height" (click)="frame.hide()">{{'Cancel' | translate}}</button>
-      </div>
-    </div>
-  </div>
+<h3 mat-dialog-title>{{ 'Edit Transporter' | translate}}</h3>
+<div mat-dialog-content class="d-flex flex-column">
+  <mat-form-field>
+    <mat-label>{{'Address' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.address"
+      type="text"
+      id="editProducerAddress"
+      name="editProducerAddress">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Name' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.name"
+      type="text"
+      id="editProducerName"
+      name="editProducerName">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Description' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.description"
+      type="text"
+      id="editProducerDescription"
+      name="editProducerDescription">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'City' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.city"
+      type="text"
+      id="editProducerCity"
+      name="editProducerCity">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Contact Person' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.contactPerson"
+      type="text"
+      id="editProducerContactPerson"
+      name="editProducerContactPerson">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Foreign Id' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.foreignId"
+      type="text"
+      id="editProducerForeignId"
+      name="editProducerForeignId">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Phone' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.phone"
+      type="text"
+      id="editProducerPhone"
+      name="editProducerPhone">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Zip code' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedTransporter.zipCode"
+      type="text"
+      id="editProducerZipCode"
+      name="editProducerZipCode">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="editTransporter()"
+    id="fractionEditSaveBtn"
+    [disabled]="!selectedTransporter.name"
+  >
+    {{'Update' | translate}}
+  </button>
+  <button
+    mat-raised-button
+    id="fractionEditCancelBtn"
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
 </div>

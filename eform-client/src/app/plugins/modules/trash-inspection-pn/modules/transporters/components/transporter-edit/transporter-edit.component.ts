@@ -1,30 +1,31 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { ProducerPnModel, TransporterPnModel} from '../../../../models';
-import { TrashInspectionPnTransporterService } from '../../../../services';
+import {ProducerPnModel, TransporterPnModel} from '../../../../models';
+import {TrashInspectionPnTransporterService} from '../../../../services';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-  selector: '<app-trash-inspection-pn-transporter-edit',
+  selector: 'app-trash-inspection-pn-transporter-edit',
   templateUrl: './transporter-edit.component.html',
   styleUrls: ['./transporter-edit.component.scss'],
 })
 export class TransporterEditComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onTransporterUpdated: EventEmitter<void> = new EventEmitter<void>();
-  selectedTransporter: TransporterPnModel = new TransporterPnModel();
-  constructor(
-    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
-  ) {}
+  transporterUpdated: EventEmitter<void> = new EventEmitter<void>();
+  public selectedTransporter: TransporterPnModel = new TransporterPnModel();
 
-  ngOnInit() {}
-  show(transporterModel: TransporterPnModel) {
+  constructor(
+    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService,
+    public dialogRef: MatDialogRef<TransporterEditComponent>,
+    @Inject(MAT_DIALOG_DATA) transporterModel: TransporterPnModel,
+  ) {
     this.getSelectedProducer(transporterModel.id);
-    this.frame.show();
+  }
+
+  ngOnInit() {
   }
 
   getSelectedProducer(id: number) {
@@ -36,15 +37,20 @@ export class TransporterEditComponent implements OnInit {
         }
       });
   }
+
   editTransporter() {
     this.trashInspectionPnTransporterService
       .updateTransporter(this.selectedTransporter)
       .subscribe((data) => {
         if (data && data.success) {
-          this.onTransporterUpdated.emit();
-          this.selectedTransporter = new ProducerPnModel();
-          this.frame.hide();
+          this.transporterUpdated.emit();
+          this.hide();
         }
       });
+  }
+
+  hide() {
+    this.selectedTransporter = new ProducerPnModel();
+    this.dialogRef.close();
   }
 }
