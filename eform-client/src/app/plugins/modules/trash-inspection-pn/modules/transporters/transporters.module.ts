@@ -9,7 +9,6 @@ import {
   TransporterImportComponent,
   TransporterPageComponent,
   TransporterCreateComponent,
-  TransporterDeleteComponent,
   TransporterEditComponent,
 } from './components';
 import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
@@ -41,7 +40,6 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
     TransporterImportComponent,
     TransporterPageComponent,
     TransporterCreateComponent,
-    TransporterDeleteComponent,
     TransporterEditComponent,
   ],
   providers: [

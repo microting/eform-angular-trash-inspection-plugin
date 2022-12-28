@@ -1,25 +1,30 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   TransporterPnModel,
   TransportersPnModel,
 } from '../../../../models';
-import {PaginationModel} from 'src/app/common/models';
+import {DeleteModalSettingModel, PaginationModel,} from 'src/app/common/models';
 import { TransportersStateService } from '../store';
 import {Sort} from '@angular/material/sort';
 import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {Subscription, zip} from 'rxjs';
+import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
+import {dialogConfigHelper} from 'src/app/common/helpers';
+import {TrashInspectionPnTransporterService} from '../../../../services';
+import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-transporter-page',
   templateUrl: './transporter-page.component.html',
   styleUrls: ['./transporter-page.component.scss'],
 })
-export class TransporterPageComponent implements OnInit {
+export class TransporterPageComponent implements OnInit, OnDestroy {
   @ViewChild('createTransporterModal') createTransporterModal;
   @ViewChild('editTransporterModal') editTransporterModal;
-  @ViewChild('deleteTransporterModal') deleteTransporterModal;
   transportersModel: TransportersPnModel = new TransportersPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -58,11 +63,15 @@ export class TransporterPageComponent implements OnInit {
     },
   ];
 
+  translatesSub$: Subscription;
+  transporterDeletedSub$: Subscription;
+
   constructor(
     public transportersStateService: TransportersStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
     private overlay: Overlay,
+    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
     ) {}
 
   ngOnInit() {
@@ -90,7 +99,35 @@ export class TransporterPageComponent implements OnInit {
   }
 
   showDeleteTransporterModal(transporter: TransporterPnModel) {
-    this.deleteTransporterModal.show(transporter);
+
+    this.translatesSub$ = zip(
+      this.translateService.stream('Are you sure you want to delete'),
+      this.translateService.stream('Name'),
+    ).subscribe(([headerText, name]) => {
+      const settings: DeleteModalSettingModel = {
+        model: transporter,
+        settings: {
+          headerText: `${headerText}?`,
+          fields: [
+            {header: 'ID', field: 'id'},
+            {header: name, field: 'name'},
+          ],
+          cancelButtonId: 'producerDeleteCancelBtn',
+          deleteButtonId: 'producerDeleteDeleteBtn',
+        }
+      };
+      const deleteTransporterModal = this.dialog.open(DeleteModalComponent, {...dialogConfigHelper(this.overlay, settings)});
+      this.transporterDeletedSub$ = deleteTransporterModal.componentInstance.delete
+        .subscribe((model: TransporterPnModel) => {
+          this.trashInspectionPnTransporterService.deleteTransporter(model.id)
+            .subscribe((data) => {
+              if (data && data.success) {
+                deleteTransporterModal.close();
+                this.onTransporterDeleted();
+              }
+            });
+        });
+    });
   }
 
   sortTable(sort: Sort) {
@@ -116,5 +153,8 @@ export class TransporterPageComponent implements OnInit {
   onPaginationChanged(paginationModel: PaginationModel) {
     this.transportersStateService.updatePagination(paginationModel);
     this.getAllTransporters();
+  }
+
+  ngOnDestroy(): void {
   }
 }
