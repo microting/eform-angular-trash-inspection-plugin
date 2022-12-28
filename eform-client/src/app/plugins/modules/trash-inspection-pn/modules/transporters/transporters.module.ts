@@ -17,6 +17,9 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {transportersPersistProvider} from './components/store';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MtxGridModule} from '@ng-matero/extensions/grid';
 
 @NgModule({
   imports: [
@@ -30,6 +33,9 @@ import {transportersPersistProvider} from './components/store';
     EformSharedModule,
     FontAwesomeModule,
     NgxChartsModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MtxGridModule,
   ],
   declarations: [
     TransporterImportComponent,
