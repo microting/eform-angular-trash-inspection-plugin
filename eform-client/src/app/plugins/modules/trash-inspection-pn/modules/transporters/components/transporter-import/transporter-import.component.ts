@@ -8,6 +8,8 @@ import {
   ProducerPnImportModel,
   FractionPnImportModel,
 } from '../../../../models';
+import {Router} from '@angular/router';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
 
 const URL = '';
 
@@ -31,25 +33,31 @@ export class TransporterImportComponent implements OnInit {
     'Manage matching records',
   ];
   papa: Papa = new Papa();
-  tableData: any = null;
+  tableData: [] = [];
   options = [
-    { value: 0, label: 'Name' },
-    { value: 1, label: 'Description' },
-    { value: 2, label: 'ForeignId' },
-    { value: 3, label: 'Address' },
-    { value: 4, label: 'City' },
-    { value: 5, label: 'ZipCode' },
-    { value: 6, label: 'Phone' },
-    { value: 7, label: 'Contact Person' },
+    { value: 0, label: 'Name', disabled: false },
+    { value: 1, label: 'Description', disabled: false },
+    { value: 2, label: 'ForeignId', disabled: false },
+    { value: 3, label: 'Address', disabled: false },
+    { value: 4, label: 'City', disabled: false },
+    { value: 5, label: 'ZipCode', disabled: false },
+    { value: 6, label: 'Phone', disabled: false },
+    { value: 7, label: 'Contact Person', disabled: false },
   ];
+  selectedOptions: { value: number }[] = [];
 
-  constructor(private transporterService: TrashInspectionPnTransporterService) {
+  columns: MtxGridColumn[] = [];
+
+  constructor(
+    private transporterService: TrashInspectionPnTransporterService,
+    private router: Router,
+  ) {
     this.transporterImportModel = new ProducerPnImportModel();
     this.options.forEach((option) => {
-      this.transporterHeadersModel = new TransporterPnHeadersModel();
-      this.transporterHeadersModel.headerLabel = option.label;
-      this.transporterHeadersModel.headerValue = null;
-      this.transporterImportModel.headerList.push(this.transporterHeadersModel);
+      this.transporterImportModel.headerList = [
+        ...this.transporterImportModel.headerList,
+        {headerValue: null, headerLabel: option.label},
+      ]
     });
     this.uploader = new FileUploader({
       url: URL,
@@ -67,13 +75,14 @@ export class TransporterImportComponent implements OnInit {
   ngOnInit() {}
 
   csv2Array(fileInput) {
-    const file = fileInput;
-    this.papa.parse(fileInput.target.files[0], {
+    const files = fileInput.target.files;
+    this.papa.parse(files[files.length - 1], {
       skipEmptyLines: true,
       header: false,
       complete: (results) => {
         this.tableData = results.data;
-        console.log(this.tableData);
+        console.debug(this.tableData);
+        this.changeTable();
         this.transporterImportModel.importList = JSON.stringify(this.tableData);
       },
     });
@@ -91,10 +100,37 @@ export class TransporterImportComponent implements OnInit {
       .subscribe((data) => {
         if (data && data.success) {
           this.transporterImportModel = new FractionPnImportModel();
+          this.router.navigate([`./..`]).then()
         }
       });
   }
   onSelectedChanged(e: any, columnIndex: any) {
-    this.transporterImportModel.headerList[e.value].headerValue = columnIndex;
+    // this.selectedOptions = this.selectedOptions.filter(x => x.value === e.value);
+    const i = this.transporterImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if(i !== -1) {
+      this.transporterImportModel.headerList[i].headerValue = null;
+    }
+    if(e) {
+      this.transporterImportModel.headerList.find(x => x.headerLabel === e.label).headerValue = columnIndex;
+    }
+    // this.transporterImportModel.headerList[e.value].headerValue = columnIndex;
+    this.options = this.options
+      .map(x => ({...x, disabled: this.transporterImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}))
+  }
+
+  onSelectedClear(columnIndex: any) {
+    const i = this.transporterImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if(i !== -1) {
+      this.transporterImportModel.headerList[i].headerValue = null;
+    }
+    this.options = this.options
+      .map(x => ({...x, disabled: this.transporterImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}))
+  }
+
+  changeTable() {
+    this.columns = this.options.map((x, i) => ({
+      field: i.toString(),
+      formatter: rowData => rowData[i],
+    }))
   }
 }

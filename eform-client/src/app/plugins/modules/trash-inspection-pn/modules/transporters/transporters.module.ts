@@ -22,6 +22,8 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {MtxSelectModule} from '@ng-matero/extensions/select';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -41,6 +43,8 @@ import {MatInputModule} from '@angular/material/input';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MtxSelectModule,
+    MatIconModule,
   ],
   declarations: [
     TransporterImportComponent,
