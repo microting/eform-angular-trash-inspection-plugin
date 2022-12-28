@@ -9,7 +9,6 @@ import {
   ProducerPageComponent,
   ProducerImportComponent,
   ProducerCreateComponent,
-  ProducerDeleteComponent,
   ProducerEditComponent,
 } from './components';
 import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
@@ -41,7 +40,6 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
     ProducerPageComponent,
     ProducerImportComponent,
     ProducerCreateComponent,
-    ProducerDeleteComponent,
     ProducerEditComponent,
   ],
   providers: [
