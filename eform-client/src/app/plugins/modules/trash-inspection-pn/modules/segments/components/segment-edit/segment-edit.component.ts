@@ -1,12 +1,12 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { TrashInspectionPnSegmentsService } from '../../../../services';
-import { SegmentPnModel } from '../../../../models';
+import {TrashInspectionPnSegmentsService} from '../../../../services';
+import {SegmentPnModel} from '../../../../models';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-segment-edit',
@@ -14,19 +14,19 @@ import { SegmentPnModel } from '../../../../models';
   styleUrls: ['./segment-edit.component.scss'],
 })
 export class SegmentEditComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();
+  onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   typeahead = new EventEmitter<string>();
+
   constructor(
-    private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService
-  ) {}
-
-  ngOnInit() {}
-
-  show(segmentPnModel: SegmentPnModel) {
+    private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
+    public dialogRef: MatDialogRef<SegmentEditComponent>,
+    @Inject(MAT_DIALOG_DATA) segmentPnModel: SegmentPnModel,
+  ) {
     this.getSelectedFraction(segmentPnModel.id);
-    this.frame.show();
+  }
+
+  ngOnInit() {
   }
 
   getSelectedFraction(id: number) {
@@ -39,17 +39,19 @@ export class SegmentEditComponent implements OnInit {
       });
   }
 
-  updateFraction() {
+  updateSegment() {
     this.trashInspectionPnSegmentsService
       .updateSegment(this.segmentPnModel)
       .subscribe((data) => {
         if (data && data.success) {
           this.onSegmentUpdated.emit();
-          this.segmentPnModel = new SegmentPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
   }
 
-  onSelectedChanged(e: any) {}
+  hide() {
+    this.segmentPnModel = new SegmentPnModel();
+    this.dialogRef.close();
+  }
 }

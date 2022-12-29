@@ -1,60 +1,48 @@
-<div [config]="{ignoreBackdropClick: true}" mdbModal class="modal fade" #frame="mdbModal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>{{ 'Update Segment' | translate }}</h3>
-        <button class="close" data-dismiss="modal" (click)="frame.hide()">
-          <span>×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="container-fluid">
-          <form #createForm="ngForm">
-            <div class="row mb-2">
-              <div class="col-md-12 col-xs-12">
-                <div class="md-form">
-                  <input mdbInput
-
-                         [(ngModel)]="segmentPnModel.name"
-                         type="text" id="updateSegmentName"
-                         name="updateSegmentName" class="form-control">
-                  <label for="updateSegmentName">{{'Name' | translate}}</label>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12 col-xs-12">
-                <div class="md-form">
-                  <input mdbInput
-
-                         [(ngModel)]="segmentPnModel.description"
-                         type="text" id="updateSegmentDescription"
-                         name="updateSegmentDescription" class="form-control">
-                  <label for="updateSegmentDescription">{{'Description' | translate}}</label>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12 col-xs-12">
-                <div class="md-form">
-                  <input mdbInput
-
-                         [(ngModel)]="segmentPnModel.sdkFolderId"
-                         type="text" id="updateSegmentSdkFolderId"
-                         name="updateSegmentSdkFolderId" class="form-control">
-                  <label for="updateSegmentSdkFolderId">{{'SDk folder id' | translate}}</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="segmentUpdateSaveBtn" class="btn btn-success btn-small-height" [disabled]="!segmentPnModel.name" (click)="  updateFraction()">
-          {{ 'Save' | translate }}
-        </button>
-        <button id="segmentUpdateCancelBtn" class="btn btn-accent text-black-50 btn-small-height" (click)="frame.hide()">{{'Cancel' | translate}}</button>
-      </div>
-    </div>
-  </div>
+<h3 mat-dialog-title>{{ 'Update Segment' | translate}}</h3>
+<div mat-dialog-content class="d-flex flex-column">
+  <mat-form-field>
+    <mat-label>{{'Name' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.name"
+      type="text"
+      id="updateSegmentName"
+      name="updateSegmentName">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Description' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.description"
+      type="text"
+      id="updateSegmentDescription"
+      name="updateSegmentDescription">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'SDk folder id' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.sdkFolderId"
+      type="text"
+      id="updateSegmentSdkFolderId"
+      name="updateSegmentSdkFolderId">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="updateSegment()"
+    id="segmentUpdateSaveBtn"
+    [disabled]="!segmentPnModel.name"
+  >
+    {{'Save' | translate}}
+  </button>
+  <button
+    mat-raised-button
+    id="segmentUpdateCancelBtn"
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
 </div>

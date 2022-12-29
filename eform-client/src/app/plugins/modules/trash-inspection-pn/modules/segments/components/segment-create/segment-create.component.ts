@@ -2,14 +2,13 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import { SiteNameDto, DeployModel } from 'src/app/common/models';
-import { SegmentPnModel } from '../../../../models';
-import { TrashInspectionPnSegmentsService } from '../../../../services';
-import { AuthStateService } from 'src/app/common/store';
-import { SitesService } from 'src/app/common/services';
+import {SiteNameDto, DeployModel} from 'src/app/common/models';
+import {SegmentPnModel,} from '../../../../models';
+import {TrashInspectionPnSegmentsService} from '../../../../services';
+import {AuthStateService} from 'src/app/common/store';
+import {SitesService} from 'src/app/common/services';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-segment-create',
@@ -17,8 +16,7 @@ import { SitesService } from 'src/app/common/services';
   styleUrls: ['./segment-create.component.scss'],
 })
 export class SegmentCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();
+  onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
@@ -31,8 +29,12 @@ export class SegmentCreateComponent implements OnInit {
   constructor(
     private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
     private sitesService: SitesService,
-    private authStateService: AuthStateService
-  ) {}
+    private authStateService: AuthStateService,
+    public dialogRef: MatDialogRef<SegmentCreateComponent>,
+  ) {
+    this.deployModel = new DeployModel();
+    this.deployViewModel = new DeployModel();
+  }
 
   ngOnInit() {
     this.loadAllSites();
@@ -44,8 +46,7 @@ export class SegmentCreateComponent implements OnInit {
       .subscribe((data) => {
         if (data && data.success) {
           this.onSegmentCreated.emit();
-          this.segmentPnModel = new SegmentPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
   }
@@ -60,11 +61,8 @@ export class SegmentCreateComponent implements OnInit {
     }
   }
 
-  show() {
-    this.deployModel = new DeployModel();
-    this.deployViewModel = new DeployModel();
-    this.frame.show();
+  hide() {
+    this.segmentPnModel = new SegmentPnModel();
+    this.dialogRef.close();
   }
-
-  onSelectedChanged(e: any) {}
 }

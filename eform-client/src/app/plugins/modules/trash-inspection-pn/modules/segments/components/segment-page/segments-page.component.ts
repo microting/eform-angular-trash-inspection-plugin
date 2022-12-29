@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {SegmentPnModel, SegmentsPnModel, TransporterPnModel} from '../../../../models';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {SegmentPnModel, SegmentsPnModel,} from '../../../../models';
 import {SegmentsStateService} from '../store';
 import {DeleteModalSettingModel, PaginationModel} from 'src/app/common/models';
 import {Sort} from '@angular/material/sort';
@@ -12,6 +12,7 @@ import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/componen
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {TrashInspectionPnSegmentsService} from '../../../../services';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
+import {SegmentCreateComponent, SegmentEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -20,8 +21,6 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
   styleUrls: ['./segments-page.component.scss'],
 })
 export class SegmentsPageComponent implements OnInit, OnDestroy {
-  @ViewChild('createSegmentModal') createSegmentModal;
-  @ViewChild('editSegmentModal') editSegmentModal;
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -57,6 +56,8 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
 
   translatesSub$: Subscription;
   segmentDeletedSub$: Subscription;
+  segmentCreatedSub$: Subscription;
+  segmentUpdatedSub$: Subscription;
 
   constructor(
     public segmentsStateService: SegmentsStateService,
@@ -84,7 +85,9 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   }
 
   showEditSegmentModal(segment: SegmentPnModel) {
-    this.editSegmentModal.show(segment);
+    const updateSegmentModal =
+      this.dialog.open(SegmentEditComponent, {...dialogConfigHelper(this.overlay, segment), minWidth: 400});
+    this.segmentUpdatedSub$ = updateSegmentModal.componentInstance.onSegmentUpdated.subscribe(() => this.getAllSegments());
   }
 
   showDeleteSegmentModal(segment: SegmentPnModel) {
@@ -120,7 +123,9 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   }
 
   showCreateSegmentModal() {
-    this.createSegmentModal.show();
+    const createSegmentModal =
+      this.dialog.open(SegmentCreateComponent, {...dialogConfigHelper(this.overlay), minWidth: 400});
+    this.segmentCreatedSub$ = createSegmentModal.componentInstance.onSegmentCreated.subscribe(() => this.getAllSegments());
   }
 
   sortTable(sort: Sort) {

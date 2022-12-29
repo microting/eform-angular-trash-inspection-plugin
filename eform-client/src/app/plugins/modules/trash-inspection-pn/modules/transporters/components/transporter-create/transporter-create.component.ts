@@ -36,7 +36,6 @@ export class TransporterCreateComponent implements OnInit {
       });
   }
 
-
   hide() {
     this.newTransporterModel = new TransporterPnModel();
     this.dialogRef.close();
