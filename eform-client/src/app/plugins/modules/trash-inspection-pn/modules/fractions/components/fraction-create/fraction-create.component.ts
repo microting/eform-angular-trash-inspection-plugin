@@ -3,8 +3,6 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { TrashInspectionPnFractionsService } from '../../../../services';
@@ -16,6 +14,7 @@ import {
   TemplateRequestModel,
 } from 'src/app/common/models/eforms';
 import { AuthStateService } from 'src/app/common/store';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-fraction-create',
@@ -23,9 +22,7 @@ import { AuthStateService } from 'src/app/common/store';
   styleUrls: ['./fraction-create.component.scss'],
 })
 export class FractionCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
+  onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
   newFractionModel: FractionPnModel = new FractionPnModel();
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
@@ -43,7 +40,8 @@ export class FractionCreateComponent implements OnInit {
     private sitesService: SitesService,
     private authStateService: AuthStateService,
     private eFormService: EFormService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public dialogRef: MatDialogRef<FractionCreateComponent>,
   ) {
     this.typeahead
       .pipe(
@@ -57,21 +55,21 @@ export class FractionCreateComponent implements OnInit {
         this.templatesModel = items.model;
         this.cd.markForCheck();
       });
+    this.deployModel = new DeployModel();
+    this.deployViewModel = new DeployModel();
   }
 
   ngOnInit() {
     this.loadAllSites();
   }
 
-  createInstallation() {
+  createFraction() {
     this.trashInspectionPnFractionsService
       .createFraction(this.newFractionModel)
       .subscribe((data) => {
         if (data && data.success) {
           this.onFractionCreated.emit();
-          // this.submitDeployment();
-          this.newFractionModel = new FractionPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
   }
@@ -86,24 +84,12 @@ export class FractionCreateComponent implements OnInit {
     }
   }
 
-  show() {
-    this.deployModel = new DeployModel();
-    this.deployViewModel = new DeployModel();
-    this.frame.show();
-  }
-
   onSelectedChanged(e: any) {
     this.newFractionModel.eFormId = e.id;
   }
-  // submitDeployment() {
-  //   this.spinnerStatus = true;
-  //   // this.deployModel.id = this.newInstallationModel.id;
-  //   this.eFormService.deploySingle(this.deployModel).subscribe(operation => {
-  //     if (operation && operation.success) {
-  //       this.frame.hide();
-  //       this.onDeploymentFinished.emit();
-  //     }
-  //
-  //   });
-  // }
+
+  hide() {
+    this.newFractionModel = new FractionPnModel();
+    this.dialogRef.close();
+  }
 }

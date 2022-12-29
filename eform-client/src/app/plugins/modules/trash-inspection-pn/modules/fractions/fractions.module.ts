@@ -19,6 +19,10 @@ import {fractionsPersistProvider} from './components/store';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MtxSelectModule} from '@ng-matero/extensions/select';
 
 @NgModule({
   imports: [
@@ -35,6 +39,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MtxGridModule,
     MatButtonModule,
     MatTooltipModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MtxSelectModule,
   ],
   declarations: [
     FractionCreateComponent,

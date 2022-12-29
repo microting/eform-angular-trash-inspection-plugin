@@ -2,9 +2,8 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
 import { TrashInspectionPnFractionsService } from '../../../../services';
 import { FractionPnModel } from '../../../../models';
@@ -12,8 +11,10 @@ import {
   TemplateListModel,
   TemplateRequestModel,
 } from 'src/app/common/models';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import {debounceTime, skip, switchMap} from 'rxjs/operators';
 import { EFormService } from 'src/app/common/services/eform';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-trash-inspection-pn-fraction-edit',
@@ -21,8 +22,7 @@ import { EFormService } from 'src/app/common/services/eform';
   styleUrls: ['./fraction-edit.component.scss'],
 })
 export class FractionEditComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
+  onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
   selectedFractionModel: FractionPnModel = new FractionPnModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
   templatesModel: TemplateListModel = new TemplateListModel();
@@ -30,7 +30,9 @@ export class FractionEditComponent implements OnInit {
   constructor(
     private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
     private cd: ChangeDetectorRef,
-    private eFormService: EFormService
+    private eFormService: EFormService,
+    public dialogRef: MatDialogRef<FractionEditComponent>,
+    @Inject(MAT_DIALOG_DATA) fractionModel: FractionPnModel,
   ) {
     this.typeahead
       .pipe(
@@ -40,26 +42,26 @@ export class FractionEditComponent implements OnInit {
           return this.eFormService.getAll(this.templateRequestModel);
         })
       )
+      .pipe(skip(1))
       .subscribe((items) => {
         this.templatesModel = items.model;
         this.cd.markForCheck();
       });
+    this.getSelectedFraction(fractionModel.id);
   }
 
-  ngOnInit() {}
-
-  show(fractionModel: FractionPnModel) {
-    this.getSelectedFraction(fractionModel.id);
-    this.frame.show();
+  ngOnInit() {
+    this.eFormService.getAll(this.templateRequestModel).pipe(take(1)).subscribe((items) => {
+      this.templatesModel = items.model;
+    });
   }
 
   hide() {
-    this.frame.hide();
     this.selectedFractionModel = new FractionPnModel();
+    this.dialogRef.close();
   }
 
   getSelectedFraction(id: number) {
-    // debugger;
     this.trashInspectionPnFractionsService
       .getSingleFraction(id)
       .subscribe((data) => {
@@ -81,7 +83,6 @@ export class FractionEditComponent implements OnInit {
   }
 
   onSelectedChanged(e: any) {
-    // debugger;
     this.selectedFractionModel.eFormId = e.id;
   }
 }

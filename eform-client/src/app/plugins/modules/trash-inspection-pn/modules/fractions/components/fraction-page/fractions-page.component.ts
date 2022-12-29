@@ -1,6 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FractionPnModel, TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
+import {TrashInspectionPnFractionsService} from '../../../../services';
 import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
 import {FractionsStateService} from '../store';
 import {AuthStateService} from 'src/app/common/store';
@@ -10,10 +11,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
-import {TrashInspectionPnFractionsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
 import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
+import {FractionCreateComponent, FractionEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -22,8 +23,6 @@ import {dialogConfigHelper} from 'src/app/common/helpers';
   styleUrls: ['./fractions-page.component.scss'],
 })
 export class FractionsPageComponent implements OnInit, OnDestroy {
-  @ViewChild('createFractionModal') createFractionModal;
-  @ViewChild('editFractionModal') editFractionModal;
   fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
@@ -59,6 +58,8 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
 
   translatesSub$: Subscription;
   fractionDeletedSub$: Subscription;
+  fractionCreatedSub$: Subscription;
+  fractionUpdatedSub$: Subscription;
 
   get trashInspectionPnClaims() {
     return TrashInspectionPnClaims;
@@ -91,7 +92,9 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
 
   showEditFractionModal(fraction: FractionPnModel) {
-    this.editFractionModal.show(fraction);
+    const editFractionModal =
+      this.dialog.open(FractionEditComponent, {...dialogConfigHelper(this.overlay, fraction), minWidth: 400});
+    this.fractionUpdatedSub$ = editFractionModal.componentInstance.onFractionUpdated.subscribe(() => this.getAllFractions());
   }
 
   showDeleteFractionModal(fraction: FractionPnModel) {
@@ -126,7 +129,9 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
 
   showCreateFractionModal() {
-    this.createFractionModal.show();
+    const createFractionModal =
+      this.dialog.open(FractionCreateComponent, {...dialogConfigHelper(this.overlay), minWidth: 400});
+    this.fractionCreatedSub$ = createFractionModal.componentInstance.onFractionCreated.subscribe(() => this.getAllFractions());
   }
 
   sortTable(sort: Sort) {
