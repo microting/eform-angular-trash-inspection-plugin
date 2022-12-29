@@ -8,7 +8,6 @@ import {InstallationsRouting} from './installations.routing';
 import {
   InstallationCreateComponent,
   InstallationsPageComponent,
-  InstallationDeleteComponent,
   InstallationEditComponent,
 } from './components';
 import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
@@ -39,7 +38,6 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
   declarations: [
     InstallationCreateComponent,
     InstallationsPageComponent,
-    InstallationDeleteComponent,
     InstallationEditComponent,
   ],
   providers: [

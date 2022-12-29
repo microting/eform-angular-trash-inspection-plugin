@@ -3,7 +3,8 @@ import {
   InstallationPnModel,
   InstallationsPnModel,
 } from '../../../../models';
-import {PaginationModel, TableHeaderElementModel} from 'src/app/common/models';
+import {TrashInspectionPnInstallationsService} from '../../../../services';
+import {DeleteModalSettingModel, PaginationModel} from 'src/app/common/models';
 import {InstallationsStateService} from '../store';
 import {Sort} from '@angular/material/sort';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
@@ -11,6 +12,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {Subscription, zip} from 'rxjs';
+import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
+import {dialogConfigHelper} from 'src/app/common/helpers';
 
 @AutoUnsubscribe()
 @Component({
@@ -21,16 +25,9 @@ import {MtxGridColumn} from '@ng-matero/extensions/grid';
 export class InstallationsPageComponent implements OnInit, OnDestroy {
   @ViewChild('createInspectionModal') createInspectionModal;
   @ViewChild('editInstallationModal') editInstallationModal;
-  @ViewChild('deleteInstallationModal') deleteInstallationModal;
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
 
-  tableHeaders: TableHeaderElementModel[] = [
-    {name: 'Id', elementId: 'idTableHeader', sortable: true},
-    {name: 'Name', elementId: 'nameTableHeader', sortable: true},
-    {name: 'Actions', elementId: '', sortable: false},
-  ];
-
-  tableHeaders1: MtxGridColumn[] = [
+  tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
     {
@@ -59,11 +56,15 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
     },
   ];
 
+  translatesSub$: Subscription;
+  installationDeletedSub$: Subscription;
+
   constructor(
     public installationsStateService: InstallationsStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
     private overlay: Overlay,
+    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService
   ) {
   }
 
@@ -88,7 +89,34 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
   }
 
   showDeleteInstallationModal(installation: InstallationPnModel) {
-    this.deleteInstallationModal.show(installation);
+    this.translatesSub$ = zip(
+      this.translateService.stream('Are you sure you want to delete'),
+      this.translateService.stream('Name'),
+    ).subscribe(([headerText, name]) => {
+      const settings: DeleteModalSettingModel = {
+        model: installation,
+        settings: {
+          headerText: `${headerText}?`,
+          fields: [
+            {header: 'ID', field: 'id'},
+            {header: name, field: 'name'},
+          ],
+          cancelButtonId: 'installationDeleteCancelBtn',
+          deleteButtonId: 'installationDeleteDeleteBtn',
+        }
+      };
+      const deleteInspectionModal = this.dialog.open(DeleteModalComponent, {...dialogConfigHelper(this.overlay, settings)});
+      this.installationDeletedSub$ = deleteInspectionModal.componentInstance.delete
+        .subscribe((model: InstallationPnModel) => {
+          this.trashInspectionPnInstallationsService.deleteInstallation(model.id)
+            .subscribe((data) => {
+              if (data && data.success) {
+                deleteInspectionModal.close();
+                this.onInstallationDeleted();
+              }
+            });
+        });
+    });
   }
 
   showCreateInstallationModal() {
@@ -97,16 +125,6 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
 
   sortTable(sort: Sort) {
     this.installationsStateService.onSortTable(sort.active);
-    this.getAllInstallations();
-  }
-
-  changePage(offset: number) {
-    this.installationsStateService.changePage(offset);
-    this.getAllInstallations();
-  }
-
-  onPageSizeChanged(pageSize: number) {
-    this.installationsStateService.updatePageSize(pageSize);
     this.getAllInstallations();
   }
 
