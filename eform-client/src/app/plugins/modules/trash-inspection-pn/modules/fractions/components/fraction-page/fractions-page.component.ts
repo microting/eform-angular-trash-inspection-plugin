@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FractionPnModel} from '../../../../models';
+import {FractionPnModel, TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
-import {Paged, PaginationModel} from 'src/app/common/models';
+import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
 import {FractionsStateService} from '../store';
 import {AuthStateService} from 'src/app/common/store';
 import {Sort} from '@angular/material/sort';
@@ -10,6 +10,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
+import {TrashInspectionPnFractionsService} from 'src/app/plugins/modules/trash-inspection-pn/services';
+import {Subscription, zip} from 'rxjs';
+import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
+import {dialogConfigHelper} from 'src/app/common/helpers';
 
 @AutoUnsubscribe()
 @Component({
@@ -20,13 +24,7 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 export class FractionsPageComponent implements OnInit, OnDestroy {
   @ViewChild('createFractionModal') createFractionModal;
   @ViewChild('editFractionModal') editFractionModal;
-  @ViewChild('deleteFractionModal') deleteFractionModal;
   fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();
-
-  get trashInspectionPnClaims() {
-    return TrashInspectionPnClaims;
-  }
-
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {header: this.translateService.stream('Item number'), field: 'itemNumber', sortProp: {id: 'ItemNumber'}, sortable: true},
@@ -59,12 +57,20 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
     },
   ];
 
+  translatesSub$: Subscription;
+  fractionDeletedSub$: Subscription;
+
+  get trashInspectionPnClaims() {
+    return TrashInspectionPnClaims;
+  }
+
   constructor(
     public fractionsStateService: FractionsStateService,
     public authStateService: AuthStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
     private overlay: Overlay,
+    private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
   ) {
   }
 
@@ -89,7 +95,34 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
 
   showDeleteFractionModal(fraction: FractionPnModel) {
-    this.deleteFractionModal.show(fraction);
+    this.translatesSub$ = zip(
+      this.translateService.stream('Are you sure you want to delete'),
+      this.translateService.stream('Name'),
+    ).subscribe(([headerText, name]) => {
+      const settings: DeleteModalSettingModel = {
+        model: fraction,
+        settings: {
+          headerText: `${headerText}?`,
+          fields: [
+            {header: 'ID', field: 'id'},
+            {header: name, field: 'name'},
+          ],
+          cancelButtonId: 'fractionDeleteCancelBtn',
+          deleteButtonId: 'fractionDeleteDeleteBtn',
+        }
+      };
+      const deleteFractionModal = this.dialog.open(DeleteModalComponent, {...dialogConfigHelper(this.overlay, settings)});
+      this.fractionDeletedSub$ = deleteFractionModal.componentInstance.delete
+        .subscribe((model: TransporterPnModel) => {
+          this.trashInspectionPnFractionsService.deleteFraction(model.id)
+            .subscribe((data) => {
+              if (data && data.success) {
+                deleteFractionModal.close();
+                this.onFractionDeleted();
+              }
+            });
+        });
+    });
   }
 
   showCreateFractionModal() {

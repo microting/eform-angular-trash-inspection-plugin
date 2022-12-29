@@ -4,7 +4,7 @@ import {
   TransportersPnModel,
 } from '../../../../models';
 import {DeleteModalSettingModel, PaginationModel,} from 'src/app/common/models';
-import { TransportersStateService } from '../store';
+import {TransportersStateService} from '../store';
 import {Sort} from '@angular/material/sort';
 import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
@@ -72,7 +72,8 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private overlay: Overlay,
     private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
-    ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.getAllInitialData();

@@ -7,7 +7,6 @@ import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-share
 import {FractionsRouting} from './fractions.routing';
 import {
   FractionCreateComponent,
-  FractionDeleteComponent,
   FractionEditComponent,
   FractionsPageComponent,
   FractionsPnImportComponent,
@@ -39,7 +38,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
   ],
   declarations: [
     FractionCreateComponent,
-    FractionDeleteComponent,
     FractionEditComponent,
     FractionsPageComponent,
     FractionsPnImportComponent,
