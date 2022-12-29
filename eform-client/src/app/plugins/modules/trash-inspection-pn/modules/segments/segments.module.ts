@@ -7,7 +7,6 @@ import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-share
 import {SegmentsRouting} from './segments.routing';
 import {
   SegmentCreateComponent,
-  SegmentDeleteComponent,
   SegmentEditComponent,
   SegmentsPageComponent,
 } from './components';
@@ -38,7 +37,6 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
   ],
   declarations: [
     SegmentCreateComponent,
-    SegmentDeleteComponent,
     SegmentEditComponent,
     SegmentsPageComponent,
   ],
