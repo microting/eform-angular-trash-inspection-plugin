@@ -3,14 +3,15 @@ import { FileUploader } from 'ng2-file-upload';
 import { Papa } from 'ngx-papaparse';
 import { TrashInspectionPnFractionsService } from '../../../../services';
 import { FractionPnImportModel, FractionPnHeadersModel} from '../../../../models';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
 
 const URL = '';
 @Component({
   selector: 'app-trash-inspection-pn-fraction-import',
-  templateUrl: './fractions-pn-import.component.html',
-  styleUrls: ['./fractions-pn-import.component.scss'],
+  templateUrl: './fractions-import.component.html',
+  styleUrls: ['./fractions-import.component.scss'],
 })
-export class FractionsPnImportComponent implements OnInit {
+export class FractionsImportComponent implements OnInit {
   public data: any = [];
   uploader: FileUploader;
   fractionsImportModel: FractionPnImportModel;
@@ -27,27 +28,22 @@ export class FractionsPnImportComponent implements OnInit {
   papa: Papa = new Papa();
   tableData: any = null;
   options = [
-    { value: 0, label: 'Number' },
-    { value: 1, label: 'Name' },
-    { value: 2, label: 'Location Nr' },
-    { value: 3, label: 'eForm nr' },
-    { value: 4, label: 'Statutory eForm' },
-    { value: 5, label: 'Description' },
+    { value: 0, label: 'Number', disabled: false },
+    { value: 1, label: 'Name', disabled: false },
+    { value: 2, label: 'Location Nr', disabled: false },
+    { value: 3, label: 'eForm nr', disabled: false },
+    { value: 4, label: 'Statutory eForm', disabled: false },
+    { value: 5, label: 'Description', disabled: false },
   ];
+
+  columns: MtxGridColumn[] = [];
   constructor(private fractionsService: TrashInspectionPnFractionsService) {
     this.fractionsImportModel = new FractionPnImportModel();
-    // forEach(Option in this.options) {
-    //   this.customerHeaderModel = new CustomerPnHeadersModel();
-    //   this.customerHeaderModel.header = str.label;
-    //   this.customerImportModel.headers.add this.customerHeaderModel;
-    // }
-    // this.customerHeaderModel = new CustomerPnHeadersModel();
     this.options.forEach((option) => {
-      this.fractionHeaderModel = new FractionPnHeadersModel();
-      this.fractionHeaderModel.headerLabel = option.label;
-      this.fractionHeaderModel.headerValue = null;
-      this.fractionsImportModel.headerList.push(this.fractionHeaderModel);
-      // console.log(label);
+      this.fractionsImportModel.headerList = [
+        ...this.fractionsImportModel.headerList,
+        {headerValue: null, headerLabel: option.label},
+      ]
     });
     this.uploader = new FileUploader({
       url: URL,
@@ -67,19 +63,22 @@ export class FractionsPnImportComponent implements OnInit {
     this.totalColumns = 4;
     this.totalRows = 100;
   }
+
   csv2Array(fileInput) {
-    const file = fileInput;
-    this.papa.parse(fileInput.target.files[0], {
+    const files = fileInput.target.files;
+    this.papa.parse(files[files.length - 1], {
       skipEmptyLines: true,
       header: false,
       complete: (results) => {
         this.tableData = results.data;
-        console.log(this.tableData);
+        this.changeTable();
+        console.debug(this.tableData);
         this.fractionsImportModel.importList = JSON.stringify(this.tableData);
       },
     });
     return this.tableData;
   }
+
   importFraction() {
     // this.customerImportModel.importList = this.tableData;
     // debugger;
@@ -94,10 +93,33 @@ export class FractionsPnImportComponent implements OnInit {
         }
       });
   }
-  logThings(value) {
-    console.log(value);
-  }
+
   onSelectedChanged(e: any, columnIndex: any) {
-    this.fractionsImportModel.headerList[e.value].headerValue = columnIndex;
+    const i = this.fractionsImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if(i !== -1) {
+      this.fractionsImportModel.headerList[i].headerValue = null;
+    }
+    if(e) {
+      this.fractionsImportModel.headerList.find(x => x.headerLabel === e.label).headerValue = columnIndex;
+    }
+    // this.transporterImportModel.headerList[e.value].headerValue = columnIndex;
+    this.options = this.options
+      .map(x => ({...x, disabled: this.fractionsImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}))
+  }
+
+  onSelectedClear(columnIndex: any) {
+    const i = this.fractionsImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if(i !== -1) {
+      this.fractionsImportModel.headerList[i].headerValue = null;
+    }
+    this.options = this.options
+      .map(x => ({...x, disabled: this.fractionsImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}))
+  }
+
+  changeTable() {
+    this.columns = this.options.map((x, i) => ({
+      field: i.toString(),
+      formatter: rowData => rowData[i],
+    }))
   }
 }

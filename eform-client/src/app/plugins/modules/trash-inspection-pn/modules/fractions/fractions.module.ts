@@ -9,7 +9,7 @@ import {
   FractionCreateComponent,
   FractionEditComponent,
   FractionsPageComponent,
-  FractionsPnImportComponent,
+  FractionsImportComponent,
 } from './components';
 import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
@@ -23,6 +23,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MtxSelectModule} from '@ng-matero/extensions/select';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -43,12 +44,13 @@ import {MtxSelectModule} from '@ng-matero/extensions/select';
     MatFormFieldModule,
     MatInputModule,
     MtxSelectModule,
+    MatIconModule,
   ],
   declarations: [
     FractionCreateComponent,
     FractionEditComponent,
     FractionsPageComponent,
-    FractionsPnImportComponent,
+    FractionsImportComponent,
   ],
   providers: [
     fractionsPersistProvider,

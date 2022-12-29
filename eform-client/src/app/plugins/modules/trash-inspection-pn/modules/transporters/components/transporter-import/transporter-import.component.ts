@@ -44,7 +44,6 @@ export class TransporterImportComponent implements OnInit {
     { value: 6, label: 'Phone', disabled: false },
     { value: 7, label: 'Contact Person', disabled: false },
   ];
-  selectedOptions: { value: number }[] = [];
 
   columns: MtxGridColumn[] = [];
 

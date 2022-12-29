@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {PermissionGuard} from 'src/app/common/guards';
 import {
   FractionsPageComponent,
-  FractionsPnImportComponent,
+  FractionsImportComponent,
 } from './components';
 import {TrashInspectionPnClaims} from '../../enums';
 
@@ -17,7 +17,7 @@ export const routes: Routes = [
   {
     path: 'import',
     canActivate: [PermissionGuard],
-    component: FractionsPnImportComponent,
+    component: FractionsImportComponent,
     data: { requiredPermission: TrashInspectionPnClaims.accessTrashInspectionPlugin, },
   },
 ];
