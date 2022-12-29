@@ -1,7 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SegmentPnModel, SegmentsPnModel } from '../../../../models';
-import { SegmentsStateService } from '../store';
-import { TableHeaderElementModel } from 'src/app/common/models';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {SegmentPnModel, SegmentsPnModel} from '../../../../models';
+import {SegmentsStateService} from '../store';
+import {PaginationModel} from 'src/app/common/models';
+import {Sort} from '@angular/material/sort';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {TranslateService} from '@ngx-translate/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Overlay} from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-trash-inspection-pn-segments-page',
@@ -14,24 +19,44 @@ export class SegmentsPageComponent implements OnInit {
   @ViewChild('deleteSegmentModal') deleteSegmentModal;
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
 
-  tableHeaders: TableHeaderElementModel[] = [
-    { name: 'Id', elementId: 'idTableHeader', sortable: true },
-    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
+  tableHeaders: MtxGridColumn[] = [
+    {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
+    {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
+    {header: this.translateService.stream('Description'), field: 'description', sortProp: {id: 'Description'}, sortable: true},
+    {header: this.translateService.stream('SDK folder id'), field: 'sdkFolderId', sortProp: {id: 'SdkFolderId'}, sortable: true},
     {
-      name: 'Description',
-      elementId: 'descriptionTableHeader',
-      sortable: true,
+      header: this.translateService.stream('Actions'),
+      field: 'actions',
+      sortable: false,
+      type: 'button',
+      buttons: [
+        {
+          type: 'icon',
+          icon: 'edit',
+          color: 'accent',
+          click: (segment: SegmentPnModel) => this.showEditSegmentModal(segment),
+          tooltip: this.translateService.stream('Edit Segment'),
+          class: 'editSegmentBtn',
+        },
+        {
+          type: 'icon',
+          icon: 'delete',
+          color: 'warn',
+          click: (segment: SegmentPnModel) => this.showDeleteSegmentModal(segment),
+          tooltip: this.translateService.stream('Delete Segment'),
+          class: 'deleteSegmentBtn',
+        },
+      ]
     },
-    {
-      name: 'SdkFolderId',
-      elementId: 'sdkFolderIdTableHeader',
-      sortable: true,
-      visibleName: 'SDK folder id',
-    },
-    { name: 'Actions', elementId: '', sortable: false },
   ];
 
-  constructor(public segmentsStateService: SegmentsStateService) {}
+  constructor(
+    public segmentsStateService: SegmentsStateService,
+    private translateService: TranslateService,
+    private dialog: MatDialog,
+    private overlay: Overlay,
+  ) {
+  }
 
   ngOnInit() {
     this.getAllInitialData();
@@ -61,13 +86,8 @@ export class SegmentsPageComponent implements OnInit {
     this.createSegmentModal.show();
   }
 
-  sortTable(sort: string) {
-    this.segmentsStateService.onSortTable(sort);
-    this.getAllSegments();
-  }
-
-  changePage(offset: number) {
-    this.segmentsStateService.changePage(offset);
+  sortTable(sort: Sort) {
+    this.segmentsStateService.onSortTable(sort.active);
     this.getAllSegments();
   }
 
@@ -76,8 +96,8 @@ export class SegmentsPageComponent implements OnInit {
     this.getAllSegments();
   }
 
-  onPageSizeChanged(pageSize: number) {
-    this.segmentsStateService.updatePageSize(pageSize);
+  onPaginationChanged(paginationModel: PaginationModel) {
+    this.segmentsStateService.updatePagination(paginationModel);
     this.getAllSegments();
   }
 }

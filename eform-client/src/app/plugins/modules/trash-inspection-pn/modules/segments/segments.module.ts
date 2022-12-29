@@ -16,6 +16,9 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {segmentsPersistProvider} from './components/store';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatButtonModule} from '@angular/material/button';
+import {MtxGridModule} from '@ng-matero/extensions/grid';
 
 @NgModule({
   imports: [
@@ -29,6 +32,9 @@ import {segmentsPersistProvider} from './components/store';
     EformSharedModule,
     FontAwesomeModule,
     NgxChartsModule,
+    MatTooltipModule,
+    MatButtonModule,
+    MtxGridModule,
   ],
   declarations: [
     SegmentCreateComponent,

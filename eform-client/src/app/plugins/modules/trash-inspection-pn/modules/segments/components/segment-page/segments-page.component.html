@@ -1,80 +1,35 @@
-<eform-subheader>
-  <div class="p-3">
-    <button
-      mdbBtn
-      id="createSegmentBtn"
-      class="btn btn-success btn-small-height"
-      mdbTooltip="{{ 'Create Segment' | translate }}"
-      (click)="showCreateSegmentModal()"
-    >
-      {{ 'New Segment' | translate }}
-    </button>
-  </div>
-</eform-subheader>
+<eform-new-subheader>
+  <button
+    mat-raised-button
+    id="createSegmentBtn"
+    color="accent"
+    matTooltip="{{ 'Create Segment' | translate }}"
+    (click)="showCreateSegmentModal()"
+  >
+    {{ 'New Segment' | translate }}
+  </button>
+</eform-new-subheader>
 
-<div class="container-fluid">
-  <div class="row p-1 mt-4 table-responsive no-gutters">
-    <table class="table table-sm table-striped text-center z-depth-1">
-      <thead
-        table-headers
-        [tableHeaders]="tableHeaders"
-        [sort]="segmentsStateService.getSort() | async"
-        (sortChanged)="sortTable($event)"
-      ></thead>
-      <tbody id="tableBody">
-        <tr *ngFor="let segment of segmentsPnModel.segmentList">
-          <td id="segmentId">
-            {{ segment.id }}
-          </td>
-          <td id="segmentName">
-            {{ segment.name }}
-          </td>
-          <td id="segmentDescription">
-            {{ segment.description }}
-          </td>
-          <td id="segmentSDKFolderID">
-            {{ segment.sdkFolderId }}
-          </td>
-          <td>
-            <div class="d-flex flex-row justify-content-center">
-              <button
-                id="editSegmentBtn"
-                class="btn btn-accent text-black-50 btn-icon mb-2"
-                mdbTooltip="{{ 'Edit Segment' | translate }}"
-                (click)="showEditSegmentModal(segment)"
-              >
-                <i class="material-icons"> edit </i>
-              </button>
-              <button
-                id="deleteSegmentBtn"
-                class="btn btn-danger btn-icon mb-2"
-                mdbTooltip="{{ 'Delete Segment' | translate }}"
-                (click)="showDeleteSegmentModal(segment)"
-              >
-                <i class="material-icons"> delete_forever </i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="row justify-content-between mr-2 ml-2">
-    <div class="col-md-1">
-      <eform-page-size
-        [pageSize]="segmentsStateService.getPageSize() | async"
-        (onPageSizeChanged)="onPageSizeChanged($event)"
-      >
-      </eform-page-size>
-    </div>
-    <div class="col-md-4 ml-auto d-flex justify-content-end p-2">
-      <eform-pagination
-        [pagination]="segmentsStateService.getPagination() | async"
-        (onPageChanged)="changePage($event)"
-      ></eform-pagination>
-    </div>
-  </div>
-</div>
+<mtx-grid
+  [data]="segmentsPnModel.segmentList"
+  [columns]="tableHeaders"
+  [showPaginator]="true"
+  [paginationTemplate]="paginatorTpl"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="false"
+  [showColumnMenuButton]="false"
+  [sortActive]="segmentsStateService.getActiveSort() | async"
+  [sortDirection]="segmentsStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTable($event)">
+</mtx-grid>
+
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="segmentsStateService.getPagination() | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>
 
 <app-trash-inspection-pn-segment-create
   #createSegmentModal
