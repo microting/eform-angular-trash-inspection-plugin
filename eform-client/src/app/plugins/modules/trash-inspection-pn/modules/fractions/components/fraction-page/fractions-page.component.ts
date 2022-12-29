@@ -1,16 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FractionPnModel } from '../../../../models';
-import { TrashInspectionPnClaims } from '../../../../enums';
-import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { FractionsStateService } from '../store';
-import { AuthStateService } from 'src/app/common/store';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FractionPnModel} from '../../../../models';
+import {TrashInspectionPnClaims} from '../../../../enums';
+import {Paged, PaginationModel} from 'src/app/common/models';
+import {FractionsStateService} from '../store';
+import {AuthStateService} from 'src/app/common/store';
+import {Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Overlay} from '@angular/cdk/overlay';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-trash-inspection-pn-fractions-page',
   templateUrl: './fractions-page.component.html',
   styleUrls: ['./fractions-page.component.scss'],
 })
-export class FractionsPageComponent implements OnInit {
+export class FractionsPageComponent implements OnInit, OnDestroy {
   @ViewChild('createFractionModal') createFractionModal;
   @ViewChild('editFractionModal') editFractionModal;
   @ViewChild('deleteFractionModal') deleteFractionModal;
@@ -20,39 +27,46 @@ export class FractionsPageComponent implements OnInit {
     return TrashInspectionPnClaims;
   }
 
-  tableHeaders: TableHeaderElementModel[] = [
-    { name: 'Id', elementId: 'idTableHeader', sortable: true },
+  tableHeaders: MtxGridColumn[] = [
+    {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
+    {header: this.translateService.stream('Item number'), field: 'itemNumber', sortProp: {id: 'ItemNumber'}, sortable: true},
+    {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
+    {header: this.translateService.stream('Location code'), field: 'locationCode', sortProp: {id: 'LocationCode'}, sortable: true},
+    {header: this.translateService.stream('eForm'), field: 'selectedTemplateName', sortProp: {id: 'eFormId'}, sortable: true},
     {
-      name: 'ItemNumber',
-      elementId: 'itemNumberTableHeader',
-      sortable: true,
-      visibleName: 'Item number',
+      header: this.translateService.stream('Actions'),
+      field: 'actions',
+      sortable: false,
+      type: 'button',
+      buttons: [
+        {
+          type: 'icon',
+          icon: 'edit',
+          color: 'accent',
+          click: (fraction: FractionPnModel) => this.showEditFractionModal(fraction),
+          tooltip: this.translateService.stream('Edit Fraction'),
+          class: 'updateFractionBtn',
+        },
+        {
+          type: 'icon',
+          icon: 'delete',
+          color: 'warn',
+          click: (fraction: FractionPnModel) => this.showDeleteFractionModal(fraction),
+          tooltip: this.translateService.stream('Delete Fraction'),
+          class: 'deleteFractionBtn',
+        },
+      ]
     },
-    { name: 'Name', elementId: 'nameTableHeader', sortable: true },
-    {
-      name: 'Description',
-      elementId: 'descriptionTableHeader',
-      sortable: true,
-    },
-    {
-      name: 'LocationCode',
-      elementId: 'locationCodeTableHeader',
-      sortable: true,
-      visibleName: 'Location code',
-    },
-    {
-      name: 'eFormId',
-      elementId: 'eFormTableHeader',
-      sortable: true,
-      visibleName: 'eForm',
-    },
-    { name: 'Actions', elementId: '', sortable: false },
   ];
 
   constructor(
     public fractionsStateService: FractionsStateService,
-    public authStateService: AuthStateService
-  ) {}
+    public authStateService: AuthStateService,
+    private translateService: TranslateService,
+    private dialog: MatDialog,
+    private overlay: Overlay,
+  ) {
+  }
 
   ngOnInit() {
     this.getAllInitialData();
@@ -69,6 +83,7 @@ export class FractionsPageComponent implements OnInit {
       }
     });
   }
+
   showEditFractionModal(fraction: FractionPnModel) {
     this.editFractionModal.show(fraction);
   }
@@ -81,13 +96,8 @@ export class FractionsPageComponent implements OnInit {
     this.createFractionModal.show();
   }
 
-  sortTable(sort: string) {
-    this.fractionsStateService.onSortTable(sort);
-    this.getAllFractions();
-  }
-
-  changePage(offset: number) {
-    this.fractionsStateService.changePage(offset);
+  sortTable(sort: Sort) {
+    this.fractionsStateService.onSortTable(sort.active);
     this.getAllFractions();
   }
 
@@ -96,8 +106,11 @@ export class FractionsPageComponent implements OnInit {
     this.getAllFractions();
   }
 
-  onPageSizeChanged(pageSize: number) {
-    this.fractionsStateService.updatePageSize(pageSize);
+  onPaginationChanged(paginationModel: PaginationModel) {
+    this.fractionsStateService.updatePagination(paginationModel);
     this.getAllFractions();
+  }
+
+  ngOnDestroy(): void {
   }
 }

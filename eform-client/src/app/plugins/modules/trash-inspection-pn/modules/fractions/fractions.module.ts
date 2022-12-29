@@ -17,6 +17,9 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {fractionsPersistProvider} from './components/store';
+import {MtxGridModule} from '@ng-matero/extensions/grid';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -30,6 +33,9 @@ import {fractionsPersistProvider} from './components/store';
     EformSharedModule,
     FontAwesomeModule,
     NgxChartsModule,
+    MtxGridModule,
+    MatButtonModule,
+    MatTooltipModule,
   ],
   declarations: [
     FractionCreateComponent,
