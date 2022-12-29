@@ -2,13 +2,14 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import {InstallationPnCreateModel} from '../../../../models';
+import {InstallationPnCreateModel, InstallationPnModel} from '../../../../models';
 import {TrashInspectionPnInstallationsService} from '../../../../services';
 import {DeployCheckbox, DeployModel, SiteNameDto} from 'src/app/common/models';
-import {AuthService, SitesService, EFormService} from 'src/app/common/services';
+import {AuthService, SitesService} from 'src/app/common/services';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-create',
@@ -16,15 +17,17 @@ import {AuthService, SitesService, EFormService} from 'src/app/common/services';
   styleUrls: ['./installation-create.component.scss'],
 })
 export class InstallationCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output()
-  onInstallationCreated: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
+  installationCreated: EventEmitter<void> = new EventEmitter<void>();
   newInstallationModel: InstallationPnCreateModel = new InstallationPnCreateModel();
   sitesDto: Array<SiteNameDto> = [];
-  deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
   matchFound = false;
+
+  tableHeaders: MtxGridColumn[] = [
+    {header: this.translateService.stream('Microting ID'), field: 'siteUId'},
+    {header: this.translateService.stream('Name'), field: 'siteName'},
+    {header: this.translateService.stream('Check to pair'), field: 'deployCheckboxes'},
+  ];
 
   get userClaims() {
     return this.authService.userClaims;
@@ -34,8 +37,11 @@ export class InstallationCreateComponent implements OnInit {
     private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
     private sitesService: SitesService,
     private authService: AuthService,
-    private eFormService: EFormService
+    public dialogRef: MatDialogRef<InstallationCreateComponent>,
+    private translateService: TranslateService,
   ) {
+    this.deployViewModel = new DeployModel();
+    this.fillCheckboxes();
   }
 
   ngOnInit() {
@@ -47,10 +53,8 @@ export class InstallationCreateComponent implements OnInit {
       .createInstallation(this.newInstallationModel)
       .subscribe((data) => {
         if (data && data.success) {
-          this.onInstallationCreated.emit();
-          // this.submitDeployment();
-          this.newInstallationModel = new InstallationPnCreateModel();
-          this.frame.hide();
+          this.installationCreated.emit();
+          this.hide();
         }
       });
   }
@@ -65,19 +69,9 @@ export class InstallationCreateComponent implements OnInit {
     }
   }
 
-  show() {
-    this.deployModel = new DeployModel();
-    this.deployViewModel = new DeployModel();
-    this.fillCheckboxes();
-    this.frame.show();
-  }
-
-  addToArray(e: any, deployId: number) {
-    const deployObject = new DeployCheckbox();
-    deployObject.id = deployId;
-    if (e.target.checked) {
-      deployObject.isChecked = true;
-      this.newInstallationModel.deployCheckboxes.push(deployObject);
+  addToArray(checked: boolean, deployId: number) {
+    if (checked) {
+      this.newInstallationModel.deployCheckboxes = [...this.newInstallationModel.deployCheckboxes, {id: deployId, isChecked: true}];
     } else {
       this.newInstallationModel.deployCheckboxes = this.newInstallationModel.deployCheckboxes.filter(
         (x) => x.id !== deployId
@@ -102,5 +96,18 @@ export class InstallationCreateComponent implements OnInit {
       this.matchFound = false;
       this.deployViewModel.deployCheckboxes.push(deployObject);
     }
+  }
+
+  getCheckboxValueBySiteId(siteId: number): boolean {
+    const i = this.deployViewModel.deployCheckboxes.findIndex(x => x.id === siteId);
+    if(i !== -1) {
+      return this.deployViewModel.deployCheckboxes[i].isChecked;
+    }
+    return false;
+  }
+
+  hide() {
+    this.newInstallationModel = new InstallationPnCreateModel();
+    this.dialogRef.close();
   }
 }

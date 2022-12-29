@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   InstallationPnModel,
   InstallationsPnModel,
@@ -15,6 +15,7 @@ import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
+import {InstallationCreateComponent, InstallationEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -23,8 +24,6 @@ import {dialogConfigHelper} from 'src/app/common/helpers';
   styleUrls: ['./installations-page.component.scss'],
 })
 export class InstallationsPageComponent implements OnInit, OnDestroy {
-  @ViewChild('createInspectionModal') createInspectionModal;
-  @ViewChild('editInstallationModal') editInstallationModal;
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -58,6 +57,8 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
 
   translatesSub$: Subscription;
   installationDeletedSub$: Subscription;
+  installationCreatedSub$: Subscription;
+  installationUpdatedSub$: Subscription;
 
   constructor(
     public installationsStateService: InstallationsStateService,
@@ -85,7 +86,10 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
   }
 
   showEditInstallationModal(installation: InstallationPnModel) {
-    this.editInstallationModal.show(installation);
+    const editInstallationModal =
+      this.dialog.open(InstallationEditComponent, {...dialogConfigHelper(this.overlay, installation), minWidth: 400});
+    this.installationUpdatedSub$ = editInstallationModal.componentInstance.onInstallationUpdated
+      .subscribe(() => this.getAllInstallations());
   }
 
   showDeleteInstallationModal(installation: InstallationPnModel) {
@@ -120,7 +124,8 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
   }
 
   showCreateInstallationModal() {
-    this.createInspectionModal.show();
+    const createInspectionModal = this.dialog.open(InstallationCreateComponent, {...dialogConfigHelper(this.overlay), minWidth: 400});
+    this.installationCreatedSub$ = createInspectionModal.componentInstance.installationCreated.subscribe(() => this.getAllInstallations());
   }
 
   sortTable(sort: Sort) {

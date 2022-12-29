@@ -1,21 +1,22 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
 import {
   InstallationPnModel,
   InstallationPnUpdateModel,
-} from 'src/app/plugins/modules/trash-inspection-pn/models/installation';
+} from '../../../../models';
 import {TrashInspectionPnInstallationsService} from '../../../../services';
 import {AuthService, SitesService} from 'src/app/common/services';
 import {
   SiteNameDto,
-  DeployCheckbox,
   DeployModel,
 } from 'src/app/common/models';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-edit',
@@ -23,15 +24,16 @@ import {
   styleUrls: ['./installation-edit.component.scss'],
 })
 export class InstallationEditComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output()
   onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
-
-  deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
   sitesDto: Array<SiteNameDto> = [];
-  matchFound = false;
+
+  tableHeaders: MtxGridColumn[] = [
+    {header: this.translateService.stream('Microting ID'), field: 'siteUId'},
+    {header: this.translateService.stream('Name'), field: 'siteName'},
+    {header: this.translateService.stream('Related Site'), field: 'deployCheckboxes'},
+  ];
 
   get userClaims() {
     return this.authService.userClaims;
@@ -40,23 +42,18 @@ export class InstallationEditComponent implements OnInit {
   constructor(
     private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
     private sitesService: SitesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translateService: TranslateService,
+    public dialogRef: MatDialogRef<InstallationEditComponent>,
+    @Inject(MAT_DIALOG_DATA) private installationModel: InstallationPnModel
   ) {
+    this.loadAllSites();
   }
 
   ngOnInit() {
-    this.loadAllSites();
-    this.selectedInstallationModel.deployCheckboxes = new Array<DeployCheckbox>();
-  }
-
-  show(installationModel: InstallationPnModel) {
-    this.getSelectedInstallation(installationModel.id);
-    this.deployViewModel = new DeployModel();
-    this.frame.show();
   }
 
   getSelectedInstallation(id: number) {
-    // debugger;
     this.trashInspectionPnInstallationsService
       .getSingleInstallation(id)
       .subscribe((data) => {
@@ -68,7 +65,6 @@ export class InstallationEditComponent implements OnInit {
   }
 
   updateInstallation() {
-    // debugger;
     this.trashInspectionPnInstallationsService
       .updateInstallation(
         new InstallationPnUpdateModel(this.selectedInstallationModel)
@@ -76,8 +72,7 @@ export class InstallationEditComponent implements OnInit {
       .subscribe((data) => {
         if (data && data.success) {
           this.onInstallationUpdated.emit();
-          this.selectedInstallationModel = new InstallationPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
   }
@@ -87,28 +82,16 @@ export class InstallationEditComponent implements OnInit {
       this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
+          this.getSelectedInstallation(this.installationModel.id);
         }
       });
     }
   }
 
-  addToEditMapping(e: any, sdkSiteId: number) {
-    if (e.target.checked) {
-      this.selectedInstallationModel.SdkSiteIds.push(sdkSiteId);
-    } else {
-      this.selectedInstallationModel.SdkSiteIds = this.selectedInstallationModel.SdkSiteIds.filter(
-        (x) => x !== sdkSiteId
-      );
-    }
-  }
-
-  addToArray(e: any, deployId: number) {
-    // debugger;
-    const deployObject = new DeployCheckbox();
-    deployObject.id = deployId;
-    if (e.target.checked) {
-      deployObject.isChecked = true;
-      this.selectedInstallationModel.deployCheckboxes.push(deployObject);
+  addToArray(checked: boolean, deployId: number) {
+    if (checked) {
+      this.selectedInstallationModel.deployCheckboxes =
+        [...this.selectedInstallationModel.deployCheckboxes, {id: deployId, isChecked: true}];
     } else {
       this.selectedInstallationModel.deployCheckboxes = this.selectedInstallationModel.deployCheckboxes.filter(
         (x) => x.id !== deployId
@@ -116,31 +99,28 @@ export class InstallationEditComponent implements OnInit {
     }
   }
 
-  // isChecked(sdkSiteId: number) {
-  //   debugger;
-  //   if (this.selectedInstallationModel.SdkSiteIds && this.selectedInstallationModel.SdkSiteIds.length > 0) {
-  //     return this.selectedInstallationModel.SdkSiteIds.findIndex(x => x === sdkSiteId) !== -1;
-  //   }
-  //   return false;
-  // }
-
   fillCheckboxes() {
+    this.deployViewModel = new DeployModel();
     for (const siteDto of this.sitesDto) {
-      const deployObject = new DeployCheckbox();
-      for (const deployCheckboxes of this.selectedInstallationModel
-        .deployCheckboxes) {
-        if (deployCheckboxes.id === siteDto.siteUId) {
-          this.matchFound = true;
-          deployObject.id = siteDto.siteUId;
-          deployObject.isChecked = true;
-          this.deployModel.deployCheckboxes.push(deployObject);
-        }
+      const i = this.selectedInstallationModel.deployCheckboxes.findIndex(x => x.id === siteDto.siteUId);
+      let isChecked = false;
+      if(i !== -1) {
+        isChecked = this.selectedInstallationModel.deployCheckboxes[i].isChecked;
       }
-      this.deployViewModel.id = this.selectedInstallationModel.id;
-      deployObject.id = siteDto.siteUId;
-      deployObject.isChecked = this.matchFound === true;
-      this.matchFound = false;
-      this.deployViewModel.deployCheckboxes.push(deployObject);
+      this.deployViewModel.deployCheckboxes = [...this.deployViewModel.deployCheckboxes, {id: siteDto.siteUId, isChecked: isChecked}];
     }
+  }
+
+  getCheckboxValueBySiteId(siteId: number): boolean {
+    const i = this.deployViewModel.deployCheckboxes.findIndex(x => x.id === siteId);
+    if(i !== -1) {
+      return this.deployViewModel.deployCheckboxes[i].isChecked;
+    }
+    return false;
+  }
+
+  hide() {
+    this.selectedInstallationModel = new InstallationPnModel();
+    this.dialogRef.close();
   }
 }
