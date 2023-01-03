@@ -1,9 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TrashInspectionPnModel } from '../../../../models';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { TrashInspectionsStateService } from '../store';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {TrashInspectionPnModel} from '../../../../models';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {Paged, PaginationModel} from 'src/app/common/models';
+import {TrashInspectionsStateService} from '../store';
+import {Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Overlay} from '@angular/cdk/overlay';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
 
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
@@ -19,83 +24,84 @@ export class TrashInspectionsPageComponent implements OnInit {
   searchSubject = new Subject();
   trashInspectionsModel: Paged<TrashInspectionPnModel> = new Paged<TrashInspectionPnModel>();
 
-  tableHeaders: TableHeaderElementModel[] = [
-    { name: 'Id', elementId: 'idTableHeader', sortable: true },
-    { name: 'Date', elementId: 'dateTableHeader', sortable: true },
-    { name: 'Time', elementId: 'timeTableHeader', sortable: true },
+  tableHeaders: MtxGridColumn[] = [
+    {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {
-      name: 'EakCode',
-      elementId: 'eakCodeTableHeader',
+      header: this.translateService.stream('Date'),
+      field: 'date',
+      sortProp: {id: 'Date'},
       sortable: true,
-      visibleName: 'Eak code',
+      type: 'date',
+      typeParameter: {format: 'dd.MM.y'}
     },
     {
-      name: 'InstallationId',
-      elementId: 'installationTableHeader',
+      header: this.translateService.stream('Time'),
+      field: 'time',
+      sortProp: {id: 'Time'},
       sortable: true,
-      visibleName: 'Installation',
+      type: 'date',
+      typeParameter: {format: 'HH:mm:ss'}
+    },
+    {header: this.translateService.stream('Eak code'), field: 'eakCode', sortProp: {id: 'EakCode'}, sortable: true},
+    {header: this.translateService.stream('Installation'), field: 'installationName', sortProp: {id: 'InstallationId'}, sortable: true},
+    {header: this.translateService.stream('Segment'), field: 'segment', sortProp: {id: 'SegmentId'}, sortable: true},
+    {
+      header: this.translateService.stream('Must be inspected'),
+      field: 'mustBeInspected',
+      sortProp: {id: 'MustBeInspected'},
+      sortable: true,
+      formatter: (trashInspection: TrashInspectionPnModel) => (
+        `<span class="material-icons">${trashInspection.mustBeInspected ? 'done' : 'close'}</span>`
+      ),
+    },
+    {header: this.translateService.stream('Producer'), field: 'producer', sortProp: {id: 'Producer'}, sortable: true},
+    {
+      header: this.translateService.stream('Registration number'),
+      field: 'registrationNumber',
+      sortProp: {id: 'RegistrationNumber'},
+      sortable: true
+    },
+    {header: this.translateService.stream('Transporter'), field: 'transporter', sortProp: {id: 'Transporter'}, sortable: true},
+    {header: this.translateService.stream('Trash fraction'), field: 'trashFraction', sortProp: {id: 'TrashFraction'}, sortable: true},
+    {header: this.translateService.stream('Weighing number'), field: 'weighingNumber', sortProp: {id: 'WeighingNumber'}, sortable: true},
+    {
+      header: this.translateService.stream('Extended inspection'),
+      field: 'extendedInspection',
+      sortProp: {id: 'ExtendedInspection'},
+      sortable: true,
+      formatter: (trashInspection: TrashInspectionPnModel) => (
+        `<span class="material-icons">${trashInspection.extendedInspection ? 'done' : 'close'}</span>`
+      ),
     },
     {
-      name: 'SegmentId',
-      elementId: 'segmentTableHeader',
+      header: this.translateService.stream('Is approved'),
+      field: 'isApproved',
+      sortProp: {id: 'IsApproved'},
       sortable: true,
-      visibleName: 'Segment',
+      formatter: (trashInspection: TrashInspectionPnModel) => (
+        `<span class="material-icons">${trashInspection.isApproved ? 'done' : 'close'}</span>`
+      ),
+    },
+    {header: this.translateService.stream('Comment'), field: 'comment', sortProp: {id: 'Comment'}, sortable: true},
+    {header: this.translateService.stream('Status'), field: 'status', sortProp: {id: 'Status'}, sortable: true},
+    {
+      header: this.translateService.stream('Is removed'),
+      field: 'workflowState',
+      sortProp: {id: 'WorkflowState'},
+      sortable: true,
+      formatter: (trashInspection: TrashInspectionPnModel) => (
+        `<span class="material-icons">${trashInspection.workflowState === 'removed' || trashInspection.inspectionDone ? 'done' : 'close'}</span>`
+      ),
     },
     {
-      name: 'MustBeInspected',
-      elementId: 'mustBeInspectedTableHeader',
-      sortable: true,
-      visibleName: 'Must be inspected',
+      header: this.translateService.stream('Actions'),
+      field: 'actions',
     },
-    { name: 'Producer', elementId: 'producerTableHeader', sortable: true },
-    {
-      name: 'RegistrationNumber',
-      elementId: 'registrationNumberTableHeader',
-      sortable: true,
-      visibleName: 'Registration number',
-    },
-    {
-      name: 'Transporter',
-      elementId: 'transporterTableHeader',
-      sortable: true,
-    },
-    {
-      name: 'TrashFraction',
-      elementId: 'trashFractionTableHeader',
-      sortable: true,
-      visibleName: 'Trash fraction',
-    },
-    {
-      name: 'WeighingNumber',
-      elementId: 'weighingNumberTableHeader',
-      sortable: true,
-      visibleName: 'Weighing number',
-    },
-    {
-      name: 'ExtendedInspection',
-      elementId: 'isExtendedInspectionTableHeader',
-      sortable: true,
-      visibleName: 'Extended inspection',
-    },
-    {
-      name: 'IsApproved',
-      elementId: 'isApprovedTableHeader',
-      sortable: true,
-      visibleName: 'Is approved',
-    },
-    { name: 'Comment', elementId: 'commentTableHeader', sortable: true },
-    { name: 'Status', elementId: 'statusTableHeader', sortable: true },
-    {
-      name: 'WorkflowState',
-      elementId: 'isRemovedTableHeader',
-      sortable: true,
-      visibleName: 'Is removed',
-    },
-    { name: 'Actions', elementId: '', sortable: false },
   ];
 
   constructor(
-    public trashInspectionsStateService: TrashInspectionsStateService
+    public trashInspectionsStateService: TrashInspectionsStateService,
+    private translateService: TranslateService,
   ) {
     this.searchSubject.pipe(debounceTime(500)).subscribe((val: string) => {
       this.trashInspectionsStateService.updateNameFilter(val);
@@ -140,10 +146,10 @@ export class TrashInspectionsPageComponent implements OnInit {
   downloadPDF(trashInspection: TrashInspectionPnModel) {
     window.open(
       '/api/trash-inspection-pn/inspection-results/' +
-        trashInspection.weighingNumber +
-        '?token=' +
-        trashInspection.token +
-        '&fileType=pdf',
+      trashInspection.weighingNumber +
+      '?token=' +
+      trashInspection.token +
+      '&fileType=pdf',
       '_blank'
     );
   }
@@ -151,31 +157,26 @@ export class TrashInspectionsPageComponent implements OnInit {
   downloadDocx(trashInspection: TrashInspectionPnModel) {
     window.open(
       '/api/trash-inspection-pn/inspection-results/' +
-        trashInspection.weighingNumber +
-        '?token=' +
-        trashInspection.token +
-        '&fileType=docx',
+      trashInspection.weighingNumber +
+      '?token=' +
+      trashInspection.token +
+      '&fileType=docx',
       '_blank'
     );
   }
 
-  sortTable(sort: string) {
-    this.trashInspectionsStateService.onSortTable(sort);
-    this.getAllTrashInspections();
-  }
-
-  changePage(offset: number) {
-    this.trashInspectionsStateService.changePage(offset);
-    this.getAllTrashInspections();
-  }
-
-  onPageSizeChanged(pageSize: number) {
-    this.trashInspectionsStateService.updatePageSize(pageSize);
+  sortTable(sort: Sort) {
+    this.trashInspectionsStateService.onSortTable(sort.active);
     this.getAllTrashInspections();
   }
 
   onTrashInspectionDeleted() {
     this.trashInspectionsStateService.onDelete();
+    this.getAllTrashInspections();
+  }
+
+  onPaginationChanged(paginationModel: PaginationModel) {
+    this.trashInspectionsStateService.updatePagination(paginationModel);
     this.getAllTrashInspections();
   }
 }

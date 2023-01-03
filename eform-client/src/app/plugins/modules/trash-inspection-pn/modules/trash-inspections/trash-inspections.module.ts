@@ -17,6 +17,12 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {trashInspectionPersistProvider, TrashInspectionsStateService} from './components/store';
+import {MtxGridModule} from '@ng-matero/extensions/grid';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -30,6 +36,12 @@ import {trashInspectionPersistProvider, TrashInspectionsStateService} from './co
     EformSharedModule,
     FontAwesomeModule,
     NgxChartsModule,
+    MtxGridModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
   declarations: [
     TrashInspectionCreateComponent,

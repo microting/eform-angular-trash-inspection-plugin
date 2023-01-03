@@ -1,24 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 import {
   OperationDataResult,
   Paged,
   PaginationModel,
-  SortModel,
 } from 'src/app/common/models';
-import { updateTableSort, getOffset } from 'src/app/common/helpers';
-import { map } from 'rxjs/operators';
-import { TrashInspectionsQuery, TrashInspectionsStore } from './';
-import { TrashInspectionPnTrashInspectionsService } from '../../../../services';
-import { TrashInspectionPnModel } from '../../../../models';
+import {updateTableSort, getOffset} from 'src/app/common/helpers';
+import {map} from 'rxjs/operators';
+import {TrashInspectionsQuery, TrashInspectionsStore} from './';
+import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
+import {TrashInspectionPnModel} from '../../../../models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TrashInspectionsStateService {
   constructor(
     private store: TrashInspectionsStore,
     private service: TrashInspectionPnTrashInspectionsService,
     private query: TrashInspectionsQuery
-  ) {}
+  ) {
+  }
 
   getAllTrashInspections(): Observable<
     OperationDataResult<Paged<TrashInspectionPnModel>>
@@ -67,8 +67,16 @@ export class TrashInspectionsStateService {
     return this.query.selectPageSize$;
   }
 
-  getSort(): Observable<SortModel> {
-    return this.query.selectSort$;
+  // getSort(): Observable<SortModel> {
+  //   return this.query.selectSort$;
+  // }
+
+  getActiveSort(): Observable<string> {
+    return this.query.selectActiveSort$;
+  }
+
+  getActiveSortDirection(): Observable<'asc' | 'desc'> {
+    return this.query.selectActiveSortDirection$;
   }
 
   getNameFilter(): Observable<string> {
@@ -124,5 +132,16 @@ export class TrashInspectionsStateService {
 
   getPagination(): Observable<PaginationModel> {
     return this.query.selectPagination$;
+  }
+
+  updatePagination(pagination: PaginationModel) {
+    this.store.update((state) => ({
+      pagination: {
+        ...state.pagination,
+        pageSize: pagination.pageSize,
+        offset: pagination.offset,
+      },
+    }));
+    // this.checkOffset();
   }
 }
