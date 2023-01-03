@@ -1,0 +1,41 @@
+<eform-new-subheader>
+  <button
+    mat-raised-button
+    id="fractionCreateBtn"
+    color="accent"
+    matTooltip="{{ 'Create Transporter' | translate }}"
+    (click)="showCreateTransporterModal()"
+  >
+    {{ 'New Transporter' | translate }}
+  </button>
+  <button
+    mat-raised-button
+    id="importFractionBtn"
+    color="accent"
+    matTooltip="{{ 'Import Transporter' | translate }}"
+    routerLink="./import"
+  >
+    {{ 'Import Transporter' | translate }}
+  </button>
+</eform-new-subheader>
+
+<mtx-grid
+  [data]="transportersModel.transporterList"
+  [columns]="tableHeaders"
+  [showPaginator]="true"
+  [paginationTemplate]="paginatorTpl"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="false"
+  [showColumnMenuButton]="false"
+  [sortActive]="transportersStateService.getActiveSort() | async"
+  [sortDirection]="transportersStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTable($event)">
+</mtx-grid>
+
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="transportersStateService.getPagination() | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>

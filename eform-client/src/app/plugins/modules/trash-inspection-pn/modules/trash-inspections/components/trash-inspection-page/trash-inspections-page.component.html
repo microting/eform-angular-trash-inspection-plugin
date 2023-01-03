@@ -1,0 +1,114 @@
+<eform-new-subheader>
+  <!--    <button-->
+  <!--      id="createInstallationBtn"-->
+  <!--      class="btn btn-success"-->
+  <!--      mdbTooltip="{{ 'Create Trash Inspection' | translate }}"-->
+  <!--      (click)="showCreateTrashInspection()">{{ 'New Trash Inspection' | translate }}-->
+  <!--    </button>-->
+</eform-new-subheader>
+
+<ng-template #toolbarTpl>
+  <div class="d-flex flex-row justify-content-start flex-nowrap">
+    <div class="d-flex flex-column mr-2 ml-2">
+      <mat-form-field>
+        <mat-label>{{ 'Label' | translate }}</mat-label>
+        <input
+          matInput
+          type="text"
+          (ngModelChange)="onLabelInputChanged($event)"
+          [ngModel]="trashInspectionsStateService.getNameFilter() | async"
+          id="labelInput"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
+<mtx-grid
+  [data]="trashInspectionsModel.entities"
+  [columns]="tableHeaders"
+  [cellTemplate]="{status: statusTpl, actions: actionsTpl}"
+  [showPaginator]="true"
+  [paginationTemplate]="paginatorTpl"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="true"
+  [toolbarTemplate]="toolbarTpl"
+  [showColumnMenuButton]="false"
+  [sortActive]="trashInspectionsStateService.getActiveSort() | async"
+  [sortDirection]="trashInspectionsStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTable($event)">
+</mtx-grid>
+
+<ng-template #statusTpl let-row>
+  <status-bar [status]="row.status"></status-bar>
+</ng-template>
+
+<ng-template #actionsTpl let-row let-index="index">
+  <div class="d-flex">
+    <button
+      mat-icon-button
+      color="warn"
+      matTooltip="{{ 'Delete Trash Inspection' | translate }}"
+      (click)="showDeleteTrashInspectionModal(row)"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="accent"
+      *ngIf="row.status === 100"
+      [routerLink]="['/cases/edit/' + row.sdkCaseId + '/' + row.sdkeFormId]"
+      [queryParams]="{reverseRoute: '/plugins/trash-inspection-pn/trash-inspections'}"
+      matTooltip="{{ 'Edit Case' | translate }}"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="accent"
+      matTooltip="{{ 'Get PDF' | translate }}"
+      (click)="downloadPDF(row)"
+      *ngIf="row.status === 100"
+    >
+      <fa-icon
+        icon="file-pdf"
+        size="lg"
+        [fixedWidth]="true"
+      ></fa-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="accent"
+      matTooltip="{{ 'Get DOCX' | translate }}"
+      (click)="downloadDocx(row)"
+      *ngIf="row.status === 100"
+    >
+      <fa-icon
+        icon="file-word"
+        size="lg"
+        [fixedWidth]="true"
+      ></fa-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="accent"
+      matTooltip="{{ 'Analytics' | translate }}"
+      (click)="showVersionViewModal(row.id)"
+    >
+      <mat-icon>analytics</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="trashInspectionsStateService.getPagination() | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>
+
+<!--<app-trash-inspection-pn-trash-inspection-create
+  #createTrashInspectionModal
+  (onTrashInspectionCreated)="getAllTrashInspections()"
+></app-trash-inspection-pn-trash-inspection-create>-->

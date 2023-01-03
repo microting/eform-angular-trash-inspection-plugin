@@ -1,0 +1,37 @@
+<h3 mat-dialog-title>{{ 'Trash Inspection Versions' | translate}} - {{trashInspectionVersionsModel.trashInspectionId}}</h3>
+<div mat-dialog-content class="d-flex flex-column">
+  <mtx-grid
+    [data]="trashInspectionVersionsModel.trashInspectionVersionList"
+    [columns]="trashInspectionVersionHeaders"
+    [cellTemplate]="{status: statusTpl}"
+    [showPaginator]="false"
+    [pageOnFront]="false"
+    [rowStriped]="true"
+    [showToolbar]="false"
+    [showColumnMenuButton]="false">
+  </mtx-grid>
+
+  <mtx-grid
+    class="mt-4"
+    [data]="trashInspectionVersionsModel.trashInspectionCaseStatusModels"
+    [columns]="caseHeaders"
+    [cellTemplate]="{status: statusTpl}"
+    [showPaginator]="false"
+    [pageOnFront]="false"
+    [rowStriped]="true"
+    [showToolbar]="false"
+    [showColumnMenuButton]="false">
+  </mtx-grid>
+
+  <ng-template #statusTpl let-row>
+    <status-bar [status]="row.status"></status-bar>
+  </ng-template>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
+</div>

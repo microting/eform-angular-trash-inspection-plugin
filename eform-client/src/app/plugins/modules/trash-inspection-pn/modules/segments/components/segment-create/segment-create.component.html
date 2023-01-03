@@ -1,0 +1,48 @@
+<h3 mat-dialog-title>{{ 'New Segment' | translate}}</h3>
+<div mat-dialog-content class="d-flex flex-column">
+  <mat-form-field>
+    <mat-label>{{'Name' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.name"
+      type="text"
+      id="createSegmentName"
+      name="createSegmentName">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Description' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.description"
+      type="text"
+      id="createSegmentDescription"
+      name="createSegmentDescription">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'SDk folder id' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="segmentPnModel.sdkFolderId"
+      type="text"
+      id="createSegmentSdkFolderId"
+      name="createSegmentSdkFolderId">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="createSegment()"
+    id="segmentCreateSaveBtn"
+    [disabled]="!segmentPnModel.name"
+  >
+    {{'Create' | translate}}
+  </button>
+  <button
+    mat-raised-button
+    id="segmentCreateCancelBtn"
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
+</div>

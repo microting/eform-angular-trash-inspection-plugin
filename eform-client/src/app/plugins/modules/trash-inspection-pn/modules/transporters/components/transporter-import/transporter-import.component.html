@@ -1,0 +1,58 @@
+<eform-new-subheader [forceStaticTitle]="true" [title]="'Import transporters' | translate">
+  <button
+    mat-icon-button
+    color="warn"
+    routerLink="./.."
+    id="cancelImportBtn"
+    matTooltip="{{ 'Cancel' | translate }}"
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="importTransporter()"
+    routerLink="./.."
+    id="continueImportBtn"
+    matTooltip="{{ 'Import the transporter' | translate }}"
+  >
+    {{'Continue Import' | translate}}
+  </button>
+</eform-new-subheader>
+<!--[title]="'File name: '+this.fileName +' '+'Total Columns: '+this.totalColumns+' '+'Total Rows: '+this.totalRows"-->
+
+<ng-template #toolbarTpl>
+  <div class="d-flex flex-row justify-content-start flex-nowrap">
+    <div class="d-flex flex-column mr-2 ml-2">
+      <input
+        type="file"
+        id="files"
+        accept="text/csv"
+        (change)="csv2Array($event)"
+      />
+    </div>
+  </div>
+</ng-template>
+
+<mtx-grid
+  [data]="tableData"
+  [columns]="columns"
+  [headerTemplate]="headerTpl"
+  [toolbarTemplate]="toolbarTpl"
+  [showToolbar]="true"
+  [showColumnMenuButton]="false"
+  [rowStriped]="true"
+  [noResultText]="'Select file for start' | translate"
+>
+</mtx-grid>
+
+<ng-template #headerTpl let-col>
+  <mat-form-field>
+    <mtx-select
+      [items]="options"
+      (change)="onSelectedChanged($event, +col.field)"
+      (clear)="onSelectedClear(+col.field)"
+      [clearable]="true"
+    ></mtx-select>
+  </mat-form-field>
+</ng-template>

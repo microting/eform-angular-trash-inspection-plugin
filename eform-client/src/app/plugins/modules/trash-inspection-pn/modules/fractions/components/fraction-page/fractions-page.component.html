@@ -1,0 +1,42 @@
+<eform-new-subheader>
+  <button
+    mat-raised-button
+    id="fractionCreateBtn"
+    color="accent"
+    matTooltip="{{ 'Create Fraction' | translate }}"
+    (click)="showCreateFractionModal()"
+    *ngIf="authStateService.checkClaim(trashInspectionPnClaims.createFraction)"
+  >
+    {{ 'New Fraction' | translate }}
+  </button>
+  <button
+    mat-raised-button
+    id="importFractionBtn"
+    color="accent"
+    matTooltip="{{ 'Import Fraction' | translate }}"
+    routerLink="./import"
+  >
+    {{ 'Import Fraction' | translate }}
+  </button>
+</eform-new-subheader>
+
+<mtx-grid
+  [data]="fractionsModel.entities"
+  [columns]="tableHeaders"
+  [showPaginator]="true"
+  [paginationTemplate]="paginatorTpl"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="false"
+  [showColumnMenuButton]="false"
+  [sortActive]="fractionsStateService.getActiveSort() | async"
+  [sortDirection]="fractionsStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTable($event)">
+</mtx-grid>
+
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="fractionsStateService.getPagination() | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>

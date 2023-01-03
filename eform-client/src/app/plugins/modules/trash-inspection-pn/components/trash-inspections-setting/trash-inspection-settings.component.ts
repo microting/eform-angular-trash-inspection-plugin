@@ -6,14 +6,14 @@ import {
 } from '@angular/core';
 import { TrashInspectionPnSettingsService } from '../../services';
 import { Router } from '@angular/router';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import { EntitySearchService } from '../../../../../common/services/advanced';
+import {debounceTime, skip, switchMap} from 'rxjs/operators';
 import {
   TemplateListModel,
   TemplateRequestModel,
-} from '../../../../../common/models/eforms';
-import { EFormService } from '../../../../../common/services/eform';
-import { TrashInspectionBaseSettingsModel } from '../../models/trash-inspection-base-settings.model';
+} from 'src/app/common/models';
+import { EFormService, EntitySearchService} from 'src/app/common/services';
+import { TrashInspectionBaseSettingsModel } from '../../models';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-trash-inspection-settings',
@@ -26,6 +26,16 @@ export class TrashInspectionSettingsComponent implements OnInit {
   templatesModel: TemplateListModel = new TemplateListModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
 
+/*  get selectedEformName(): string {
+    if(!!this.templatesModel && !!this.templatesModel.templates) {
+      const i = this.templatesModel.templates.findIndex(x => x.id === this.settingsModel.extendedInspectioneFormId);
+      if (i !== -1) {
+        return this.templatesModel.templates[i].label;
+      }
+    }
+    return ''
+  }*/
+
   constructor(
     private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
     private router: Router,
@@ -35,6 +45,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
   ) {
     this.typeahead
       .pipe(
+        skip(1),
         debounceTime(200),
         switchMap((term) => {
           this.templateRequestModel.nameFilter = term;
@@ -49,6 +60,10 @@ export class TrashInspectionSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.getSettings();
+    this.eFormService.getAll(this.templateRequestModel).pipe(take(1))
+      .subscribe((items) => {
+        this.templatesModel = items.model;
+    })
   }
 
   getSettings() {
@@ -58,6 +73,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
       }
     });
   }
+
   updateSettings() {
     this.trashInspectionPnSettingsService
       .updateSettings(this.settingsModel)
@@ -65,9 +81,5 @@ export class TrashInspectionSettingsComponent implements OnInit {
         if (data && data.success) {
         }
       });
-  }
-
-  onSelectedChanged(e: any) {
-    this.settingsModel.extendedInspectioneFormId = e.id;
   }
 }

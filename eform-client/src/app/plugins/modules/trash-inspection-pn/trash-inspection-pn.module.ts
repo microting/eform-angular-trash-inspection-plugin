@@ -1,125 +1,54 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgSelectModule } from '@ng-select/ng-select';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TranslateModule} from '@ngx-translate/core';
 import {
-  TrashInspectionPnFractionsService,
-  TrashInspectionPnInstallationsService,
-  TrashInspectionPnProducersService,
-  TrashInspectionPnSegmentsService,
   TrashInspectionPnSettingsService,
-  TrashInspectionPnTransporterService,
   TrashInspectionPnTrashInspectionsService,
+  TrashInspectionPnSegmentsService,
+  TrashInspectionPnFractionsService,
+  TrashInspectionPnProducersService,
+  TrashInspectionPnInstallationsService,
+  TrashInspectionPnTransporterService,
 } from './services';
-import { TrashInspectionPnLayoutComponent } from './layouts';
-import { TrashInspectionPnRouting } from './trash-inspection-pn.routing.module';
-import { SharedPnModule } from '../shared/shared-pn.module';
-import { EformSharedModule } from 'src/app/common/modules/eform-shared/eform-shared.module';
+import {TrashInspectionPnLayoutComponent} from './layouts';
+import {TrashInspectionPnRouting} from './trash-inspection-pn.routing';
+import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-shared.module';
 import {
-  FractionCreateComponent,
-  FractionDeleteComponent,
-  FractionEditComponent,
-  FractionsPageComponent,
-  FractionsPnImportComponent,
-  FractionsReportPreviewTableComponent,
-  InstallationCreateComponent,
-  InstallationDeleteComponent,
-  InstallationEditComponent,
-  InstallationsPageComponent,
-  ProducerCreateComponent,
-  ProducerDeleteComponent,
-  ProducerEditComponent,
-  ProducerImportComponent,
-  ProducerPageComponent,
-  ProducersReportPreviewTableComponent,
-  ReportGraphViewComponent,
-  ReportPreviewTableContainerComponent,
-  SegmentCreateComponent,
-  SegmentDeleteComponent,
-  SegmentEditComponent,
-  SegmentsPageComponent,
-  TransporterCreateComponent,
-  TransporterDeleteComponent,
-  TransporterEditComponent,
-  TransporterImportComponent,
-  TransporterPageComponent,
-  TransportersReportPreviewTableComponent,
-  TrashInspectionCreateComponent,
-  TrashInspectionDeleteComponent,
-  TrashInspectionEditComponent,
   TrashInspectionSettingsComponent,
-  TrashInspectionsPageComponent,
-  TrashInspectionVersionViewComponent,
 } from './components';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { trashInspectionStoreProviders } from './store-providers.config';
-import { TrashInspectionsStateService } from './components/trash-inspections/store';
-import { InstallationsStateService } from './components/installations/store';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MtxSelectModule} from '@ng-matero/extensions/select';
 
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
-    MDBBootstrapModule,
     TrashInspectionPnRouting,
     TranslateModule,
     FormsModule,
-    NgSelectModule,
     EformSharedModule,
-    FontAwesomeModule,
-    NgxChartsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MtxSelectModule,
   ],
   declarations: [
-    InstallationsPageComponent,
-    InstallationDeleteComponent,
-    InstallationCreateComponent,
-    InstallationEditComponent,
-    TrashInspectionsPageComponent,
-    TrashInspectionCreateComponent,
-    TrashInspectionEditComponent,
-    TrashInspectionDeleteComponent,
     TrashInspectionPnLayoutComponent,
     TrashInspectionSettingsComponent,
-    TrashInspectionVersionViewComponent,
-    FractionCreateComponent,
-    FractionDeleteComponent,
-    FractionEditComponent,
-    FractionsPnImportComponent,
-    FractionsPageComponent,
-    SegmentCreateComponent,
-    SegmentDeleteComponent,
-    SegmentEditComponent,
-    SegmentsPageComponent,
-    ProducerPageComponent,
-    ProducerCreateComponent,
-    ProducerDeleteComponent,
-    ProducerEditComponent,
-    ProducerImportComponent,
-    TransporterPageComponent,
-    TransporterCreateComponent,
-    TransporterDeleteComponent,
-    TransporterEditComponent,
-    TransporterImportComponent,
-    ReportPreviewTableContainerComponent,
-    ReportGraphViewComponent,
-    TransportersReportPreviewTableComponent,
-    FractionsReportPreviewTableComponent,
-    ProducersReportPreviewTableComponent,
   ],
   providers: [
-    TrashInspectionPnFractionsService,
-    TrashInspectionPnInstallationsService,
+    TrashInspectionPnSettingsService,
     TrashInspectionPnTrashInspectionsService,
     TrashInspectionPnSegmentsService,
-    TrashInspectionPnSettingsService,
-    TrashInspectionPnTransporterService,
+    TrashInspectionPnFractionsService,
     TrashInspectionPnProducersService,
-    TrashInspectionsStateService,
-    InstallationsStateService,
-    ...trashInspectionStoreProviders,
+    TrashInspectionPnInstallationsService,
+    TrashInspectionPnTransporterService,
   ],
 })
-export class TrashInspectionPnModule {}
+export class TrashInspectionPnModule {
+}

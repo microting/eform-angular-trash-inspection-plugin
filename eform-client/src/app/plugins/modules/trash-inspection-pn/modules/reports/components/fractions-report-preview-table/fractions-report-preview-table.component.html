@@ -1,0 +1,17 @@
+<mtx-grid
+  [data]="fractionYearModel.entities"
+  [columns]="tableHeaders"
+  [cellTemplate]="{name: showGraphTpl}"
+  [showPaginator]="false"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="false"
+  [showColumnMenuButton]="false"
+  [sortActive]="fractionsReportPreviewTableStateService.getActiveSort() | async"
+  [sortDirection]="fractionsReportPreviewTableStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTableFractions($event)">
+</mtx-grid>
+
+<ng-template let-row #showGraphTpl>
+  <a (click)="showGraphModal(row)" class="button-show-graph-modal">{{row.name}}</a>
+</ng-template>
