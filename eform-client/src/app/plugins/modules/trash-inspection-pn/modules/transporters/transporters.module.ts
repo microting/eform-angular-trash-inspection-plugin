@@ -10,8 +10,6 @@ import {
   TransporterCreateComponent,
   TransporterEditComponent,
 } from './components';
-import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {transportersPersistProvider} from './components/store';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -25,12 +23,10 @@ import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
     TransportersRouting,
     TranslateModule,
     FormsModule,
     EformSharedModule,
-    NgxChartsModule,
     MatButtonModule,
     MatTooltipModule,
     MtxGridModule,

@@ -1,97 +1,58 @@
-<eform-subheader [title]="'Import Producers' | translate"> </eform-subheader>
-<eform-subheader [heandingSizeRem]="1">
-  <!--[title]="'File name: '+this.fileName +' '+'Total Columns: '+this.totalColumns+' '+'Total Rows: '+this.totalRows"-->
-</eform-subheader>
-<input
-  type="file"
-  class="form-control"
-  id="files"
-  accept="text/csv"
-  (change)="csv2Array($event)"
-/>
-<!--<div class="container-fluid">-->
-<!--<div class="row mt-4">-->
-<!--<div class="col-md-2" *ngFor="let name of chboxNames">-->
-<!--<div class="mat-checkbox">-->
-<!--<label>-->
-<!--<input type="checkbox" (click)="logThings(name)" color="primary">{{name | translate}}-->
-<!--</label>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<div class="p-3">
-  <div class="row p-1 table-responsive-lg no-gutters">
-    <table
-      class="table mh-100 table-striped text-center z-depth-1"
-      *ngIf="tableData"
-    >
-      <thead>
-        <tr>
-          <th
-            scope="row"
-            class="table-header-sortable th-lg"
-            *ngFor="let cols of tableData[0]; let i = index"
-            [attr.data-index]="i"
-          >
-            <ng-select
-              style="width: 180px"
-              class=""
-              [items]="options"
-              (change)="onSelectedChanged($event, i)"
-            >
-            </ng-select>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="producersToImport">
-        <tr *ngFor="let rows of tableData">
-          <td>
-            {{ rows[0] }}
-          </td>
-          <td>
-            {{ rows[1] }}
-          </td>
-          <td>
-            {{ rows[2] }}
-          </td>
-          <td>
-            {{ rows[3] }}
-          </td>
-          <td>
-            {{ rows[4] }}
-          </td>
-          <td>
-            {{ rows[5] }}
-          </td>
-          <td>
-            {{ rows[6] }}
-          </td>
-          <td>
-            {{ rows[7] }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<eform-new-subheader [forceStaticTitle]="true" [title]="'Import Producers' | translate">
   <button
-    mdbBtn
-    class="btn-danger"
-    routerLink="/plugins/trash-inspection-pn/producers"
+    mat-icon-button
+    color="warn"
+    routerLink="./.."
     id="cancelImportBtn"
-    mdbTooltip="{{ 'Cancel' | translate }}"
+    matTooltip="{{ 'Cancel' | translate }}"
   >
-    <fa-icon icon="times-circle" size="lg"></fa-icon>
+    <mat-icon>cancel</mat-icon>
   </button>
   <button
-    mdbBtn
-    class="btn-success btn-small-height"
+    mat-raised-button
+    color="accent"
     (click)="importProducer()"
-    routerLink="/plugins/trash-inspection-pn/producers"
+    routerLink="./.."
     id="continueImportBtn"
-    mdbTooltip="{{ 'Import the producer' | translate }}"
+    matTooltip="{{ 'Import the producer' | translate }}"
   >
-    {{ 'Continue Import' | translate }}
+    {{'Continue Import' | translate}}
   </button>
-</div>
+</eform-new-subheader>
+<!--[title]="'File name: '+this.fileName +' '+'Total Columns: '+this.totalColumns+' '+'Total Rows: '+this.totalRows"-->
+
+<ng-template #toolbarTpl>
+  <div class="d-flex flex-row justify-content-start flex-nowrap">
+    <div class="d-flex flex-column mr-2 ml-2">
+      <input
+        type="file"
+        id="files"
+        accept="text/csv"
+        (change)="csv2Array($event)"
+      />
+    </div>
+  </div>
+</ng-template>
+
+<mtx-grid
+  [data]="tableData"
+  [columns]="columns"
+  [headerTemplate]="headerTpl"
+  [toolbarTemplate]="toolbarTpl"
+  [showToolbar]="true"
+  [showColumnMenuButton]="false"
+  [rowStriped]="true"
+  [noResultText]="'Select file for start' | translate"
+>
+</mtx-grid>
+
+<ng-template #headerTpl let-col>
+  <mat-form-field>
+    <mtx-select
+      [items]="options"
+      (change)="onSelectedChanged($event, +col.field)"
+      (clear)="onSelectedClear(+col.field)"
+      [clearable]="true"
+    ></mtx-select>
+  </mat-form-field>
+</ng-template>

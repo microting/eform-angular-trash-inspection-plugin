@@ -9,7 +9,6 @@ import {
   InstallationsPageComponent,
   InstallationEditComponent,
 } from './components';
-import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
 import {installationsPersistProvider, InstallationsStateService} from './components/store';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -22,7 +21,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
     InstallationsRouting,
     TranslateModule,
     FormsModule,

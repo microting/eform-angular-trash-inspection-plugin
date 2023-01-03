@@ -7,6 +7,8 @@ import {
   FractionPnImportModel
 } from '../../../../models';
 import {TrashInspectionPnProducersService} from '../../../../services';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {Router} from '@angular/router';
 
 const URL = '';
 
@@ -30,26 +32,25 @@ export class ProducerImportComponent implements OnInit {
     'Manage matching records',
   ];
   papa: Papa = new Papa();
-  tableData: any = null;
+  tableData: any[] = [];
   options = [
-    {value: 0, label: 'Name'},
-    {value: 1, label: 'Description'},
-    {value: 2, label: 'ForeignId'},
-    {value: 3, label: 'Address'},
-    {value: 4, label: 'City'},
-    {value: 5, label: 'ZipCode'},
-    {value: 6, label: 'Phone'},
-    {value: 7, label: 'Contact Person'},
+    {value: 0, label: 'Name', disabled: false},
+    {value: 1, label: 'Description', disabled: false},
+    {value: 2, label: 'ForeignId', disabled: false},
+    {value: 3, label: 'Address', disabled: false},
+    {value: 4, label: 'City', disabled: false},
+    {value: 5, label: 'ZipCode', disabled: false},
+    {value: 6, label: 'Phone', disabled: false},
+    {value: 7, label: 'Contact Person', disabled: false},
   ];
+  columns: MtxGridColumn[] = [];
 
-  constructor(private producerService: TrashInspectionPnProducersService) {
+  constructor(
+    private producerService: TrashInspectionPnProducersService,
+    private router: Router,
+  ) {
     this.producerImportModel = new ProducerPnImportModel();
-    this.options.forEach((option) => {
-      this.producerHeadersModel = new ProducerPnHeadersModel();
-      this.producerHeadersModel.headerLabel = option.label;
-      this.producerHeadersModel.headerValue = null;
-      this.producerImportModel.headerList.push(this.producerHeadersModel);
-    });
+    this.producerImportModel.headerList = this.options.map((option) => ({headerValue: null, headerLabel: option.label}));
     this.uploader = new FileUploader({
       url: URL,
       autoUpload: true,
@@ -67,13 +68,14 @@ export class ProducerImportComponent implements OnInit {
   }
 
   csv2Array(fileInput) {
-    const file = fileInput;
-    this.papa.parse(fileInput.target.files[0], {
+    const files = fileInput.target.files;
+    this.papa.parse(files[files.length - 1], {
       skipEmptyLines: true,
       header: false,
       complete: (results) => {
         this.tableData = results.data;
-        console.log(this.tableData);
+        console.debug(this.tableData);
+        this.changeTable();
         this.producerImportModel.importList = JSON.stringify(this.tableData);
       },
     });
@@ -81,8 +83,6 @@ export class ProducerImportComponent implements OnInit {
   }
 
   importProducer() {
-    // this.customerImportModel.importList = this.tableData;
-    // debugger;
     this.producerImportModel.headers = JSON.stringify(
       this.producerImportModel.headerList
     );
@@ -91,11 +91,38 @@ export class ProducerImportComponent implements OnInit {
       .subscribe((data) => {
         if (data && data.success) {
           this.producerImportModel = new FractionPnImportModel();
+          this.router.navigate([`./..`]).then();
         }
       });
   }
 
   onSelectedChanged(e: any, columnIndex: any) {
-    this.producerImportModel.headerList[e.value].headerValue = columnIndex;
+    // this.selectedOptions = this.selectedOptions.filter(x => x.value === e.value);
+    const i = this.producerImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if (i !== -1) {
+      this.producerImportModel.headerList[i].headerValue = null;
+    }
+    if (e) {
+      this.producerImportModel.headerList.find(x => x.headerLabel === e.label).headerValue = columnIndex;
+    }
+    // this.transporterImportModel.headerList[e.value].headerValue = columnIndex;
+    this.options = this.options
+      .map(x => ({...x, disabled: this.producerImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}));
+  }
+
+  onSelectedClear(columnIndex: any) {
+    const i = this.producerImportModel.headerList.findIndex(x => x.headerValue === columnIndex);
+    if (i !== -1) {
+      this.producerImportModel.headerList[i].headerValue = null;
+    }
+    this.options = this.options
+      .map(x => ({...x, disabled: this.producerImportModel.headerList.some(y => y.headerLabel === x.label && y.headerValue !== null)}));
+  }
+
+  changeTable() {
+    this.columns = this.options.map((x, i) => ({
+      field: i.toString(),
+      formatter: rowData => rowData[i],
+    }));
   }
 }

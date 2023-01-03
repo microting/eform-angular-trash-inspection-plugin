@@ -10,7 +10,6 @@ import {
   FractionsPageComponent,
   FractionsImportComponent,
 } from './components';
-import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
 import {fractionsPersistProvider} from './components/store';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatButtonModule} from '@angular/material/button';
@@ -24,7 +23,6 @@ import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
     FractionsRouting,
     TranslateModule,
     FormsModule,

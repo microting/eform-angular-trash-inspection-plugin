@@ -9,7 +9,6 @@ import {
   SegmentEditComponent,
   SegmentsPageComponent,
 } from './components';
-import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
 import {segmentsPersistProvider} from './components/store';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
@@ -21,7 +20,6 @@ import {MatInputModule} from '@angular/material/input';
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
     SegmentsRouting,
     TranslateModule,
     FormsModule,

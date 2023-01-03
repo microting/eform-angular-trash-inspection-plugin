@@ -11,10 +11,6 @@ import {
   TrashInspectionsPageComponent,
   TrashInspectionVersionViewComponent,
 } from './components';
-import {SharedPnModule} from 'src/app/plugins/modules/shared/shared-pn.module';
-import {MDBBootstrapModule} from 'angular-bootstrap-md';
-import {NgSelectModule} from '@ng-select/ng-select';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {trashInspectionPersistProvider, TrashInspectionsStateService} from './components/store';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -27,15 +23,11 @@ import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   imports: [
     CommonModule,
-    SharedPnModule,
-    MDBBootstrapModule,
     TrashInspectionsRouting,
     TranslateModule,
     FormsModule,
-    NgSelectModule,
     EformSharedModule,
     FontAwesomeModule,
-    NgxChartsModule,
     MtxGridModule,
     MatFormFieldModule,
     MatInputModule,
