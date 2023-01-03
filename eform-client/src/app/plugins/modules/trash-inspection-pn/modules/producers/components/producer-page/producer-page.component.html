@@ -39,13 +39,3 @@
     (paginationChanged)="onPaginationChanged($event)"
   ></eform-pagination>
 </ng-template>
-
-<app-trash-inspection-pn-producer-create
-  #createProducerModal
-  (onProducerCreated)="getAllProducers()"
->
-</app-trash-inspection-pn-producer-create>
-<app-trash-inspection-pn-producer-edit
-  #editProducerModal
-  (onProducerUpdated)="getAllProducers()"
-></app-trash-inspection-pn-producer-edit>

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DeleteModalSettingModel, PaginationModel,} from 'src/app/common/models';
 import {ProducerPnModel, ProducersPnModel} from '../../../../models';
 import {TrashInspectionPnProducersService} from '../../../../services';
@@ -12,6 +12,7 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
+import {ProducerCreateComponent, ProducerEditComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -20,8 +21,6 @@ import {dialogConfigHelper} from 'src/app/common/helpers';
   styleUrls: ['./producer-page.component.scss'],
 })
 export class ProducerPageComponent implements OnInit, OnDestroy {
-  @ViewChild('createProducerModal') createProducerModal;
-  @ViewChild('editProducerModal') editProducerModal;
   producersModel: ProducersPnModel = new ProducersPnModel();
 
   tableHeaders1: MtxGridColumn[] = [
@@ -61,6 +60,8 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   ];
   translatesSub$: Subscription;
   producerDeletedSub$: Subscription;
+  producerCreatedSub$: Subscription;
+  producerUpdatedSub$: Subscription;
 
   constructor(
     public producersStateService: ProducersStateService,
@@ -88,11 +89,15 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   }
 
   showCreateProducerModal() {
-    this.createProducerModal.show();
+    const createProducerModal =
+      this.dialog.open(ProducerCreateComponent, {...dialogConfigHelper(this.overlay), minWidth: 400});
+    this.producerCreatedSub$ = createProducerModal.componentInstance.onProducerCreated.subscribe(() => this.getAllProducers());
   }
 
   showEditProducerModal(producer: ProducerPnModel) {
-    this.editProducerModal.show(producer);
+    const editProducerModal =
+      this.dialog.open(ProducerEditComponent, {...dialogConfigHelper(this.overlay, producer), minWidth: 400});
+    this.producerUpdatedSub$ = editProducerModal.componentInstance.onProducerUpdated.subscribe(() => this.getAllProducers());
   }
 
   showDeleteProducerModal(producer: ProducerPnModel) {
@@ -138,11 +143,6 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
 
   onProducerDeleted() {
     this.producersStateService.onDelete();
-    this.getAllProducers();
-  }
-
-  onPageSizeChanged(pageSize: number) {
-    this.producersStateService.updatePageSize(pageSize);
     this.getAllProducers();
   }
 

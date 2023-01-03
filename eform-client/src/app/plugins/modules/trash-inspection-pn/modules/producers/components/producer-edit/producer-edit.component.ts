@@ -1,12 +1,12 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
 import { ProducerPnModel } from '../../../../models';
 import { TrashInspectionPnProducersService } from '../../../../services';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-producer-edit',
@@ -14,19 +14,17 @@ import { TrashInspectionPnProducersService } from '../../../../services';
   styleUrls: ['./producer-edit.component.scss'],
 })
 export class ProducerEditComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();
+  onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();
   selectedProducer: ProducerPnModel = new ProducerPnModel();
   constructor(
-    private trashInspectionPnProducerService: TrashInspectionPnProducersService
-  ) {}
+    private trashInspectionPnProducerService: TrashInspectionPnProducersService,
+    public dialogRef: MatDialogRef<ProducerEditComponent>,
+    @Inject(MAT_DIALOG_DATA) producerModel: ProducerPnModel
+  ) {
+    this.getSelectedProducer(producerModel.id);
+  }
 
   ngOnInit() {}
-
-  show(producerModel: ProducerPnModel) {
-    this.getSelectedProducer(producerModel.id);
-    this.frame.show();
-  }
 
   getSelectedProducer(id: number) {
     this.trashInspectionPnProducerService
@@ -43,9 +41,13 @@ export class ProducerEditComponent implements OnInit {
       .subscribe((data) => {
         if (data && data.success) {
           this.onProducerUpdated.emit();
-          this.selectedProducer = new ProducerPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
+  }
+
+  hide() {
+    this.selectedProducer = new ProducerPnModel();
+    this.dialogRef.close();
   }
 }

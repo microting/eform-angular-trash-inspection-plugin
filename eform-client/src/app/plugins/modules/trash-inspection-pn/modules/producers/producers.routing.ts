@@ -16,7 +16,6 @@ export const routes: Routes = [
   },
   {
     path: 'import',
-    canActivate: [PermissionGuard],
     component: ProducerImportComponent,
   },
 ];

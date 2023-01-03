@@ -2,12 +2,10 @@ import {
   Component,
   EventEmitter,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
-import {ProducerPnModel} from '../../../../models';
+import {ProducerPnModel,} from '../../../../models';
 import {TrashInspectionPnProducersService} from '../../../../services';
-import {EFormService} from 'src/app/common/services';
+import {MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trash-inspection-pn-producer-create',
@@ -15,15 +13,12 @@ import {EFormService} from 'src/app/common/services';
   styleUrls: ['./producer-create.component.scss'],
 })
 export class ProducerCreateComponent implements OnInit {
-  @ViewChild('frame') frame;
-  @Output() onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
-  @Output() onDeploymentFinished: EventEmitter<void> = new EventEmitter<void>();
+  onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
   newProducerModel: ProducerPnModel = new ProducerPnModel();
-  typeAhead = new EventEmitter<string>();
 
   constructor(
     private trashInspectionPnProducerService: TrashInspectionPnProducersService,
-    private eFormService: EFormService
+    public dialogRef: MatDialogRef<ProducerCreateComponent>,
   ) {
   }
 
@@ -34,17 +29,15 @@ export class ProducerCreateComponent implements OnInit {
     this.trashInspectionPnProducerService
       .createProducer(this.newProducerModel)
       .subscribe((data) => {
-        // debugger;
         if (data && data.success) {
           this.onProducerCreated.emit();
-          // this.submitDeployment();
-          this.newProducerModel = new ProducerPnModel();
-          this.frame.hide();
+          this.hide();
         }
       });
   }
 
-  show() {
-    this.frame.show();
+  hide() {
+    this.newProducerModel = new ProducerPnModel();
+    this.dialogRef.close();
   }
 }

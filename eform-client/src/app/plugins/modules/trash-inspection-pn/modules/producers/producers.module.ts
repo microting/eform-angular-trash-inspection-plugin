@@ -19,6 +19,9 @@ import {producersPersistProvider} from './components/store';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   imports: [
@@ -35,6 +38,9 @@ import {MtxGridModule} from '@ng-matero/extensions/grid';
     MatButtonModule,
     MatTooltipModule,
     MtxGridModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [
     ProducerPageComponent,
