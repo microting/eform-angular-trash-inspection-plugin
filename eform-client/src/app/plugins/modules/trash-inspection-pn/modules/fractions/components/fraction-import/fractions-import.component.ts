@@ -26,7 +26,7 @@ export class FractionsImportComponent implements OnInit {
     'Manage matching records',
   ];
   papa: Papa = new Papa();
-  tableData: any = null;
+  tableData: any[] = [];
   options = [
     { value: 0, label: 'Number', disabled: false },
     { value: 1, label: 'Name', disabled: false },
