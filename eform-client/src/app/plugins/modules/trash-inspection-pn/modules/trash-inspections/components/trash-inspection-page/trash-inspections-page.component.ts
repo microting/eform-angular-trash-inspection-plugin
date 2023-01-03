@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TrashInspectionPnModel} from '../../../../models';
 import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
 import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
@@ -6,12 +6,14 @@ import {TrashInspectionsStateService} from '../store';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {Subject, Subscription, zip} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';import {Sort} from '@angular/material/sort';
+import {debounceTime} from 'rxjs/operators';
+import {Sort} from '@angular/material/sort';
 import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
+import {TrashInspectionVersionViewComponent} from '../';
 
 @AutoUnsubscribe()
 @Component({
@@ -21,8 +23,6 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 })
 export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   // @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
-  @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
-  @ViewChild('versionViewModal') versionViewModal;
 
   searchSubject = new Subject();
   trashInspectionsModel: Paged<TrashInspectionPnModel> = new Paged<TrashInspectionPnModel>();
@@ -99,6 +99,9 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
     {
       header: this.translateService.stream('Actions'),
       field: 'actions',
+      width: '100px',
+      pinned: 'right',
+      right: '0px',
     },
   ];
   translatesSub$: Subscription;
@@ -173,7 +176,8 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   }
 
   showVersionViewModal(trashInspectionId: number) {
-    this.versionViewModal.show(trashInspectionId);
+    // const versionViewModal =
+    this.dialog.open(TrashInspectionVersionViewComponent, {...dialogConfigHelper(this.overlay, trashInspectionId), minWidth: 800});
   }
 
   downloadPDF(trashInspection: TrashInspectionPnModel) {

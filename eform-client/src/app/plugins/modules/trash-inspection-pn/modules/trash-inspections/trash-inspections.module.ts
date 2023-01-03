@@ -7,7 +7,7 @@ import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-share
 import {TrashInspectionsRouting} from './trash-inspections.routing';
 import {
   // TrashInspectionCreateComponent,
-  TrashInspectionEditComponent,
+  // TrashInspectionEditComponent,
   TrashInspectionsPageComponent,
   TrashInspectionVersionViewComponent,
 } from './components';
@@ -22,6 +22,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -41,10 +42,11 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    MatDialogModule,
   ],
   declarations: [
     // TrashInspectionCreateComponent,
-    TrashInspectionEditComponent,
+    // TrashInspectionEditComponent,
     TrashInspectionsPageComponent,
     TrashInspectionVersionViewComponent,
   ],
