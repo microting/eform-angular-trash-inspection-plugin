@@ -23,7 +23,7 @@ import {ProducerCreateComponent, ProducerEditComponent} from '../';
 export class ProducerPageComponent implements OnInit, OnDestroy {
   producersModel: ProducersPnModel = new ProducersPnModel();
 
-  tableHeaders1: MtxGridColumn[] = [
+  tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
     {header: this.translateService.stream('Description'), field: 'description', sortProp: {id: 'Description'}, sortable: true},

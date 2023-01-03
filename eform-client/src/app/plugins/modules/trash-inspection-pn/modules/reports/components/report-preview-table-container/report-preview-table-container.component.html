@@ -1,58 +1,44 @@
-<eform-subheader> </eform-subheader>
-<!--<div class="col-md-2">-->
-<!--  <ng-select-->
-<!--    [items]="fractions"-->
-<!--    bindLabel="name"-->
-<!--    (change)="onSelectedChanged($event)"-->
-<!--    [placeholder]="('Select Fraction' | translate)"-->
-<!--  >-->
-<!--  </ng-select>-->
-<!--</div>-->
+<eform-new-subheader
+  [subtitle]="subtitle | translate"
+></eform-new-subheader>
 <div class="d-flex flex-row">
-  <div class="col-md-2">
-    <ng-select
-      class=""
-      id="yearSelector"
-      [items]="years"
-      [placeholder]="'Select Year' | translate"
-      [ngModel]="selectedYear"
-      (ngModelChange)="onSelectedChanged($event)"
-      [clearable]="false"
-    >
-    </ng-select>
+  <div class="d-flex mr-2">
+    <mat-form-field>
+      <mat-label>{{'Select Year' | translate}}</mat-label>
+      <mtx-select
+        id="yearSelector"
+        [items]="years"
+        [(ngModel)]="selectedYear"
+        [clearable]="false"
+      ></mtx-select>
+    </mat-form-field>
   </div>
-  <div class="col-md-2">
-    <ng-select
-      class=""
-      [items]="viewNames"
-      [placeholder]="'Select Table' | translate"
-      [ngModel]="selectedView"
-      (ngModelChange)="onSelectedViewChanged($event)"
-      [disabled]="!selectedYear"
-    >
-    </ng-select>
-  </div>
-</div>
-<div class="container-fluid">
-  <div class="row p-1 mt-4 table-responsive no-gutters">
-    <app-transporters-report-preview-table
-      *ngIf="this.selectedView === 'Transporters'"
-      [thisYear]="selectedYear"
-      (onShowGraphModal)="showGraphModal($event)"
-    >
-    </app-transporters-report-preview-table>
-    <app-fractions-report-preview-table
-      *ngIf="this.selectedView === 'Fractions'"
-      [thisYear]="selectedYear"
-      (onShowGraphModal)="showGraphModal($event)"
-    >
-    </app-fractions-report-preview-table>
-    <app-producers-report-preview-table
-      *ngIf="this.selectedView === 'Producers'"
-      (onShowGraphModal)="showGraphModal($event)"
-      [thisYear]="selectedYear"
-    ></app-producers-report-preview-table>
+  <div class="d-flex">
+    <mat-form-field>
+      <mat-label>{{'Select Table' | translate}}</mat-label>
+      <mtx-select
+        [items]="viewNames"
+        [ngModel]="selectedView"
+        (ngModelChange)="onSelectedViewChanged($event)"
+        [disabled]="!selectedYear"
+      ></mtx-select>
+    </mat-form-field>
   </div>
 </div>
-
-<app-report-graph-view #reportGraphViewModal></app-report-graph-view>
+<app-transporters-report-preview-table
+  *ngIf="this.selectedView === 'Transporters'"
+  [thisYear]="selectedYear"
+  (onShowGraphModal)="showGraphModal($event)"
+>
+</app-transporters-report-preview-table>
+<app-fractions-report-preview-table
+  *ngIf="this.selectedView === 'Fractions'"
+  [thisYear]="selectedYear"
+  (onShowGraphModal)="showGraphModal($event)"
+>
+</app-fractions-report-preview-table>
+<app-producers-report-preview-table
+  *ngIf="this.selectedView === 'Producers'"
+  (onShowGraphModal)="showGraphModal($event)"
+  [thisYear]="selectedYear"
+></app-producers-report-preview-table>

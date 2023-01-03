@@ -1,21 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { OperationDataResult, Paged, SortModel } from 'src/app/common/models';
-import { updateTableSort } from 'src/app/common/helpers';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {OperationDataResult, Paged} from 'src/app/common/models';
+import {updateTableSort} from 'src/app/common/helpers';
 import {
   TransportersReportPreviewTableQuery,
   TransportersReportPreviewTableStore,
 } from './';
-import { TrashInspectionPnTransporterService } from '../../../../../services';
-import { FractionPnStatsByYearModel } from '../../../../../models';
+import {TrashInspectionPnTransporterService} from '../../../../../services';
+import {FractionPnStatsByYearModel} from '../../../../../models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class TransportersReportPreviewTableStateService {
   constructor(
     private store: TransportersReportPreviewTableStore,
     private service: TrashInspectionPnTransporterService,
     private query: TransportersReportPreviewTableQuery
-  ) {}
+  ) {
+  }
 
   private year = new Date().getFullYear();
 
@@ -32,8 +33,16 @@ export class TransportersReportPreviewTableStateService {
     this.year = year;
   }
 
-  getSort(): Observable<SortModel> {
-    return this.query.selectSort$;
+  // getSort(): Observable<SortModel> {
+  //   return this.query.selectSort$;
+  // }
+
+  getActiveSort(): Observable<string> {
+    return this.query.selectActiveSort$;
+  }
+
+  getActiveSortDirection(): Observable<'asc' | 'desc'> {
+    return this.query.selectActiveSortDirection$;
   }
 
   onSortTable(sort: string) {

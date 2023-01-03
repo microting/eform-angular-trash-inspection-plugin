@@ -7,9 +7,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { TransporterPnStatsByYearModel } from '../../../../models';
-import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { TransportersReportPreviewTableStateService } from './store';
+import {TransporterPnStatsByYearModel} from '../../../../models';
+import {Paged} from 'src/app/common/models';
+import {TransportersReportPreviewTableStateService} from './store';
+import {Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
 
 @Component({
   selector: 'app-transporters-report-preview-table',
@@ -23,53 +26,24 @@ export class TransportersReportPreviewTableComponent
   onShowGraphModal: EventEmitter<TransporterPnStatsByYearModel> = new EventEmitter<TransporterPnStatsByYearModel>();
   transporterYearModel: Paged<TransporterPnStatsByYearModel> = new Paged<TransporterPnStatsByYearModel>();
 
-  tableHeaders: TableHeaderElementModel[] = [
+  tableHeaders: MtxGridColumn[] = [
     {
-      name: 'Name',
-      elementId: 'nameTableHeaderProducers',
+      header: this.translateService.stream('Transporter'),
+      field: 'name',
+      sortProp: {id: 'Name'},
       sortable: true,
-      visibleName: 'Transporter',
     },
-    {
-      name: 'Weighings',
-      elementId: 'descriptionTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Amount of load',
-    },
-    {
-      name: 'AmountOfWeighingsControlled',
-      elementId: 'ForeignIdTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Amount of load controlled',
-    },
-    {
-      name: 'ControlPercentage',
-      elementId: 'addressTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Controlled percentage',
-    },
-    {
-      name: 'ApprovedPercentage',
-      elementId: 'cityTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Approved percentage',
-    },
-    {
-      name: 'ConditionalApprovedPercentage',
-      elementId: 'zipCodeTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Conditional approved percentage',
-    },
-    {
-      name: 'NotApprovedPercentage',
-      elementId: 'phoneTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Not approved percentage',
-    },
+    {header: this.translateService.stream('Amount of load'), field: 'weighings', sortProp: {id: 'Weighings'}, sortable: true},
+    {header: this.translateService.stream('Amount of load controlled'), field: 'amountOfWeighingsControlled', sortProp: {id: 'AmountOfWeighingsControlled'}, sortable: true},
+    {header: this.translateService.stream('Controlled percentage'), field: 'controlPercentage', sortProp: {id: 'ControlPercentage'}, sortable: true, type: 'percent'},
+    {header: this.translateService.stream('Approved percentage'), field: 'approvedPercentage', sortProp: {id: 'ApprovedPercentage'}, sortable: true, type: 'percent'},
+    {header: this.translateService.stream('Conditional approved percentage'), field: 'conditionalApprovedPercentage', sortProp: {id: 'ConditionalApprovedPercentage'}, sortable: true, type: 'percent'},
+    {header: this.translateService.stream('Not approved percentage'), field: 'notApprovedPercentage', sortProp: {id: 'NotApprovedPercentage'}, sortable: true, type: 'percent'},
   ];
 
   constructor(
-    public transportersReportPreviewTableStateService: TransportersReportPreviewTableStateService
+    public transportersReportPreviewTableStateService: TransportersReportPreviewTableStateService,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit() {
@@ -98,8 +72,8 @@ export class TransportersReportPreviewTableComponent
       });
   }
 
-  sortTableTransporters(sort: string) {
-    this.transportersReportPreviewTableStateService.onSortTable(sort);
+  sortTableTransporters(sort: Sort) {
+    this.transportersReportPreviewTableStateService.onSortTable(sort.active);
     this.getAllTransportersByYear();
   }
 

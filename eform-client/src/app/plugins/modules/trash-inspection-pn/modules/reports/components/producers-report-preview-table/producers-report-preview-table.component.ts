@@ -7,9 +7,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { ProducerPnStatsByYearModel } from '../../../../models';
-import { ProducersReportPreviewTableStateService } from './store';
+import {Paged} from 'src/app/common/models';
+import {ProducerPnStatsByYearModel} from '../../../../models';
+import {ProducersReportPreviewTableStateService} from './store';
+import {Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
 
 @Component({
   selector: 'app-producers-report-preview-table',
@@ -22,54 +25,55 @@ export class ProducersReportPreviewTableComponent implements OnInit, OnChanges {
   onShowGraphModal: EventEmitter<ProducerPnStatsByYearModel> = new EventEmitter<ProducerPnStatsByYearModel>();
   producerYearModel: Paged<ProducerPnStatsByYearModel> = new Paged<ProducerPnStatsByYearModel>();
 
-  tableHeaders: TableHeaderElementModel[] = [
+  tableHeaders: MtxGridColumn[] = [
     {
-      name: 'Name',
-      elementId: 'nameTableHeaderProducers',
+      header: this.translateService.stream('Producer'),
+      field: 'name',
+      sortProp: {id: 'Name'},
       sortable: true,
-      visibleName: 'Producer',
+    },
+    {header: this.translateService.stream('Amount of load'), field: 'weighings', sortProp: {id: 'Weighings'}, sortable: true},
+    {
+      header: this.translateService.stream('Amount of load controlled'),
+      field: 'amountOfWeighingsControlled',
+      sortProp: {id: 'AmountOfWeighingsControlled'},
+      sortable: true
     },
     {
-      name: 'Weighings',
-      elementId: 'descriptionTableHeaderProducers',
+      header: this.translateService.stream('Controlled percentage'),
+      field: 'controlPercentage',
+      sortProp: {id: 'ControlPercentage'},
       sortable: true,
-      visibleName: 'Amount of load',
+      type: 'percent'
     },
     {
-      name: 'AmountOfWeighingsControlled',
-      elementId: 'ForeignIdTableHeaderProducers',
+      header: this.translateService.stream('Approved percentage'),
+      field: 'approvedPercentage',
+      sortProp: {id: 'ApprovedPercentage'},
       sortable: true,
-      visibleName: 'Amount of load controlled',
+      type: 'percent'
     },
     {
-      name: 'ControlPercentage',
-      elementId: 'addressTableHeaderProducers',
+      header: this.translateService.stream('Conditional approved percentage'),
+      field: 'conditionalApprovedPercentage',
+      sortProp: {id: 'ConditionalApprovedPercentage'},
       sortable: true,
-      visibleName: 'Controlled percentage',
+      type: 'percent'
     },
     {
-      name: 'ApprovedPercentage',
-      elementId: 'cityTableHeaderProducers',
+      header: this.translateService.stream('Not approved percentage'),
+      field: 'notApprovedPercentage',
+      sortProp: {id: 'NotApprovedPercentage'},
       sortable: true,
-      visibleName: 'Approved percentage',
-    },
-    {
-      name: 'ConditionalApprovedPercentage',
-      elementId: 'zipCodeTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Conditional approved percentage',
-    },
-    {
-      name: 'NotApprovedPercentage',
-      elementId: 'phoneTableHeaderProducers',
-      sortable: true,
-      visibleName: 'Not approved percentage',
+      type: 'percent'
     },
   ];
 
   constructor(
-    public producersReportPreviewTableStateService: ProducersReportPreviewTableStateService
-  ) {}
+    public producersReportPreviewTableStateService: ProducersReportPreviewTableStateService,
+    private translateService: TranslateService,
+  ) {
+  }
 
   ngOnInit() {
     this.getAllInitialDataProducers();
@@ -101,8 +105,8 @@ export class ProducersReportPreviewTableComponent implements OnInit, OnChanges {
     this.onShowGraphModal.emit(producer);
   }
 
-  sortTableProducers(sort: string) {
-    this.producersReportPreviewTableStateService.onSortTable(sort);
+  sortTableProducers(sort: Sort) {
+    this.producersReportPreviewTableStateService.onSortTable(sort.active);
     this.getAllProducers();
   }
 }

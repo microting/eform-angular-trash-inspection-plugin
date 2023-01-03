@@ -7,9 +7,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Paged, TableHeaderElementModel } from 'src/app/common/models';
-import { FractionPnStatsByYearModel } from '../../../../models';
-import { FractionsReportPreviewTableStateService } from './store';
+import {Paged} from 'src/app/common/models';
+import {FractionPnStatsByYearModel} from '../../../../models';
+import {FractionsReportPreviewTableStateService} from './store';
+import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {Sort} from '@angular/material/sort';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-fractions-report-preview-table',
@@ -22,54 +25,55 @@ export class FractionsReportPreviewTableComponent implements OnInit, OnChanges {
   onShowGraphModal: EventEmitter<FractionPnStatsByYearModel> = new EventEmitter<FractionPnStatsByYearModel>();
   fractionYearModel: Paged<FractionPnStatsByYearModel> = new Paged<FractionPnStatsByYearModel>();
 
-  tableHeaders: TableHeaderElementModel[] = [
+  tableHeaders: MtxGridColumn[] = [
     {
-      name: 'Name',
-      elementId: 'nameTableHeaderFractions',
+      header: this.translateService.stream('Transporter'),
+      field: 'name',
+      sortProp: {id: 'Name'},
       sortable: true,
-      visibleName: 'Item Name',
+    },
+    {header: this.translateService.stream('Amount of load'), field: 'weighings', sortProp: {id: 'Weighings'}, sortable: true},
+    {
+      header: this.translateService.stream('Amount of load controlled'),
+      field: 'amountOfWeighingsControlled',
+      sortProp: {id: 'AmountOfWeighingsControlled'},
+      sortable: true
     },
     {
-      name: 'Weighings',
-      elementId: 'descriptionTableHeaderFractions',
+      header: this.translateService.stream('Controlled percentage'),
+      field: 'controlPercentage',
+      sortProp: {id: 'ControlPercentage'},
       sortable: true,
-      visibleName: 'Amount of load',
+      type: 'percent'
     },
     {
-      name: 'AmountOfWeighingsControlled',
-      elementId: 'ForeignIdTableHeaderFractions',
+      header: this.translateService.stream('Approved percentage'),
+      field: 'approvedPercentage',
+      sortProp: {id: 'ApprovedPercentage'},
       sortable: true,
-      visibleName: 'Amount of load controlled',
+      type: 'percent'
     },
     {
-      name: 'ControlPercentage',
-      elementId: 'addressTableHeaderFractions',
+      header: this.translateService.stream('Conditional approved percentage'),
+      field: 'conditionalApprovedPercentage',
+      sortProp: {id: 'ConditionalApprovedPercentage'},
       sortable: true,
-      visibleName: 'Controlled percentage',
+      type: 'percent'
     },
     {
-      name: 'ApprovedPercentage',
-      elementId: 'cityTableHeaderFractions',
+      header: this.translateService.stream('Not approved percentage'),
+      field: 'notApprovedPercentage',
+      sortProp: {id: 'NotApprovedPercentage'},
       sortable: true,
-      visibleName: 'Approved percentage',
-    },
-    {
-      name: 'ConditionalApprovedPercentage',
-      elementId: 'zipCodeTableHeaderFractions',
-      sortable: true,
-      visibleName: 'Conditional approved percentage',
-    },
-    {
-      name: 'NotApprovedPercentage',
-      elementId: 'phoneTableHeaderFractions',
-      sortable: true,
-      visibleName: 'Not approved percentage',
+      type: 'percent'
     },
   ];
 
   constructor(
-    public fractionsReportPreviewTableStateService: FractionsReportPreviewTableStateService
-  ) {}
+    public fractionsReportPreviewTableStateService: FractionsReportPreviewTableStateService,
+    private translateService: TranslateService,
+  ) {
+  }
 
   ngOnInit() {
     this.getAllInitialDataFractions();
@@ -97,8 +101,8 @@ export class FractionsReportPreviewTableComponent implements OnInit, OnChanges {
       });
   }
 
-  sortTableFractions(sort: string) {
-    this.fractionsReportPreviewTableStateService.onSortTable(sort);
+  sortTableFractions(sort: Sort) {
+    this.fractionsReportPreviewTableStateService.onSortTable(sort.active);
     this.getAllFractions();
   }
 

@@ -1,10 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
+import {Component, Inject, OnInit,} from '@angular/core';
 import {
   TrashInspectionPnFractionsService,
   TrashInspectionPnProducersService,
   TrashInspectionPnTransporterService,
 } from '../../../../services';
+import {
+  FractionPnStatsByYearModel,
+  ProducerPnStatsByYearModel,
+  TransporterPnStatsByYearModel
+} from '../../../../models';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {LegendPosition, Color} from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-report-graph-view',
@@ -12,8 +18,6 @@ import {
   styleUrls: ['./report-graph-view.component.scss'],
 })
 export class ReportGraphViewComponent implements OnInit {
-  @ViewChild('frame') frame;
-
   // series1 = [
   //   {
   //     name: 'jan',
@@ -190,10 +194,11 @@ export class ReportGraphViewComponent implements OnInit {
   showYAxisLabel = true;
   yAxisLabel = '%';
   yScaleMax = 100;
-  legendPosition = 'below';
+  legendPosition = LegendPosition.Below;
   legendTitle = '';
-  colorScheme = {
-    domain: ['#0004ff', '#FF7800', '#a9a9a9', '#FF7F50', '#90EE90', '#FFB600'],
+  colorScheme: Color = {
+    group: undefined, name: '', selectable: false,
+    domain: ['#0004ff', '#FF7800', '#a9a9a9', '#FF7F50', '#90EE90', '#FFB600']
   };
   // lineChartScheme = {
   //   name: 'coolthree',
@@ -210,25 +215,29 @@ export class ReportGraphViewComponent implements OnInit {
   constructor(
     private trashInspectionPnTransporterService: TrashInspectionPnTransporterService,
     private trashInspectionPnProducerService: TrashInspectionPnProducersService,
-    private trashInspectionPnFractionService: TrashInspectionPnFractionsService
-  ) {}
+    private trashInspectionPnFractionService: TrashInspectionPnFractionsService,
+    public dialogRef: MatDialogRef<ReportGraphViewComponent>,
+    @Inject(MAT_DIALOG_DATA) model: {
+      model: FractionPnStatsByYearModel | ProducerPnStatsByYearModel | TransporterPnStatsByYearModel,
+      selectedYear: number,
+      selectedView: string
+    }
+  ) {
+    if (model.selectedView === 'Transporters') {
+      this.getSelectedTransporter(model.model.id, model.selectedYear);
+      this.transporterName = model.model.name;
+    }
+    if (model.selectedView === 'Producers') {
+      this.getSelectedProducer(model.model.id, model.selectedYear);
+      this.producerName = model.model.name;
+    }
+    if (model.selectedView === 'Fractions') {
+      this.getSelectedFraction(model.model.id, model.selectedYear);
+      this.fractionName = model.model.name;
+    }
+  }
 
-  ngOnInit() {}
-
-  show(model: any, year: number, view: string) {
-    if (view === 'Transporters') {
-      this.getSelectedTransporter(model.id, year);
-      this.transporterName = model.name;
-    }
-    if (view === 'Producers') {
-      this.getSelectedProducer(model.id, year);
-      this.producerName = model.name;
-    }
-    if (view === 'Fractions') {
-      this.getSelectedFraction(model.id, year);
-      this.fractionName = model.name;
-    }
-    // this.frame.show();
+  ngOnInit() {
   }
 
   getSelectedTransporter(id: number, year: number) {
@@ -238,7 +247,6 @@ export class ReportGraphViewComponent implements OnInit {
         if (data && data.success) {
           this.data1 = data.model.statByMonthListData1;
           this.data2 = data.model.statByMonthListData2;
-          this.frame.show();
         }
       });
   }
@@ -250,7 +258,6 @@ export class ReportGraphViewComponent implements OnInit {
         if (data && data.success) {
           this.data1 = data.model.statByMonthListData1;
           this.data2 = data.model.statByMonthListData2;
-          this.frame.show();
         }
       });
   }
@@ -262,8 +269,11 @@ export class ReportGraphViewComponent implements OnInit {
         if (data && data.success) {
           this.data1 = data.model.statByMonthListData1;
           this.data2 = data.model.statByMonthListData2;
-          this.frame.show();
         }
       });
+  }
+
+  hide() {
+    this.dialogRef.close();
   }
 }
