@@ -1,24 +1,27 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TrashInspectionPnModel} from '../../../../models';
-import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {Paged, PaginationModel} from 'src/app/common/models';
+import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
+import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
 import {TrashInspectionsStateService} from '../store';
-import {Sort} from '@angular/material/sort';
+import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
+import {dialogConfigHelper} from 'src/app/common/helpers';
+import {Subject, Subscription, zip} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';import {Sort} from '@angular/material/sort';
 import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
+import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-trash-inspection-pn-trash-inspection-page',
   templateUrl: './trash-inspections-page.component.html',
   styleUrls: ['./trash-inspections-page.component.scss'],
 })
-export class TrashInspectionsPageComponent implements OnInit {
-  @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
+export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
+  // @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
   @ViewChild('editTrashInspectionModal') editTrashInspectionModal;
-  @ViewChild('deleteTrashInspectionModal') deleteTrashInspectionModal;
   @ViewChild('versionViewModal') versionViewModal;
 
   searchSubject = new Subject();
@@ -98,10 +101,15 @@ export class TrashInspectionsPageComponent implements OnInit {
       field: 'actions',
     },
   ];
+  translatesSub$: Subscription;
+  trashInspectionDeletedSub$: Subscription;
 
   constructor(
     public trashInspectionsStateService: TrashInspectionsStateService,
     private translateService: TranslateService,
+    private dialog: MatDialog,
+    private overlay: Overlay,
+    private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService
   ) {
     this.searchSubject.pipe(debounceTime(500)).subscribe((val: string) => {
       this.trashInspectionsStateService.updateNameFilter(val);
@@ -131,12 +139,37 @@ export class TrashInspectionsPageComponent implements OnInit {
     this.searchSubject.next(label);
   }
 
-  showCreateTrashInspection() {
-    this.createTrashInspectionModal.show();
-  }
+  // showCreateTrashInspection() {
+  //   this.createTrashInspectionModal.show();
+  // }
 
   showDeleteTrashInspectionModal(trashInspection: TrashInspectionPnModel) {
-    this.deleteTrashInspectionModal.show(trashInspection);
+    this.translatesSub$ = zip(
+      this.translateService.stream('Are you sure you want to delete'),
+      this.translateService.stream('Name'),
+    ).subscribe(([headerText, name]) => {
+      const settings: DeleteModalSettingModel = {
+        model: trashInspection,
+        settings: {
+          headerText: `${headerText}?`,
+          fields: [
+            {header: 'ID', field: 'id'},
+            {header: name, field: 'name'},
+          ],
+        }
+      };
+      const deleteTrashInspectionModal = this.dialog.open(DeleteModalComponent, {...dialogConfigHelper(this.overlay, settings)});
+      this.trashInspectionDeletedSub$ = deleteTrashInspectionModal.componentInstance.delete
+        .subscribe((model: TrashInspectionPnModel) => {
+          this.machineAreaPnMachinesService.deleteTrashInspection(model.id)
+            .subscribe((data) => {
+              if (data && data.success) {
+                deleteTrashInspectionModal.close();
+                this.onTrashInspectionDeleted();
+              }
+            });
+        });
+    });
   }
 
   showVersionViewModal(trashInspectionId: number) {
@@ -178,5 +211,8 @@ export class TrashInspectionsPageComponent implements OnInit {
   onPaginationChanged(paginationModel: PaginationModel) {
     this.trashInspectionsStateService.updatePagination(paginationModel);
     this.getAllTrashInspections();
+  }
+
+  ngOnDestroy(): void {
   }
 }

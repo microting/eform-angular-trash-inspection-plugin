@@ -6,8 +6,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-shared.module';
 import {TrashInspectionsRouting} from './trash-inspections.routing';
 import {
-  TrashInspectionCreateComponent,
-  TrashInspectionDeleteComponent,
+  // TrashInspectionCreateComponent,
   TrashInspectionEditComponent,
   TrashInspectionsPageComponent,
   TrashInspectionVersionViewComponent,
@@ -44,8 +43,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatTooltipModule,
   ],
   declarations: [
-    TrashInspectionCreateComponent,
-    TrashInspectionDeleteComponent,
+    // TrashInspectionCreateComponent,
     TrashInspectionEditComponent,
     TrashInspectionsPageComponent,
     TrashInspectionVersionViewComponent,
