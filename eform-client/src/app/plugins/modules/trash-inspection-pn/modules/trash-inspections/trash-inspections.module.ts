@@ -1,7 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {TranslateModule} from '@ngx-translate/core';
 import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-shared.module';
 import {TrashInspectionsRouting} from './trash-inspections.routing';
@@ -27,7 +26,6 @@ import {MatDialogModule} from '@angular/material/dialog';
     TranslateModule,
     FormsModule,
     EformSharedModule,
-    FontAwesomeModule,
     MtxGridModule,
     MatFormFieldModule,
     MatInputModule,
