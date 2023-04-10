@@ -1,5 +1,10 @@
-exports.config = {
+//const path = require("path");
+import type { Options } from '@wdio/types'
 
+export const config: Options.Testrunner = {
+
+    runner: 'local',
+    path: '/',
     //
     // ==================
     // Specify Test Files
@@ -10,7 +15,17 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        'e2e/Tests/trash-inspections-settings/application-settings.plugins-page.spec.ts'
+        'e2e/Tests/trash-inspections-settings/application-settings.plugins-page.spec.ts',
+        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.add.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.delete.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.multi.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.add.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.edit.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.delete.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.add.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.edit.spec.ts', // TODO Fix it
+        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.delete.spec.ts', // TODO Fix it
     ],
     suites: {
         settings: [
@@ -44,15 +59,23 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
+
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
-        maxInstances: 1,
+        maxInstances: 5,
         //
         browserName: 'chrome',
-        chromeOptions: {
-            args: ['--window-size=1920,1080']
-        }
+        'goog:chromeOptions': {
+            args: [
+                'headless',
+                'window-size=1920,1080',
+                'disable-gpu'],
+        },
+        // If outputDir is provided WebdriverIO can capture driver session logs
+        // it is possible to configure which logTypes to include/exclude.
+        // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
+        // excludeDriverLogs: ['bugreport', 'server'],
     }],
     //
     // ===================
@@ -76,7 +99,7 @@ exports.config = {
     //
     // If you only want to run your Tests until a specific amount of Tests have failed use
     // bail (default is 0 - don't bail, run all Tests).
-    bail: 1,
+    bail: 0,
     //
     // Saves a screenshot to a given path if a command fails.
     screenshotPath: './errorShots/',
@@ -119,7 +142,9 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone', 'chromedriver'],
+    services: ['chromedriver'],
+    //chromeDriverArgs: ['--whitelisted-ips', '--port=9515', '--url-base=\'/\''], // default for ChromeDriver
+    //chromeDriverLogs: './',
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -139,9 +164,8 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        require: 'ts-node/register',
-        compilers: ['tsconfig-paths/register'],
-        timeout: 60000
+        //compilers: ['tsconfig-paths/register'],
+        timeout: 180000
     },
     //
     // =====
@@ -174,7 +198,6 @@ exports.config = {
      * @param {Array.<String>} specs List of spec file paths that are to be run
      */
     before: function () {
-        require('ts-node/register');
         browser.timeouts('implicit', 5000);
     },
     /**
@@ -213,8 +236,39 @@ exports.config = {
      * Function to be executed after a test (in Mocha/Jasmine) or a step (in Cucumber) ends.
      * @param {Object} test test details
      */
-    // afterTest: function (test) {
-    // },
+    afterTest(test, context, { error, result, duration, passed, retries }) {
+        const path = require('path');
+
+        // if test passed, ignore, else take and save screenshot.
+        if (passed) {
+            return;
+        }
+
+        /*
+         * get the current date and clean it
+         * const date = (new Date()).toString().replace(/\s/g, '-').replace(/-\(\w+\)/, '');
+         */
+        //const { browserName } = browser.desiredCapabilities;
+        const timestamp = new Date().toLocaleString('iso', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }).replace(/[ ]/g, '--').replace(':', '-');
+
+        // get current test title and clean it, to use it as file name
+        const filename = encodeURIComponent(
+            `${
+                test.fullTitle.replace(/\s+/g, '-')
+            }-chrome-${timestamp}`.replace(/[/]/g, '__')
+        ).replace(/%../, '.');
+
+        const filePath = path.resolve(this.screenshotPath, `${filename}.png`);
+
+        browser.saveScreenshot(filePath);
+    },
     /**
      * Hook that gets executed after the suite has ended
      * @param {Object} suite suite details
