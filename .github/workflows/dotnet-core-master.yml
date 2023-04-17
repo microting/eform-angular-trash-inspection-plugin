@@ -80,15 +80,6 @@ jobs:
         repository: microting/eform-angular-frontend
         ref: ${{ steps.extract_branch.outputs.BRANCH }}
         path: eform-angular-frontend
-    - name: Cache node_modules
-      id: cache
-      uses: actions/cache@v3
-      with:
-        path: eform-angular-frontend/eform-client/node_modules
-        key: ${{ runner.os }}-build-${{ hashFiles('eform-angular-frontend/eform-client/package.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
     - name: Copy dependencies
       run: |
         cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspections-settings eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
