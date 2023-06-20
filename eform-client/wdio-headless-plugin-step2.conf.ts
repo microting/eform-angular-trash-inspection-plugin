@@ -23,9 +23,9 @@ export const config: Options.Testrunner = {
         'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.add.spec.ts',
         'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.edit.spec.ts',
         'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.delete.spec.ts',
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.add.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.edit.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.delete.spec.ts', // TODO Fix it
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.add.spec.ts',
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.edit.spec.ts',
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.delete.spec.ts',
     ],
     suites: {
         settings: [
