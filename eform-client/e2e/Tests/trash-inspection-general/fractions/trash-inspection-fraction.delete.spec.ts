@@ -1,7 +1,7 @@
-import { expect } from 'chai';
+import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import fractionsPage from '../../../Page objects/trash-inspection/TrashInspection-Fraction.page';
-import { generateRandmString } from '../../../Helpers/helper-functions';
+import {generateRandmString} from '../../../Helpers/helper-functions';
 
 const createModel = {
   name: generateRandmString(),
@@ -21,8 +21,8 @@ describe('Trash Inspection Plugin - Fraction Delete', function () {
     const rowNumBeforeDelete = await fractionsPage.rowNum();
     const fraction = await fractionsPage.getFirstRowObject();
     await fraction.openDeleteModal();
-    expect(+await (await fractionsPage.fractionDeleteId()).getText()).eq(fraction.id);
-    expect(await (await fractionsPage.fractionDeleteName()).getText()).eq(fraction.name);
+    expect(+await (await fractionsPage.fractionDeleteId() as WebdriverIO.Element).getText()).eq(fraction.id);
+    expect(await (await fractionsPage.fractionDeleteName() as WebdriverIO.Element).getText()).eq(fraction.name);
     await fraction.closeDeleteModal(true);
     expect(await fractionsPage.rowNum(), 'fraction is deleted').equal(
       rowNumBeforeDelete

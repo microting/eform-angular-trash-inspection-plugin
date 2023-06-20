@@ -1,7 +1,7 @@
-import { expect } from 'chai';
+import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import fractionsPage from '../../../Page objects/trash-inspection/TrashInspection-Fraction.page';
-import { generateRandmString } from '../../../Helpers/helper-functions';
+import {generateRandmString} from '../../../Helpers/helper-functions';
 
 const createModel = {
   name: generateRandmString(),

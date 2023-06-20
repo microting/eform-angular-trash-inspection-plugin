@@ -20,93 +20,95 @@ export class TrashInspectionInstallationPage extends Page {
 
   public async installationCreateBtn() {
     const ele = $('#createInstallationBtn');
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationCreateNameBox() {
     const ele = $('#createInstallationName');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async installationCreateSiteCheckbox() {
     const ele = $(`#checkbox`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationCreateSaveBtn() {
     const ele = $(`#installationCreateSaveBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationCreateCancelBtn() {
     const ele = $(`#installationCreateCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationUpdateNameBox() {
     const ele = $(`#updateInstallationName`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationUpdateSiteCheckbox(Index: number) {
     const ele = $(`#installationUpdateSiteCheckbox${Index}`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationUpdateSaveBtn() {
     const ele = $(`#installationUpdateSaveBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationUpdateCancelBtn() {
     const ele = $(`#installationUpdateCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async installationDeleteId() {
     const ele = $$('strong')[0];
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async installationDeleteName() {
     const ele = $$('strong')[1];
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async installationDeleteDeleteBtn() {
     const ele = $('#installationDeleteDeleteBtn');
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
+
   public async installationDeleteCancelBtn() {
     const ele = $(`#installationDeleteCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
+
   public async page2Object() {
     const ele = (await $('.mat-paginator-range-label'));
     // ele.waitForDisplayed({timeout: 20000});
@@ -133,11 +135,11 @@ export class TrashInspectionInstallationPage extends Page {
     } else {
       await (await this.installationCreateCancelBtn()).click();
     }
-    await (await this.installationCreateBtn()).waitForDisplayed({ timeout: 20000 });
+    await (await this.installationCreateBtn()).waitForDisplayed({timeout: 20000});
   }
 
   async getFirstRowObject(): Promise<InstallationPageRowObject> {
-    await  browser.pause(500);
+    await browser.pause(500);
     const rowObj = new InstallationPageRowObject();
     return await rowObj.getRow(1);
   }
@@ -173,7 +175,8 @@ const installationPage = new TrashInspectionInstallationPage();
 export default installationPage;
 
 export class InstallationPageRowObject {
-  constructor() {}
+  constructor() {
+  }
 
   element: WebdriverIO.Element;
   id: number;
@@ -187,7 +190,8 @@ export class InstallationPageRowObject {
       this.id = +await (await this.element.$('.cdk-column-id')).getText();
       try {
         this.name = await (await this.element.$('.cdk-column-name')).getText();
-      } catch (e) {}
+      } catch (e) {
+      }
       this.editBtn = await this.element.$$('.cdk-column-actions button')[0] as WebdriverIO.Element;
       this.deleteBtn = await this.element.$$('.cdk-column-actions button')[1] as WebdriverIO.Element;
     }
@@ -209,7 +213,7 @@ export class InstallationPageRowObject {
     } else {
       await (await installationPage.installationDeleteDeleteBtn()).click();
     }
-    await (await installationPage.installationCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await installationPage.installationCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async delete(clickCancel = false) {
@@ -231,7 +235,7 @@ export class InstallationPageRowObject {
     } else {
       await (await installationPage.installationUpdateSaveBtn()).click();
     }
-    await (await installationPage.installationCreateBtn()).waitForDisplayed({ timeout: 10000 });
+    await (await installationPage.installationCreateBtn()).waitForDisplayed({timeout: 10000});
   }
 
   async edit(name, clickCancel = false) {

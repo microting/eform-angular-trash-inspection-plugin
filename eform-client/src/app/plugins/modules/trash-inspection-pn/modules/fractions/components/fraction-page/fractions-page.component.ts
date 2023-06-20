@@ -28,6 +28,7 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {header: this.translateService.stream('Item number'), field: 'itemNumber', sortProp: {id: 'ItemNumber'}, sortable: true},
     {header: this.translateService.stream('Name'), field: 'name', sortProp: {id: 'Name'}, sortable: true},
+    {header: this.translateService.stream('Description'), field: 'description', sortProp: {id: 'Description'}, sortable: true},
     {header: this.translateService.stream('Location code'), field: 'locationCode', sortProp: {id: 'LocationCode'}, sortable: true},
     {header: this.translateService.stream('eForm'), field: 'selectedTemplateName', sortProp: {id: 'eFormId'}, sortable: true},
     {
