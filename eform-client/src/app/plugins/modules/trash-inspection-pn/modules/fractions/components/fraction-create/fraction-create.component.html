@@ -1,0 +1,69 @@
+<h3 mat-dialog-title>{{ 'New Fraction' | translate}}</h3>
+<div mat-dialog-content class="d-flex flex-column mb-1">
+  <mat-form-field>
+    <mat-label>{{'Item number' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="newFractionModel.itemNumber"
+      type="text"
+      id="createFractionItemNumber"
+      name="createFractionItemNumber">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Name' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="newFractionModel.name"
+      type="text"
+      id="createFractionName"
+      name="createFractionName">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Description' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="newFractionModel.description"
+      type="text"
+      id="createFractionDescription"
+      name="createFractionDescription">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Location code' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="newFractionModel.locationCode"
+      type="text"
+      id="createFractionLocationCode"
+      name="createFractionLocationCode">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'Selected template' | translate}}</mat-label>
+    <mtx-select
+      appendTo="body"
+      [items]="templatesModel.templates"
+      bindLabel="label"
+      bindValue="id"
+      [typeahead]="typeahead"
+      (change)="onSelectedChanged($event)"
+      id="createFractionSelector"
+    ></mtx-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="createFraction()"
+    id="fractionCreateSaveBtn"
+    [disabled]="!newFractionModel.name"
+  >
+    {{'Create' | translate}}
+  </button>
+  <button
+    mat-raised-button
+    id="fractionCreateCancelBtn"
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
+</div>

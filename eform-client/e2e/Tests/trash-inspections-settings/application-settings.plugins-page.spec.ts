@@ -3,32 +3,32 @@ import myEformsPage from '../../Page objects/MyEforms.page';
 import pluginPage from '../../Page objects/Plugin.page';
 import { expect } from 'chai';
 
+
 describe('Application settings page - site header section', function () {
   before(async () => {
     await loginPage.open('/auth');
-    await loginPage.login();
   });
   it('should go to plugin settings page', async () => {
+    await loginPage.login();
     await myEformsPage.Navbar.goToPluginsPage();
+    //await (await $('#plugin-name')).waitForDisplayed({ timeout: 50000 });
 
     const plugin = await pluginPage.getFirstPluginRowObj();
-    expect(plugin.id, 'id is not equal').equal(1);
-    expect(plugin.name, 'name is not equal').equal(
-      'Microting Trash Inspection Plugin'
-    );
-    expect(plugin.version, 'version is not equal').equal('1.0.0.0');
-    expect(plugin.status, 'status is not equal').eq(false);
+    expect(plugin.id).equal(1);
+    expect(plugin.name).equal('Microting Trash Inspection Plugin');
+    expect(plugin.version).equal('1.0.0.0');
+    expect(plugin.status, 'status is not equal').eq('toggle_off');
   });
+
   it('should activate the plugin', async () => {
     let plugin = await pluginPage.getFirstPluginRowObj();
     await plugin.enableOrDisablePlugin();
 
+    // $('Microting Items Planning Plugin').waitForDisplayed({timeout: 10000});
     plugin = await pluginPage.getFirstPluginRowObj();
-    expect(plugin.id, 'id is not equal').equal(1);
-    expect(plugin.name, 'name is not equal').equal(
-      'Microting Trash Inspection Plugin'
-    );
-    expect(plugin.version, 'version is not equal').equal('1.0.0.0');
-    expect(plugin.status, 'status is not equal').eq(true);
+    expect(plugin.id).equal(1);
+    expect(plugin.name).equal('Microting Trash Inspection Plugin');
+    expect(plugin.version).equal('1.0.0.0');
+    expect(plugin.status, 'status is not equal').eq('toggle_on');
   });
 });

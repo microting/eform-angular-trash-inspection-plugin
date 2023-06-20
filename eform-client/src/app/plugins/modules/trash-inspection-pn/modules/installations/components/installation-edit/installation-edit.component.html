@@ -1,0 +1,46 @@
+<div mat-dialog-content class="d-flex flex-column">
+  <mat-form-field>
+    <mat-label>{{'Name' | translate}}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="selectedInstallationModel.name"
+      type="text"
+      id="updateInstallationName"
+      name="updateInstallationName">
+  </mat-form-field>
+  <mtx-grid
+    [data]="sitesDto"
+    [columns]="tableHeaders"
+    [cellTemplate]="{deployCheckboxes: deployCheckboxesTpl}"
+    [showPaginator]="false"
+    [pageOnFront]="false"
+    [rowStriped]="true"
+    [showToolbar]="false"
+    [showColumnMenuButton]="false">
+  </mtx-grid>
+
+  <ng-template #deployCheckboxesTpl let-row>
+    <mat-checkbox
+      (ngModelChange)="addToArray($event, row.siteUId)"
+      [ngModel]="getCheckboxValueBySiteId(row.siteUId)"
+    ></mat-checkbox>
+  </ng-template>
+</div>
+<div mat-dialog-actions class="d-flex flex-row justify-content-end">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="updateInstallation()"
+    id="installationUpdateSaveBtn"
+    [disabled]="!selectedInstallationModel.name"
+  >
+    {{'Save' | translate}}
+  </button>
+  <button
+    mat-raised-button
+    id="installationUpdateCancelBtn"
+    (click)="hide()"
+  >
+    {{'Cancel' | translate}}
+  </button>
+</div>

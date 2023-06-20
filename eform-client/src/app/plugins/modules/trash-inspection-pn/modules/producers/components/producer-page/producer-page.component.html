@@ -1,0 +1,41 @@
+<eform-new-subheader>
+  <button
+    mat-raised-button
+    id="fractionCreateBtn"
+    color="accent"
+    matTooltip="{{ 'Create Producers' | translate }}"
+    (click)="showCreateProducerModal()"
+  >
+    {{ 'New Producer' | translate }}
+  </button>
+  <button
+    mat-raised-button
+    id="importFractionBtn"
+    color="accent"
+    matTooltip="{{ 'Import Producer' | translate }}"
+    routerLink="./import"
+  >
+    {{ 'Import Producer' | translate }}
+  </button>
+</eform-new-subheader>
+
+<mtx-grid
+  [data]="producersModel.producerList"
+  [columns]="tableHeaders"
+  [showPaginator]="true"
+  [paginationTemplate]="paginatorTpl"
+  [pageOnFront]="false"
+  [rowStriped]="true"
+  [showToolbar]="false"
+  [showColumnMenuButton]="false"
+  [sortActive]="producersStateService.getActiveSort() | async"
+  [sortDirection]="producersStateService.getActiveSortDirection() | async"
+  (sortChange)="sortTable($event)">
+</mtx-grid>
+
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="producersStateService.getPagination() | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>
