@@ -32,8 +32,8 @@ describe('Trash Inspection Plugin - Segment', function () {
         sdkFolderId: getRandomInt(1, 10).toString(),
       },
     ]
-    expect(await segmentPage.rowNum()).equal(4);
     await segmentPage.createSegments(createModels); // create all segments
+    expect(await segmentPage.rowNum()).equal(4);
     await segmentPage.clearTable(); // delete all segments
     expect(await segmentPage.rowNum()).equal(0);
   });
