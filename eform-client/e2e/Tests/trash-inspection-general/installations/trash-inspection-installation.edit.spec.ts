@@ -1,7 +1,7 @@
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
-import { expect } from 'chai';
+import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
-import { generateRandmString } from '../../../Helpers/helper-functions';
+import {generateRandmString} from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Installation', function () {
   before(async () => {
@@ -16,7 +16,6 @@ describe('Trash Inspection Plugin - Installation', function () {
     await (await installationPage.getInstallationByName(name)).edit(newName);
     const installation = await installationPage.getFirstRowObject();
     expect(installation.name).equal(newName);
-    await installationPage.clearTable();
   });
   it('should not edit installation', async () => {
     const newName = generateRandmString();
@@ -27,7 +26,7 @@ describe('Trash Inspection Plugin - Installation', function () {
     expect(installation.name).equal(name);
     await installation.delete();
   });
-  after(async () => {
+  afterEach(async () => {
     await installationPage.clearTable();
   });
 });

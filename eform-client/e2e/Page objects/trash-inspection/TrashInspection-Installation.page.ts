@@ -8,17 +8,13 @@ export class TrashInspectionInstallationPage extends Page {
 
   public async rowNum(): Promise<number> {
     await browser.pause(500);
-    return (await $$('#installationsTableBody > tr')).length;
-  }
-
-  public async trashInspectionDropDown() {
-    await (await trashInspectionsPage.trashInspectionDropDown()).click();
+    return (await $$('.cdk-row')).length;
   }
 
   public async installationBtn() {
     const ele = $('#trash-inspection-pn-installations');
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    // await ele.waitForDisplayed({ timeout: 20000 });
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
@@ -32,7 +28,7 @@ export class TrashInspectionInstallationPage extends Page {
   public async installationCreateNameBox() {
     const ele = $('#createInstallationName');
     await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
@@ -86,16 +82,16 @@ export class TrashInspectionInstallationPage extends Page {
   }
 
   public async installationDeleteId() {
-    const ele = $(`#selectedInstallationId`);
+    const ele = $$('strong')[0];
     await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async installationDeleteName() {
-    const ele = $(`#selectedInstallationName`);
+    const ele = $$('strong')[1];
     await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
@@ -112,16 +108,19 @@ export class TrashInspectionInstallationPage extends Page {
     return ele;
   }
   public async page2Object() {
-    const ele = (await $$('eform-pagination ul li'))[1];
+    const ele = (await $('.mat-paginator-range-label'));
     // ele.waitForDisplayed({timeout: 20000});
     // ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
-  async goToInstallationsPage() {
-    await this.trashInspectionDropDown();
+  public async goToInstallationsPage() {
+    if (!await (await this.installationBtn()).isDisplayed()) {
+      await (await trashInspectionsPage.trashInspectionDropDown()).click();
+    }
+    await (await this.installationBtn()).waitForClickable({timeout: 20000});
     await (await this.installationBtn()).click();
-    await (await this.installationCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await this.installationCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async createInstallation(name?: string, clickCancel = false) {
@@ -131,14 +130,10 @@ export class TrashInspectionInstallationPage extends Page {
     }
     if (!clickCancel) {
       await (await this.installationCreateSaveBtn()).click();
-      await (await $('#spinner-animation')).waitForDisplayed({
-        timeout: 20000,
-        reverse: true,
-      });
     } else {
       await (await this.installationCreateCancelBtn()).click();
     }
-    await (await this.installationCreateBtn()).waitForDisplayed({ timeout: 10000 });
+    await (await this.installationCreateBtn()).waitForDisplayed({ timeout: 20000 });
   }
 
   async getFirstRowObject(): Promise<InstallationPageRowObject> {
@@ -187,14 +182,14 @@ export class InstallationPageRowObject {
   deleteBtn: WebdriverIO.Element;
 
   async getRow(rowNum: number): Promise<InstallationPageRowObject> {
-    this.element = (await $$('#installationsTableBody > tr'))[rowNum - 1];
+    this.element = (await $$('.cdk-row'))[rowNum - 1];
     if (this.element) {
-      this.id = +await (await this.element.$('#installationId')).getText();
+      this.id = +await (await this.element.$('.cdk-column-id')).getText();
       try {
-        this.name = await (await this.element.$('#installationName')).getText();
+        this.name = await (await this.element.$('.cdk-column-name')).getText();
       } catch (e) {}
-      this.editBtn = await this.element.$('#updateInstallationBtn');
-      this.deleteBtn = await this.element.$('#deleteInstallationBtn');
+      this.editBtn = await this.element.$$('.cdk-column-actions button')[0] as WebdriverIO.Element;
+      this.deleteBtn = await this.element.$$('.cdk-column-actions button')[1] as WebdriverIO.Element;
     }
 
     return this;
@@ -213,10 +208,6 @@ export class InstallationPageRowObject {
       await (await installationPage.installationDeleteCancelBtn()).click();
     } else {
       await (await installationPage.installationDeleteDeleteBtn()).click();
-      await (await $('#spinner-animation')).waitForDisplayed({
-        timeout: 20000,
-        reverse: true,
-      });
     }
     await (await installationPage.installationCreateBtn()).waitForClickable({ timeout: 20000 });
   }
@@ -228,9 +219,7 @@ export class InstallationPageRowObject {
 
   async openEditModal(name?: string) {
     await this.editBtn.click();
-    (await installationPage.installationUpdateCancelBtn()).waitForClickable({
-      timeout: 20000,
-    });
+    await (await installationPage.installationUpdateCancelBtn()).waitForClickable({timeout: 20000,});
     if (name) {
       await (await installationPage.installationUpdateNameBox()).setValue(name);
     }
