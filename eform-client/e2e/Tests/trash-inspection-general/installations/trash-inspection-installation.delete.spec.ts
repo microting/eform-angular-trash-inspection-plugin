@@ -1,7 +1,7 @@
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
-import { expect } from 'chai';
+import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
-import { generateRandmString } from '../../../Helpers/helper-functions';
+import {generateRandmString} from '../../../Helpers/helper-functions';
 
 const name = generateRandmString();
 describe('Trash Inspection Plugin - Installation', function () {
@@ -15,10 +15,10 @@ describe('Trash Inspection Plugin - Installation', function () {
     const rowNumBeforeDelete = await installationPage.rowNum();
     const installation = await installationPage.getInstallationByName(name);
     await installation.openDeleteModal();
-    expect(+await (await installationPage.installationDeleteId()).getText()).eq(
+    expect(+await (await installationPage.installationDeleteId() as WebdriverIO.Element).getText()).eq(
       installation.id
     );
-    expect(await (await installationPage.installationDeleteName()).getText()).eq(
+    expect(await (await installationPage.installationDeleteName() as WebdriverIO.Element).getText()).eq(
       installation.name
     );
     await installation.closeDeleteModal(true);

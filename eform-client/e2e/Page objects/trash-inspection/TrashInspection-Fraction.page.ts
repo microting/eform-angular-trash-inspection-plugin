@@ -1,6 +1,7 @@
 import Page from '../Page';
 import myEformsPage from '../MyEforms.page';
 import trashInspectionsPage from './TrashInspections.page';
+import {selectValueInNgSelector} from '../../Helpers/helper-functions';
 
 export class TrashInspectionFractionPage extends Page {
   constructor() {
@@ -9,7 +10,7 @@ export class TrashInspectionFractionPage extends Page {
 
   public async rowNum(): Promise<number> {
     await browser.pause(500);
-    return (await $$('#tableBody > tr')).length;
+    return (await $$('.cdk-row')).length;
   }
 
   public async trashInspectionDropDown() {
@@ -18,155 +19,158 @@ export class TrashInspectionFractionPage extends Page {
 
   public async fractionBtn() {
     const ele = await $(`#trash-inspection-pn-fractions`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    // await ele.waitForDisplayed({ timeout: 20000 });
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async fractionCreateBtn() {
     const ele = await $(`#fractionCreateBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionCreateNameBox() {
     const ele = await $(`#createFractionName`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async fractionCreateDescriptionBox() {
     const ele = await $(`#createFractionDescription`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async fractionCreateSelectorBox() {
     const ele = await $(`#createFractionSelector`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionCreateSaveBtn() {
     const ele = await $(`#fractionCreateSaveBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionCreateCancelBtn() {
     const ele = await $(`#fractionCreateCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionEditBtn() {
     const ele = await $(`#updateFractionBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionUpdateNameBox() {
     const ele = await $(`#updateFractionName`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    // await ele.waitForClickable({ timeout: 20000 });
     return ele;
   }
 
   public async fractionUpdateDescriptionBox() {
-    const ele = await $(`#editFractionDescription`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    const ele = await $(`#updateFractionDescription`);
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionUpdateSelectorBox() {
     const ele = await $(`#fractionUpdateSelector`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionUpdateSaveBtn() {
     const ele = await $(`#fractionUpdateSaveBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionUpdateCancelBtn() {
     const ele = await $(`#fractionUpdateCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionDeleteId() {
-    const ele = await $(`#selectedFractionId`);
-    await ele.waitForDisplayed({ timeout: 20000 });
+    const ele = $$('strong')[0];
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async fractionDeleteName() {
-    const ele = await $(`#selectedFractionName`);
-    await ele.waitForDisplayed({ timeout: 20000 });
+    const ele = $$('strong')[1];
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async fractionDeleteDeleteBtn() {
     const ele = await $('#fractionDeleteDeleteBtn');
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async fractionDeleteCancelBtn() {
     const ele = await $(`#fractionDeleteCancelBtn`);
-    await ele.waitForDisplayed({ timeout: 20000 });
-    await ele.waitForClickable({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
+    await ele.waitForClickable({timeout: 20000});
     return ele;
   }
 
   public async updateFractionItemNumber() {
     const ele = await $('#updateFractionItemNumber');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async editFractionLocationCode() {
-    const ele = await $('#editFractionLocationCode');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    const ele = await $('#updateFractionLocationCode');
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async fractionUpdateSelector() {
-    const ele = await $('#fractionUpdateSelector');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    const ele = await $('#updateFractionSelector');
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async createFractionItemNumber() {
     const ele = await $('#createFractionItemNumber');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
   public async createFractionLocationCode() {
     const ele = await $('#createFractionLocationCode');
-    await ele.waitForDisplayed({ timeout: 20000 });
+    await ele.waitForDisplayed({timeout: 20000});
     return ele;
   }
 
-  async goToFractionsPage() {
-    await this.trashInspectionDropDown();
+  public async goToFractionsPage() {
+    if (!await (await this.fractionBtn()).isDisplayed()) {
+      await (await trashInspectionsPage.trashInspectionDropDown()).click();
+    }
+    await (await this.fractionBtn()).waitForClickable({timeout: 20000});
     await (await this.fractionBtn()).click();
-    await (await fractionsPage.fractionCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await this.fractionCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async openCreateFraction(createModel?: FractionsCreateUpdate) {
@@ -185,18 +189,11 @@ export class TrashInspectionFractionPage extends Page {
         await (await this.createFractionLocationCode()).setValue(createModel.locationCode);
       }
       if (createModel.eForm) {
-        const ngOption = await $('.ng-option');
-        await (await (await this.fractionCreateSelectorBox()).$('input')).setValue(createModel.eForm);
-        await ngOption.waitForDisplayed({ timeout: 20000 });
-        const value = await (await (await this.fractionCreateSelectorBox())
-          .$('.ng-dropdown-panel'))
-          .$(`.ng-option=${createModel.eForm}`);
-        await value.waitForClickable({ timeout: 20000 });
-        await value.click();
+        await selectValueInNgSelector(await fractionsPage.fractionCreateSelectorBox(), createModel.eForm, true);
       }
     }
 
-    await (await this.fractionCreateCancelBtn()).waitForClickable({ timeout: 20000 });
+    await (await this.fractionCreateCancelBtn()).waitForClickable({timeout: 20000});
   }
 
   async closeCreateFraction(clickCancel = false) {
@@ -205,7 +202,7 @@ export class TrashInspectionFractionPage extends Page {
     } else {
       await (await this.fractionCreateSaveBtn()).click();
     }
-    await (await this.fractionCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await this.fractionCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async createFraction(createModel?: FractionsCreateUpdate, clickCancel = false) {
@@ -230,7 +227,7 @@ export class TrashInspectionFractionPage extends Page {
   }
 
   public async clearTable() {
-    browser.pause(2000);
+    await browser.pause(2000);
     let rowCount = await this.rowNum();
     for (let i = 1; i <= rowCount; i++) {
       if (i % 9 === 0 && await this.rowNum() > 0) {
@@ -258,6 +255,7 @@ export default fractionsPage;
 export class FractionsRowObject {
   constructor() {
   }
+
   element: WebdriverIO.Element;
   id: number;
   itemNumber: string;
@@ -269,16 +267,17 @@ export class FractionsRowObject {
   deleteBtn: WebdriverIO.Element;
 
   async getRow(rowNum: number): Promise<FractionsRowObject> {
-    this.element = (await $$('#tableBody > tr'))[rowNum - 1];
+    await browser.pause(1000);
+    this.element = (await $$('.cdk-row'))[rowNum - 1];
     if (this.element) {
-      this.id = +await (await this.element.$('#fractionId')).getText();
-      this.itemNumber = await (await this.element.$('#fractionItemNumber')).getText();
-      this.name = await (await this.element.$('#fractionName')).getText();
-      this.description = await (await this.element.$('#fractionDescription')).getText();
-      this.locationCode = await (await this.element.$('#fractionLocationCode')).getText();
-      this.eForm = await (await this.element.$('#fractionSelectedeForm')).getText();
-      this.editBtn = await this.element.$('#updateFractionBtn');
-      this.deleteBtn = await this.element.$('#deleteFractionBtn');
+      this.id = +await (await this.element.$('.cdk-column-id')).getText();
+      this.itemNumber = (await (await this.element.$('.cdk-column-itemNumber')).getText()).replace('--', '');
+      this.name = (await (await this.element.$('.cdk-column-name')).getText()).replace('--', '');
+      this.description = (await (await this.element.$('.cdk-column-description')).getText()).replace('--', '');
+      this.locationCode = (await (await this.element.$('.cdk-column-locationCode')).getText()).replace('--', '');
+      this.eForm = (await (await this.element.$('.cdk-column-selectedTemplateName')).getText()).replace('--', '');
+      this.editBtn = await this.element.$$('.cdk-column-actions button')[0] as WebdriverIO.Element;
+      this.deleteBtn = await this.element.$$('.cdk-column-actions button')[1] as WebdriverIO.Element;
     }
     return this;
   }
@@ -296,12 +295,8 @@ export class FractionsRowObject {
       await (await fractionsPage.fractionDeleteCancelBtn()).click();
     } else {
       await (await fractionsPage.fractionDeleteDeleteBtn()).click();
-      await (await $('#spinner-animation')).waitForDisplayed({
-        timeout: 20000,
-        reverse: true,
-      });
     }
-    await (await fractionsPage.fractionCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await fractionsPage.fractionCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async delete(clickCancel = false) {
@@ -329,21 +324,10 @@ export class FractionsRowObject {
         );
       }
       if (updateModel.eForm) {
-        await (await (await fractionsPage.fractionUpdateSelector())
-          .$('input'))
-          .setValue(updateModel.eForm);
-        const value = await (await (await fractionsPage.fractionUpdateSelector())
-          .$('.ng-dropdown-panel'))
-          .$(`.ng-option=${updateModel.eForm}`);
-        value.waitForClickable({ timeout: 20000 });
-        await (await $('#spinner-animation')).waitForDisplayed({
-          timeout: 20000,
-          reverse: true,
-        });
-        await value.click();
+        await selectValueInNgSelector(await fractionsPage.fractionUpdateSelector(), updateModel.eForm, true);
       }
     }
-    await (await fractionsPage.fractionUpdateCancelBtn()).waitForClickable({ timeout: 20000 });
+    await (await fractionsPage.fractionUpdateCancelBtn()).waitForClickable({timeout: 20000});
   }
 
   async closeEditModal(clickCancel = false) {
@@ -352,7 +336,7 @@ export class FractionsRowObject {
     } else {
       await (await fractionsPage.fractionUpdateSaveBtn()).click();
     }
-    await (await fractionsPage.fractionCreateBtn()).waitForClickable({ timeout: 20000 });
+    await (await fractionsPage.fractionCreateBtn()).waitForClickable({timeout: 20000});
   }
 
   async edit(updateModel?: FractionsCreateUpdate, clickCancel = false) {

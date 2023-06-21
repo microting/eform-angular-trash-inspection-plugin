@@ -16,16 +16,16 @@ export const config: Options.Testrunner = {
     //
     specs: [
         'e2e/Tests/trash-inspections-settings/application-settings.plugins-page.spec.ts',
-        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.add.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.delete.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.multi.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.add.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.edit.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.delete.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.add.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.edit.spec.ts', // TODO Fix it
-        //'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.delete.spec.ts', // TODO Fix it
+        'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.add.spec.ts',
+        'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.edit.spec.ts',
+        'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.delete.spec.ts',
+        'e2e/Tests/trash-inspection-general/installations/trash-inspection-installation.multi.spec.ts',
+        'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.add.spec.ts',
+        'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.edit.spec.ts',
+        'e2e/Tests/trash-inspection-general/fractions/trash-inspection-fraction.delete.spec.ts',
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.add.spec.ts',
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.edit.spec.ts',
+        'e2e/Tests/trash-inspection-general/segments/trash-inspection-segment.delete.spec.ts',
     ],
     suites: {
         settings: [

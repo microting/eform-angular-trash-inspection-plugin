@@ -1,60 +1,103 @@
 import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
-import segmentPage from '../../../Page objects/trash-inspection/TrashInspection-Segment.page';
-import {Guid} from 'guid-typescript';
+import segmentPage, {CreateUpdateSegment} from '../../../Page objects/trash-inspection/TrashInspection-Segment.page';
+import {generateRandmString, getRandomInt} from '../../../Helpers/helper-functions';
 
 describe('Trash Inspection Plugin - Segment', function () {
   before(async () => {
     await loginPage.open('/auth');
     await loginPage.login();
+    await segmentPage.goToSegmentsPage();
   });
   it('Should edit segment.', async () => {
-    const name = Guid.create().toString();
-    const newName = Guid.create().toString();
-    const description = Guid.create().toString();
-    const newDescription = Guid.create().toString();
-    const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    const newSDKFolderId = Math.floor((Math.random() * 20) + 1);
-    await segmentPage.goToSegmentsPage();
-    await segmentPage.createSegment(name, description, sdkFolderId);
-    await segmentPage.editSegment(newName, newDescription, newSDKFolderId);
-    const segment = await segmentPage.getFirstRowObject();
-    expect(segment.name).equal(newName);
-    expect(segment.description).equal(newDescription);
-    expect(segment.sdkFolderId).equal(`${newSDKFolderId}`);
-    await segmentPage.deleteSegment();
+    const createModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 10).toString(),
+    };
+    const updateModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 20).toString(),
+    };
+
+    await segmentPage.createSegment(createModel);
+    let segment = await segmentPage.getFirstRowObject();
+    await segment.edit(updateModel);
+    segment = await segmentPage.getFirstRowObject();
+    expect(segment.name).equal(updateModel.name);
+    expect(segment.description).equal(updateModel.description);
+    expect(segment.sdkFolderId).equal(updateModel.sdkFolderId);
   });
   it('Should edit segment with only Name.', async () => {
-    const name = Guid.create().toString();
-    const newName = Guid.create().toString();
-    await segmentPage.createSegment(name);
-    await segmentPage.editSegment(newName);
-    const segment = await segmentPage.getFirstRowObject();
-    expect(segment.name).equal(newName);
-    await segmentPage.deleteSegment();
+    const createModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+    };
+    const updateModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+    };
+
+    await segmentPage.createSegment(createModel);
+    let segment = await segmentPage.getFirstRowObject();
+    await segment.edit(updateModel);
+    segment = await segmentPage.getFirstRowObject();
+    expect(segment.name).equal(updateModel.name);
   });
   it('Should edit segment with name and description.', async () => {
-    const name = Guid.create().toString();
-    const newName = Guid.create().toString();
-    const description = Guid.create().toString();
-    const newDescription = Guid.create().toString();
-    await segmentPage.createSegment(name, description);
-    await segmentPage.editSegment(newName, newDescription);
-    const segment = await segmentPage.getFirstRowObject();
-    expect(segment.name).equal(newName);
-    expect(segment.description).equal(newDescription);
-    await segmentPage.deleteSegment();
+    const createModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+    };
+    const updateModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+    };
+
+    await segmentPage.createSegment(createModel);
+    let segment = await segmentPage.getFirstRowObject();
+    await segment.edit(updateModel);
+    segment = await segmentPage.getFirstRowObject();
+    expect(segment.name).equal(updateModel.name);
+    expect(segment.description).equal(updateModel.description);
   });
   it('Should edit segment with name and sdkFolderId.', async () => {
-    const name = Guid.create().toString();
-    const newName = Guid.create().toString();
-    const sdkFolderId = Math.floor((Math.random() * 10) + 1);
-    const newSDKFolderId = Math.floor((Math.random() * 10) + 1);
-    await segmentPage.createSegment(name, '', sdkFolderId);
-    await segmentPage.editSegment(newName, '', newSDKFolderId);
-    const segment = await segmentPage.getFirstRowObject();
-    expect(segment.name).equal(newName);
-    expect(segment.sdkFolderId).equal(`${newSDKFolderId}`);
-    await segmentPage.deleteSegment();
+    const createModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 10).toString(),
+    };
+    const updateModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 10).toString(),
+    };
+    await segmentPage.createSegment(createModel);
+    let segment = await segmentPage.getFirstRowObject();
+    await segment.edit(updateModel);
+    segment = await segmentPage.getFirstRowObject();
+    expect(segment.name).equal(updateModel.name);
+    expect(segment.sdkFolderId).equal(updateModel.sdkFolderId);
+  });
+  it('Should not edit segment.', async () => {
+    const createModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 10).toString(),
+    };
+    const updateModel: CreateUpdateSegment = {
+      name: generateRandmString(),
+      description: generateRandmString(),
+      sdkFolderId: getRandomInt(1, 20).toString(),
+    };
+
+    await segmentPage.createSegment(createModel);
+    let segment = await segmentPage.getFirstRowObject();
+    await segment.edit(updateModel, true);
+    await browser.pause(500);
+    segment = await segmentPage.getFirstRowObject();
+    expect(segment.name).equal(createModel.name);
+    expect(segment.description).equal(createModel.description);
+    expect(segment.sdkFolderId).equal(createModel.sdkFolderId);
+  });
+  afterEach(async () => {
+    await segmentPage.clearTable();
   });
 });
