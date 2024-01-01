@@ -52,7 +52,7 @@ jobs:
       with:
         name: trashinspection-container
     - run: docker load -i trashinspection-container.tar
-    - name: Create docker network 🖧
+    - name: Create docker network
       run: docker network create --driver bridge --attachable data
     - name: Start MariaDB
       run: |
@@ -70,7 +70,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.12.1'
+        node-version: 18.18.2
     - name: Extract branch
       id: extract_branch
       run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Create docker network 🖧
+    - name: Create docker network
       run: docker network create --driver bridge --attachable data
     - name: Start MariaDB
       run: |
@@ -128,7 +128,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 8.0.x
     - name: Build
       run: dotnet build eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.sln
     - name: Unit Tests
