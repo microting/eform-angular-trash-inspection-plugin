@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Microting.eForm" Version="8.0.1" />
     <PackageReference Include="Microting.eFormApi.BasePn" Version="8.0.1" />
-    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="3.0.203" />
+    <PackageReference Include="Microting.eFormTrashInspectionBase" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
