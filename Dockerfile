@@ -1,11 +1,13 @@
-FROM node:18-bookworm-slim as node-env
+FROM node:20-bookworm-slim as node-env
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY eform-angular-frontend/eform-client ./
+RUN apt-get update
+RUN apt-get -y -q install ca-certificates
 RUN yarn install
-RUN npm run build
+RUN yarn build
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
 WORKDIR /app
 ARG GITVERSION
 ARG PLUGINVERSION
@@ -17,7 +19,7 @@ RUN dotnet publish eFormAPI.Web -o eFormAPI.Web/out /p:Version=$GITVERSION --run
 RUN dotnet publish TrashInspection.Pn -o TrashInspection.Pn/out /p:Version=$PLUGINVERSION --runtime linux-x64 --configuration Release
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy
 WORKDIR /app
 COPY --from=build-env /app/eFormAPI.Web/out .
 RUN mkdir -p ./Plugins/TrashInspection.Pn
