@@ -9,7 +9,6 @@ import {
   SegmentEditComponent,
   SegmentsPageComponent,
 } from './components';
-import {segmentsPersistProvider} from './components/store';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
@@ -37,7 +36,6 @@ import {MatInputModule} from '@angular/material/input';
     SegmentsPageComponent,
   ],
   providers: [
-    segmentsPersistProvider,
   ],
 })
 export class SegmentsModule {

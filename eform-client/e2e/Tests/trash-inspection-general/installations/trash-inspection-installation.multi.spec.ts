@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
 import {generateRandmString} from '../../../Helpers/helper-functions';
+import { $ } from '@wdio/globals';
 
 describe('Trash Inspection Plugin - Installation', function () {
   before(async () => {
@@ -14,7 +15,7 @@ describe('Trash Inspection Plugin - Installation', function () {
     for (let i = 0; i < 11; i++) {
       await installationPage.createInstallation(generateRandmString());
     }
-    expect(await (await installationPage.page2Object()).getText()).equal('1 – 10 of 11');
+    expect(await (await installationPage.page2Object()).getText()).equal('Side 1 af 2');
   });
   after(async () => {
     await loginPage.open('/');

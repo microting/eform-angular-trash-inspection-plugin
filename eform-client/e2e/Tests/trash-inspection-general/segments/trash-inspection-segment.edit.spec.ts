@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import segmentPage, {CreateUpdateSegment} from '../../../Page objects/trash-inspection/TrashInspection-Segment.page';
 import {generateRandmString, getRandomInt} from '../../../Helpers/helper-functions';
+import { $ } from '@wdio/globals';
 
 describe('Trash Inspection Plugin - Segment', function () {
   before(async () => {

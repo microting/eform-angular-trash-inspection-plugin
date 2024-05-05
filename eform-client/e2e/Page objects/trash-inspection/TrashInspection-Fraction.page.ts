@@ -2,6 +2,7 @@ import Page from '../Page';
 import myEformsPage from '../MyEforms.page';
 import trashInspectionsPage from './TrashInspections.page';
 import {selectValueInNgSelector} from '../../Helpers/helper-functions';
+import { $ } from '@wdio/globals';
 
 export class TrashInspectionFractionPage extends Page {
   constructor() {

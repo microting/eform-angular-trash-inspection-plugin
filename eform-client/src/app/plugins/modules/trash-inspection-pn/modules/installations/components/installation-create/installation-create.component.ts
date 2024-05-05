@@ -10,6 +10,8 @@ import {AuthService, SitesService} from 'src/app/common/services';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {TranslateService} from '@ngx-translate/core';
+import {selectCurrentUserClaimsEformsPairingRead} from 'src/app/state';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-trash-inspection-pn-installation-create',
@@ -22,6 +24,7 @@ export class InstallationCreateComponent implements OnInit {
   sitesDto: Array<SiteNameDto> = [];
   deployViewModel: DeployModel = new DeployModel();
   matchFound = false;
+  private selectCurrentUserClaimsEformsPairingRead$ = this.authStore.select(selectCurrentUserClaimsEformsPairingRead);
 
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Microting ID'), field: 'siteUId'},
@@ -29,11 +32,8 @@ export class InstallationCreateComponent implements OnInit {
     {header: this.translateService.stream('Check to pair'), field: 'deployCheckboxes'},
   ];
 
-  get userClaims() {
-    return this.authService.userClaims;
-  }
-
   constructor(
+    private authStore: Store,
     private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
     private sitesService: SitesService,
     private authService: AuthService,
@@ -60,13 +60,15 @@ export class InstallationCreateComponent implements OnInit {
   }
 
   loadAllSites() {
-    if (this.userClaims.eformsPairingRead) {
+    this.selectCurrentUserClaimsEformsPairingRead$.subscribe((x) => {
+      if (x) {
       this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
       });
     }
+    });
   }
 
   addToArray(checked: boolean, deployId: number) {

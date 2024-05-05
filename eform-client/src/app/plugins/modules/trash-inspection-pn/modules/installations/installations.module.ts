@@ -9,7 +9,7 @@ import {
   InstallationsPageComponent,
   InstallationEditComponent,
 } from './components';
-import {installationsPersistProvider, InstallationsStateService} from './components/store';
+import {InstallationsStateService} from './components/store';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
@@ -39,7 +39,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     InstallationEditComponent,
   ],
   providers: [
-    installationsPersistProvider,
     InstallationsStateService,
   ],
 })

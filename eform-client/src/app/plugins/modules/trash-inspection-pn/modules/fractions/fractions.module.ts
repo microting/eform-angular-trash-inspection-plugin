@@ -10,7 +10,6 @@ import {
   FractionsPageComponent,
   FractionsImportComponent,
 } from './components';
-import {fractionsPersistProvider} from './components/store';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -43,7 +42,6 @@ import {MatIconModule} from '@angular/material/icon';
     FractionsImportComponent,
   ],
   providers: [
-    fractionsPersistProvider,
   ],
 })
 export class FractionsModule {

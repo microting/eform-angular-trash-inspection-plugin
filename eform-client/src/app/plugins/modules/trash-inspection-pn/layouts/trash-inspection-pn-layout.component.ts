@@ -3,7 +3,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {translates} from './../i18n/translates';
 import {AuthStateService} from 'src/app/common/store';
 import {LocaleService} from 'src/app/common/services';
-import {Subscription} from 'rxjs';
+import {Subscription, take} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {addPluginToVisited, selectPluginsVisitedPlugins} from 'src/app/state';
 
 @Component({
   selector: 'app-trash-inspection-pn-layout',
@@ -13,24 +15,32 @@ import {Subscription} from 'rxjs';
 export class TrashInspectionPnLayoutComponent
   implements AfterContentInit, OnInit, OnDestroy {
   currentUserLocaleAsyncSub$: Subscription;
+  private pluginName = 'trashinspection';
   constructor(
-    private localeService: LocaleService,
     private translateService: TranslateService,
-    private authStateService: AuthStateService
+    store: Store
   ) {
+    store.select(selectPluginsVisitedPlugins)
+      .pipe(take(1))
+      .subscribe(x => {
+        // check current plugin in activated plugin
+        if (x.findIndex(y => y === this.pluginName) === -1) {
+          // add all plugin translates one time
+          Object.keys(translates).forEach(locale => {
+            this.translateService.setTranslation(locale, translates[locale], true);
+          });
+          // add plugin to visited plugins
+          store.dispatch(addPluginToVisited(this.pluginName));
+        }
+      });
   }
 
   ngOnInit() {
   }
 
   ngAfterContentInit() {
-    this.currentUserLocaleAsyncSub$ = this.authStateService.currentUserLocaleAsync.subscribe(lang => {
-      const i18n = translates[lang];
-      this.translateService.setTranslation(lang, i18n, true);
-    });
   }
 
   ngOnDestroy(): void {
-    this.currentUserLocaleAsyncSub$.unsubscribe();
   }
 }

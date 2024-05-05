@@ -23,19 +23,18 @@
   [data]="transportersModel.transporterList"
   [columns]="tableHeaders"
   [showPaginator]="true"
-  [paginationTemplate]="paginatorTpl"
   [pageOnFront]="false"
   [rowStriped]="true"
   [showToolbar]="false"
   [showColumnMenuButton]="false"
-  [sortActive]="transportersStateService.getActiveSort() | async"
-  [sortDirection]="transportersStateService.getActiveSortDirection() | async"
+  [sortActive]="selectTransportersPaginationSort$ | async"
+  [sortDirection]="selectTransportersPaginationIsSortDsc$ | async"
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<ng-template #paginatorTpl>
-  <eform-pagination
-    [pagination]="transportersStateService.getPagination() | async"
-    (paginationChanged)="onPaginationChanged($event)"
-  ></eform-pagination>
-</ng-template>
+<!--<ng-template #paginatorTpl>-->
+<!--  <eform-pagination-->
+<!--    [pagination]="selectTransportersPagination$ | async"-->
+<!--    (paginationChanged)="onPaginationChanged($event)"-->
+<!--  ></eform-pagination>-->
+<!--</ng-template>-->

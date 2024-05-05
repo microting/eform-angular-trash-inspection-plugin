@@ -1,5 +1,6 @@
 import Page from '../Page';
 import trashInspectionsPage from './TrashInspections.page';
+import { $ } from '@wdio/globals';
 
 export class TrashInspectionSegmentsPage extends Page {
   constructor() {
@@ -127,6 +128,7 @@ export class TrashInspectionSegmentsPage extends Page {
     }
     await (await this.segmentnBtn()).waitForClickable({timeout: 20000});
     await (await this.segmentnBtn()).click();
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 50000, reverse: true });
     await (await this.createSegmentBtn()).waitForClickable({timeout: 20000});
   }
 
@@ -139,6 +141,7 @@ export class TrashInspectionSegmentsPage extends Page {
   async createSegment(createModel?: CreateUpdateSegment, clickCancel = false) {
     await this.openCreateSegment(createModel);
     await this.closeCreateSegment(clickCancel);
+    await (await $('#spinner-animation')).waitForDisplayed({ timeout: 50000, reverse: true });
   }
 
   async openCreateSegment(createModel?: CreateUpdateSegment) {

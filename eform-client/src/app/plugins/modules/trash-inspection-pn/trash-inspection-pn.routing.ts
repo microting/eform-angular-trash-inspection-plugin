@@ -36,13 +36,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'reports',
-        loadChildren: () =>
-          import('./modules/reports/reports.module').then(
-            (m) => m.ReportsModule
-          ),
-      },
-      {
         path: 'segments',
         loadChildren: () =>
           import('./modules/segments/segments.module').then(

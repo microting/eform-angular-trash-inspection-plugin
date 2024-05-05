@@ -13,6 +13,12 @@ import {dialogConfigHelper} from 'src/app/common/helpers';
 import {TrashInspectionPnSegmentsService} from '../../../../services';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 import {SegmentCreateComponent, SegmentEditComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectSegmentsPagination,
+  selectSegmentsPaginationIsSortDsc,
+  selectSegmentsPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -58,8 +64,12 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   segmentDeletedSub$: Subscription;
   segmentCreatedSub$: Subscription;
   segmentUpdatedSub$: Subscription;
+  public selectSegmentsPaginationSort$ = this.store.select(selectSegmentsPaginationSort);
+  public selectSegmentsPaginationIsSortDsc$ = this.store.select(selectSegmentsPaginationIsSortDsc);
+  public selectSegmentsPagination$ = this.store.select(selectSegmentsPagination);
 
   constructor(
+    private store: Store,
     public segmentsStateService: SegmentsStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
@@ -139,7 +149,6 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    this.segmentsStateService.updatePagination(paginationModel);
     this.getAllSegments();
   }
 

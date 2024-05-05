@@ -1,5 +1,6 @@
 import Page from '../Page';
 import trashInspectionsPage from './TrashInspections.page';
+import { $ } from '@wdio/globals';
 
 export class TrashInspectionInstallationPage extends Page {
   constructor() {
@@ -110,7 +111,7 @@ export class TrashInspectionInstallationPage extends Page {
   }
 
   public async page2Object() {
-    const ele = (await $('.mat-paginator-range-label'));
+    const ele = (await $('.mat-mdc-paginator-range-label'));
     // ele.waitForDisplayed({timeout: 20000});
     // ele.waitForClickable({timeout: 20000});
     return ele;

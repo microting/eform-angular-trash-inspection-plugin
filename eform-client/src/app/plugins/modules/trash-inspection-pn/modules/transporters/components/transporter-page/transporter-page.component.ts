@@ -16,6 +16,12 @@ import {dialogConfigHelper} from 'src/app/common/helpers';
 import {TrashInspectionPnTransporterService} from '../../../../services';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 import {TransporterCreateComponent, TransporterEditComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectTransportersPagination,
+  selectTransportersPaginationIsSortDsc,
+  selectTransportersPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -65,8 +71,12 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   transporterDeletedSub$: Subscription;
   transporterUpdatedSub$: Subscription;
   transporterCreatedSub$: Subscription;
+  public selectTransportersPaginationSort$ = this.store.select(selectTransportersPaginationSort);
+  public selectTransportersPaginationIsSortDsc$ = this.store.select(selectTransportersPaginationIsSortDsc);
+  public selectTransportersPagination$ = this.store.select(selectTransportersPagination);
 
   constructor(
+    private store: Store,
     public transportersStateService: TransportersStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
@@ -139,23 +149,12 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
     this.getAllTransporters();
   }
 
-  changePage(offset: any) {
-    this.transportersStateService.changePage(offset);
-    this.getAllTransporters();
-  }
-
-  onPageSizeChanged(pageSize: number) {
-    this.transportersStateService.updatePageSize(pageSize);
-    this.getAllTransporters();
-  }
-
   onTransporterDeleted() {
     this.transportersStateService.onDelete();
     this.getAllTransporters();
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    this.transportersStateService.updatePagination(paginationModel);
     this.getAllTransporters();
   }
 

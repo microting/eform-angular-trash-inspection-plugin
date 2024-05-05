@@ -14,6 +14,12 @@ import {Overlay} from '@angular/cdk/overlay';
 import {MtxGridColumn} from '@ng-matero/extensions/grid';
 import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 import {TrashInspectionVersionViewComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectTrashInspectionsNameFilters, selectTrashInspectionsPagination,
+  selectTrashInspectionsPaginationIsSortDsc,
+  selectTrashInspectionsPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -106,8 +112,13 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   ];
   translatesSub$: Subscription;
   trashInspectionDeletedSub$: Subscription;
+  public selectTrashInspectionsPaginationSort$ = this.store.select(selectTrashInspectionsPaginationSort);
+  public selectTrashInspectionsPaginationIsSortDsc$ = this.store.select(selectTrashInspectionsPaginationIsSortDsc);
+  public selectTrashInspectionsNameFilters$ = this.store.select(selectTrashInspectionsNameFilters);
+  public selectTrashInspectionsPagination$ = this.store.select(selectTrashInspectionsPagination);
 
   constructor(
+    private store: Store,
     public trashInspectionsStateService: TrashInspectionsStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
@@ -213,7 +224,6 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    this.trashInspectionsStateService.updatePagination(paginationModel);
     this.getAllTrashInspections();
   }
 

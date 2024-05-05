@@ -22,6 +22,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MtxSelectModule} from '@ng-matero/extensions/select';
+import {StoreModule} from '@ngrx/store';
+import {
+  fractionsReducer,
+  installationsReducer,
+  producersReducer,
+  segmentsReducer,
+  transportersReducer,
+  trashInspectionsReducer
+} from './state';
 
 @NgModule({
   imports: [
@@ -35,6 +44,14 @@ import {MtxSelectModule} from '@ng-matero/extensions/select';
     MatFormFieldModule,
     MatInputModule,
     MtxSelectModule,
+    StoreModule.forFeature('trashInspectionPn', {
+      fractionsState: fractionsReducer,
+      installationsState: installationsReducer,
+      producersState: producersReducer,
+      segmentsState: segmentsReducer,
+      transportersState: transportersReducer,
+      trashInspectionsState: trashInspectionsReducer
+    })
   ],
   declarations: [
     TrashInspectionPnLayoutComponent,

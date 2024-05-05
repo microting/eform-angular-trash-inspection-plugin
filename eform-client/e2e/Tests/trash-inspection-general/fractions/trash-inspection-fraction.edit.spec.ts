@@ -3,6 +3,7 @@ import loginPage from '../../../Page objects/Login.page';
 import fractionsPage, {FractionsCreateUpdate} from '../../../Page objects/trash-inspection/TrashInspection-Fraction.page';
 import myEformsPage from '../../../Page objects/MyEforms.page';
 import {generateRandmString} from '../../../Helpers/helper-functions';
+import { $ } from '@wdio/globals';
 
 const createModel: FractionsCreateUpdate = {
   name: generateRandmString(),

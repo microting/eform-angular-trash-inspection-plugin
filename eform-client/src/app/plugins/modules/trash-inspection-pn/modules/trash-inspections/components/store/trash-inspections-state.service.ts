@@ -1,23 +1,36 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
+  CommonPaginationState,
   OperationDataResult,
   Paged,
   PaginationModel,
 } from 'src/app/common/models';
 import {updateTableSort, getOffset} from 'src/app/common/helpers';
 import {map} from 'rxjs/operators';
-import {TrashInspectionsQuery, TrashInspectionsStore} from './';
 import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
 import {TrashInspectionPnModel} from '../../../../models';
+import {Store} from '@ngrx/store';
+import {
+  selectTrashInspectionsFilters,
+  selectTrashInspectionsPagination,
+  trashInspectionUpdateFilters,
+  trashInspectionUpdatePagination,
+  trashInspectionUpdateTotalTrashInspections
+} from '../../../../state';
 
 @Injectable({providedIn: 'root'})
 export class TrashInspectionsStateService {
+  private selectTrashInspectionsFilters$ = this.store.select(selectTrashInspectionsFilters);
+  private selectTrashInspectionsPagination$ = this.store.select(selectTrashInspectionsPagination);
+  currentPagination: CommonPaginationState;
+  currentFilters: any;
   constructor(
-    private store: TrashInspectionsStore,
+    private store: Store,
     private service: TrashInspectionPnTrashInspectionsService,
-    private query: TrashInspectionsQuery
   ) {
+    this.selectTrashInspectionsPagination$.subscribe(x => this.currentPagination = x);
+    this.selectTrashInspectionsFilters$.subscribe(x => this.currentFilters = x);
   }
 
   getAllTrashInspections(): Observable<
@@ -25,15 +38,15 @@ export class TrashInspectionsStateService {
   > {
     return this.service
       .getAllTrashInspections({
-        ...this.query.pageSetting.pagination,
-        ...this.query.pageSetting.filters,
+        ...this.currentPagination,
+        ...this.currentFilters,
       })
       .pipe(
         map((response) => {
           if (response && response.success && response.model) {
-            this.store.update(() => ({
-              total: response.model.total,
-            }));
+            this.store.dispatch(
+              trashInspectionUpdateTotalTrashInspections(response.model.total)
+            )
           }
           return response;
         })
@@ -41,107 +54,111 @@ export class TrashInspectionsStateService {
   }
 
   updateNameFilter(nameFilter: string) {
-    this.store.update((state) => ({
-      filters: {
-        ...state.filters,
-        nameFilter: nameFilter,
-      },
-      pagination: {
-        ...state.pagination,
-        offset: 0,
-      },
-    }));
+    this.store.dispatch(trashInspectionUpdateFilters({nameFilter: nameFilter}));
   }
 
-  updatePageSize(pageSize: number) {
-    this.store.update((state) => ({
-      pagination: {
-        ...state.pagination,
-        pageSize: pageSize,
-      },
-    }));
-    this.checkOffset();
-  }
-
-  getPageSize(): Observable<number> {
-    return this.query.selectPageSize$;
-  }
+  // updatePageSize(pageSize: number) {
+  //   this.store.update((state) => ({
+  //     pagination: {
+  //       ...state.pagination,
+  //       pageSize: pageSize,
+  //     },
+  //   }));
+  //   this.checkOffset();
+  // }
+  //
+  // getPageSize(): Observable<number> {
+  //   return this.query.selectPageSize$;
+  // }
 
   // getSort(): Observable<SortModel> {
   //   return this.query.selectSort$;
   // }
 
-  getActiveSort(): Observable<string> {
-    return this.query.selectActiveSort$;
-  }
-
-  getActiveSortDirection(): Observable<'asc' | 'desc'> {
-    return this.query.selectActiveSortDirection$;
-  }
-
-  getNameFilter(): Observable<string> {
-    return this.query.selectNameFilter$;
-  }
-
-  changePage(offset: number) {
-    this.store.update((state) => ({
-      pagination: {
-        ...state.pagination,
-        offset: offset,
-      },
-    }));
-  }
+  // getActiveSort(): Observable<string> {
+  //   return this.query.selectActiveSort$;
+  // }
+  //
+  // getActiveSortDirection(): Observable<'asc' | 'desc'> {
+  //   return this.query.selectActiveSortDirection$;
+  // }
+  //
+  // getNameFilter(): Observable<string> {
+  //   return this.query.selectNameFilter$;
+  // }
+  //
+  // changePage(offset: number) {
+  //   this.store.update((state) => ({
+  //     pagination: {
+  //       ...state.pagination,
+  //       offset: offset,
+  //     },
+  //   }));
+  // }
+  //
+  // onDelete() {
+  //   this.store.update((state) => ({
+  //     total: state.total - 1,
+  //   }));
+  //   this.checkOffset();
+  // }
 
   onDelete() {
-    this.store.update((state) => ({
-      total: state.total - 1,
-    }));
-    this.checkOffset();
+    if (this.currentPagination.offset !== 0) {
+      this.store.dispatch(
+        trashInspectionUpdatePagination({
+          pagination: {
+            ...this.currentPagination,
+            offset: this.currentPagination.offset - 1,
+          }
+        }));
+    }
   }
 
   onSortTable(sort: string) {
     const localPageSettings = updateTableSort(
       sort,
-      this.query.pageSetting.pagination.sort,
-      this.query.pageSetting.pagination.isSortDsc
+      this.currentPagination.sort,
+      this.currentPagination.isSortDsc
     );
-    this.store.update((state) => ({
-      pagination: {
-        ...state.pagination,
-        isSortDsc: localPageSettings.isSortDsc,
-        sort: localPageSettings.sort,
-      },
-    }));
-  }
-
-  checkOffset() {
-    const newOffset = getOffset(
-      this.query.pageSetting.pagination.pageSize,
-      this.query.pageSetting.pagination.offset,
-      this.query.pageSetting.total
-    );
-    if (newOffset !== this.query.pageSetting.pagination.offset) {
-      this.store.update((state) => ({
+    this.store.dispatch(
+      trashInspectionUpdatePagination({
         pagination: {
-          ...state.pagination,
-          offset: newOffset,
-        },
+          ...this.currentPagination,
+          sort: localPageSettings.sort,
+          isSortDsc: localPageSettings.isSortDsc,
+        }
       }));
-    }
   }
 
-  getPagination(): Observable<PaginationModel> {
-    return this.query.selectPagination$;
-  }
-
-  updatePagination(pagination: PaginationModel) {
-    this.store.update((state) => ({
-      pagination: {
-        ...state.pagination,
-        pageSize: pagination.pageSize,
-        offset: pagination.offset,
-      },
-    }));
-    // this.checkOffset();
-  }
+  // checkOffset() {
+  //   const newOffset = getOffset(
+  //     this.query.pageSetting.pagination.pageSize,
+  //     this.query.pageSetting.pagination.offset,
+  //     this.query.pageSetting.total
+  //   );
+  //   if (newOffset !== this.query.pageSetting.pagination.offset) {
+  //     this.store.update((state) => ({
+  //       pagination: {
+  //         ...state.pagination,
+  //         offset: newOffset,
+  //       },
+  //     }));
+  //   }
+  // }
+  //
+  // getPagination(): Observable<PaginationModel> {
+  //   return this.query.selectPagination$;
+  // }
+  //
+  // updatePagination(pagination: PaginationModel) {
+  //   this.store.update((state) => ({
+  //     pagination: {
+  //       ...state.pagination,
+  //       pageSize: pagination.pageSize,
+  //       offset: pagination.offset,
+  //     },
+  //   }));
+  //   // this.checkOffset();
+  // }
 }

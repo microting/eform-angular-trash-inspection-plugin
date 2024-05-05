@@ -14,19 +14,18 @@
   [data]="segmentsPnModel.segmentList"
   [columns]="tableHeaders"
   [showPaginator]="true"
-  [paginationTemplate]="paginatorTpl"
   [pageOnFront]="false"
   [rowStriped]="true"
   [showToolbar]="false"
   [showColumnMenuButton]="false"
-  [sortActive]="segmentsStateService.getActiveSort() | async"
-  [sortDirection]="segmentsStateService.getActiveSortDirection() | async"
+  [sortActive]="selectSegmentsPaginationSort$ | async"
+  [sortDirection]="selectSegmentsPaginationIsSortDsc$ | async"
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<ng-template #paginatorTpl>
-  <eform-pagination
-    [pagination]="segmentsStateService.getPagination() | async"
-    (paginationChanged)="onPaginationChanged($event)"
-  ></eform-pagination>
-</ng-template>
+<!--<ng-template #paginatorTpl>-->
+<!--  <eform-pagination-->
+<!--    [pagination]="selectSegmentsPagination$ | async"-->
+<!--    (paginationChanged)="onPaginationChanged($event)"-->
+<!--  ></eform-pagination>-->
+<!--</ng-template>-->

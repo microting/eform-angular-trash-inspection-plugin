@@ -5,12 +5,10 @@ import {TranslateModule} from '@ngx-translate/core';
 import {EformSharedModule} from 'src/app/common/modules/eform-shared/eform-shared.module';
 import {TrashInspectionsRouting} from './trash-inspections.routing';
 import {
-  // TrashInspectionCreateComponent,
-  // TrashInspectionEditComponent,
   TrashInspectionsPageComponent,
   TrashInspectionVersionViewComponent,
 } from './components';
-import {trashInspectionPersistProvider, TrashInspectionsStateService} from './components/store';
+import {TrashInspectionsStateService} from './components/store';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -35,13 +33,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatDialogModule,
   ],
   declarations: [
-    // TrashInspectionCreateComponent,
-    // TrashInspectionEditComponent,
     TrashInspectionsPageComponent,
     TrashInspectionVersionViewComponent,
   ],
   providers: [
-    trashInspectionPersistProvider,
     TrashInspectionsStateService,
   ],
 })

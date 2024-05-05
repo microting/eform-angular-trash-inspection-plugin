@@ -13,20 +13,20 @@
 <mtx-grid
   [data]="installationsModel.installationList"
   [columns]="tableHeaders"
-  [showPaginator]="true"
   [paginationTemplate]="paginatorTpl"
+  [showPaginator]="true"
   [pageOnFront]="false"
   [rowStriped]="true"
   [showToolbar]="false"
   [showColumnMenuButton]="false"
-  [sortActive]="installationsStateService.getActiveSort() | async"
-  [sortDirection]="installationsStateService.getActiveSortDirection() | async"
+  [sortActive]="selectInstallationsPaginationSort$ | async"
+  [sortDirection]="selectInstallationsPaginationIsSortDsc$ | async"
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
 <ng-template #paginatorTpl>
   <eform-pagination
-    [pagination]="installationsStateService.getPagination() | async"
+    [pagination]="selectInstallationsPagination$ | async"
     (paginationChanged)="onPaginationChanged($event)"
   ></eform-pagination>
 </ng-template>

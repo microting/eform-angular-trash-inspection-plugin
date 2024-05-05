@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import loginPage from '../../../Page objects/Login.page';
 import installationPage from '../../../Page objects/trash-inspection/TrashInspection-Installation.page';
 import {generateRandmString} from '../../../Helpers/helper-functions';
+import { $ } from '@wdio/globals';
 
 describe('Trash Inspection Plugin - Installation', function () {
   before(async () => {

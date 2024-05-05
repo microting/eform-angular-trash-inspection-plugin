@@ -24,19 +24,18 @@
   [data]="fractionsModel.entities"
   [columns]="tableHeaders"
   [showPaginator]="true"
-  [paginationTemplate]="paginatorTpl"
   [pageOnFront]="false"
   [rowStriped]="true"
   [showToolbar]="false"
   [showColumnMenuButton]="false"
-  [sortActive]="fractionsStateService.getActiveSort() | async"
-  [sortDirection]="fractionsStateService.getActiveSortDirection() | async"
+  [sortActive]="selectFractionsPaginationSort$ | async"
+  [sortDirection]="selectFractionsPaginationIsSortDsc$ | async"
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<ng-template #paginatorTpl>
-  <eform-pagination
-    [pagination]="fractionsStateService.getPagination() | async"
-    (paginationChanged)="onPaginationChanged($event)"
-  ></eform-pagination>
-</ng-template>
+<!--<ng-template #paginatorTpl>-->
+<!--  <eform-pagination-->
+<!--    [pagination]="selectFractionsPagination$ | async"-->
+<!--    (paginationChanged)="onPaginationChanged($event)"-->
+<!--  ></eform-pagination>-->
+<!--</ng-template>-->

@@ -13,6 +13,12 @@ import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {ProducerCreateComponent, ProducerEditComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectProducersPagination,
+  selectProducersPaginationIsSortDsc,
+  selectProducersPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -62,8 +68,12 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   producerDeletedSub$: Subscription;
   producerCreatedSub$: Subscription;
   producerUpdatedSub$: Subscription;
+  public selectProducersPaginationSort$ = this.store.select(selectProducersPaginationSort);
+  public selectProducersPaginationIsSortDsc$ = this.store.select(selectProducersPaginationIsSortDsc);
+  public selectProducersPagination$ = this.store.select(selectProducersPagination);
 
   constructor(
+    private store: Store,
     public producersStateService: ProducersStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,
@@ -137,7 +147,7 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    this.producersStateService.updatePagination(paginationModel);
+    //this.producersStateService.updatePagination(paginationModel);
     this.getAllProducers();
   }
 

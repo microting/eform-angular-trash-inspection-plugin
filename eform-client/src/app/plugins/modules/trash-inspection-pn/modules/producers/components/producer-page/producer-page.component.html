@@ -23,19 +23,18 @@
   [data]="producersModel.producerList"
   [columns]="tableHeaders"
   [showPaginator]="true"
-  [paginationTemplate]="paginatorTpl"
   [pageOnFront]="false"
   [rowStriped]="true"
   [showToolbar]="false"
   [showColumnMenuButton]="false"
-  [sortActive]="producersStateService.getActiveSort() | async"
-  [sortDirection]="producersStateService.getActiveSortDirection() | async"
+  [sortActive]="selectProducersPaginationSort$ | async"
+  [sortDirection]="selectProducersPaginationIsSortDsc$ | async"
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<ng-template #paginatorTpl>
-  <eform-pagination
-    [pagination]="producersStateService.getPagination() | async"
-    (paginationChanged)="onPaginationChanged($event)"
-  ></eform-pagination>
-</ng-template>
+<!--<ng-template #paginatorTpl>-->
+<!--  <eform-pagination-->
+<!--    [pagination]="selectProducersPagination$ | async"-->
+<!--    (paginationChanged)="onPaginationChanged($event)"-->
+<!--  ></eform-pagination>-->
+<!--</ng-template>-->

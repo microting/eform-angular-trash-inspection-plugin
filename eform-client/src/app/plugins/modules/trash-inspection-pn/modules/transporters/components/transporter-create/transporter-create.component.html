@@ -1,77 +1,79 @@
 <h3 mat-dialog-title>{{ 'New Transporter' | translate}}</h3>
-<div mat-dialog-content class="d-flex flex-column">
-  <mat-form-field>
-    <mat-label>{{'Address' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.address"
-      type="text"
-      id="createProducerAddress"
-      name="createProducerAddress">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Name' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.name"
-      type="text"
-      id="createProducerName"
-      name="createProducerName">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Description' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.description"
-      type="text"
-      id="createProducerDescription"
-      name="createProducerDescription">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'City' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.city"
-      type="text"
-      id="createProducerCity"
-      name="createProducerCity">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Contact Person' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.contactPerson"
-      type="text"
-      id="createProducerContactPerson"
-      name="createProducerContactPerson">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Foreign Id' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.foreignId"
-      type="text"
-      id="createProducerForeignId"
-      name="createProducerForeignId">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Phone' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.phone"
-      type="text"
-      id="createProducerPhone"
-      name="createProducerPhone">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Zip code' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newTransporterModel.zipCode"
-      type="text"
-      id="createProducerZipCode"
-      name="createProducerZipCode">
-  </mat-form-field>
+<div mat-dialog-content>
+  <div class="d-flex flex-column">
+    <mat-form-field>
+      <mat-label>{{'Address' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.address"
+        type="text"
+        id="createProducerAddress"
+        name="createProducerAddress">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Name' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.name"
+        type="text"
+        id="createProducerName"
+        name="createProducerName">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Description' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.description"
+        type="text"
+        id="createProducerDescription"
+        name="createProducerDescription">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'City' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.city"
+        type="text"
+        id="createProducerCity"
+        name="createProducerCity">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Contact Person' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.contactPerson"
+        type="text"
+        id="createProducerContactPerson"
+        name="createProducerContactPerson">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Foreign Id' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.foreignId"
+        type="text"
+        id="createProducerForeignId"
+        name="createProducerForeignId">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Phone' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.phone"
+        type="text"
+        id="createProducerPhone"
+        name="createProducerPhone">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Zip code' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newTransporterModel.zipCode"
+        type="text"
+        id="createProducerZipCode"
+        name="createProducerZipCode">
+    </mat-form-field>
+  </div>
 </div>
 <div mat-dialog-actions class="d-flex flex-row justify-content-end">
   <button

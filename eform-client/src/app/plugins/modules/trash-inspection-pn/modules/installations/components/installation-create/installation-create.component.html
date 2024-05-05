@@ -1,31 +1,33 @@
 <h3 mat-dialog-title>{{ 'New Installation' | translate}}</h3>
-<div mat-dialog-content class="d-flex flex-column">
-  <mat-form-field>
-    <mat-label>{{'Name' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="newInstallationModel.name"
-      type="text"
-      id="createInstallationName"
-      name="createInstallationName">
-  </mat-form-field>
-  <mtx-grid
-    [data]="sitesDto"
-    [columns]="tableHeaders"
-    [cellTemplate]="{deployCheckboxes: deployCheckboxesTpl}"
-    [showPaginator]="false"
-    [pageOnFront]="false"
-    [rowStriped]="true"
-    [showToolbar]="false"
-    [showColumnMenuButton]="false">
-  </mtx-grid>
+<div mat-dialog-content>
+  <div class="d-flex flex-column">
+    <mat-form-field>
+      <mat-label>{{'Name' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="newInstallationModel.name"
+        type="text"
+        id="createInstallationName"
+        name="createInstallationName">
+    </mat-form-field>
+    <mtx-grid
+      [data]="sitesDto"
+      [columns]="tableHeaders"
+      [cellTemplate]="{deployCheckboxes: deployCheckboxesTpl}"
+      [showPaginator]="false"
+      [pageOnFront]="false"
+      [rowStriped]="true"
+      [showToolbar]="false"
+      [showColumnMenuButton]="false">
+    </mtx-grid>
 
-  <ng-template #deployCheckboxesTpl let-row>
-    <mat-checkbox
-      (ngModelChange)="addToArray($event, row.siteUId)"
-      [ngModel]="getCheckboxValueBySiteId(row.siteUId)"
-    ></mat-checkbox>
-  </ng-template>
+    <ng-template #deployCheckboxesTpl let-row>
+      <mat-checkbox
+        (ngModelChange)="addToArray($event, row.siteUId)"
+        [ngModel]="getCheckboxValueBySiteId(row.siteUId)"
+      ></mat-checkbox>
+    </ng-template>
+  </div>
 </div>
 <div mat-dialog-actions class="d-flex flex-row justify-content-end">
   <button

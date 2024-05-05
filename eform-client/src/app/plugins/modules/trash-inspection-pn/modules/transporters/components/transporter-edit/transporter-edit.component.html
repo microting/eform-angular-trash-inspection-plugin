@@ -1,77 +1,79 @@
 <h3 mat-dialog-title>{{ 'Edit Transporter' | translate}}</h3>
-<div mat-dialog-content class="d-flex flex-column">
-  <mat-form-field>
-    <mat-label>{{'Address' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.address"
-      type="text"
-      id="editProducerAddress"
-      name="editProducerAddress">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Name' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.name"
-      type="text"
-      id="editProducerName"
-      name="editProducerName">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Description' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.description"
-      type="text"
-      id="editProducerDescription"
-      name="editProducerDescription">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'City' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.city"
-      type="text"
-      id="editProducerCity"
-      name="editProducerCity">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Contact Person' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.contactPerson"
-      type="text"
-      id="editProducerContactPerson"
-      name="editProducerContactPerson">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Foreign Id' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.foreignId"
-      type="text"
-      id="editProducerForeignId"
-      name="editProducerForeignId">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Phone' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.phone"
-      type="text"
-      id="editProducerPhone"
-      name="editProducerPhone">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>{{'Zip code' | translate}}</mat-label>
-    <input
-      matInput
-      [(ngModel)]="selectedTransporter.zipCode"
-      type="text"
-      id="editProducerZipCode"
-      name="editProducerZipCode">
-  </mat-form-field>
+<div mat-dialog-content>
+  <div class="d-flex flex-column">
+    <mat-form-field>
+      <mat-label>{{'Address' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.address"
+        type="text"
+        id="editProducerAddress"
+        name="editProducerAddress">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Name' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.name"
+        type="text"
+        id="editProducerName"
+        name="editProducerName">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Description' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.description"
+        type="text"
+        id="editProducerDescription"
+        name="editProducerDescription">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'City' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.city"
+        type="text"
+        id="editProducerCity"
+        name="editProducerCity">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Contact Person' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.contactPerson"
+        type="text"
+        id="editProducerContactPerson"
+        name="editProducerContactPerson">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Foreign Id' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.foreignId"
+        type="text"
+        id="editProducerForeignId"
+        name="editProducerForeignId">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Phone' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.phone"
+        type="text"
+        id="editProducerPhone"
+        name="editProducerPhone">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Zip code' | translate}}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="selectedTransporter.zipCode"
+        type="text"
+        id="editProducerZipCode"
+        name="editProducerZipCode">
+    </mat-form-field>
+  </div>
 </div>
 <div mat-dialog-actions class="d-flex flex-row justify-content-end">
   <button

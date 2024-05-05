@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FractionPnModel, TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
 import {TrashInspectionPnFractionsService} from '../../../../services';
-import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
+import {CommonPaginationState, DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
 import {FractionsStateService} from '../store';
 import {AuthStateService} from 'src/app/common/store';
 import {Sort} from '@angular/material/sort';
@@ -15,6 +15,12 @@ import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {FractionCreateComponent, FractionEditComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectFractionsPagination,
+  selectFractionsPaginationIsSortDsc,
+  selectFractionsPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -61,12 +67,16 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   fractionDeletedSub$: Subscription;
   fractionCreatedSub$: Subscription;
   fractionUpdatedSub$: Subscription;
+  currentPagination: CommonPaginationState;
 
   get trashInspectionPnClaims() {
     return TrashInspectionPnClaims;
   }
+  public selectFractionsPaginationSort$ = this.store.select(selectFractionsPaginationSort);
+  public selectFractionsPaginationIsSortDsc$ = this.store.select(selectFractionsPaginationIsSortDsc);
 
   constructor(
+    private store: Store,
     public fractionsStateService: FractionsStateService,
     public authStateService: AuthStateService,
     private translateService: TranslateService,
@@ -146,7 +156,7 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    this.fractionsStateService.updatePagination(paginationModel);
+    //this.fractionsStateService.updatePagination(paginationModel);
     this.getAllFractions();
   }
 

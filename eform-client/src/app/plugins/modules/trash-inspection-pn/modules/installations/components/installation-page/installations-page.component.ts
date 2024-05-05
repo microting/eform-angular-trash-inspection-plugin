@@ -16,6 +16,12 @@ import {Subscription, zip} from 'rxjs';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {InstallationCreateComponent, InstallationEditComponent} from '../';
+import {Store} from '@ngrx/store';
+import {
+  selectInstallationsPagination,
+  selectInstallationsPaginationIsSortDsc,
+  selectInstallationsPaginationSort
+} from '../../../../state';
 
 @AutoUnsubscribe()
 @Component({
@@ -59,8 +65,12 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
   installationDeletedSub$: Subscription;
   installationCreatedSub$: Subscription;
   installationUpdatedSub$: Subscription;
+  public selectInstallationsPaginationSort$ = this.store.select(selectInstallationsPaginationSort);
+  public selectInstallationsPaginationIsSortDsc$ = this.store.select(selectInstallationsPaginationIsSortDsc);
+  public selectInstallationsPagination$ = this.store.select(selectInstallationsPagination);
 
   constructor(
+    private store: Store,
     public installationsStateService: InstallationsStateService,
     private translateService: TranslateService,
     private dialog: MatDialog,

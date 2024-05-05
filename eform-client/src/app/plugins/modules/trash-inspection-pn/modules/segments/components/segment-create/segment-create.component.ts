@@ -9,6 +9,8 @@ import {TrashInspectionPnSegmentsService} from '../../../../services';
 import {AuthStateService} from 'src/app/common/store';
 import {SitesService} from 'src/app/common/services';
 import {MatDialogRef} from '@angular/material/dialog';
+import {Store} from '@ngrx/store';
+import {selectCurrentUserClaimsEformsPairingRead} from 'src/app/state';
 
 @Component({
   selector: 'app-trash-inspection-pn-segment-create',
@@ -21,15 +23,12 @@ export class SegmentCreateComponent implements OnInit {
   sitesDto: Array<SiteNameDto> = [];
   deployModel: DeployModel = new DeployModel();
   deployViewModel: DeployModel = new DeployModel();
-
-  get userClaims() {
-    return this.authStateService.currentUserClaims;
-  }
+  private selectCurrentUserClaimsEformsPairingRead$ = this.authStore.select(selectCurrentUserClaimsEformsPairingRead);
 
   constructor(
+    private authStore: Store,
     private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
     private sitesService: SitesService,
-    private authStateService: AuthStateService,
     public dialogRef: MatDialogRef<SegmentCreateComponent>,
   ) {
     this.deployModel = new DeployModel();
@@ -52,13 +51,15 @@ export class SegmentCreateComponent implements OnInit {
   }
 
   loadAllSites() {
-    if (this.userClaims.eformsPairingRead) {
+    this.selectCurrentUserClaimsEformsPairingRead$.subscribe((x) => {
+      if (x) {
       this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
       });
     }
+    });
   }
 
   hide() {

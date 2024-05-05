@@ -1,6 +1,6 @@
 export class ProducerPnRequestModel {
   pageSize: number;
-  nameFilter: string;
+  //nameFilter: string;
   sort: string;
   pageIndex: number;
   isSortDsc: boolean;

@@ -15,6 +15,8 @@ import {
 } from 'src/app/common/models/eforms';
 import { AuthStateService } from 'src/app/common/store';
 import {MatDialogRef} from '@angular/material/dialog';
+import {selectCurrentUserClaimsEformsPairingRead} from 'src/app/state';
+import {Store} from '@ngrx/store';
 
 @Component({
   selector: 'app-trash-inspection-pn-fraction-create',
@@ -30,12 +32,10 @@ export class FractionCreateComponent implements OnInit {
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
   templatesModel: TemplateListModel = new TemplateListModel();
   typeahead = new EventEmitter<string>();
-
-  get userClaims() {
-    return this.authStateService.currentUserClaims;
-  }
+  private selectCurrentUserClaimsEformsPairingRead$ = this.authStore.select(selectCurrentUserClaimsEformsPairingRead);
 
   constructor(
+    private authStore: Store,
     private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
     private sitesService: SitesService,
     private authStateService: AuthStateService,
@@ -75,13 +75,15 @@ export class FractionCreateComponent implements OnInit {
   }
 
   loadAllSites() {
-    if (this.userClaims.eformsPairingRead) {
+    this.selectCurrentUserClaimsEformsPairingRead$.subscribe((x) => {
+      if (x) {
       this.sitesService.getAllSitesForPairing().subscribe((operation) => {
         if (operation && operation.success) {
           this.sitesDto = operation.model;
         }
       });
     }
+    });
   }
 
   onSelectedChanged(e: any) {

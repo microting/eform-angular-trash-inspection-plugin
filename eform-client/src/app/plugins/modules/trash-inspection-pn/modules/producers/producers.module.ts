@@ -10,7 +10,6 @@ import {
   ProducerCreateComponent,
   ProducerEditComponent,
 } from './components';
-import {producersPersistProvider} from './components/store';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MtxGridModule} from '@ng-matero/extensions/grid';
@@ -43,7 +42,6 @@ import {MatIconModule} from '@angular/material/icon';
     ProducerEditComponent,
   ],
   providers: [
-    producersPersistProvider,
   ],
 })
 export class ProducersModule {

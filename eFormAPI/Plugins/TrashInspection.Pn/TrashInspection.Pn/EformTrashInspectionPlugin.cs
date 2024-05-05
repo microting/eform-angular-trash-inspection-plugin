@@ -557,71 +557,71 @@ namespace TrashInspection.Pn
                                         },
                                     }
                             },
-                            new PluginMenuItemModel
-                            {
-                                Name = "Reports",
-                                E2EId = "trash-inspection-pn-reports",
-                                Link = "/plugins/trash-inspection-pn/reports",
-                                Type = MenuItemTypeEnum.Link,
-                                Position = 6,
-                                MenuTemplate = new PluginMenuTemplateModel
-                                {
-                                    Name = "Reports",
-                                    E2EId = "trash-inspection-pn-reports",
-                                    DefaultLink = "/plugins/trash-inspection-pn/reports",
-                                    Permissions = new List<PluginMenuTemplatePermissionModel>
-                                    {
-                                        new PluginMenuTemplatePermissionModel
-                                        {
-                                            ClaimName = TrashInspectionClaims.AccessReports,
-                                            PermissionName = "Obtain reports",
-                                            PermissionTypeName = "Reports",
-                                        }
-                                    },
-                                    Translations = new List<PluginMenuTranslationModel>
-                                    {
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.English,
-                                            Name = "Reports",
-                                            Language = LanguageNames.English,
-                                        },
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.German,
-                                            Name = "Reports",
-                                            Language = LanguageNames.German,
-                                        },
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.Danish,
-                                            Name = "Rapporter",
-                                            Language = LanguageNames.Danish,
-                                        },
-                                    }
-                                },
-                                Translations = new List<PluginMenuTranslationModel>
-                                    {
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.English,
-                                            Name = "Reports",
-                                            Language = LanguageNames.English,
-                                        },
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.German,
-                                            Name = "Reports",
-                                            Language = LanguageNames.German,
-                                        },
-                                        new PluginMenuTranslationModel
-                                        {
-                                            LocaleName = LocaleNames.Danish,
-                                            Name = "Rapporter",
-                                            Language = LanguageNames.Danish,
-                                        },
-                                    }
-                            }
+                            // new PluginMenuItemModel
+                            // {
+                            //     Name = "Reports",
+                            //     E2EId = "trash-inspection-pn-reports",
+                            //     Link = "/plugins/trash-inspection-pn/reports",
+                            //     Type = MenuItemTypeEnum.Link,
+                            //     Position = 6,
+                            //     MenuTemplate = new PluginMenuTemplateModel
+                            //     {
+                            //         Name = "Reports",
+                            //         E2EId = "trash-inspection-pn-reports",
+                            //         DefaultLink = "/plugins/trash-inspection-pn/reports",
+                            //         Permissions = new List<PluginMenuTemplatePermissionModel>
+                            //         {
+                            //             new PluginMenuTemplatePermissionModel
+                            //             {
+                            //                 ClaimName = TrashInspectionClaims.AccessReports,
+                            //                 PermissionName = "Obtain reports",
+                            //                 PermissionTypeName = "Reports",
+                            //             }
+                            //         },
+                            //         Translations = new List<PluginMenuTranslationModel>
+                            //         {
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.English,
+                            //                 Name = "Reports",
+                            //                 Language = LanguageNames.English,
+                            //             },
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.German,
+                            //                 Name = "Reports",
+                            //                 Language = LanguageNames.German,
+                            //             },
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.Danish,
+                            //                 Name = "Rapporter",
+                            //                 Language = LanguageNames.Danish,
+                            //             },
+                            //         }
+                            //     },
+                            //     Translations = new List<PluginMenuTranslationModel>
+                            //         {
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.English,
+                            //                 Name = "Reports",
+                            //                 Language = LanguageNames.English,
+                            //             },
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.German,
+                            //                 Name = "Reports",
+                            //                 Language = LanguageNames.German,
+                            //             },
+                            //             new PluginMenuTranslationModel
+                            //             {
+                            //                 LocaleName = LocaleNames.Danish,
+                            //                 Name = "Rapporter",
+                            //                 Language = LanguageNames.Danish,
+                            //             },
+                            //         }
+                            // }
                         }
                     }
             };
@@ -691,14 +691,14 @@ namespace TrashInspection.Pn
                         Guards = new List<string> { TrashInspectionClaims.AccessTransporters },
                         Position = 5,
                     },
-                    new MenuItemModel
-                    {
-                        Name = localizationService.GetString("Reports"),
-                        E2EId = "trash-inspection-pn-reports",
-                        Link = "/plugins/trash-inspection-pn/reports",
-                        Guards = new List<string> { TrashInspectionClaims.AccessReports },
-                        Position = 6,
-                    }
+                    // new MenuItemModel
+                    // {
+                    //     Name = localizationService.GetString("Reports"),
+                    //     E2EId = "trash-inspection-pn-reports",
+                    //     Link = "/plugins/trash-inspection-pn/reports",
+                    //     Guards = new List<string> { TrashInspectionClaims.AccessReports },
+                    //     Position = 6,
+                    // }
                 }
             });
             return result;
