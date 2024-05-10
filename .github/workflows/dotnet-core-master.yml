@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        path: eform-angular-trashinspection-plugin
+        path: eform-angular-trash-inspection-plugin
     - name: Extract branch
       id: extract_branch
       run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
@@ -25,33 +25,33 @@ jobs:
         path: eform-angular-frontend
     - name: Copy dependencies
       run: |
-        cp -av eform-angular-trashinspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
-        cd eform-angular-frontend/eform-client && ../../eform-angular-trashinspection-plugin/testinginstallpn.sh
+        cp -av eform-angular-trash-inspection-plugin/eform-client/src/app/plugins/modules/trash-inspection-pn eform-angular-frontend/eform-client/src/app/plugins/modules/trash-inspection-pn
+        cd eform-angular-frontend/eform-client && ../../eform-angular-trash-inspection-plugin/testinginstallpn.sh
     - name: Copy Dockerfile
-      run: cp eform-angular-trashinspection-plugin/Dockerfile .
+      run: cp eform-angular-trash-inspection-plugin/Dockerfile .
     - name: Build Docker image
       id: build
       run: |
         pwd
         ls -lah
-        docker build . -t microtingas/trashinspection-container:latest --build-arg GITVERSION=1.0.0 --build-arg PLUGINVERSION=1.0.0
+        docker build . -t microtingas/trash-inspection-container:latest --build-arg GITVERSION=1.0.0 --build-arg PLUGINVERSION=1.0.0
       shell: bash
-    - run: docker save microtingas/trashinspection-container:latest -o trashinspection-container.tar
+    - run: docker save microtingas/trash-inspection-container:latest -o trash-inspection-container.tar
     - uses: actions/upload-artifact@v2
       with:
-        name: trashinspection-container
-        path: trashinspection-container.tar
+        name: trash-inspection-container
+        path: trash-inspection-container.tar
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
       with:
-        path: eform-angular-trashinspection-plugin
+        path: eform-angular-trash-inspection-plugin
     - uses: actions/download-artifact@v3
       with:
-        name: trashinspection-container
-    - run: docker load -i trashinspection-container.tar
+        name: trash-inspection-container
+    - run: docker load -i trash-inspection-container.tar
     - name: Create docker network
       run: docker network create --driver bridge --attachable data
     - name: Start MariaDB
@@ -66,7 +66,7 @@ jobs:
       run: sleep 15
     - name: Start the newly build Docker container
       id: docker-run
-      run: docker run --name my-container -p 4200:5000 --network data microtingas/trashinspection-container:latest "/ConnectionString=host=mariadbtest;Database=420_Angular;user=root;password=secretpassword;port=3306;Convert Zero Datetime = true;SslMode=none;" > docker_run_log 2>&1 &
+      run: docker run --name my-container -p 4200:5000 --network data microtingas/trash-inspection-container:latest "/ConnectionString=host=mariadbtest;Database=420_Angular;user=root;password=secretpassword;port=3306;Convert Zero Datetime = true;SslMode=none;" > docker_run_log 2>&1 &
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
@@ -82,11 +82,11 @@ jobs:
         path: eform-angular-frontend
     - name: Copy dependencies
       run: |
-        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspections-settings eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
-        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Tests/trash-inspection-general eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
-        cp -av eform-angular-trashinspection-plugin/eform-client/e2e/Page\ objects/trash-inspection eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
-        cp -av eform-angular-trashinspection-plugin/eform-client/wdio-headless-plugin-step2.conf.ts  eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.ts 
-        cp -av eform-angular-trashinspection-plugin/eform-client/wdio-plugin-step2.conf.ts  eform-angular-frontend/eform-client/wdio-plugin-step2.conf.ts 
+        cp -av eform-angular-trash-inspection-plugin/eform-client/e2e/Tests/trash-inspections-settings eform-angular-frontend/eform-client/e2e/Tests/trash-inspections-settings
+        cp -av eform-angular-trash-inspection-plugin/eform-client/e2e/Tests/trash-inspection-general eform-angular-frontend/eform-client/e2e/Tests/trash-inspection-general
+        cp -av eform-angular-trash-inspection-plugin/eform-client/e2e/Page\ objects/trash-inspection eform-angular-frontend/eform-client/e2e/Page\ objects/trash-inspection
+        cp -av eform-angular-trash-inspection-plugin/eform-client/wdio-headless-plugin-step2.conf.ts  eform-angular-frontend/eform-client/wdio-headless-plugin-step2.conf.ts 
+        cp -av eform-angular-trash-inspection-plugin/eform-client/wdio-plugin-step2.conf.ts  eform-angular-frontend/eform-client/wdio-plugin-step2.conf.ts 
     - name: yarn install
       run: cd eform-angular-frontend/eform-client && yarn install
       if: steps.cache.outputs.cache-hit != 'true'

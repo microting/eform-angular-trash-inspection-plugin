@@ -14,7 +14,7 @@ ARG PLUGINVERSION
 
 # Copy csproj and restore as distinct layers
 COPY eform-angular-frontend/eFormAPI/eFormAPI.Web ./eFormAPI.Web
-COPY eform-angular-trashinspection-plugin/eFormAPI/Plugins/TrashInspection.Pn ./TrashInspection.Pn
+COPY eform-angular-trash-inspection-plugin/eFormAPI/Plugins/TrashInspection.Pn ./TrashInspection.Pn
 RUN dotnet publish eFormAPI.Web -o eFormAPI.Web/out /p:Version=$GITVERSION --runtime linux-x64 --configuration Release
 RUN dotnet publish TrashInspection.Pn -o TrashInspection.Pn/out /p:Version=$PLUGINVERSION --runtime linux-x64 --configuration Release
 

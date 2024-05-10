@@ -8,7 +8,7 @@ if (( "$GIT_STATUS" > 0 )); then
 
 	PACKAGES=('Microting.eForm' 'Microting.eFormApi.BasePn' 'Microting.eFormTrashInspectionBase' 'Microsoft.AspNetCore.Identity.EntityFrameworkCore')
 	PROJECT_NAME='TrashInspection.Pn.csproj'
-	REPOSITORY='eform-angular-trashinspection-plugin'
+	REPOSITORY='eform-angular-trash-inspection-plugin'
 
 	for PACKAGE_NAME in ${PACKAGES[@]}; do
 
