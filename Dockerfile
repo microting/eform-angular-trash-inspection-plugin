@@ -7,7 +7,7 @@ RUN apt-get -y -q install ca-certificates
 RUN yarn install
 RUN yarn build
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble AS build-env
 WORKDIR /app
 ARG GITVERSION
 ARG PLUGINVERSION
@@ -19,7 +19,7 @@ RUN dotnet publish eFormAPI.Web -o eFormAPI.Web/out /p:Version=$GITVERSION --run
 RUN dotnet publish TrashInspection.Pn -o TrashInspection.Pn/out /p:Version=$PLUGINVERSION --runtime linux-x64 --configuration Release
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble
 WORKDIR /app
 COPY --from=build-env /app/eFormAPI.Web/out .
 RUN mkdir -p ./Plugins/TrashInspection.Pn
