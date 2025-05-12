@@ -34,7 +34,7 @@ jobs:
         docker build . -t microtingas/trash-inspection-container:latest --build-arg GITVERSION=1.0.0 --build-arg PLUGINVERSION=1.0.0
       shell: bash
     - run: docker save microtingas/trash-inspection-container:latest -o trash-inspection-container.tar
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: trash-inspection-container
         path: trash-inspection-container.tar
