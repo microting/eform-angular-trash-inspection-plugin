@@ -1,6 +1,10 @@
 version: 2
 updates:
 - package-ecosystem: nuget
-  directory: "/eFormAPI/Plugins/TrashInspection.Pn"
+  directory: "/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn"
+  schedule:
+    interval: daily
+- package-ecosystem: nuget
+  directory: "/eFormAPI/Plugins/TrashInspection.Pn/TrashInspection.Pn.Test"
   schedule:
     interval: daily
