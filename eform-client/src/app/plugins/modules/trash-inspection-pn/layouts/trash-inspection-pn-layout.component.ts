@@ -11,6 +11,7 @@ import {addPluginToVisited, selectPluginsVisitedPlugins} from 'src/app/state';
   selector: 'app-trash-inspection-pn-layout',
   template: `
     <router-outlet></router-outlet>`,
+  standalone: false
 })
 export class TrashInspectionPnLayoutComponent
   implements AfterContentInit, OnInit, OnDestroy {

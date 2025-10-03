@@ -13,6 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
   selector: 'app-trash-inspection-pn-trash-inspection-version-view',
   templateUrl: './trash-inspection-version-view.component.html',
   styleUrls: ['./trash-inspection-version-view.component.scss'],
+  standalone: false
 })
 export class TrashInspectionVersionViewComponent implements OnInit {
   localPageSettings: PageSettingsModel = new PageSettingsModel();

@@ -19,6 +19,7 @@ import {take} from 'rxjs';
   selector: 'app-trash-inspection-settings',
   templateUrl: './trash-inspection-settings.component.html',
   styleUrls: ['./trash-inspection-settings.component.scss'],
+  standalone: false
 })
 export class TrashInspectionSettingsComponent implements OnInit {
   typeahead = new EventEmitter<string>();
