@@ -25,7 +25,6 @@ COPY --from=build-env /app/eFormAPI.Web/out .
 RUN mkdir -p ./Plugins/TrashInspection.Pn
 COPY --from=build-env /app/TrashInspection.Pn/out ./Plugins/TrashInspection.Pn
 COPY --from=node-env /app/dist wwwroot
-RUN rm connection.json; exit 0
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV Logging__Console__FormatterName=
