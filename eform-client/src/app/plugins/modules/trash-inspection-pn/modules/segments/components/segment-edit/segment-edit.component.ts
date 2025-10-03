@@ -12,6 +12,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-segment-edit',
   templateUrl: './segment-edit.component.html',
   styleUrls: ['./segment-edit.component.scss'],
+  standalone: false
 })
 export class SegmentEditComponent implements OnInit {
   onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();

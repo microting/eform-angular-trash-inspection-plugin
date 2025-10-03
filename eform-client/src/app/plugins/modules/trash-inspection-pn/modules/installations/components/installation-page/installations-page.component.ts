@@ -28,6 +28,7 @@ import {
   selector: 'app-trash-inspection-pn-installations-page',
   templateUrl: './installations-page.component.html',
   styleUrls: ['./installations-page.component.scss'],
+  standalone: false
 })
 export class InstallationsPageComponent implements OnInit, OnDestroy {
   installationsModel: InstallationsPnModel = new InstallationsPnModel();

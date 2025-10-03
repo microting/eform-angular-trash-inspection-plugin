@@ -11,6 +11,7 @@ import {MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-producer-create',
   templateUrl: './producer-create.component.html',
   styleUrls: ['./producer-create.component.scss'],
+  standalone: false
 })
 export class ProducerCreateComponent implements OnInit {
   onProducerCreated: EventEmitter<void> = new EventEmitter<void>();

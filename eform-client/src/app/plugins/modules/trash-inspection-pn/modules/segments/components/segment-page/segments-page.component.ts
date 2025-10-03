@@ -25,6 +25,7 @@ import {
   selector: 'app-trash-inspection-pn-segments-page',
   templateUrl: './segments-page.component.html',
   styleUrls: ['./segments-page.component.scss'],
+  standalone: false
 })
 export class SegmentsPageComponent implements OnInit, OnDestroy {
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();

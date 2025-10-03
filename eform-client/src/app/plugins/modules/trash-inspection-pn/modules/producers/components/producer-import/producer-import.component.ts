@@ -16,6 +16,7 @@ const URL = '';
   selector: 'app-producer-import',
   templateUrl: './producer-import.component.html',
   styleUrls: ['./producer-import.component.scss'],
+  standalone: false
 })
 export class ProducerImportComponent implements OnInit {
   public data: any = [];
