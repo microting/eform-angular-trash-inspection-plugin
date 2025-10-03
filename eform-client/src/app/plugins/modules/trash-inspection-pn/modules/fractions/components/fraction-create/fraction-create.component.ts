@@ -22,6 +22,7 @@ import {Store} from '@ngrx/store';
   selector: 'app-trash-inspection-pn-fraction-create',
   templateUrl: './fraction-create.component.html',
   styleUrls: ['./fraction-create.component.scss'],
+  standalone: false
 })
 export class FractionCreateComponent implements OnInit {
   onFractionCreated: EventEmitter<void> = new EventEmitter<void>();

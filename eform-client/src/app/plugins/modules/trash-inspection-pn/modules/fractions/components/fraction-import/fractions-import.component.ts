@@ -10,6 +10,7 @@ const URL = '';
   selector: 'app-trash-inspection-pn-fraction-import',
   templateUrl: './fractions-import.component.html',
   styleUrls: ['./fractions-import.component.scss'],
+  standalone: false
 })
 export class FractionsImportComponent implements OnInit {
   public data: any = [];

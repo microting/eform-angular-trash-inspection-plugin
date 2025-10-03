@@ -26,6 +26,7 @@ import {
   selector: 'app-trash-inspection-pn-trash-inspection-page',
   templateUrl: './trash-inspections-page.component.html',
   styleUrls: ['./trash-inspections-page.component.scss'],
+  standalone: false
 })
 export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   // @ViewChild('createTrashInspectionModal') createTrashInspectionModal;

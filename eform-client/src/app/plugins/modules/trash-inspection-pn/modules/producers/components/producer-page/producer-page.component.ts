@@ -25,6 +25,7 @@ import {
   selector: 'app-producer-page',
   templateUrl: './producer-page.component.html',
   styleUrls: ['./producer-page.component.scss'],
+  standalone: false
 })
 export class ProducerPageComponent implements OnInit, OnDestroy {
   producersModel: ProducersPnModel = new ProducersPnModel();

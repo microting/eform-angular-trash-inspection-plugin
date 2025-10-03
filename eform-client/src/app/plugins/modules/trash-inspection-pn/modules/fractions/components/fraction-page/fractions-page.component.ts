@@ -27,6 +27,7 @@ import {
   selector: 'app-trash-inspection-pn-fractions-page',
   templateUrl: './fractions-page.component.html',
   styleUrls: ['./fractions-page.component.scss'],
+  standalone: false
 })
 export class FractionsPageComponent implements OnInit, OnDestroy {
   fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();

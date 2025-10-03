@@ -17,6 +17,7 @@ import {Store} from '@ngrx/store';
   selector: 'app-trash-inspection-pn-installation-create',
   templateUrl: './installation-create.component.html',
   styleUrls: ['./installation-create.component.scss'],
+  standalone: false
 })
 export class InstallationCreateComponent implements OnInit {
   installationCreated: EventEmitter<void> = new EventEmitter<void>();

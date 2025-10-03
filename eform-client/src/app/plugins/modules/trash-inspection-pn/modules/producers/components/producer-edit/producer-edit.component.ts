@@ -12,6 +12,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-producer-edit',
   templateUrl: './producer-edit.component.html',
   styleUrls: ['./producer-edit.component.scss'],
+  standalone: false
 })
 export class ProducerEditComponent implements OnInit {
   onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();

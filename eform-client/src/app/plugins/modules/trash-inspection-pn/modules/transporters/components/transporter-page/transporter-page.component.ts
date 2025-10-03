@@ -28,6 +28,7 @@ import {
   selector: 'app-transporter-page',
   templateUrl: './transporter-page.component.html',
   styleUrls: ['./transporter-page.component.scss'],
+  standalone: false
 })
 export class TransporterPageComponent implements OnInit, OnDestroy {
   transportersModel: TransportersPnModel = new TransportersPnModel();
