@@ -17,6 +17,7 @@ const URL = '';
   selector: 'app-transporter-import',
   templateUrl: './transporter-import.component.html',
   styleUrls: ['./transporter-import.component.scss'],
+  standalone: false
 })
 export class TransporterImportComponent implements OnInit {
   public data: any = [];

@@ -16,6 +16,7 @@ import {selectCurrentUserClaimsEformsPairingRead} from 'src/app/state';
   selector: 'app-trash-inspection-pn-segment-create',
   templateUrl: './segment-create.component.html',
   styleUrls: ['./segment-create.component.scss'],
+  standalone: false
 })
 export class SegmentCreateComponent implements OnInit {
   onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();

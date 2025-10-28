@@ -11,6 +11,7 @@ import {MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-transporter-create',
   templateUrl: './transporter-create.component.html',
   styleUrls: ['./transporter-create.component.scss'],
+  standalone: false
 })
 export class TransporterCreateComponent implements OnInit {
   transporterCreated: EventEmitter<void> = new EventEmitter<void>();

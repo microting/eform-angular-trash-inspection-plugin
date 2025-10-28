@@ -20,6 +20,7 @@ import {take} from 'rxjs';
   selector: 'app-trash-inspection-pn-fraction-edit',
   templateUrl: './fraction-edit.component.html',
   styleUrls: ['./fraction-edit.component.scss'],
+  standalone: false
 })
 export class FractionEditComponent implements OnInit {
   onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();

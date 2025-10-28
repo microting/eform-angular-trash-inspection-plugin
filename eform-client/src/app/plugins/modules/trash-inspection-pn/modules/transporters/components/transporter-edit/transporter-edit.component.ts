@@ -12,6 +12,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-transporter-edit',
   templateUrl: './transporter-edit.component.html',
   styleUrls: ['./transporter-edit.component.scss'],
+  standalone: false
 })
 export class TransporterEditComponent implements OnInit {
   transporterUpdated: EventEmitter<void> = new EventEmitter<void>();

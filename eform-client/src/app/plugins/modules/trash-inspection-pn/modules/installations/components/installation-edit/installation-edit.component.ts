@@ -24,6 +24,7 @@ import {Store} from '@ngrx/store';
   selector: 'app-trash-inspection-pn-installation-edit',
   templateUrl: './installation-edit.component.html',
   styleUrls: ['./installation-edit.component.scss'],
+  standalone: false
 })
 export class InstallationEditComponent implements OnInit {
   onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
