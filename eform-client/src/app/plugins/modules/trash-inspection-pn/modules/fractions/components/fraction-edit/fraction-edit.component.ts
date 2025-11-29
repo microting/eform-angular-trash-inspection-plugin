@@ -2,8 +2,8 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Inject,
   OnInit,
+  inject
 } from '@angular/core';
 import { TrashInspectionPnFractionsService } from '../../../../services';
 import { FractionPnModel } from '../../../../models';
@@ -23,18 +23,20 @@ import {take} from 'rxjs';
   standalone: false
 })
 export class FractionEditComponent implements OnInit {
+  private trashInspectionPnFractionsService = inject(TrashInspectionPnFractionsService);
+  private cd = inject(ChangeDetectorRef);
+  private eFormService = inject(EFormService);
+  public dialogRef = inject(MatDialogRef<FractionEditComponent>);
+  private fractionModel = inject<FractionPnModel>(MAT_DIALOG_DATA);
+
   onFractionUpdated: EventEmitter<void> = new EventEmitter<void>();
   selectedFractionModel: FractionPnModel = new FractionPnModel();
   templateRequestModel: TemplateRequestModel = new TemplateRequestModel();
   templatesModel: TemplateListModel = new TemplateListModel();
   typeahead = new EventEmitter<string>();
-  constructor(
-    private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
-    private cd: ChangeDetectorRef,
-    private eFormService: EFormService,
-    public dialogRef: MatDialogRef<FractionEditComponent>,
-    @Inject(MAT_DIALOG_DATA) fractionModel: FractionPnModel,
-  ) {
+  
+
+  ngOnInit() {
     this.typeahead
       .pipe(
         debounceTime(200),
@@ -48,10 +50,7 @@ export class FractionEditComponent implements OnInit {
         this.templatesModel = items.model;
         this.cd.markForCheck();
       });
-    this.getSelectedFraction(fractionModel.id);
-  }
-
-  ngOnInit() {
+    this.getSelectedFraction(this.fractionModel.id);
     this.eFormService.getAll(this.templateRequestModel).pipe(take(1)).subscribe((items) => {
       this.templatesModel = items.model;
     });

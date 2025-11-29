@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { Papa } from 'ngx-papaparse';
 import { TrashInspectionPnTransporterService } from '../../../../services';
@@ -20,6 +20,9 @@ const URL = '';
   standalone: false
 })
 export class TransporterImportComponent implements OnInit {
+  private transporterService = inject(TrashInspectionPnTransporterService);
+  private router = inject(Router);
+
   public data: any = [];
   uploader: FileUploader;
   transporterImportModel: TransporterPnImportModel;
@@ -48,11 +51,10 @@ export class TransporterImportComponent implements OnInit {
 
   columns: MtxGridColumn[] = [];
 
-  constructor(
-    private transporterService: TrashInspectionPnTransporterService,
-    private router: Router,
-  ) {
-    this.transporterImportModel = new ProducerPnImportModel();
+  
+
+  ngOnInit() {
+    this.transporterImportModel = new TransporterPnImportModel();
     this.options.forEach((option) => {
       this.transporterImportModel.headerList = [
         ...this.transporterImportModel.headerList,
@@ -71,8 +73,6 @@ export class TransporterImportComponent implements OnInit {
       this.myFile = fileItem.file.rawFile;
     };
   }
-
-  ngOnInit() {}
 
   csv2Array(fileInput) {
     const files = fileInput.target.files;

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit,} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {
   TransporterPnModel,
   TransportersPnModel,
@@ -31,6 +31,13 @@ import {
   standalone: false
 })
 export class TransporterPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public transportersStateService = inject(TransportersStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private trashInspectionPnTransporterService = inject(TrashInspectionPnTransporterService);
+
   transportersModel: TransportersPnModel = new TransportersPnModel();
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
@@ -76,15 +83,7 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   public selectTransportersPaginationIsSortDsc$ = this.store.select(selectTransportersPaginationIsSortDsc);
   public selectTransportersPagination$ = this.store.select(selectTransportersPagination);
 
-  constructor(
-    private store: Store,
-    public transportersStateService: TransportersStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService
-  ) {
-  }
+  
 
   ngOnInit() {
     this.getAllInitialData();

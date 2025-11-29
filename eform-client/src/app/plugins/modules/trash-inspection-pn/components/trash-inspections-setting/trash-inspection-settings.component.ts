@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import { TrashInspectionPnSettingsService } from '../../services';
 import { Router } from '@angular/router';
@@ -22,6 +23,12 @@ import {take} from 'rxjs';
   standalone: false
 })
 export class TrashInspectionSettingsComponent implements OnInit {
+  private trashInspectionPnSettingsService = inject(TrashInspectionPnSettingsService);
+  private router = inject(Router);
+  private eFormService = inject(EFormService);
+  private entitySearchService = inject(EntitySearchService);
+  private cd = inject(ChangeDetectorRef);
+
   typeahead = new EventEmitter<string>();
   settingsModel: TrashInspectionBaseSettingsModel = new TrashInspectionBaseSettingsModel();
   templatesModel: TemplateListModel = new TemplateListModel();
@@ -37,13 +44,9 @@ export class TrashInspectionSettingsComponent implements OnInit {
     return ''
   }*/
 
-  constructor(
-    private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
-    private router: Router,
-    private eFormService: EFormService,
-    private entitySearchService: EntitySearchService,
-    private cd: ChangeDetectorRef
-  ) {
+  
+
+  ngOnInit() {
     this.typeahead
       .pipe(
         skip(1),
@@ -57,9 +60,7 @@ export class TrashInspectionSettingsComponent implements OnInit {
         this.templatesModel = items.model;
         this.cd.markForCheck();
       });
-  }
 
-  ngOnInit() {
     this.getSettings();
     this.eFormService.getAll(this.templateRequestModel).pipe(take(1))
       .subscribe((items) => {

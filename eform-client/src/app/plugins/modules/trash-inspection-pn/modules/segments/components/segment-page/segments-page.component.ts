@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {SegmentPnModel, SegmentsPnModel,} from '../../../../models';
 import {SegmentsStateService} from '../store';
 import {DeleteModalSettingModel, PaginationModel} from 'src/app/common/models';
@@ -28,6 +28,13 @@ import {
   standalone: false
 })
 export class SegmentsPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public segmentsStateService = inject(SegmentsStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private trashInspectionPnSegmentsService = inject(TrashInspectionPnSegmentsService);
+
   segmentsPnModel: SegmentsPnModel = new SegmentsPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -69,15 +76,7 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   public selectSegmentsPaginationIsSortDsc$ = this.store.select(selectSegmentsPaginationIsSortDsc);
   public selectSegmentsPagination$ = this.store.select(selectSegmentsPagination);
 
-  constructor(
-    private store: Store,
-    public segmentsStateService: SegmentsStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
-  ) {
-  }
+  
 
   ngOnInit() {
     this.getAllInitialData();

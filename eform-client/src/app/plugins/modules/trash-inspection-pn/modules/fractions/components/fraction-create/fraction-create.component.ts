@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { TrashInspectionPnFractionsService } from '../../../../services';
@@ -25,6 +26,14 @@ import {Store} from '@ngrx/store';
   standalone: false
 })
 export class FractionCreateComponent implements OnInit {
+  private authStore = inject(Store);
+  private trashInspectionPnFractionsService = inject(TrashInspectionPnFractionsService);
+  private sitesService = inject(SitesService);
+  private authStateService = inject(AuthStateService);
+  private eFormService = inject(EFormService);
+  private cd = inject(ChangeDetectorRef);
+  public dialogRef = inject(MatDialogRef<FractionCreateComponent>);
+
   onFractionCreated: EventEmitter<void> = new EventEmitter<void>();
   newFractionModel: FractionPnModel = new FractionPnModel();
   sitesDto: Array<SiteNameDto> = [];
@@ -35,15 +44,9 @@ export class FractionCreateComponent implements OnInit {
   typeahead = new EventEmitter<string>();
   private selectCurrentUserClaimsEformsPairingRead$ = this.authStore.select(selectCurrentUserClaimsEformsPairingRead);
 
-  constructor(
-    private authStore: Store,
-    private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
-    private sitesService: SitesService,
-    private authStateService: AuthStateService,
-    private eFormService: EFormService,
-    private cd: ChangeDetectorRef,
-    public dialogRef: MatDialogRef<FractionCreateComponent>,
-  ) {
+  
+
+  ngOnInit() {
     this.typeahead
       .pipe(
         debounceTime(200),
@@ -58,9 +61,6 @@ export class FractionCreateComponent implements OnInit {
       });
     this.deployModel = new DeployModel();
     this.deployViewModel = new DeployModel();
-  }
-
-  ngOnInit() {
     this.loadAllSites();
   }
 
