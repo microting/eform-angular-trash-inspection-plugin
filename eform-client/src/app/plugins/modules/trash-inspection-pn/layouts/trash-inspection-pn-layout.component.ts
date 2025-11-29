@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {translates} from './../i18n/translates';
 import {AuthStateService} from 'src/app/common/store';
@@ -15,13 +15,15 @@ import {addPluginToVisited, selectPluginsVisitedPlugins} from 'src/app/state';
 })
 export class TrashInspectionPnLayoutComponent
   implements AfterContentInit, OnInit, OnDestroy {
+  private translateService = inject(TranslateService);
+  private store = inject(Store);
+
   currentUserLocaleAsyncSub$: Subscription;
   private pluginName = 'trashinspection';
-  constructor(
-    private translateService: TranslateService,
-    store: Store
-  ) {
-    store.select(selectPluginsVisitedPlugins)
+  
+
+  ngOnInit() {
+    this.store.select(selectPluginsVisitedPlugins)
       .pipe(take(1))
       .subscribe(x => {
         // check current plugin in activated plugin
@@ -31,12 +33,9 @@ export class TrashInspectionPnLayoutComponent
             this.translateService.setTranslation(locale, translates[locale], true);
           });
           // add plugin to visited plugins
-          store.dispatch(addPluginToVisited(this.pluginName));
+          this.store.dispatch(addPluginToVisited(this.pluginName));
         }
       });
-  }
-
-  ngOnInit() {
   }
 
   ngAfterContentInit() {

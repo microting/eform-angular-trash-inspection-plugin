@@ -1,8 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Inject,
   OnInit,
+  inject
 } from '@angular/core';
 import {TrashInspectionPnSegmentsService} from '../../../../services';
 import {SegmentPnModel} from '../../../../models';
@@ -15,19 +15,18 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   standalone: false
 })
 export class SegmentEditComponent implements OnInit {
+  private trashInspectionPnSegmentsService = inject(TrashInspectionPnSegmentsService);
+  public dialogRef = inject(MatDialogRef<SegmentEditComponent>);
+  private segmentPnModelParam = inject<SegmentPnModel>(MAT_DIALOG_DATA);
+
   onSegmentUpdated: EventEmitter<void> = new EventEmitter<void>();
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   typeahead = new EventEmitter<string>();
 
-  constructor(
-    private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
-    public dialogRef: MatDialogRef<SegmentEditComponent>,
-    @Inject(MAT_DIALOG_DATA) segmentPnModel: SegmentPnModel,
-  ) {
-    this.getSelectedFraction(segmentPnModel.id);
-  }
+  
 
   ngOnInit() {
+    this.getSelectedFraction(this.segmentPnModelParam.id);
   }
 
   getSelectedFraction(id: number) {

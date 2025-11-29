@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import {SiteNameDto, DeployModel} from 'src/app/common/models';
 import {SegmentPnModel,} from '../../../../models';
@@ -19,6 +20,11 @@ import {selectCurrentUserClaimsEformsPairingRead} from 'src/app/state';
   standalone: false
 })
 export class SegmentCreateComponent implements OnInit {
+  private authStore = inject(Store);
+  private trashInspectionPnSegmentsService = inject(TrashInspectionPnSegmentsService);
+  private sitesService = inject(SitesService);
+  public dialogRef = inject(MatDialogRef<SegmentCreateComponent>);
+
   onSegmentCreated: EventEmitter<void> = new EventEmitter<void>();
   segmentPnModel: SegmentPnModel = new SegmentPnModel();
   sitesDto: Array<SiteNameDto> = [];
@@ -26,17 +32,11 @@ export class SegmentCreateComponent implements OnInit {
   deployViewModel: DeployModel = new DeployModel();
   private selectCurrentUserClaimsEformsPairingRead$ = this.authStore.select(selectCurrentUserClaimsEformsPairingRead);
 
-  constructor(
-    private authStore: Store,
-    private trashInspectionPnSegmentsService: TrashInspectionPnSegmentsService,
-    private sitesService: SitesService,
-    public dialogRef: MatDialogRef<SegmentCreateComponent>,
-  ) {
-    this.deployModel = new DeployModel();
-    this.deployViewModel = new DeployModel();
-  }
+  
 
   ngOnInit() {
+    this.deployModel = new DeployModel();
+    this.deployViewModel = new DeployModel();
     this.loadAllSites();
   }
 

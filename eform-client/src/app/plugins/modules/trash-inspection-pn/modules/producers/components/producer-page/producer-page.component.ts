@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {DeleteModalSettingModel, PaginationModel,} from 'src/app/common/models';
 import {ProducerPnModel, ProducersPnModel} from '../../../../models';
 import {TrashInspectionPnProducersService} from '../../../../services';
@@ -28,6 +28,13 @@ import {
   standalone: false
 })
 export class ProducerPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public producersStateService = inject(ProducersStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private trashInspectionPnProducerService = inject(TrashInspectionPnProducersService);
+
   producersModel: ProducersPnModel = new ProducersPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -73,15 +80,7 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   public selectProducersPaginationIsSortDsc$ = this.store.select(selectProducersPaginationIsSortDsc);
   public selectProducersPagination$ = this.store.select(selectProducersPagination);
 
-  constructor(
-    private store: Store,
-    public producersStateService: ProducersStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private trashInspectionPnProducerService: TrashInspectionPnProducersService
-  ) {
-  }
+  
 
   ngOnInit() {
     this.getAllInitialData();

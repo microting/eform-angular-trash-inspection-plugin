@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { Papa } from 'ngx-papaparse';
 import { TrashInspectionPnFractionsService } from '../../../../services';
@@ -13,6 +13,8 @@ const URL = '';
   standalone: false
 })
 export class FractionsImportComponent implements OnInit {
+  private fractionsService = inject(TrashInspectionPnFractionsService);
+
   public data: any = [];
   uploader: FileUploader;
   fractionsImportModel: FractionPnImportModel;
@@ -38,7 +40,9 @@ export class FractionsImportComponent implements OnInit {
   ];
 
   columns: MtxGridColumn[] = [];
-  constructor(private fractionsService: TrashInspectionPnFractionsService) {
+  
+
+  ngOnInit() {
     this.fractionsImportModel = new FractionPnImportModel();
     this.options.forEach((option) => {
       this.fractionsImportModel.headerList = [
@@ -57,9 +61,6 @@ export class FractionsImportComponent implements OnInit {
       // console.log(fileItem._file);
       this.myFile = fileItem.file.rawFile;
     };
-  }
-
-  ngOnInit() {
     this.fileName = 'DummyCustomerData.csv';
     this.totalColumns = 4;
     this.totalRows = 100;

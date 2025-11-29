@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {FractionPnModel, TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
 import {TrashInspectionPnFractionsService} from '../../../../services';
@@ -30,6 +30,14 @@ import {
   standalone: false
 })
 export class FractionsPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public fractionsStateService = inject(FractionsStateService);
+  public authStateService = inject(AuthStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private trashInspectionPnFractionsService = inject(TrashInspectionPnFractionsService);
+
   fractionsModel: Paged<FractionPnModel> = new Paged<FractionPnModel>();
   tableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
@@ -76,16 +84,7 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   public selectFractionsPaginationSort$ = this.store.select(selectFractionsPaginationSort);
   public selectFractionsPaginationIsSortDsc$ = this.store.select(selectFractionsPaginationIsSortDsc);
 
-  constructor(
-    private store: Store,
-    public fractionsStateService: FractionsStateService,
-    public authStateService: AuthStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private trashInspectionPnFractionsService: TrashInspectionPnFractionsService,
-  ) {
-  }
+  
 
   ngOnInit() {
     this.getAllInitialData();

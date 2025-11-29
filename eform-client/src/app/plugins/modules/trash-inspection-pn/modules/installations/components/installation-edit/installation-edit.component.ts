@@ -1,8 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Inject,
   OnInit,
+  inject
 } from '@angular/core';
 import {
   InstallationPnModel,
@@ -27,6 +27,13 @@ import {Store} from '@ngrx/store';
   standalone: false
 })
 export class InstallationEditComponent implements OnInit {
+  private authStore = inject(Store);
+  private trashInspectionPnInstallationsService = inject(TrashInspectionPnInstallationsService);
+  private sitesService = inject(SitesService);
+  private translateService = inject(TranslateService);
+  public dialogRef = inject(MatDialogRef<InstallationEditComponent>);
+  private installationModel = inject<InstallationPnModel>(MAT_DIALOG_DATA);
+
   onInstallationUpdated: EventEmitter<void> = new EventEmitter<void>();
   deployViewModel: DeployModel = new DeployModel();
   selectedInstallationModel: InstallationPnModel = new InstallationPnModel();
@@ -39,18 +46,10 @@ export class InstallationEditComponent implements OnInit {
     {header: this.translateService.stream('Related Site'), field: 'deployCheckboxes'},
   ];
 
-  constructor(
-    private authStore: Store,
-    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
-    private sitesService: SitesService,
-    private translateService: TranslateService,
-    public dialogRef: MatDialogRef<InstallationEditComponent>,
-    @Inject(MAT_DIALOG_DATA) private installationModel: InstallationPnModel
-  ) {
-    this.loadAllSites();
-  }
+  
 
   ngOnInit() {
+    this.loadAllSites();
   }
 
   getSelectedInstallation(id: number) {

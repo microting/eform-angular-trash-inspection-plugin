@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import {TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnTransporterService} from '../../../../services';
@@ -14,14 +15,13 @@ import {MatDialogRef} from '@angular/material/dialog';
   standalone: false
 })
 export class TransporterCreateComponent implements OnInit {
+  private trashInspectionPnTransporterService = inject(TrashInspectionPnTransporterService);
+  public dialogRef = inject(MatDialogRef<TransporterCreateComponent>);
+
   transporterCreated: EventEmitter<void> = new EventEmitter<void>();
   newTransporterModel: TransporterPnModel = new TransporterPnModel();
 
-  constructor(
-    private trashInspectionPnTransporterService: TrashInspectionPnTransporterService,
-    public dialogRef: MatDialogRef<TransporterCreateComponent>,
-  ) {
-  }
+  
 
   ngOnInit() {
   }

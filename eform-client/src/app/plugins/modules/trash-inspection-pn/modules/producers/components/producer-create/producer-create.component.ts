@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import {ProducerPnModel,} from '../../../../models';
 import {TrashInspectionPnProducersService} from '../../../../services';
@@ -14,14 +15,13 @@ import {MatDialogRef} from '@angular/material/dialog';
   standalone: false
 })
 export class ProducerCreateComponent implements OnInit {
+  private trashInspectionPnProducerService = inject(TrashInspectionPnProducersService);
+  public dialogRef = inject(MatDialogRef<ProducerCreateComponent>);
+
   onProducerCreated: EventEmitter<void> = new EventEmitter<void>();
   newProducerModel: ProducerPnModel = new ProducerPnModel();
 
-  constructor(
-    private trashInspectionPnProducerService: TrashInspectionPnProducersService,
-    public dialogRef: MatDialogRef<ProducerCreateComponent>,
-  ) {
-  }
+  
 
   ngOnInit() {
   }
