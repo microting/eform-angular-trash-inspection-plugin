@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnInit,
+  inject
 } from '@angular/core';
 import {InstallationPnCreateModel, InstallationPnModel} from '../../../../models';
 import {TrashInspectionPnInstallationsService} from '../../../../services';
@@ -20,6 +21,13 @@ import {Store} from '@ngrx/store';
   standalone: false
 })
 export class InstallationCreateComponent implements OnInit {
+  private authStore = inject(Store);
+  private trashInspectionPnInstallationsService = inject(TrashInspectionPnInstallationsService);
+  private sitesService = inject(SitesService);
+  private authService = inject(AuthService);
+  public dialogRef = inject(MatDialogRef<InstallationCreateComponent>);
+  private translateService = inject(TranslateService);
+
   installationCreated: EventEmitter<void> = new EventEmitter<void>();
   newInstallationModel: InstallationPnCreateModel = new InstallationPnCreateModel();
   sitesDto: Array<SiteNameDto> = [];
@@ -33,19 +41,11 @@ export class InstallationCreateComponent implements OnInit {
     {header: this.translateService.stream('Check to pair'), field: 'deployCheckboxes'},
   ];
 
-  constructor(
-    private authStore: Store,
-    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService,
-    private sitesService: SitesService,
-    private authService: AuthService,
-    public dialogRef: MatDialogRef<InstallationCreateComponent>,
-    private translateService: TranslateService,
-  ) {
-    this.deployViewModel = new DeployModel();
-    this.fillCheckboxes();
-  }
+  
 
   ngOnInit() {
+    this.deployViewModel = new DeployModel();
+    this.fillCheckboxes();
     this.loadAllSites();
   }
 

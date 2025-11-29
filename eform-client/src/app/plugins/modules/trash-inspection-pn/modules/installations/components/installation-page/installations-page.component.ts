@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {
   InstallationPnModel,
   InstallationsPnModel,
@@ -31,6 +31,13 @@ import {
   standalone: false
 })
 export class InstallationsPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public installationsStateService = inject(InstallationsStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private trashInspectionPnInstallationsService = inject(TrashInspectionPnInstallationsService);
+
   installationsModel: InstallationsPnModel = new InstallationsPnModel();
 
   tableHeaders: MtxGridColumn[] = [
@@ -70,15 +77,7 @@ export class InstallationsPageComponent implements OnInit, OnDestroy {
   public selectInstallationsPaginationIsSortDsc$ = this.store.select(selectInstallationsPaginationIsSortDsc);
   public selectInstallationsPagination$ = this.store.select(selectInstallationsPagination);
 
-  constructor(
-    private store: Store,
-    public installationsStateService: InstallationsStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private trashInspectionPnInstallationsService: TrashInspectionPnInstallationsService
-  ) {
-  }
+  
 
   ngOnInit() {
     this.getAllInitialData();

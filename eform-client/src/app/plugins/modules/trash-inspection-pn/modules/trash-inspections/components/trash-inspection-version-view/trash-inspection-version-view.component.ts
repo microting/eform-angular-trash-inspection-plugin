@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit, inject} from '@angular/core';
 import {
   TrashInspectionPnSettingsService,
   TrashInspectionPnTrashInspectionsService,
@@ -16,6 +16,12 @@ import {TranslateService} from '@ngx-translate/core';
   standalone: false
 })
 export class TrashInspectionVersionViewComponent implements OnInit {
+  private trashInspectionPnSettingsService = inject(TrashInspectionPnSettingsService);
+  private trashInspectionPnTrashInspectionsService = inject(TrashInspectionPnTrashInspectionsService);
+  private translateService = inject(TranslateService);
+  public dialogRef = inject(MatDialogRef<TrashInspectionVersionViewComponent>);
+  private trashInspectionId = inject<number>(MAT_DIALOG_DATA);
+
   localPageSettings: PageSettingsModel = new PageSettingsModel();
   trashInspectionVersionsModel: TrashInspectionVersionsPnModel = new TrashInspectionVersionsPnModel();
 
@@ -96,17 +102,10 @@ export class TrashInspectionVersionViewComponent implements OnInit {
     {header: this.translateService.stream('Removed'), field: 'removed', type: 'date', typeParameter: {format: 'dd.MM.y HH:mm:ss'}},
   ];
 
-  constructor(
-    private trashInspectionPnSettingsService: TrashInspectionPnSettingsService,
-    private trashInspectionPnTrashInspectionsService: TrashInspectionPnTrashInspectionsService,
-    private translateService: TranslateService,
-    public dialogRef: MatDialogRef<TrashInspectionVersionViewComponent>,
-    @Inject(MAT_DIALOG_DATA) trashInspectionId: number
-  ) {
-    this.getSelectedVersions(trashInspectionId);
-  }
+  
 
   ngOnInit() {
+    this.getSelectedVersions(this.trashInspectionId);
   }
 
   getSelectedVersions(trashInspectionId: number) {

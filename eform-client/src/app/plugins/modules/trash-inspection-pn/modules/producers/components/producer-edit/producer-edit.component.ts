@@ -1,8 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Inject,
   OnInit,
+  inject
 } from '@angular/core';
 import { ProducerPnModel } from '../../../../models';
 import { TrashInspectionPnProducersService } from '../../../../services';
@@ -15,17 +15,17 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   standalone: false
 })
 export class ProducerEditComponent implements OnInit {
+  private trashInspectionPnProducerService = inject(TrashInspectionPnProducersService);
+  public dialogRef = inject(MatDialogRef<ProducerEditComponent>);
+  private producerModel = inject<ProducerPnModel>(MAT_DIALOG_DATA);
+
   onProducerUpdated: EventEmitter<void> = new EventEmitter<void>();
   selectedProducer: ProducerPnModel = new ProducerPnModel();
-  constructor(
-    private trashInspectionPnProducerService: TrashInspectionPnProducersService,
-    public dialogRef: MatDialogRef<ProducerEditComponent>,
-    @Inject(MAT_DIALOG_DATA) producerModel: ProducerPnModel
-  ) {
-    this.getSelectedProducer(producerModel.id);
-  }
+  
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getSelectedProducer(this.producerModel.id);
+  }
 
   getSelectedProducer(id: number) {
     this.trashInspectionPnProducerService

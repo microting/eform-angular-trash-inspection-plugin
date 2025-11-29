@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {TrashInspectionPnModel} from '../../../../models';
 import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
 import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
@@ -29,6 +29,13 @@ import {
   standalone: false
 })
 export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  public trashInspectionsStateService = inject(TrashInspectionsStateService);
+  private translateService = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private overlay = inject(Overlay);
+  private machineAreaPnMachinesService = inject(TrashInspectionPnTrashInspectionsService);
+
   // @ViewChild('createTrashInspectionModal') createTrashInspectionModal;
 
   searchSubject = new Subject();
@@ -118,21 +125,13 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   public selectTrashInspectionsNameFilters$ = this.store.select(selectTrashInspectionsNameFilters);
   public selectTrashInspectionsPagination$ = this.store.select(selectTrashInspectionsPagination);
 
-  constructor(
-    private store: Store,
-    public trashInspectionsStateService: TrashInspectionsStateService,
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private overlay: Overlay,
-    private machineAreaPnMachinesService: TrashInspectionPnTrashInspectionsService
-  ) {
+  
+
+  ngOnInit() {
     this.searchSubject.pipe(debounceTime(500)).subscribe((val: string) => {
       this.trashInspectionsStateService.updateNameFilter(val);
       this.getAllTrashInspections();
     });
-  }
-
-  ngOnInit() {
     this.getAllInitialData();
   }
 
