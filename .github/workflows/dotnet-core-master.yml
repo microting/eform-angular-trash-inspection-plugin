@@ -89,7 +89,6 @@ jobs:
         cp -av eform-angular-trash-inspection-plugin/eform-client/wdio-plugin-step2.conf.ts  eform-angular-frontend/eform-client/wdio-plugin-step2.conf.ts 
     - name: yarn install
       run: cd eform-angular-frontend/eform-client && yarn install
-      if: steps.cache.outputs.cache-hit != 'true'
     - name: Create errorShots directory
       run: mkdir eform-angular-frontend/eform-client/errorShots
     - name: Pretest changes to work with Docker container
