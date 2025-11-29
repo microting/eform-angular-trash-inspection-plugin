@@ -54,7 +54,7 @@ export class TransporterImportComponent implements OnInit {
   
 
   ngOnInit() {
-    this.transporterImportModel = new ProducerPnImportModel();
+    this.transporterImportModel = new TransporterPnImportModel();
     this.options.forEach((option) => {
       this.transporterImportModel.headerList = [
         ...this.transporterImportModel.headerList,
