@@ -87,6 +87,9 @@ jobs:
       run: mkdir eform-angular-frontend/eform-client/errorShots
     - name: Pretest changes to work with Docker container
       run: sed -i 's/localhost/mariadbtest/g' eform-angular-frontend/eform-client/e2e/Constants/DatabaseConfigurationConstants.ts
+    - name: Get standard output
+      run: |
+        cat docker_run_log
     - name: DB Configuration
       uses: cypress-io/github-action@v4
       with:
