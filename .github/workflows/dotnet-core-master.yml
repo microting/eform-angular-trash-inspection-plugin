@@ -3,9 +3,6 @@ name: .NET Master
 on:
   push:
     branches: [ master, stable, angular19 ]
-    paths-ignore:
-    - '**.md'
-    - '.github/**'
 
 jobs:
   build:
@@ -48,6 +45,9 @@ jobs:
     - uses: actions/checkout@v3
       with:
         path: eform-angular-trash-inspection-plugin
+    - name: Extract branch name
+      id: extract_branch
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
     - uses: actions/download-artifact@v4
       with:
         name: trash-inspection-container
@@ -71,9 +71,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 22
-    - name: Extract branch
-      id: extract_branch
-      run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
     - name: 'Preparing Frontend checkout'
       uses: actions/checkout@v3
       with:

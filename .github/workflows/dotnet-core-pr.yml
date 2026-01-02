@@ -3,9 +3,6 @@ name: .NET Pull requests
 on:
   pull_request:
     branches: [ master, stable, angular19 ]
-    paths-ignore:
-    - '**.md'
-    - '.github/**'
 
 jobs:
   build:
