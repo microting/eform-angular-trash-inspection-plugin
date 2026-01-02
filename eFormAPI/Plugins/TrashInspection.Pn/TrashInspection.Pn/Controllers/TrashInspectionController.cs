@@ -129,7 +129,7 @@ namespace TrashInspection.Pn.Controllers
             }
         }
 
-        private class DebuggingFilter : AuthorizeAttribute, IAuthorizationFilter
+        private class DebuggingFilter : Attribute, IAuthorizationFilter
         {
             public void OnAuthorization(AuthorizationFilterContext context)
             {
