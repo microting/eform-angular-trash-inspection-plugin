@@ -37,7 +37,7 @@ jobs:
         path: trash-inspection-container.tar
   test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
       with:
