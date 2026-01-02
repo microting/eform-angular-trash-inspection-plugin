@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=build-env /app/eFormAPI.Web/out .
 RUN mkdir -p ./Plugins/TrashInspection.Pn
 COPY --from=build-env /app/TrashInspection.Pn/out ./Plugins/TrashInspection.Pn
-COPY --from=node-env /app/dist wwwroot
+COPY --from=node-env /app/dist/browser wwwroot
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV Logging__Console__FormatterName=
