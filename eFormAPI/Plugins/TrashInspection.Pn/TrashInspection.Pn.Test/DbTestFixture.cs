@@ -83,7 +83,7 @@ namespace TrashInspection.Pn.Test
                     if (firstRunNotDone)
                     {
                         DbContext.Database.ExecuteSqlRaw(
-                            $"SET FOREIGN_KEY_CHECKS = 0;TRUNCATE `trash-inspection-pn-tests`.`{modelName}`");
+                            "SET FOREIGN_KEY_CHECKS = 0;TRUNCATE `trash-inspection-pn-tests`.`{0}`", modelName);
                     }
                 }
                 catch (Exception ex)
@@ -103,8 +103,8 @@ namespace TrashInspection.Pn.Test
 
         private void ClearFile()
         {
-            _path = Assembly.GetExecutingAssembly().CodeBase;
-            _path = Path.GetDirectoryName(_path)?.Replace(@"file:\", "");
+            _path = Assembly.GetExecutingAssembly().Location;
+            _path = Path.GetDirectoryName(_path);
 
             string picturePath = _path + @"\output\dataFolder\picture\Deleted";
 
