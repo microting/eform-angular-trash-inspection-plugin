@@ -56,7 +56,7 @@ export class TrashInspectionInstallationPage {
   }
 
   public paginatorLabel(): Locator {
-    return this.page.locator('.mat-mdc-paginator-range-label');
+    return this.page.locator('.mat-mdc-paginator-range-label').first();
   }
 
   public installationUpdateSiteCheckbox(index: number): Locator {
