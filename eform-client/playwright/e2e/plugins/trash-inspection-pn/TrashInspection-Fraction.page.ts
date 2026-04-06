@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { selectValueInNgSelector } from '../../helper-functions';
 
 export interface FractionsCreateUpdate {
@@ -190,6 +190,8 @@ export class FractionsRowObject {
     const row = this.page.locator('.cdk-row').nth(this.rowIndex);
     await row.locator('.cdk-column-actions button').nth(0).click();
     await this.page.locator('#fractionUpdateSaveBtn').waitFor({ state: 'visible', timeout: 20000 });
+    // Wait for the async getSelectedFraction to populate the form
+    await expect(this.page.locator('#updateFractionName')).not.toHaveValue('', { timeout: 20000 });
     if (model) {
       if (model.itemNumber) {
         await this.page.locator('#updateFractionItemNumber').fill('');
