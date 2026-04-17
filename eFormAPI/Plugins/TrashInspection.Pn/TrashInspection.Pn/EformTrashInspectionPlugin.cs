@@ -92,7 +92,7 @@ namespace TrashInspection.Pn
         public void ConfigureDbContext(IServiceCollection services, string connectionString)
         {
             _connectionString = connectionString;
-            services.AddDbContext<TrashInspectionPnDbContext>(o =>
+            services.AddDbContextPool<TrashInspectionPnDbContext>(o =>
                 o.UseMySql(connectionString, new MariaDbServerVersion(
                     new Version(10, 4, 0)), mySqlOptionsAction: builder =>
                 {
