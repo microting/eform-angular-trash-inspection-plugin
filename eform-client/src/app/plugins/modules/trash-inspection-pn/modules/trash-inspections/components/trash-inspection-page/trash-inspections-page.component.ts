@@ -224,6 +224,7 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
+    this.trashInspectionsStateService.updatePagination(paginationModel);
     this.getAllTrashInspections();
   }
 

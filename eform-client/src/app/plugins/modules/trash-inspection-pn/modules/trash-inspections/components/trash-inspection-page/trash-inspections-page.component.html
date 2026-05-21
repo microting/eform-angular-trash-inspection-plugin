@@ -27,6 +27,7 @@
   [data]="trashInspectionsModel.entities"
   [columns]="tableHeaders"
   [cellTemplate]="{status: statusTpl, actions: actionsTpl}"
+  [paginationTemplate]="paginatorTpl"
   [showPaginator]="true"
   [pageOnFront]="false"
   [rowStriped]="true"
