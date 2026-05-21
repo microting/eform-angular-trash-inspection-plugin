@@ -30,14 +30,13 @@ using eFormCore;
 using Microsoft.EntityFrameworkCore;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Rebus.Handlers;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
 namespace TrashInspection.Pn.Handlers
 {
-    public class TrashInspectionDeleteHandler : IHandleMessages<TrashInspectionDeleted>
+    public class TrashInspectionDeleteHandler
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;

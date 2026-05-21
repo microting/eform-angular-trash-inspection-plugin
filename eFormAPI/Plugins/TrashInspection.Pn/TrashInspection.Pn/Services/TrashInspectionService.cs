@@ -37,8 +37,8 @@ using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormApi.BasePn.Infrastructure.Models.API;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Rebus.Bus;
 using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Handlers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 using Microting.eFormApi.BasePn.Infrastructure.Helpers;
@@ -56,7 +56,8 @@ namespace TrashInspection.Pn.Services
         private readonly TrashInspectionPnDbContext _dbContext;
         private readonly ITrashInspectionLocalizationService _trashInspectionLocalizationService;
         private readonly IUserService _userService;
-        private readonly IBus _bus;
+        private readonly TrashInspectionReceivedHandler _trashInspectionReceivedHandler;
+        private readonly TrashInspectionDeleteHandler _trashInspectionDeleteHandler;
         private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
 
         public TrashInspectionService(ILogger<TrashInspectionService> logger,
@@ -65,14 +66,16 @@ namespace TrashInspection.Pn.Services
             IUserService userService,
             ITrashInspectionLocalizationService trashInspectionLocalizationService,
             IPluginDbOptions<TrashInspectionBaseSettings> options,
-            IRebusService rebusService)
+            TrashInspectionReceivedHandler trashInspectionReceivedHandler,
+            TrashInspectionDeleteHandler trashInspectionDeleteHandler)
         {
             _logger = logger;
             _dbContext = dbContext;
             _coreHelper = coreHelper;
             _trashInspectionLocalizationService = trashInspectionLocalizationService;
             _userService = userService;
-            _bus = rebusService.GetBus();
+            _trashInspectionReceivedHandler = trashInspectionReceivedHandler;
+            _trashInspectionDeleteHandler = trashInspectionDeleteHandler;
             _options = options;
         }
 
@@ -305,7 +308,7 @@ namespace TrashInspection.Pn.Services
                     await UpdateProducerAndTransporter(trashInspection, createModel);
 
                     _coreHelper.LogEvent($"CreateTrashInspection: Segment: {segment.Name}, InstallationName: {installation.Name}, TrashFraction: {fraction.Name} ");
-                    await _bus.SendLocal(new TrashInspectionReceived(createModel, fraction.Id, segment.Id, installation.Id));
+                    await _trashInspectionReceivedHandler.Handle(new TrashInspectionReceived(createModel, fraction.Id, segment.Id, installation.Id));
                 }
 
                 return new OperationResult(true, createModel.Id.ToString());
@@ -629,7 +632,7 @@ namespace TrashInspection.Pn.Services
                     InspectionDone = x.InspectionDone
                 })
                 .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
-            await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, true));
+            await _trashInspectionDeleteHandler.Handle(new TrashInspectionDeleted(trashInspection, true));
             //trashInspection.Delete(_dbContext);
             return new OperationResult(true);
 
@@ -673,7 +676,7 @@ namespace TrashInspection.Pn.Services
 
             if (trashInspection != null)
             {
-                await _bus.SendLocal(new TrashInspectionDeleted(trashInspection, false));
+                await _trashInspectionDeleteHandler.Handle(new TrashInspectionDeleted(trashInspection, false));
 
                 return new OperationResult(true);
             }

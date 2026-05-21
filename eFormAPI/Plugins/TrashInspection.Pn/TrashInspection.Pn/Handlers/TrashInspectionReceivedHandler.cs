@@ -34,25 +34,24 @@ using Microting.eForm.Infrastructure.Constants;
 using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Rebus.Bus;
-using Rebus.Handlers;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
 namespace TrashInspection.Pn.Handlers
 {
-    public class TrashInspectionReceivedHandler : IHandleMessages<TrashInspectionReceived>
+    public class TrashInspectionReceivedHandler
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;
-        private readonly IBus _bus;
+        private readonly TrashInspectionCaseCreatedHandler _trashInspectionCaseCreatedHandler;
 
-        public TrashInspectionReceivedHandler(Core core, DbContextHelper dbContextHelper, IBus bus)
+        public TrashInspectionReceivedHandler(Core core, DbContextHelper dbContextHelper,
+            TrashInspectionCaseCreatedHandler trashInspectionCaseCreatedHandler)
         {
             _core = core;
             _dbContext = dbContextHelper.GetDbContext();
-            _bus = bus;
+            _trashInspectionCaseCreatedHandler = trashInspectionCaseCreatedHandler;
         }
 
         #pragma warning disable 1998
@@ -105,7 +104,7 @@ namespace TrashInspection.Pn.Handlers
 
                 if (eFormId != 0)
                 {
-                    await _bus.SendLocal(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment.Id,
+                    await _trashInspectionCaseCreatedHandler.Handle(new TrashInspectionCaseCreated(eFormId, trashInspectionCase.Id, createModel, segment.Id,
                         fraction.Id));
                 }
 //                tasks.Add(sendLocal);

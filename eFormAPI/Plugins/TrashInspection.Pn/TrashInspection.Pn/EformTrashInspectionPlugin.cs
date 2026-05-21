@@ -42,11 +42,14 @@ using Microting.eFormApi.BasePn.Infrastructure.Settings;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
 using TrashInspection.Pn.Abstractions;
+using TrashInspection.Pn.Handlers;
 using TrashInspection.Pn.Infrastructure.Const;
 using TrashInspection.Pn.Infrastructure.Data.Seed;
 using TrashInspection.Pn.Infrastructure.Data.Seed.Data;
+using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Services;
+using Microting.eFormApi.BasePn.Abstractions;
 
 namespace TrashInspection.Pn
 {
@@ -76,7 +79,29 @@ namespace TrashInspection.Pn
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
             services.AddTransient<ITransporterService, TransporterService>();
             services.AddTransient<IProducerService, ProducerService>();
-            services.AddSingleton<IRebusService, RebusService>();
+
+            // Handlers (formerly Rebus IHandleMessages<T>): now invoked directly by
+            // TrashInspectionService and from each other. Each handler resolves its own
+            // Core + DbContextHelper since they aren't ASP.NET-DI registered upstream.
+            services.AddTransient<TrashInspectionCaseCreatedHandler>(sp =>
+            {
+                var coreHelper = sp.GetRequiredService<IEFormCoreService>();
+                var core = coreHelper.GetCore().GetAwaiter().GetResult();
+                return new TrashInspectionCaseCreatedHandler(core, new DbContextHelper(_connectionString));
+            });
+            services.AddTransient<TrashInspectionDeleteHandler>(sp =>
+            {
+                var coreHelper = sp.GetRequiredService<IEFormCoreService>();
+                var core = coreHelper.GetCore().GetAwaiter().GetResult();
+                return new TrashInspectionDeleteHandler(core, new DbContextHelper(_connectionString));
+            });
+            services.AddTransient<TrashInspectionReceivedHandler>(sp =>
+            {
+                var coreHelper = sp.GetRequiredService<IEFormCoreService>();
+                var core = coreHelper.GetCore().GetAwaiter().GetResult();
+                var caseCreatedHandler = sp.GetRequiredService<TrashInspectionCaseCreatedHandler>();
+                return new TrashInspectionReceivedHandler(core, new DbContextHelper(_connectionString), caseCreatedHandler);
+            });
         }
 
         public void AddPluginConfig(IConfigurationBuilder builder, string connectionString)
@@ -121,16 +146,11 @@ namespace TrashInspection.Pn
 
         public void Configure(IApplicationBuilder appBuilder)
         {
-            var serviceProvider = appBuilder.ApplicationServices;
-            IRebusService rebusService = serviceProvider.GetService<IRebusService>();
+            // Rebus is intentionally not started here: the host plugin is loaded into an
+            // isolated AssemblyLoadContext, which makes Rebus's JSON serializer unable to
+            // resolve plugin-owned message types via Type.GetType. Handlers are now invoked
+            // directly from TrashInspectionService and from each other via ASP.NET DI.
             Console.WriteLine($"[DBG] EformTrashInspectionPlugin.Configure _sdkConnectionString is {_sdkConnectionString}");
-            if (!_sdkConnectionString.Contains("..."))
-            {
-                WindsorContainer container = rebusService.GetContainer();
-                container.Register(Component.For<EformTrashInspectionPlugin>().Instance(this));
-                rebusService.Start(_sdkConnectionString, _connectionString, _maxParallelism, _numberOfWorkers);
-            }
-
         }
 
         public List<PluginMenuItemModel> GetNavigationMenu(IServiceProvider serviceProvider)

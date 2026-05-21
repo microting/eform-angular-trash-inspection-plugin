@@ -35,14 +35,13 @@ using Microting.eForm.Infrastructure.Data.Entities;
 using Microting.eForm.Infrastructure.Models;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
-using Rebus.Handlers;
 using TrashInspection.Pn.Infrastructure.Helpers;
 using TrashInspection.Pn.Infrastructure.Models;
 using TrashInspection.Pn.Messages;
 
 namespace TrashInspection.Pn.Handlers
 {
-    public class TrashInspectionCaseCreatedHandler : IHandleMessages<TrashInspectionCaseCreated>
+    public class TrashInspectionCaseCreatedHandler
     {
         private readonly Core _core;
         private readonly TrashInspectionPnDbContext _dbContext;

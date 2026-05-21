@@ -25,19 +25,15 @@ SOFTWARE.
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using Rebus.Handlers;
-using TrashInspection.Pn.Handlers;
-using TrashInspection.Pn.Messages;
 
 namespace TrashInspection.Pn.Installers
 {
+    // Kept for compile compatibility with any callers; intentionally a no-op.
+    // The handlers are now ASP.NET-DI'd and invoked directly, not through Rebus.
     public class RebusHandlerInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<IHandleMessages<TrashInspectionReceived>>().ImplementedBy<TrashInspectionReceivedHandler>().LifestyleTransient());            
-            container.Register(Component.For<IHandleMessages<TrashInspectionDeleted>>().ImplementedBy<TrashInspectionDeleteHandler>().LifestyleTransient());            
-            container.Register(Component.For<IHandleMessages<TrashInspectionCaseCreated>>().ImplementedBy<TrashInspectionCaseCreatedHandler>().LifestyleTransient());            
         }
     }
 }
