@@ -1,6 +1,6 @@
 import {CommonPaginationState} from 'src/app/common/models';
 import {createReducer, on} from '@ngrx/store';
-import {fractionsUpdatePagination} from './fractions.actions';
+import {fractionsUpdatePagination, fractionsUpdateTotalFractions} from './fractions.actions';
 
 export interface FractionsState {
   pagination: CommonPaginationState;
@@ -31,6 +31,14 @@ export const _fractionsReducer = createReducer(
       isSortDsc: payload.pagination.isSortDsc,
       total: payload.pagination.total,
     },
+  })),
+  on(fractionsUpdateTotalFractions, (state, {payload}) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      total: payload,
+    },
+    total: payload,
   })),
 );
 

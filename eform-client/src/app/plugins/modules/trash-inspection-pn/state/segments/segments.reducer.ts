@@ -1,6 +1,6 @@
 import {CommonPaginationState} from 'src/app/common/models';
 import {createReducer, on} from '@ngrx/store';
-import {segmentsUpdatePagination} from './segments.actions';
+import {segmentsUpdatePagination, segmentsUpdateTotalSegments} from './segments.actions';
 
 export interface SegmentsState {
   pagination: CommonPaginationState;
@@ -31,6 +31,14 @@ export const _segmentsReducer = createReducer(
       isSortDsc: payload.pagination.isSortDsc,
       total: payload.pagination.total,
     },
+  })),
+  on(segmentsUpdateTotalSegments, (state, {payload}) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      total: payload,
+    },
+    total: payload,
   })),
 );
 

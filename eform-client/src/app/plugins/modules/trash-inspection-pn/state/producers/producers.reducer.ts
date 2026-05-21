@@ -1,7 +1,7 @@
 // pagination
 import {CommonPaginationState} from 'src/app/common/models';
 import {createReducer, on} from '@ngrx/store';
-import {producersUpdatePagination} from './producers.actions';
+import {producersUpdatePagination, producersUpdateTotalProducers} from './producers.actions';
 
 export interface ProducersState {
   pagination: CommonPaginationState;
@@ -32,6 +32,14 @@ export const _producersReducer = createReducer(
       isSortDsc: payload.pagination.isSortDsc,
       total: payload.pagination.total,
     },
+  })),
+  on(producersUpdateTotalProducers, (state, {payload}) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      total: payload,
+    },
+    total: payload,
   })),
 );
 

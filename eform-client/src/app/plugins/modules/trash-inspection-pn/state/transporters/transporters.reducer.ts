@@ -1,7 +1,8 @@
 import {CommonPaginationState} from 'src/app/common/models';
 import {createReducer, on} from '@ngrx/store';
 import {
-  transportersUpdatePagination
+  transportersUpdatePagination,
+  transportersUpdateTotalTransporters
 } from './transporters.actions';
 
 export interface TransportersState {
@@ -33,6 +34,14 @@ export const _transportersReducer = createReducer(
       isSortDsc: payload.pagination.isSortDsc,
       total: payload.pagination.total,
     },
+  })),
+  on(transportersUpdateTotalTransporters, (state, {payload}) => ({
+    ...state,
+    pagination: {
+      ...state.pagination,
+      total: payload,
+    },
+    total: payload,
   })),
 );
 
