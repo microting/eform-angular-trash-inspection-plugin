@@ -32,30 +32,40 @@ namespace TrashInspection.Pn.Installers
 {
     public class RebusInstaller : IWindsorInstaller
     {
+        private readonly string customerNo;
         private readonly string connectionString;
         private readonly int maxParallelism;
         private readonly int numberOfWorkers;
+        private readonly string rabbitMqUser;
+        private readonly string rabbitMqPassword;
+        private readonly string rabbitMqHost;
 
-        public RebusInstaller(string connectionString, int maxParallelism, int numberOfWorkers)
+        public RebusInstaller(string customerNo, string connectionString, int maxParallelism, int numberOfWorkers,
+                              string rabbitMqUser, string rabbitMqPassword, string rabbitMqHost)
         {
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString));
+            this.customerNo = customerNo;
             this.connectionString = connectionString;
             this.maxParallelism = maxParallelism;
             this.numberOfWorkers = numberOfWorkers;
+            this.rabbitMqUser = rabbitMqUser;
+            this.rabbitMqPassword = rabbitMqPassword;
+            this.rabbitMqHost = rabbitMqHost;
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             Configure.With(new CastleWindsorContainerAdapter(container))
                 .Logging(l => l.ColoredConsole())
-                .Transport(t => t.UseRabbitMq("amqp://admin:password@localhost", "eform-angular-trashinspection-plugin"))
+                .Transport(t => t.UseRabbitMq(
+                    $"amqp://{rabbitMqUser}:{rabbitMqPassword}@{rabbitMqHost}",
+                    $"{customerNo}-eform-angular-trashinspection-plugin"))
                 .Options(o =>
                 {
                     o.SetMaxParallelism(maxParallelism);
                     o.SetNumberOfWorkers(numberOfWorkers);
                 })
                 .Start();
-            
         }
     }
 }

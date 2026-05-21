@@ -22,10 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using eFormCore;
+using Microting.eForm.Dto;
 using Microting.eFormApi.BasePn.Abstractions;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data;
 using Microting.eFormTrashInspectionBase.Infrastructure.Data.Factories;
@@ -58,13 +60,19 @@ namespace TrashInspection.Pn.Services
 
             Core core = await _coreHelper.GetCore();
             _dbContextHelper = new DbContextHelper(connectionString);
+
+            var dbPrefix = Regex.Match(_connectionString, @"Database=(\d*)_").Groups[1].Value;
+            var rabbitMqHost = core.GetSdkSetting(Settings.rabbitMqHost).GetAwaiter().GetResult();
+            var rabbitMqUser = core.GetSdkSetting(Settings.rabbitMqUser).GetAwaiter().GetResult();
+            var rabbitMqPassword = core.GetSdkSetting(Settings.rabbitMqPassword).GetAwaiter().GetResult();
+
             _container.Register(Component.For<Core>().Instance(core));
             _container.Register(Component.For<DbContextHelper>().Instance(_dbContextHelper));
             _container.Install(
-                new RebusHandlerInstaller()
-                , new RebusInstaller(connectionString, maxParallelism, numberOfWorkers)
+                new RebusHandlerInstaller(),
+                new RebusInstaller(dbPrefix, connectionString, maxParallelism, numberOfWorkers,
+                                   rabbitMqUser, rabbitMqPassword, rabbitMqHost)
             );
-
 
             _bus = _container.Resolve<IBus>();
         }
