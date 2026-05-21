@@ -83,6 +83,7 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
   public selectFractionsPaginationSort$ = this.store.select(selectFractionsPaginationSort);
   public selectFractionsPaginationIsSortDsc$ = this.store.select(selectFractionsPaginationIsSortDsc);
+  public selectFractionsPagination$ = this.store.select(selectFractionsPagination);
 
   
 
@@ -156,7 +157,7 @@ export class FractionsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    //this.fractionsStateService.updatePagination(paginationModel);
+    this.fractionsStateService.updatePagination(paginationModel);
     this.getAllFractions();
   }
 

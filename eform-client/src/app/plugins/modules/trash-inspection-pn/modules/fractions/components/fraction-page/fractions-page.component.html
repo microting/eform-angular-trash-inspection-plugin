@@ -23,6 +23,7 @@
 <mtx-grid
   [data]="fractionsModel.entities"
   [columns]="tableHeaders"
+  [paginationTemplate]="paginatorTpl"
   [showPaginator]="true"
   [pageOnFront]="false"
   [rowStriped]="true"
@@ -33,9 +34,9 @@
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<!--<ng-template #paginatorTpl>-->
-<!--  <eform-pagination-->
-<!--    [pagination]="selectFractionsPagination$ | async"-->
-<!--    (paginationChanged)="onPaginationChanged($event)"-->
-<!--  ></eform-pagination>-->
-<!--</ng-template>-->
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="selectFractionsPagination$ | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>

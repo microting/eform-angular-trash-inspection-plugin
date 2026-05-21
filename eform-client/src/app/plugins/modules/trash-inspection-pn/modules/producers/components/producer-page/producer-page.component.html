@@ -22,6 +22,7 @@
 <mtx-grid
   [data]="producersModel.producerList"
   [columns]="tableHeaders"
+  [paginationTemplate]="paginatorTpl"
   [showPaginator]="true"
   [pageOnFront]="false"
   [rowStriped]="true"
@@ -32,9 +33,9 @@
   (sortChange)="sortTable($event)">
 </mtx-grid>
 
-<!--<ng-template #paginatorTpl>-->
-<!--  <eform-pagination-->
-<!--    [pagination]="selectProducersPagination$ | async"-->
-<!--    (paginationChanged)="onPaginationChanged($event)"-->
-<!--  ></eform-pagination>-->
-<!--</ng-template>-->
+<ng-template #paginatorTpl>
+  <eform-pagination
+    [pagination]="selectProducersPagination$ | async"
+    (paginationChanged)="onPaginationChanged($event)"
+  ></eform-pagination>
+</ng-template>

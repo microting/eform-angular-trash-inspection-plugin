@@ -108,34 +108,14 @@ export class FractionsStateService {
       }));
   }
 
-  // checkOffset() {
-  //   const newOffset = getOffset(
-  //     this.query.pageSetting.pagination.pageSize,
-  //     this.query.pageSetting.pagination.offset,
-  //     this.query.pageSetting.total
-  //   );
-  //   if (newOffset !== this.query.pageSetting.pagination.offset) {
-  //     this.store.update((state) => ({
-  //       pagination: {
-  //         ...state.pagination,
-  //         offset: newOffset,
-  //       },
-  //     }));
-  //   }
-  // }
-  //
-  // getPagination(): Observable<PaginationModel> {
-  //   return this.query.selectPagination$;
-  // }
-  //
-  // updatePagination(pagination: PaginationModel) {
-  //   this.store.update((state) => ({
-  //     pagination: {
-  //       ...state.pagination,
-  //       pageSize: pagination.pageSize,
-  //       offset: pagination.offset,
-  //     },
-  //   }));
-  //   // this.checkOffset();
-  // }
+  updatePagination(pagination: PaginationModel) {
+    this.store.dispatch(
+      fractionsUpdatePagination({
+        pagination: {
+          ...this.currentPagination,
+          pageSize: pagination.pageSize,
+          offset: pagination.offset,
+        }
+      }));
+  }
 }

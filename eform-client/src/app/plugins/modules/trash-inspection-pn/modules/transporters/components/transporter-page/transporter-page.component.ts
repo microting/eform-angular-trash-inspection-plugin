@@ -155,6 +155,7 @@ export class TransporterPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
+    this.transportersStateService.updatePagination(paginationModel);
     this.getAllTransporters();
   }
 

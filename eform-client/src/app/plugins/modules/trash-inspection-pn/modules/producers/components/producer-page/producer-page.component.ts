@@ -147,7 +147,7 @@ export class ProducerPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
-    //this.producersStateService.updatePagination(paginationModel);
+    this.producersStateService.updatePagination(paginationModel);
     this.getAllProducers();
   }
 

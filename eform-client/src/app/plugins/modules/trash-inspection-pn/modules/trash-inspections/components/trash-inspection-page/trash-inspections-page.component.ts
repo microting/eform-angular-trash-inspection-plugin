@@ -187,8 +187,12 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   }
 
   showVersionViewModal(trashInspectionId: number) {
-    // const versionViewModal =
-    this.dialog.open(TrashInspectionVersionViewComponent, {...dialogConfigHelper(this.overlay, trashInspectionId), minWidth: 800});
+    this.dialog.open(TrashInspectionVersionViewComponent, {
+      ...dialogConfigHelper(this.overlay, trashInspectionId),
+      width: '90vw',
+      maxWidth: '90vw',
+      minWidth: 800,
+    });
   }
 
   downloadPDF(trashInspection: TrashInspectionPnModel) {

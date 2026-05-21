@@ -149,6 +149,7 @@ export class SegmentsPageComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChanged(paginationModel: PaginationModel) {
+    this.segmentsStateService.updatePagination(paginationModel);
     this.getAllSegments();
   }
 
