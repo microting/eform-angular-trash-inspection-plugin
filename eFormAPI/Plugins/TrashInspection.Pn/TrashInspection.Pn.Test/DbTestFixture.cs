@@ -58,6 +58,8 @@ namespace TrashInspection.Pn.Test
         {
             List<string> modelNames = new List<string>
             {
+                "TrashInspectionCaseVersions",
+                "TrashInspectionCases",
                 "TrashInspectionVersions",
                 "TrashInspections",
                 "TrashInspectionSettings",
