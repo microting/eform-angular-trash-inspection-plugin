@@ -1,7 +1,7 @@
-﻿/*
+/*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2021 Microting A/S
+Copyright (c) 2007 - 2026 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-namespace TrashInspection.Pn.Infrastructure.Models
+namespace TrashInspection.Pn.Infrastructure.Models.Nav
 {
-    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
-
-    public class TrashInspectionRequestModel : PaginationModel
+    /// <summary>
+    /// The subset of TrashInspectionBaseSettings needed to post a weighing to the NAV endpoint.
+    /// </summary>
+    public class NavCallbackSettings
     {
-        public string Sort { get; set; }
-        
-        public bool IsSortDsc { get; set; }
+        public string CallBackUrl { get; set; }
 
-        public string NameFilter { get; set; }
+        public string CallBackCredentialDomain { get; set; }
 
-        /// <summary>
-        /// NAV delivery state to filter on: notSent, failed, unconfirmed, sent. Null or "all"
-        /// applies no filter.
-        /// </summary>
-        public string NavStatusFilter { get; set; }
+        public string CallbackCredentialUserName { get; set; }
+
+        public string CallbackCredentialPassword { get; set; }
+
+        public string CallbackCredentialAuthType { get; set; }
     }
 }

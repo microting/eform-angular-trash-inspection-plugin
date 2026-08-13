@@ -79,6 +79,9 @@ namespace TrashInspection.Pn
             services.AddTransient<ITrashInspectionPnSettingsService, TrashInspectionPnSettingsService>();
             services.AddTransient<ITransporterService, TransporterService>();
             services.AddTransient<IProducerService, ProducerService>();
+            // Constructed by hand: the handler factory and the timeout are constructor seams for
+            // the tests and have defaults the container cannot resolve.
+            services.AddTransient<INavCallbackSender>(_ => new NavCallbackSender());
 
             // Handlers (formerly Rebus IHandleMessages<T>): now invoked directly by
             // TrashInspectionService and from each other. Each handler resolves its own

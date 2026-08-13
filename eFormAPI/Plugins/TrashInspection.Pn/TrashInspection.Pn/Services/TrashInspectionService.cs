@@ -40,6 +40,7 @@ using Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities;
 using TrashInspection.Pn.Abstractions;
 using TrashInspection.Pn.Handlers;
 using TrashInspection.Pn.Infrastructure.Models;
+using TrashInspection.Pn.Infrastructure.Models.Nav;
 using TrashInspection.Pn.Messages;
 using Microting.eFormApi.BasePn.Infrastructure.Helpers;
 using Microting.eFormApi.BasePn.Infrastructure.Helpers.PluginDbOptions;
@@ -59,6 +60,13 @@ namespace TrashInspection.Pn.Services
         private readonly TrashInspectionReceivedHandler _trashInspectionReceivedHandler;
         private readonly TrashInspectionDeleteHandler _trashInspectionDeleteHandler;
         private readonly IPluginDbOptions<TrashInspectionBaseSettings> _options;
+        private readonly INavCallbackSender _navCallbackSender;
+
+        /// <summary>
+        /// ErrorFromCallBack carries the raw remote response, which can be a multi-KB HTML error
+        /// page. The client auto-toasts the message of every response, so it is capped.
+        /// </summary>
+        private const int ErrorFromCallBackMaxLength = 200;
 
         public TrashInspectionService(ILogger<TrashInspectionService> logger,
             TrashInspectionPnDbContext dbContext,
@@ -67,7 +75,8 @@ namespace TrashInspection.Pn.Services
             ITrashInspectionLocalizationService trashInspectionLocalizationService,
             IPluginDbOptions<TrashInspectionBaseSettings> options,
             TrashInspectionReceivedHandler trashInspectionReceivedHandler,
-            TrashInspectionDeleteHandler trashInspectionDeleteHandler)
+            TrashInspectionDeleteHandler trashInspectionDeleteHandler,
+            INavCallbackSender navCallbackSender)
         {
             _logger = logger;
             _dbContext = dbContext;
@@ -77,6 +86,7 @@ namespace TrashInspection.Pn.Services
             _trashInspectionReceivedHandler = trashInspectionReceivedHandler;
             _trashInspectionDeleteHandler = trashInspectionDeleteHandler;
             _options = options;
+            _navCallbackSender = navCallbackSender;
         }
 
         public async Task<OperationDataResult<Paged<TrashInspectionModel>>> Index(TrashInspectionRequestModel pnRequestModel)
@@ -115,6 +125,26 @@ namespace TrashInspection.Pn.Services
                     }
                 }
 
+                switch (pnRequestModel.NavStatusFilter)
+                {
+                    case "notSent":
+                        trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                            !x.ResponseSendToCallBackUrl && string.IsNullOrEmpty(x.ErrorFromCallBack));
+                        break;
+                    case "failed":
+                        trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                            !x.ResponseSendToCallBackUrl && !string.IsNullOrEmpty(x.ErrorFromCallBack));
+                        break;
+                    case "unconfirmed":
+                        trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                            x.ResponseSendToCallBackUrl && string.IsNullOrEmpty(x.SuccessMessageFromCallBack));
+                        break;
+                    case "sent":
+                        trashInspectionsQuery = trashInspectionsQuery.Where(x =>
+                            x.ResponseSendToCallBackUrl && !string.IsNullOrEmpty(x.SuccessMessageFromCallBack));
+                        break;
+                }
+
                 trashInspectionsQuery = QueryHelper.AddSortToQuery(trashInspectionsQuery, pnRequestModel.Sort, pnRequestModel.IsSortDsc);
 
                 var total = await trashInspectionsQuery.Select(x => x.Id).CountAsync();
@@ -125,14 +155,18 @@ namespace TrashInspection.Pn.Services
 
                 var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
 
-                var trashInspections = await AddSelectToQuery(trashInspectionsQuery, timeZoneInfo, trashInspectionSettings.Token)
+                var trashInspections = await AddSelectToQuery(trashInspectionsQuery, timeZoneInfo, trashInspectionSettings.Token, true)
                     .ToListAsync();
+
+                var navEnabled = IsNavConfigured(trashInspectionSettings.CallBackUrl);
 
                 var core = await _coreHelper.GetCore();
                 var eFormIds = new List<KeyValuePair<int, int>>(); // <FractionId, eFormId>
 
                 foreach (var trashInspectionModel in trashInspections)
                 {
+                    trashInspectionModel.NavEnabled = navEnabled;
+
                     var fractionEFormId = await _dbContext.Fractions
                         .Where(y => y.Id == trashInspectionModel.FractionId)
                         .Select(x => x.eFormId)
@@ -335,7 +369,7 @@ namespace TrashInspection.Pn.Services
 
                 var timeZoneInfo = await _userService.GetCurrentUserTimeZoneInfo();
 
-                var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "")
+                var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "", true)
                 .FirstOrDefaultAsync();
 
                 if (trashInspection == null)
@@ -381,7 +415,10 @@ namespace TrashInspection.Pn.Services
                         timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
                     }
 
-                    var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "")
+                    // This path is reachable unauthenticated with only the weighing number and the
+                    // shared token, so the NAV messages - which carry internal hostnames, IPs and
+                    // raw remote response bodies - are deliberately left out (D4).
+                    var trashInspection = await AddSelectToQuery(trashInspectionQuery, timeZoneInfo, "", false)
                         .FirstOrDefaultAsync();
 
                     if (trashInspection == null)
@@ -684,6 +721,215 @@ namespace TrashInspection.Pn.Services
             return new OperationResult(false);
         }
 
+        public async Task<OperationResult> SendToNav(int trashInspectionId)
+        {
+            // D1: there is no optimistic concurrency on the entity, so "check the flag then send"
+            // is a TOCTOU race - a double click or two operators would each post a real weighing
+            // to NAV. A named lock is fail-fast (0 second timeout), and unlike SELECT ... FOR UPDATE
+            // it does not pin a row lock for the whole NAV call. The connection is opened
+            // explicitly because MySQL named locks are scoped to a connection.
+            //
+            // LIMITATION: this is best effort, not a cluster-wide guarantee. Named locks are not
+            // replicated by Galera, and the API connects through a service that load balances over
+            // all three nodes, so two requests landing on different nodes can both acquire it.
+            // It does reliably stop the common case (one operator double clicking). Closing the
+            // gap properly needs a claim column on the entity, which means a migration in the base
+            // repo - out of scope here. The lock name is schema qualified because named locks live
+            // in a server-wide namespace shared by every tenant on the instance.
+            var connectionOpened = false;
+            var lockAcquired = false;
+
+            try
+            {
+                await _dbContext.Database.OpenConnectionAsync();
+                connectionOpened = true;
+
+                lockAcquired = await ExecuteNavLockCommandAsync(
+                    "SELECT GET_LOCK(CONCAT(DATABASE(), '_ti_nav_', @id), 0)",
+                    trashInspectionId);
+
+                if (!lockAcquired)
+                {
+                    return new OperationResult(false,
+                        _trashInspectionLocalizationService.GetString("TrashInspectionIsAlreadyBeingSentToNav"));
+                }
+
+                return await SendToNavWhileLocked(trashInspectionId);
+            }
+            catch (Exception e)
+            {
+                Trace.TraceError(e.Message);
+                _logger.LogError(e.Message);
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("ErrorWhileSendingTrashInspectionToNav"));
+            }
+            finally
+            {
+                if (lockAcquired)
+                {
+                    try
+                    {
+                        await ExecuteNavLockCommandAsync(
+                            "SELECT RELEASE_LOCK(CONCAT(DATABASE(), '_ti_nav_', @id))",
+                            trashInspectionId);
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.TraceError(e.Message);
+                        _logger.LogError(e.Message);
+                    }
+                }
+
+                if (connectionOpened)
+                {
+                    await _dbContext.Database.CloseConnectionAsync();
+                }
+            }
+        }
+
+        private async Task<bool> ExecuteNavLockCommandAsync(string sql, int trashInspectionId)
+        {
+            using var command = _dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = sql;
+
+            var idParameter = command.CreateParameter();
+            idParameter.ParameterName = "@id";
+            idParameter.Value = trashInspectionId;
+            command.Parameters.Add(idParameter);
+
+            var result = await command.ExecuteScalarAsync();
+
+            return result != null && result != DBNull.Value && Convert.ToInt64(result) == 1;
+        }
+
+        private async Task<OperationResult> SendToNavWhileLocked(int trashInspectionId)
+        {
+            // Re-read inside the lock: whatever the caller saw in the list may be stale.
+            var trashInspection = await _dbContext.TrashInspections
+                .FirstOrDefaultAsync(x => x.Id == trashInspectionId);
+
+            if (trashInspection == null)
+            {
+                // The interpolated "TrashInspectionWithID:{id}DoesNotExist" form used elsewhere in
+                // this file is not a real key - IStringLocalizer echoes the key back, so the user
+                // sees the raw string. The actual key takes {0}.
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionWithIdNotExist", trashInspectionId));
+            }
+
+            if (trashInspection.WorkflowState == Constants.WorkflowStates.Removed)
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionIsRemoved"));
+            }
+
+            if (trashInspection.Status != 100)
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionIsNotCompleted"));
+            }
+
+            if (string.IsNullOrEmpty(trashInspection.WeighingNumber))
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionHasNoWeighingNumber"));
+            }
+
+            if (trashInspection.ResponseSendToCallBackUrl &&
+                !string.IsNullOrEmpty(trashInspection.SuccessMessageFromCallBack))
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionIsAlreadySentToNav"));
+            }
+
+            // D7: rows that predate the handler populating ApprovedValue would silently deliver
+            // "not approved" for an old load, so they are never resent.
+            if (string.IsNullOrEmpty(trashInspection.ApprovedValue))
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("TrashInspectionHasNoApprovedValue"));
+            }
+
+            var settings = _options.Value;
+
+            if (!IsNavConfigured(settings.CallBackUrl))
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("NavIsNotConfigured"));
+            }
+
+            // D8: the background service uses a WCF BasicHttpBinding for "basic". This sender is
+            // NTLM shaped only, so anything else is rejected rather than silently sent over a
+            // different transport than the one the customer is configured for.
+            if (settings.CallbackCredentialAuthType != "NTLM")
+            {
+                return new OperationResult(false,
+                    _trashInspectionLocalizationService.GetString("NavAuthTypeIsNotSupported"));
+            }
+
+            _coreHelper.LogEvent($"SendToNav: user {_userService.UserId} is sending trash inspection " +
+                                 $"{trashInspection.Id} to NAV, weighing number {trashInspection.WeighingNumber}, " +
+                                 $"approved {trashInspection.IsApproved}");
+
+            var navCallResult = await _navCallbackSender.SendAsync(new NavCallbackSettings
+            {
+                CallBackUrl = settings.CallBackUrl,
+                CallBackCredentialDomain = settings.CallBackCredentialDomain,
+                CallbackCredentialUserName = settings.CallbackCredentialUserName,
+                CallbackCredentialPassword = settings.CallbackCredentialPassword,
+                CallbackCredentialAuthType = settings.CallbackCredentialAuthType
+            }, trashInspection.WeighingNumber, trashInspection.IsApproved);
+
+            // D9: UpdateInternal only writes when the change tracker has changes, so an identical
+            // repeated failure would produce no version row at all. Always stamping the user and
+            // the timestamp guarantees the version row that is the audit trail for this action.
+            trashInspection.UpdatedByUserId = _userService.UserId;
+            trashInspection.UpdatedAt = DateTime.UtcNow;
+
+            if (navCallResult.Success)
+            {
+                trashInspection.ResponseSendToCallBackUrl = true;
+                trashInspection.SuccessMessageFromCallBack = navCallResult.ReturnValue;
+                trashInspection.ErrorFromCallBack = null;
+                await trashInspection.Update(_dbContext);
+
+                _coreHelper.LogEvent($"SendToNav: trash inspection {trashInspection.Id} was accepted by NAV: " +
+                                     $"{navCallResult.ReturnValue}");
+
+                return new OperationResult(true, navCallResult.ReturnValue);
+            }
+
+            // The full NAV response is kept in the database - the column is longtext and support
+            // needs the whole 401 body or SOAP fault. Only what is shown to the user is capped:
+            // the projection truncates for the grid tooltip, and this truncates for the toast.
+            trashInspection.ErrorFromCallBack = navCallResult.Error;
+            await trashInspection.Update(_dbContext);
+
+            _coreHelper.LogException($"SendToNav: trash inspection {trashInspection.Id} was rejected by NAV: " +
+                                     $"{navCallResult.Error}");
+
+            return new OperationResult(false, Truncate(navCallResult.Error, ErrorFromCallBackMaxLength));
+        }
+
+        /// <summary>
+        /// The callback url seeds to "...", so a tenant without a NAV integration must not see the
+        /// NAV column, the NAV filter or the resend button at all (D11).
+        /// </summary>
+        private static bool IsNavConfigured(string callBackUrl)
+        {
+            return !string.IsNullOrEmpty(callBackUrl) && callBackUrl != "...";
+        }
+
+        private static string Truncate(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length <= maxLength)
+            {
+                return value;
+            }
+
+            return value.Substring(0, maxLength);
+        }
+
         public async Task<string> DownloadEFormPdf(string weighingNumber, string token, string fileType)
         {
             var trashInspectionSettings = _options.Value.Token;
@@ -864,7 +1110,7 @@ namespace TrashInspection.Pn.Services
             await trashInspection.Update(_dbContext);
         }
 
-        private static IQueryable<TrashInspectionModel> AddSelectToQuery(IQueryable<TrashInspection> query, TimeZoneInfo timeZoneInfo, string token)
+        private static IQueryable<TrashInspectionModel> AddSelectToQuery(IQueryable<TrashInspection> query, TimeZoneInfo timeZoneInfo, string token, bool includeNavMessages)
         {
             return query
                 .Select(x => new TrashInspectionModel
@@ -890,6 +1136,12 @@ namespace TrashInspection.Pn.Services
                     Comment = x.Comment,
                     Token = token,
                     ResponseSendToCallBackUrl = x.ResponseSendToCallBackUrl,
+                    SuccessMessageFromCallBack = includeNavMessages ? x.SuccessMessageFromCallBack : null,
+                    ErrorFromCallBack = includeNavMessages
+                        ? (x.ErrorFromCallBack.Length > ErrorFromCallBackMaxLength
+                            ? x.ErrorFromCallBack.Substring(0, ErrorFromCallBackMaxLength)
+                            : x.ErrorFromCallBack)
+                        : null,
                     InstallationName = x.Installation.Name,
                     TrashFraction = $"{x.Fraction.ItemNumber} {x.Fraction.Name}",
                     Segment = x.Segment.Name,

@@ -22,6 +22,7 @@ export let TrashInspectionPnTrashInspectionMethods = {
   TrashInspectionsIndex: 'api/trash-inspection-pn/inspections/index',
   TrashInspections: 'api/trash-inspection-pn/inspections',
   TrashInspectionVersions: 'api/trash-inspection-pn/versions',
+  SendToNav: '/send-to-nav',
 };
 
 @Injectable()
@@ -81,6 +82,16 @@ export class TrashInspectionPnTrashInspectionsService {
       TrashInspectionPnTrashInspectionMethods.TrashInspections +
         '/' +
         trashInspectionId
+    );
+  }
+
+  sendToNav(trashInspectionId: number): Observable<OperationResult> {
+    return this.apiBaseService.post(
+      TrashInspectionPnTrashInspectionMethods.TrashInspections +
+        '/' +
+        trashInspectionId +
+        TrashInspectionPnTrashInspectionMethods.SendToNav,
+      {}
     );
   }
 }

@@ -7,6 +7,7 @@ import {
 
 export interface TrashInspectionFiltrationModel {
   nameFilter: string;
+  navStatusFilter: string;
 }
 
 export interface TrashInspectionsState {
@@ -26,6 +27,7 @@ export const trashInspectionsInitialState: TrashInspectionsState = {
   },
   filters: {
     nameFilter: '',
+    navStatusFilter: '',
   },
   total: 0,
 };

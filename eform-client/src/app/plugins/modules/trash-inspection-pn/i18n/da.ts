@@ -74,5 +74,17 @@ export const da = {
   'Received on tablet': 'Hentet af enhed',
   Answered: 'Udfyldt',
   Removed: 'Fjernet',
+  All: 'Alle',
+  NAV: 'NAV',
+  'Sent to NAV': 'Sendt til NAV',
+  'Not sent to NAV': 'Ikke sendt til NAV',
+  'Failed to send to NAV': 'Fejlet ved afsendelse til NAV',
+  'Sent to NAV, unconfirmed': 'Sendt til NAV, ubekræftet',
+  'Send to NAV': 'Send til NAV',
+  'Are you sure you want to send this inspection to NAV':
+    'Er du sikker på, at du vil sende denne inspektion til NAV',
+  'Sent to NAV successfully': 'Sendt til NAV',
+  'NAV may already have received this weighing number':
+    'NAV har muligvis allerede modtaget dette vejenummer',
 };
 

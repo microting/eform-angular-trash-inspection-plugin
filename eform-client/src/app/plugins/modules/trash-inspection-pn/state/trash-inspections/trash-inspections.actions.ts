@@ -4,7 +4,7 @@ import {CommonPaginationState} from 'src/app/common/models';
 
 export const trashInspectionUpdateFilters = createAction(
   '[TrashInspections] Update Filters',
-  (payload: TrashInspectionFiltrationModel) => ({payload})
+  (payload: Partial<TrashInspectionFiltrationModel>) => ({payload})
 );
 
 export const trashInspectionUpdatePagination = createAction(

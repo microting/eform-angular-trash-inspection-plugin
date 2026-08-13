@@ -74,4 +74,16 @@ export const enUS = {
   'Received on tablet': 'Received on tablet',
   Answered: 'Answered',
   Removed: 'Removed',
+  All: 'All',
+  NAV: 'NAV',
+  'Sent to NAV': 'Sent to NAV',
+  'Not sent to NAV': 'Not sent to NAV',
+  'Failed to send to NAV': 'Failed to send to NAV',
+  'Sent to NAV, unconfirmed': 'Sent to NAV, unconfirmed',
+  'Send to NAV': 'Send to NAV',
+  'Are you sure you want to send this inspection to NAV':
+    'Are you sure you want to send this inspection to NAV',
+  'Sent to NAV successfully': 'Sent to NAV successfully',
+  'NAV may already have received this weighing number':
+    'NAV may already have received this weighing number',
 };

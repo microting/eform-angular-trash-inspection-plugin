@@ -16,6 +16,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSelectModule} from '@angular/material/select';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   imports: [
@@ -31,6 +33,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatIconModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   declarations: [
     TrashInspectionsPageComponent,

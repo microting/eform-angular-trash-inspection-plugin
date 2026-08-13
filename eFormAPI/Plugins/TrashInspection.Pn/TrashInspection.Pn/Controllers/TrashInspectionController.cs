@@ -50,8 +50,12 @@ namespace TrashInspection.Pn.Controllers
             return await _trashInspectionService.Read(id);
         }
 
+        // This returns ErrorFromCallBack per version, which now carries the NAV HTTP status,
+        // the WWW-Authenticate challenge and the raw response body - internal hostnames and IPs.
+        // It was [AllowAnonymous] with no token guard, so that was readable by walking the id.
+        // Its only caller is the authenticated version-view dialog.
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = TrashInspectionClaims.AccessTrashInspectionPlugin)]
         [Route("api/trash-inspection-pn/versions/{id}")]
         public async Task<OperationDataResult<TrashInspectionVersionsModel>> ReadVersion(int id)
         {
@@ -81,6 +85,14 @@ namespace TrashInspection.Pn.Controllers
         public async Task<OperationResult> Delete(int id)
         {
             return await _trashInspectionService.Delete(id);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = TrashInspectionClaims.UpdateTrashInspections)]
+        [Route("api/trash-inspection-pn/inspections/{id}/send-to-nav")]
+        public async Task<OperationResult> SendToNav(int id)
+        {
+            return await _trashInspectionService.SendToNav(id);
         }
 
         [HttpDelete]
