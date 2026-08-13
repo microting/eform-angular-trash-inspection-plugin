@@ -57,6 +57,10 @@ export class TrashInspectionsStateService {
     this.store.dispatch(trashInspectionUpdateFilters({nameFilter: nameFilter}));
   }
 
+  updateNavStatusFilter(navStatusFilter: string) {
+    this.store.dispatch(trashInspectionUpdateFilters({navStatusFilter: navStatusFilter}));
+  }
+
   // updatePageSize(pageSize: number) {
   //   this.store.update((state) => ({
   //     pagination: {

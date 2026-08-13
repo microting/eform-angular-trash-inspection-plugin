@@ -94,8 +94,12 @@ a plain `int Version` manually; there is no `[ConcurrencyCheck]` or rowversion. 
 The sender performs no persistence — a pure function from inputs to result, so the
 caller owns entity mutation.
 
-**D2 — success predicate.** `Success` requires **all** of: 2xx status, a non-null
-parsed `return_value`, and no `soap:Fault` descendant. A 2xx carrying a SOAP fault, an
+**D2 — success predicate.** `Success` requires **all** of: 2xx status, a **non-blank**
+parsed `return_value`, and no `soap:Fault` descendant. Non-blank, not merely non-null:
+`ParseReturnValue` yields `""` for `<return_value/>`, and accepting that would set the
+sent flag, wipe the previous error, and produce an empty `OperationResult` message — which
+`apiBase.service.ts` does not toast, so the operator would get no feedback at all on an
+irreversible action. A 2xx carrying a SOAP fault, an
 HTML error page, or an empty body is a **failure**. `XDocument.Parse` must be wrapped —
 a non-XML body throws. This matters: the existing service sets the sent flag on any 2xx
 and stores a possibly-null `return_value`, which is the mechanism behind the 34
@@ -121,6 +125,13 @@ Credentials: 3-arg `NetworkCredential` with domain when `CallBackCredentialDomai
 ### 2. API surface — same project
 
 - `TrashInspectionModel`: add `SuccessMessageFromCallBack`, `ErrorFromCallBack`, `NavEnabled`.
+- **D4b — close the sibling leak.** `GET api/trash-inspection-pn/versions/{id}` was
+  `[AllowAnonymous]` with **no token guard** and already projects `ErrorFromCallBack`
+  untruncated from the version rows. Since D9 guarantees a version row on every failed
+  send, and this sender captures far more than the old `ex.Message`, D4 would be defeated
+  by walking integer ids. It now carries
+  `[Authorize(Policy = AccessTrashInspectionPlugin)]`; its only caller is the
+  authenticated version-view dialog.
 - **D4 — do not widen the shared projection blindly.** `AddSelectToQuery` also backs
   `Read(weighingNumber, token)`, reachable **unauthenticated** via
   `GET api/trash-inspection-pn/inspection-results/{weighingNumber}?token=…`. `ErrorFromCallBack`
@@ -150,11 +161,23 @@ tenant 741 — so there is no rollout step.
 
 `TrashInspectionService.SendToNav(int id)`:
 
-1. **D1 — claim the row atomically.** `SELECT GET_LOCK(CONCAT('ti_nav_', @id), 0)`
-   (fail-fast, works across API replicas). Re-read the entity *inside* the lock. Release
-   in `finally`. Preferred over `SELECT … FOR UPDATE`, which would pin a row lock for the
-   full 30s. Without this, a double-click or two operators each post a real weighing to
-   NAV — the "already sent" flag alone only guards *sequential completed* attempts.
+1. **D1 — claim the row.** `SELECT GET_LOCK(CONCAT(DATABASE(), '_ti_nav_', @id), 0)`
+   (fail-fast). Re-read the entity *inside* the lock. Release in `finally`. Preferred over
+   `SELECT … FOR UPDATE`, which would pin a row lock for the full 30s. Without this, a
+   double-click or two operators each post a real weighing to NAV — the "already sent"
+   flag alone only guards *sequential completed* attempts.
+
+   The name is schema-qualified because MySQL named locks live in a **server-wide**
+   namespace shared by every tenant on the instance; a bare `ti_nav_42` would collide
+   across customer databases.
+
+   **This is best-effort, not a cluster-wide guarantee.** Named locks are session-scoped
+   to one node and Galera does not replicate them, and the API connects via
+   `mariadb-cluster-mariadb-galera`, which load-balances across all three nodes (verified
+   2026-08-13: 3 endpoints; only `…-primary` is single-writer). Two requests landing on
+   different nodes can both acquire it. It does reliably stop the common case — one
+   operator double-clicking. Closing the gap properly needs a claim column on the entity,
+   i.e. a migration in the base repo, which is out of scope here.
 2. Reject with a clear message when: not found; `WorkflowState == removed`;
    `Status != 100`; `WeighingNumber` empty; `ResponseSendToCallBackUrl` already true
    with a success message; **`ApprovedValue` null/empty** (D7); `CallBackUrl` empty or

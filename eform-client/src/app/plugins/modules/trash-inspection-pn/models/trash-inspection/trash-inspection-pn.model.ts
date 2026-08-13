@@ -22,4 +22,8 @@ export class TrashInspectionPnModel {
   inspectionDone: boolean;
   sdkCaseId: number;
   sdkeFormId: number;
+  responseSendToCallBackUrl: boolean;
+  successMessageFromCallBack: string;
+  errorFromCallBack: string;
+  navEnabled: boolean;
 }

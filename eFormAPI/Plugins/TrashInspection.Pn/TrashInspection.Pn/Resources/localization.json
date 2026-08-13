@@ -180,5 +180,68 @@
 			"da": "Affaldsinspektion med {0} id eksisterer ikke",
 			"en-US": "Trash Inspection with {0} id does not exist"
 		}
+	},
+	{
+		"Key": "TrashInspectionIsAlreadyBeingSentToNav",
+		"LocalizedValue": {
+			"da": "Denne affaldsinspektion er ved at blive sendt til NAV lige nu. Prøv igen om lidt",
+			"en-US": "This trash inspection is being sent to NAV right now. Please try again shortly"
+		}
+	},
+	{
+		"Key": "ErrorWhileSendingTrashInspectionToNav",
+		"LocalizedValue": {
+			"da": "Fejl under afsendelse af affaldsinspektion til NAV",
+			"en-US": "Error while sending trash inspection to NAV"
+		}
+	},
+	{
+		"Key": "TrashInspectionIsRemoved",
+		"LocalizedValue": {
+			"da": "Affaldsinspektionen er slettet",
+			"en-US": "The trash inspection has been removed"
+		}
+	},
+	{
+		"Key": "TrashInspectionIsNotCompleted",
+		"LocalizedValue": {
+			"da": "Affaldsinspektionen er ikke afsluttet",
+			"en-US": "The trash inspection is not completed"
+		}
+	},
+	{
+		"Key": "TrashInspectionHasNoWeighingNumber",
+		"LocalizedValue": {
+			"da": "Affaldsinspektionen har ikke et vejenummer",
+			"en-US": "The trash inspection has no weighing number"
+		}
+	},
+	{
+		"Key": "TrashInspectionIsAlreadySentToNav",
+		"LocalizedValue": {
+			"da": "Affaldsinspektionen er allerede sendt til NAV og bekræftet",
+			"en-US": "The trash inspection has already been sent to NAV and confirmed"
+		}
+	},
+	{
+		"Key": "TrashInspectionHasNoApprovedValue",
+		"LocalizedValue": {
+			"da": "Affaldsinspektionen har ingen godkendelsesværdi og kan derfor ikke sendes til NAV",
+			"en-US": "The trash inspection has no approved value and can therefore not be sent to NAV"
+		}
+	},
+	{
+		"Key": "NavIsNotConfigured",
+		"LocalizedValue": {
+			"da": "NAV er ikke konfigureret",
+			"en-US": "NAV is not configured"
+		}
+	},
+	{
+		"Key": "NavAuthTypeIsNotSupported",
+		"LocalizedValue": {
+			"da": "NAV er ikke konfigureret til NTLM-godkendelse",
+			"en-US": "NAV is not configured for NTLM authentication"
+		}
 	}
 ]

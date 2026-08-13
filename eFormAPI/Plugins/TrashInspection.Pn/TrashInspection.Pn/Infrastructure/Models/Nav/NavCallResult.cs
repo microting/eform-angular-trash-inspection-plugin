@@ -1,7 +1,7 @@
-﻿/*
+/*
 The MIT License (MIT)
 
-Copyright (c) 2007 - 2021 Microting A/S
+Copyright (c) 2007 - 2026 Microting A/S
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-namespace TrashInspection.Pn.Infrastructure.Models
+namespace TrashInspection.Pn.Infrastructure.Models.Nav
 {
-    using Microting.eFormApi.BasePn.Infrastructure.Models.Common;
-
-    public class TrashInspectionRequestModel : PaginationModel
+    /// <summary>
+    /// The outcome of a single WeighingFromMicroting2 call. Success requires a 2xx status, a
+    /// non-null return_value and no soap:Fault - see the NAV resend design, decision D2.
+    /// </summary>
+    public class NavCallResult
     {
-        public string Sort { get; set; }
-        
-        public bool IsSortDsc { get; set; }
+        public bool Success { get; set; }
 
-        public string NameFilter { get; set; }
+        /// <summary>The NAV return_value, only set when <see cref="Success"/> is true.</summary>
+        public string ReturnValue { get; set; }
 
-        /// <summary>
-        /// NAV delivery state to filter on: notSent, failed, unconfirmed, sent. Null or "all"
-        /// applies no filter.
-        /// </summary>
-        public string NavStatusFilter { get; set; }
+        /// <summary>The failure description, only set when <see cref="Success"/> is false.</summary>
+        public string Error { get; set; }
     }
 }

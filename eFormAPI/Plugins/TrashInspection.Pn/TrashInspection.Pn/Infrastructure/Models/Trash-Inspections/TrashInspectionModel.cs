@@ -76,6 +76,16 @@ namespace TrashInspection.Pn.Infrastructure.Models
 
         public bool ResponseSendToCallBackUrl { get; set; }
 
+        public string SuccessMessageFromCallBack { get; set; }
+
+        public string ErrorFromCallBack { get; set; }
+
+        /// <summary>
+        /// False when the tenant has no NAV callback url configured, so the UI can hide the NAV
+        /// column, the NAV filter and the resend button entirely.
+        /// </summary>
+        public bool NavEnabled { get; set; }
+
         //
 
         //producer vars

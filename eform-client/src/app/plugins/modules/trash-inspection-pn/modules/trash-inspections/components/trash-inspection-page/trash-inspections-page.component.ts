@@ -1,12 +1,14 @@
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {TrashInspectionPnModel} from '../../../../models';
+import {TrashInspectionPnClaims} from '../../../../enums';
 import {TrashInspectionPnTrashInspectionsService} from '../../../../services';
 import {DeleteModalSettingModel, Paged, PaginationModel} from 'src/app/common/models';
 import {TrashInspectionsStateService} from '../store';
+import {AuthStateService} from 'src/app/common/store';
 import {DeleteModalComponent} from 'src/app/common/modules/eform-shared/components';
 import {dialogConfigHelper} from 'src/app/common/helpers';
 import {Subject, Subscription, zip} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, finalize} from 'rxjs/operators';
 import {Sort} from '@angular/material/sort';
 import {TranslateService} from '@ngx-translate/core';
 import {MatDialog} from '@angular/material/dialog';
@@ -16,7 +18,7 @@ import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
 import {TrashInspectionVersionViewComponent} from '../';
 import {Store} from '@ngrx/store';
 import {
-  selectTrashInspectionsNameFilters, selectTrashInspectionsPagination,
+  selectTrashInspectionsNameFilters, selectTrashInspectionsNavStatusFilter, selectTrashInspectionsPagination,
   selectTrashInspectionsPaginationIsSortDsc,
   selectTrashInspectionsPaginationSort
 } from '../../../../state';
@@ -31,6 +33,7 @@ import {
 export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   public trashInspectionsStateService = inject(TrashInspectionsStateService);
+  public authStateService = inject(AuthStateService);
   private translateService = inject(TranslateService);
   private dialog = inject(MatDialog);
   private overlay = inject(Overlay);
@@ -40,8 +43,10 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
 
   searchSubject = new Subject();
   trashInspectionsModel: Paged<TrashInspectionPnModel> = new Paged<TrashInspectionPnModel>();
+  navEnabled = false;
+  sendingToNavIds: number[] = [];
 
-  tableHeaders: MtxGridColumn[] = [
+  private allTableHeaders: MtxGridColumn[] = [
     {header: this.translateService.stream('Id'), field: 'id', sortProp: {id: 'Id'}, sortable: true},
     {
       header: this.translateService.stream('Date'),
@@ -102,6 +107,12 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
     {header: this.translateService.stream('Comment'), field: 'comment', sortProp: {id: 'Comment'}, sortable: true},
     {header: this.translateService.stream('Status'), field: 'status', sortProp: {id: 'Status'}, sortable: true},
     {
+      header: this.translateService.stream('NAV'),
+      field: 'responseSendToCallBackUrl',
+      sortProp: {id: 'ResponseSendToCallBackUrl'},
+      sortable: true,
+    },
+    {
       header: this.translateService.stream('Is removed'),
       field: 'workflowState',
       sortProp: {id: 'WorkflowState'},
@@ -118,14 +129,22 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
       right: '0px',
     },
   ];
+  tableHeaders: MtxGridColumn[] = this.getVisibleTableHeaders();
   translatesSub$: Subscription;
+  translatesSendToNavSub$: Subscription;
   trashInspectionDeletedSub$: Subscription;
+  trashInspectionSentToNavSub$: Subscription;
+
+  get trashInspectionPnClaims() {
+    return TrashInspectionPnClaims;
+  }
   public selectTrashInspectionsPaginationSort$ = this.store.select(selectTrashInspectionsPaginationSort);
   public selectTrashInspectionsPaginationIsSortDsc$ = this.store.select(selectTrashInspectionsPaginationIsSortDsc);
   public selectTrashInspectionsNameFilters$ = this.store.select(selectTrashInspectionsNameFilters);
+  public selectTrashInspectionsNavStatusFilter$ = this.store.select(selectTrashInspectionsNavStatusFilter);
   public selectTrashInspectionsPagination$ = this.store.select(selectTrashInspectionsPagination);
 
-  
+
 
   ngOnInit() {
     this.searchSubject.pipe(debounceTime(500)).subscribe((val: string) => {
@@ -145,12 +164,18 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
       .subscribe((data) => {
         if (data && data.success) {
           this.trashInspectionsModel = data.model;
+          this.updateNavEnabled(data.model.entities);
         }
       });
   }
 
   onLabelInputChanged(label: string) {
     this.searchSubject.next(label);
+  }
+
+  onNavStatusFilterChanged(navStatusFilter: string) {
+    this.trashInspectionsStateService.updateNavStatusFilter(navStatusFilter);
+    this.getAllTrashInspections();
   }
 
   // showCreateTrashInspection() {
@@ -184,6 +209,56 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
             });
         });
     });
+  }
+
+  showSendToNavModal(trashInspection: TrashInspectionPnModel) {
+    this.translatesSendToNavSub$ = zip(
+      this.translateService.stream('Are you sure you want to send this inspection to NAV'),
+      this.translateService.stream('Weighing number'),
+      this.translateService.stream('Date'),
+      this.translateService.stream('Is approved'),
+      this.translateService.stream('Send to NAV'),
+      this.translateService.stream('NAV may already have received this weighing number'),
+    ).subscribe(([headerText, weighingNumber, date, isApproved, sendToNav, alreadyReceivedWarning]) => {
+      const settings: DeleteModalSettingModel = {
+        model: trashInspection,
+        settings: {
+          headerText: `${headerText}?`,
+          fields: [
+            {header: weighingNumber, field: 'weighingNumber'},
+            {header: date, field: 'date', type: 'date', format: 'dd.MM.y'},
+            {header: isApproved, field: 'isApproved'},
+            ...(trashInspection.responseSendToCallBackUrl
+              ? [{header: '', field: '', type: 'text' as const, text: alreadyReceivedWarning}]
+              : []),
+          ],
+          deleteButtonText: sendToNav,
+          deleteButtonId: 'sendTrashInspectionToNavConfirmBtn',
+          cancelButtonId: 'sendTrashInspectionToNavCancelBtn',
+        }
+      };
+      const sendToNavModal = this.dialog.open(DeleteModalComponent, {...dialogConfigHelper(this.overlay, settings)});
+      this.trashInspectionSentToNavSub$ = sendToNavModal.componentInstance.delete
+        .subscribe((model: TrashInspectionPnModel) => {
+          sendToNavModal.close();
+          this.sendToNav(model);
+        });
+    });
+  }
+
+  sendToNav(trashInspection: TrashInspectionPnModel) {
+    this.sendingToNavIds = [...this.sendingToNavIds, trashInspection.id];
+    this.machineAreaPnMachinesService.sendToNav(trashInspection.id)
+      .pipe(finalize(() => this.sendingToNavIds = this.sendingToNavIds.filter((id) => id !== trashInspection.id)))
+      .subscribe(() => {
+        // Refresh on failure too: a rejected send writes a fresh ErrorFromCallBack, so without
+        // this the row keeps rendering its old NAV state and contradicts the error toast.
+        this.getAllTrashInspections();
+      });
+  }
+
+  isSendingToNav(trashInspection: TrashInspectionPnModel): boolean {
+    return this.sendingToNavIds.indexOf(trashInspection.id) !== -1;
   }
 
   showVersionViewModal(trashInspectionId: number) {
@@ -230,6 +305,21 @@ export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   onPaginationChanged(paginationModel: PaginationModel) {
     this.trashInspectionsStateService.updatePagination(paginationModel);
     this.getAllTrashInspections();
+  }
+
+  // NavEnabled is a tenant level setting, but it is carried on the rows, so an empty page
+  // says nothing about it. The NAV column and filter are therefore only ever turned on -
+  // otherwise a filter that matches nothing would hide the filter used to set it.
+  private updateNavEnabled(trashInspections: TrashInspectionPnModel[]) {
+    if (this.navEnabled || !trashInspections || !trashInspections.length || !trashInspections[0].navEnabled) {
+      return;
+    }
+    this.navEnabled = true;
+    this.tableHeaders = this.getVisibleTableHeaders();
+  }
+
+  private getVisibleTableHeaders(): MtxGridColumn[] {
+    return this.allTableHeaders.filter((x) => this.navEnabled || x.field !== 'responseSendToCallBackUrl');
   }
 
   ngOnDestroy(): void {

@@ -20,13 +20,29 @@
         />
       </mat-form-field>
     </div>
+    <div class="d-flex flex-column mr-2 ml-2" *ngIf="navEnabled">
+      <mat-form-field>
+        <mat-label>{{ 'NAV' | translate }}</mat-label>
+        <mat-select
+          [ngModel]="selectTrashInspectionsNavStatusFilter$ | async"
+          (ngModelChange)="onNavStatusFilterChanged($event)"
+          id="navStatusFilterSelector"
+        >
+          <mat-option value="">{{ 'All' | translate }}</mat-option>
+          <mat-option value="notSent">{{ 'Not sent to NAV' | translate }}</mat-option>
+          <mat-option value="failed">{{ 'Failed to send to NAV' | translate }}</mat-option>
+          <mat-option value="unconfirmed">{{ 'Sent to NAV, unconfirmed' | translate }}</mat-option>
+          <mat-option value="sent">{{ 'Sent to NAV' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 </ng-template>
 
 <mtx-grid
   [data]="trashInspectionsModel.entities"
   [columns]="tableHeaders"
-  [cellTemplate]="{status: statusTpl, actions: actionsTpl}"
+  [cellTemplate]="{status: statusTpl, responseSendToCallBackUrl: navTpl, actions: actionsTpl}"
   [paginationTemplate]="paginatorTpl"
   [showPaginator]="true"
   [pageOnFront]="false"
@@ -41,6 +57,28 @@
 
 <ng-template #statusTpl let-row>
   <status-bar [status]="row.status"></status-bar>
+</ng-template>
+
+<ng-template #navTpl let-row>
+  <mat-icon
+    *ngIf="row.responseSendToCallBackUrl && row.successMessageFromCallBack"
+    class="material-icon-success"
+    [matTooltip]="row.successMessageFromCallBack"
+  >check_circle</mat-icon>
+  <mat-icon
+    *ngIf="row.responseSendToCallBackUrl && !row.successMessageFromCallBack"
+    class="text-warning"
+    [matTooltip]="'Sent to NAV, unconfirmed' | translate"
+  >help</mat-icon>
+  <mat-icon
+    *ngIf="!row.responseSendToCallBackUrl && row.errorFromCallBack"
+    class="material-icon-danger"
+    [matTooltip]="row.errorFromCallBack"
+  >error</mat-icon>
+  <mat-icon
+    *ngIf="!row.responseSendToCallBackUrl && !row.errorFromCallBack"
+    [matTooltip]="'Not sent to NAV' | translate"
+  >remove</mat-icon>
 </ng-template>
 
 <ng-template #actionsTpl let-row let-index="index">
@@ -96,6 +134,21 @@
       (click)="showVersionViewModal(row.id)"
     >
       <mat-icon>analytics</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="accent"
+      class="sendTrashInspectionToNavBtn"
+      matTooltip="{{ 'Send to NAV' | translate }}"
+      [disabled]="isSendingToNav(row)"
+      (click)="showSendToNavModal(row)"
+      *ngIf="authStateService.checkClaim(trashInspectionPnClaims.updateTrashInspections)
+        && row.navEnabled
+        && row.status === 100
+        && !(row.responseSendToCallBackUrl && row.successMessageFromCallBack)"
+    >
+      <mat-spinner *ngIf="isSendingToNav(row)" [diameter]="20"></mat-spinner>
+      <mat-icon *ngIf="!isSendingToNav(row)">cloud_upload</mat-icon>
     </button>
   </div>
 </ng-template>
