@@ -96,6 +96,11 @@ namespace TrashInspection.Pn.Infrastructure.Data.Seed.Data
                 Name = "TrashInspectionBaseSettings:UtcAdjustment",
                 Value = "false"
             },
+            new PluginConfigurationValue
+            {
+                Name = "TrashInspectionBaseSettings:InspectionRemovalDelaySeconds",
+                Value = "1800"
+            },
         };
     }
 }
