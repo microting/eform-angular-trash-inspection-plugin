@@ -105,6 +105,16 @@ namespace TrashInspection.Pn
                 var caseCreatedHandler = sp.GetRequiredService<TrashInspectionCaseCreatedHandler>();
                 return new TrashInspectionReceivedHandler(core, new DbContextHelper(_connectionString), caseCreatedHandler);
             });
+
+            // Background worker that performs the device-side eForm removal that the external /
+            // automated weighing-system delete intentionally defers (see TrashInspectionDeleteHandler).
+            // _connectionString is captured here and is set in ConfigureDbContext, which runs before
+            // the hosted service is started, mirroring the handler factory lambdas above.
+            services.AddHostedService(sp =>
+            {
+                var coreHelper = sp.GetRequiredService<IEFormCoreService>();
+                return new PendingInspectionRemovalWorker(_connectionString, coreHelper);
+            });
         }
 
         public void AddPluginConfig(IConfigurationBuilder builder, string connectionString)

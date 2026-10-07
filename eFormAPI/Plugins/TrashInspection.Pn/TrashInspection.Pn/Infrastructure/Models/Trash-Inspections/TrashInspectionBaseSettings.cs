@@ -52,6 +52,11 @@ namespace TrashInspection.Pn.Infrastructure.Models
         public int ExtendedInspectioneFormId { get; set; }
 
         public bool UtcAdjustment { get; set; }
+
+        // Delay (in seconds) before the device-side eForm removal triggered by the external /
+        // automated weighing-system delete is actually performed. Defaults to 1800 (30 min) when
+        // unset/0. See PendingInspectionRemovalWorker.
+        public int InspectionRemovalDelaySeconds { get; set; }
     }
 
     public class TrashInspectionBaseToken

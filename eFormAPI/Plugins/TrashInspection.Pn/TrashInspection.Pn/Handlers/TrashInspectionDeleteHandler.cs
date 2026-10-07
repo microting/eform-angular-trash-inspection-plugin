@@ -54,28 +54,51 @@ namespace TrashInspection.Pn.Handlers
             {
                 TrashInspectionModel createModel = message.TrashInspectionModel;
 
-                List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases
-                    .Where(x => x.TrashInspectionId == createModel.Id).ToList();
-
-                foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
-                {
-                    bool result = await _core.CaseDelete(int.Parse(trashInspectionCase.SdkCaseId));
-                    if (result)
-                    {
-                        await trashInspectionCase.Delete(_dbContext);
-                    }
-
-                }
-
                 Microting.eFormTrashInspectionBase.Infrastructure.Data.Entities.TrashInspection trashInspection = await
                     _dbContext.TrashInspections.SingleAsync(x => x.Id == createModel.Id);
 
-                trashInspection.InspectionDone = true;
-                await trashInspection.Update(_dbContext);
-
                 if (message.ShouldDelete)
                 {
+                    // Admin-initiated delete (Delete(int id)): remove immediately, as before.
+                    // The user explicitly asked to delete, so cutting off any device-side
+                    // eForm is the intended behavior here.
+                    List<TrashInspectionCase> trashInspectionCases = _dbContext.TrashInspectionCases
+                        .Where(x => x.TrashInspectionId == createModel.Id).ToList();
+
+                    foreach (TrashInspectionCase trashInspectionCase in trashInspectionCases)
+                    {
+                        // Guard against a malformed SdkCaseId so one bad row can't throw and
+                        // leave the inspection half-deleted (mirrors PendingInspectionRemovalWorker).
+                        if (!int.TryParse(trashInspectionCase.SdkCaseId, out int sdkCaseId))
+                        {
+                            continue;
+                        }
+
+                        bool result = await _core.CaseDelete(sdkCaseId);
+                        if (result)
+                        {
+                            await trashInspectionCase.Delete(_dbContext);
+                        }
+                    }
+
+                    trashInspection.InspectionDone = true;
+                    await trashInspection.Update(_dbContext);
+
                     await trashInspection.Delete(_dbContext);
+                }
+                else
+                {
+                    // External/automated delete (Delete(string weighingNumber, token) from the
+                    // weighing system): DEFER the device-side eForm removal instead of firing it
+                    // immediately. Calling _core.CaseDelete here pushes the device sync at once and
+                    // would orphan a worker who is still filling in the inspection on their device.
+                    //
+                    // We only mark the inspection as InspectionDone and stamp UpdatedAt = now (via
+                    // Update). PendingInspectionRemovalWorker later picks up inspections whose
+                    // UpdatedAt is older than the configured delay and performs the CaseDelete then.
+                    // The cases are intentionally left untouched (WorkflowState stays "Created").
+                    trashInspection.InspectionDone = true;
+                    await trashInspection.Update(_dbContext);
                 }
             }
             catch (Exception exception)
