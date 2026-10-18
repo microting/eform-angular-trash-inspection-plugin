@@ -4,6 +4,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY eform-angular-frontend/eform-client ./
 RUN apt-get update
 RUN apt-get -y -q install ca-certificates
+RUN corepack enable
 RUN yarn install
 RUN yarn build
 
