@@ -1,3 +1,10 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {AsyncPipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {RouterLink} from '@angular/router';
+import {EformNewSubheaderComponent, EformPaginationComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {
   TransporterPnModel,
@@ -28,7 +35,7 @@ import {
   selector: 'app-transporter-page',
   templateUrl: './transporter-page.component.html',
   styleUrls: ['./transporter-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, AsyncPipe, MatButton, MatTooltip, MtxGrid, RouterLink, EformNewSubheaderComponent, EformPaginationComponent],
 })
 export class TransporterPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);

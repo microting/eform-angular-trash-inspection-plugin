@@ -1,3 +1,4 @@
+import {RouterOutlet} from '@angular/router';
 import {AfterContentInit, Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {translates} from './../i18n/translates';
@@ -11,7 +12,7 @@ import {addPluginToVisited, selectPluginsVisitedPlugins} from 'src/app/state';
   selector: 'app-trash-inspection-pn-layout',
   template: `
     <router-outlet></router-outlet>`,
-  standalone: false
+  imports: [RouterOutlet],
 })
 export class TrashInspectionPnLayoutComponent
   implements AfterContentInit, OnInit, OnDestroy {

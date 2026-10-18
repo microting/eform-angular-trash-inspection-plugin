@@ -1,3 +1,10 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatDialogTitle, MatDialogContent, MatDialogActions} from '@angular/material/dialog';
+import {MtxSelect} from '@ng-matero/extensions/select';
 import {
   ChangeDetectorRef,
   Component,
@@ -20,7 +27,7 @@ import {take} from 'rxjs';
   selector: 'app-trash-inspection-pn-fraction-edit',
   templateUrl: './fraction-edit.component.html',
   styleUrls: ['./fraction-edit.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, MatFormField, MatLabel, MatInput, MatButton, MatDialogTitle, MatDialogContent, MatDialogActions, MtxSelect],
 })
 export class FractionEditComponent implements OnInit {
   private trashInspectionPnFractionsService = inject(TrashInspectionPnFractionsService);

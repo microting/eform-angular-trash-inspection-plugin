@@ -1,3 +1,9 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {AsyncPipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {EformNewSubheaderComponent, EformPaginationComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {SegmentPnModel, SegmentsPnModel,} from '../../../../models';
 import {SegmentsStateService} from '../store';
@@ -25,7 +31,7 @@ import {
   selector: 'app-trash-inspection-pn-segments-page',
   templateUrl: './segments-page.component.html',
   styleUrls: ['./segments-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, AsyncPipe, MatButton, MatTooltip, MtxGrid, EformNewSubheaderComponent, EformPaginationComponent],
 })
 export class SegmentsPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);

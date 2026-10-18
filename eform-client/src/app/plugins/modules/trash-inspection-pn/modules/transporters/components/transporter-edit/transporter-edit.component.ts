@@ -1,3 +1,9 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatDialogTitle, MatDialogContent, MatDialogActions} from '@angular/material/dialog';
 import {
   Component,
   EventEmitter,
@@ -12,7 +18,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
   selector: 'app-trash-inspection-pn-transporter-edit',
   templateUrl: './transporter-edit.component.html',
   styleUrls: ['./transporter-edit.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, MatFormField, MatLabel, MatInput, MatButton, MatDialogTitle, MatDialogContent, MatDialogActions],
 })
 export class TransporterEditComponent implements OnInit {
   private trashInspectionPnTransporterService = inject(TrashInspectionPnTransporterService);

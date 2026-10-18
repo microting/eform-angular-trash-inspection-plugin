@@ -1,3 +1,8 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {MatButton} from '@angular/material/button';
+import {MatDialogTitle, MatDialogContent, MatDialogActions} from '@angular/material/dialog';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {StatusBarComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnInit, inject} from '@angular/core';
 import {
   TrashInspectionPnSettingsService,
@@ -13,7 +18,7 @@ import {TranslateService} from '@ngx-translate/core';
   selector: 'app-trash-inspection-pn-trash-inspection-version-view',
   templateUrl: './trash-inspection-version-view.component.html',
   styleUrls: ['./trash-inspection-version-view.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, MatButton, MatDialogTitle, MatDialogContent, MatDialogActions, MtxGrid, StatusBarComponent],
 })
 export class TrashInspectionVersionViewComponent implements OnInit {
   private trashInspectionPnSettingsService = inject(TrashInspectionPnSettingsService);
