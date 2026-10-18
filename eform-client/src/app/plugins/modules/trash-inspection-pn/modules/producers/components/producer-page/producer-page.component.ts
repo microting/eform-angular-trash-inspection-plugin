@@ -1,3 +1,10 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {AsyncPipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {RouterLink} from '@angular/router';
+import {EformNewSubheaderComponent, EformPaginationComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {DeleteModalSettingModel, PaginationModel,} from 'src/app/common/models';
 import {ProducerPnModel, ProducersPnModel} from '../../../../models';
@@ -25,7 +32,7 @@ import {
   selector: 'app-producer-page',
   templateUrl: './producer-page.component.html',
   styleUrls: ['./producer-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, AsyncPipe, MatButton, MatTooltip, MtxGrid, RouterLink, EformNewSubheaderComponent, EformPaginationComponent],
 })
 export class ProducerPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);
