@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {MatDialogModule} from '@angular/material/dialog';
 import {
   TrashInspectionPnSettingsService,
   TrashInspectionPnTrashInspectionsService,
@@ -25,6 +26,7 @@ import {
 
 @NgModule({
   imports: [
+    MatDialogModule,
     TrashInspectionPnRouting,
     StoreModule.forFeature('trashInspectionPn', {
       fractionsState: fractionsReducer,
