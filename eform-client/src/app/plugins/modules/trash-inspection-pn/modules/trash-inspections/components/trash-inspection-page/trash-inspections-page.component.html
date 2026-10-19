@@ -108,11 +108,7 @@
       (click)="downloadPDF(row)"
       *ngIf="row.status === 100"
     >
-      <fa-icon
-        icon="file-pdf"
-        size="lg"
-        [fixedWidth]="true"
-      ></fa-icon>
+      <mat-icon>picture_as_pdf</mat-icon>
     </button>
     <button
       mat-icon-button
@@ -121,11 +117,7 @@
       (click)="downloadDocx(row)"
       *ngIf="row.status === 100"
     >
-      <fa-icon
-        icon="file-word"
-        size="lg"
-        [fixedWidth]="true"
-      ></fa-icon>
+      <mat-icon>description</mat-icon>
     </button>
     <button
       mat-icon-button

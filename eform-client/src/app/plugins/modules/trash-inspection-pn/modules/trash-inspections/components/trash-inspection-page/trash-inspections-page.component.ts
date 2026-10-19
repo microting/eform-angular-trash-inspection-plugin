@@ -1,3 +1,17 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {RouterLink} from '@angular/router';
+import {EformPaginationComponent, StatusBarComponent} from 'src/app/common/modules/eform-shared/components';
+import {MatSelect} from '@angular/material/select';
+import {MatOption} from '@angular/material/core';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {TrashInspectionPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
@@ -28,7 +42,7 @@ import {
   selector: 'app-trash-inspection-pn-trash-inspection-page',
   templateUrl: './trash-inspections-page.component.html',
   styleUrls: ['./trash-inspections-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, AsyncPipe, NgIf, MatFormField, MatLabel, MatInput, MatIconButton, MatIcon, MatTooltip, MtxGrid, RouterLink, EformPaginationComponent, StatusBarComponent, MatSelect, MatOption, MatProgressSpinner],
 })
 export class TrashInspectionsPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);

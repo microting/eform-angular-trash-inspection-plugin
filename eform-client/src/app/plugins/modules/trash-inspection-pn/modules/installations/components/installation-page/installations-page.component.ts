@@ -1,3 +1,9 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {AsyncPipe} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {EformNewSubheaderComponent, EformPaginationComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {
   InstallationPnModel,
@@ -28,7 +34,7 @@ import {
   selector: 'app-trash-inspection-pn-installations-page',
   templateUrl: './installations-page.component.html',
   styleUrls: ['./installations-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, AsyncPipe, MatButton, MatTooltip, MtxGrid, EformNewSubheaderComponent, EformPaginationComponent],
 })
 export class InstallationsPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);

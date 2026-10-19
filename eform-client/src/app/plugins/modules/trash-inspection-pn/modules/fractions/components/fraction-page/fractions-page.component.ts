@@ -1,3 +1,10 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {AsyncPipe, NgIf} from '@angular/common';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {RouterLink} from '@angular/router';
+import {EformNewSubheaderComponent, EformPaginationComponent} from 'src/app/common/modules/eform-shared/components';
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {FractionPnModel, TransporterPnModel} from '../../../../models';
 import {TrashInspectionPnClaims} from '../../../../enums';
@@ -27,7 +34,7 @@ import {
   selector: 'app-trash-inspection-pn-fractions-page',
   templateUrl: './fractions-page.component.html',
   styleUrls: ['./fractions-page.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, AsyncPipe, NgIf, MatButton, MatTooltip, MtxGrid, RouterLink, EformNewSubheaderComponent, EformPaginationComponent],
 })
 export class FractionsPageComponent implements OnInit, OnDestroy {
   private store = inject(Store);

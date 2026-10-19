@@ -1,3 +1,11 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatDialogTitle, MatDialogContent, MatDialogActions} from '@angular/material/dialog';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {
   Component,
   EventEmitter,
@@ -18,7 +26,7 @@ import {Store} from '@ngrx/store';
   selector: 'app-trash-inspection-pn-installation-create',
   templateUrl: './installation-create.component.html',
   styleUrls: ['./installation-create.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, MatFormField, MatLabel, MatInput, MatButton, MatDialogTitle, MatDialogContent, MatDialogActions, MtxGrid, MatCheckbox],
 })
 export class InstallationCreateComponent implements OnInit {
   private authStore = inject(Store);

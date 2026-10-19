@@ -1,3 +1,12 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {MatFormField} from '@angular/material/form-field';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MtxGrid} from '@ng-matero/extensions/grid';
+import {MtxSelect} from '@ng-matero/extensions/select';
+import {RouterLink} from '@angular/router';
+import {EformNewSubheaderComponent} from 'src/app/common/modules/eform-shared/components';
 import { Component, OnInit, inject } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { Papa } from 'ngx-papaparse';
@@ -17,7 +26,7 @@ const URL = '';
   selector: 'app-transporter-import',
   templateUrl: './transporter-import.component.html',
   styleUrls: ['./transporter-import.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, MatFormField, MatButton, MatIconButton, MatIcon, MatTooltip, MtxGrid, MtxSelect, RouterLink, EformNewSubheaderComponent],
 })
 export class TransporterImportComponent implements OnInit {
   private transporterService = inject(TrashInspectionPnTransporterService);

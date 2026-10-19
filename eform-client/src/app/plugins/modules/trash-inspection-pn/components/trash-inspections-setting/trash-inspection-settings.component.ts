@@ -1,3 +1,11 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MtxSelect} from '@ng-matero/extensions/select';
+import {EformNewSubheaderComponent} from 'src/app/common/modules/eform-shared/components';
+import {MatCard, MatCardContent} from '@angular/material/card';
 import {
   ChangeDetectorRef,
   Component,
@@ -20,7 +28,7 @@ import {take} from 'rxjs';
   selector: 'app-trash-inspection-settings',
   templateUrl: './trash-inspection-settings.component.html',
   styleUrls: ['./trash-inspection-settings.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, MatFormField, MatLabel, MatInput, MatButton, MtxSelect, EformNewSubheaderComponent, MatCard, MatCardContent],
 })
 export class TrashInspectionSettingsComponent implements OnInit {
   private trashInspectionPnSettingsService = inject(TrashInspectionPnSettingsService);

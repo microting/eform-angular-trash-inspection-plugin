@@ -1,3 +1,10 @@
+import {TranslatePipe} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatDialogTitle, MatDialogContent, MatDialogActions} from '@angular/material/dialog';
+import {MtxSelect} from '@ng-matero/extensions/select';
 import {
   ChangeDetectorRef,
   Component,
@@ -23,7 +30,7 @@ import {Store} from '@ngrx/store';
   selector: 'app-trash-inspection-pn-fraction-create',
   templateUrl: './fraction-create.component.html',
   styleUrls: ['./fraction-create.component.scss'],
-  standalone: false
+  imports: [TranslatePipe, FormsModule, MatFormField, MatLabel, MatInput, MatButton, MatDialogTitle, MatDialogContent, MatDialogActions, MtxSelect],
 })
 export class FractionCreateComponent implements OnInit {
   private authStore = inject(Store);
