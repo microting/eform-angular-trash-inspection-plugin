@@ -1,5 +1,25 @@
 import { Page, Locator } from '@playwright/test';
 
+/**
+ * Clicks a dialog's save/delete button and waits until the segment list has been reloaded and the
+ * dialog is gone. Waiting for the spinner or for #createSegmentBtn alone returns immediately (both
+ * are already in that state), so the next step raced the dialog close and the list refresh.
+ */
+async function submitAndWaitForReload(page: Page, button: Locator) {
+  const reload = page.waitForResponse(
+    (r) => r.request().method() === 'GET' && /\/api\/trash-inspection-pn\/segments(\?|$)/.test(r.url()),
+    { timeout: 20000 });
+  await button.click();
+  await reload;
+  await button.waitFor({ state: 'hidden', timeout: 20000 });
+}
+
+/** Cancels a dialog and waits until it is closed. */
+async function cancelAndWaitForClose(button: Locator) {
+  await button.click();
+  await button.waitFor({ state: 'hidden', timeout: 20000 });
+}
+
 export interface CreateUpdateSegment {
   name: string;
   description?: string;
@@ -102,11 +122,10 @@ export class TrashInspectionSegmentPage {
 
   async closeCreateSegment(clickCancel = false) {
     if (clickCancel) {
-      await this.segmentCreateCancelBtn().click();
+      await cancelAndWaitForClose(this.segmentCreateCancelBtn());
     } else {
-      await this.segmentCreateSaveBtn().click();
+      await submitAndWaitForReload(this.page, this.segmentCreateSaveBtn());
     }
-    await this.page.locator('#spinner-animation').waitFor({ state: 'hidden', timeout: 20000 });
     await this.createSegmentBtn().waitFor({ state: 'visible', timeout: 20000 });
   }
 
@@ -193,11 +212,10 @@ export class SegmentsRowObject {
 
   async closeEditModal(clickCancel = false) {
     if (clickCancel) {
-      await this.page.locator('#segmentUpdateCancelBtn').click();
+      await cancelAndWaitForClose(this.page.locator('#segmentUpdateCancelBtn'));
     } else {
-      await this.page.locator('#segmentUpdateSaveBtn').click();
+      await submitAndWaitForReload(this.page, this.page.locator('#segmentUpdateSaveBtn'));
     }
-    await this.page.locator('#spinner-animation').waitFor({ state: 'hidden', timeout: 20000 });
     await this.page.locator('#createSegmentBtn').waitFor({ state: 'visible', timeout: 20000 });
   }
 
@@ -214,11 +232,10 @@ export class SegmentsRowObject {
 
   async closeDeleteModal(clickCancel = false) {
     if (clickCancel) {
-      await this.page.locator('#segmentDeleteCancelBtn').click();
+      await cancelAndWaitForClose(this.page.locator('#segmentDeleteCancelBtn'));
     } else {
-      await this.page.locator('#segmentDeleteDeleteBtn').click();
+      await submitAndWaitForReload(this.page, this.page.locator('#segmentDeleteDeleteBtn'));
     }
-    await this.page.locator('#spinner-animation').waitFor({ state: 'hidden', timeout: 20000 });
     await this.page.locator('#createSegmentBtn').waitFor({ state: 'visible', timeout: 20000 });
   }
 
