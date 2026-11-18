@@ -1,17 +1,27 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 /**
- * Clicks a dialog's save/delete button and waits until the segment list has been reloaded and the
- * dialog is gone. Waiting for the spinner or for #createSegmentBtn alone returns immediately (both
- * are already in that state), so the next step raced the dialog close and the list refresh.
+ * Clicks a dialog's save/delete button and waits until the dialog is gone and the grid shows exactly
+ * the segments of the list reload that follows. Waiting for the spinner or for #createSegmentBtn
+ * alone returns immediately (both are already in that state), and the reload response arrives before
+ * Angular renders it, so the next step raced the dialog close and the refreshed rows.
  */
 async function submitAndWaitForReload(page: Page, button: Locator) {
   const reload = page.waitForResponse(
     (r) => r.request().method() === 'GET' && /\/api\/trash-inspection-pn\/segments(\?|$)/.test(r.url()),
     { timeout: 20000 });
   await button.click();
-  await reload;
+  const body = await (await reload).json();
+  const expected = (body?.model?.segmentList ?? []).map((s: { id: number; name: string }) => `${s.id}|${s.name}`);
   await button.waitFor({ state: 'hidden', timeout: 20000 });
+  await expect
+    .poll(async () => {
+      const rows = page.locator('.cdk-row');
+      const ids = await rows.locator('.cdk-column-id').allInnerTexts();
+      const names = await rows.locator('.cdk-column-name').allInnerTexts();
+      return ids.map((id, i) => `${parseInt(id.trim(), 10)}|${(names[i] ?? '').trim()}`);
+    }, { message: 'segment grid shows the reloaded list', timeout: 20000 })
+    .toEqual(expected);
 }
 
 /** Cancels a dialog and waits until it is closed. */
